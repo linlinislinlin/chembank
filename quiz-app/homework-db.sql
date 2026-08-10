@@ -6,8 +6,12 @@
 ```sql
 -- ============================================================
 -- 作业系统三张表：assignments(作业) / students(学生) / answers(作答)
--- 说明：客户端(anon)可读作业列表与写作答；教师通过 anon 直写作业。
+-- 说明：学生端可读作业列表、可写入学生与作答；作业列表对 anon 开放。
 -- 学生表让不同学生各自提交(用身份证级唯一约束避免重复)。
+--
+-- ⚠️ 安全：建表后请务必再运行 hardening-rls.sql，
+--    它会撤销 students / answers 的 anon select（防隐私泄露）。
+--    教师端统计改走带密钥校验的 Edge Function，见 hardening-rls.sql 说明。
 -- ============================================================
 
 -- 1) 作业表
@@ -43,9 +47,15 @@ create table public.answers (
 );
 
 -- ============================================================
--- RLS：允许 anon 读作业、读/插按学号区分的学生、读/写作答
--- 简单起见全部开放 select；insert 也放行（本工具是教学内用）。
--- 注意：生产请基于 auth 收紧。此处为了 MVP 易用而放开。
+-- RLS：按「作业可读可写、学生/作答只写不读」的收紧模型建立策略。
+--  - assignments：anon 保持 select+insert（homework/assign 页所需；非隐私）
+--  - students  ：anon 仅 insert（学生提交身份），禁止 select
+--  - answers   ：anon 仅 insert + update（作答写入与重复提交的 upsert），
+--                禁止 select（读他人作答 → 堵死）
+--
+-- ⚠️ 新版安全模型已内置到下面这段里。若你之前已经在用旧的
+--    “anon 全开放 select”版本，请**再运行一次 hardening-rls.sql**，
+--    它会幂等地撤销旧的 select 策略、重建为上面这个收紧模型。
 -- ============================================================
 alter table public.assignments enable row level security;
 alter table public.students enable row level security;
@@ -54,14 +64,14 @@ alter table public.answers enable row level security;
 create policy "anon can read assignments" on public.assignments for select using (true);
 create policy "anon can insert assignments" on public.assignments for insert with check (true);
 
-create policy "anon can read students" on public.students for select using (true);
 create policy "anon can insert students" on public.students for insert with check (true);
 
-create policy "anon can read answers" on public.answers for select using (true);
 create policy "anon can insert answers" on public.answers for insert with check (true);
 create policy "anon can update answers" on public.answers for update using (true);
 
--- 可选：给 anon 授基础权限（若上面报权限错误再放开）
+-- 授权（不授予 students/answers 的 select：读这两张表被彻底关闭）
 grant usage on schema public to anon;
-grant select, insert, update on public.assignments, public.students, public.answers to anon;
+grant select, insert on public.assignments to anon;
+grant insert on public.students to anon;
+grant insert, update on public.answers to anon;
 ```

@@ -50,6 +50,13 @@
   .each-q { color:var(--muted); }
   .sort-btn { cursor:pointer; user-select:none; }
   .sort-btn:hover { color:var(--text); }
+  /* 教师口令门 */
+  .gate { max-width:420px; margin:80px auto; padding:0 20px; }
+  .gate .card { padding:26px; }
+  .gate h2 { margin-top:0; }
+  .gate .input { width:100%; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; font-size:15px; }
+  .gate .input:focus { outline:none; border-color:var(--accent); }
+  .gate .err { color:var(--red); font-size:13px; min-height:20px; }
 </style>
 </head>
 <body>
@@ -62,7 +69,18 @@
   </div>
 </header>
 
-<div class="wrap">
+<!-- 教师口令登录门：口令正确前不加载/也不查询任何统计 -->
+<div class="gate" id="loginGate">
+  <div class="card" style="text-align:left">
+    <h2>🔒 教师口令</h2>
+    <p class="small-note" style="margin:0 0 4px">请输入教师口令以查看统计数据。</p>
+    <input class="input" id="tokenInput" type="password" placeholder="教师口令" style="margin-top:6px" />
+    <div class="err" id="gateErr"></div>
+    <button class="btn" id="gateBtn" style="margin-top:4px;width:100%">进入统计</button>
+  </div>
+</div>
+
+<div class="wrap" id="mainWrap" style="display:none">
   <div class="card">
     <h2>选择作业</h2>
     <div class="pick" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
@@ -132,7 +150,9 @@ async function selectAssignment(id, pillEl) {
   if (!ass) return;
   const qs = (ass.question_ids||[]).map(qid => BYID.get(qid)).filter(Boolean);
   try {
-    const rows = await DB.getAssignmentStats(id);
+    // 安全收紧后：anon 已不能直接 select students/answers，
+    // 统一走带密钥校验的 Edge Function（readTeacherStats）。
+    const rows = await DB.readTeacherStats(id, getToken());
     renderOverview(ass, qs, rows);
   } catch (e) {
     document.getElementById("overview").style.display = "block";
@@ -291,7 +311,59 @@ function renderHandoutTable(rows, qs, totalStudents) {
 
 function esc(s){ const d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }
 
-loadAssignments();
+// ============================================================
+// 教师口令门
+// ------------------------------------------------------------
+// ⚠️ 安全界限说明：`cfg.statsToken` 是打包进公开前端的明文口令，
+//    它只能挡“顺手点开 stats.html 的老师/学生”，**不能当作安全边界**。
+//    懂行的人直接看 config.js 就能拿到这个口令。
+//    本页面的口令只是 UI 门；真正防数据泄露的是后端两道防线：
+//      1) hardening-rls.sql 撤销了 students/answers 的 anon select，
+//         懂行的人绕过本页面也 REST select 不到这两张表（返回空/报错）；
+//      2) 统计真正读数据走 stats-edge 函数 + 服务端密钥 TEACHER_TOKEN，
+//         该密钥只在 Supabase secrets 里，前端口令不等于它能读数据。
+// ============================================================
+const cfg = window.SUPABASE_CONFIG || {};
+let __token = null;
+
+function getToken() { return __token; }
+
+function verifyToken(input) {
+  // 前端口径校验：与 config.js 的 statsToken 比对。
+  // 若 statsEdgeUrl 未部署，这里放行后真正读数据仍会因接口未配置而报错，
+  // 用户在界面上会看到明确中文提示。
+  const expected = (cfg.statsToken || "").trim();
+  if (!expected) return { ok: false, msg: "config.js 未设置 statsToken" };
+  return { ok: input === expected, msg: input === expected ? "" : "口令错误" };
+}
+
+function setupGate() {
+  const input = document.getElementById("tokenInput");
+  const err = document.getElementById("gateErr");
+  const btn = document.getElementById("gateBtn");
+
+  const unlock = () => {
+    const v = verifyToken(input.value.trim());
+    if (!v.ok) { err.textContent = v.msg; input.focus(); return; }
+    __token = input.value.trim();
+    // 记住口令（仅当次会话），刷新页面不用再输
+    try { sessionStorage.setItem("stats-token", __token); } catch (e) {}
+    document.getElementById("loginGate").style.display = "none";
+    document.getElementById("mainWrap").style.display = "block";
+    loadAssignments();
+  };
+  btn.onclick = unlock;
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); unlock(); } });
+
+  // 本会话已通过 → 跳过登录，直接进入
+  try {
+    const cached = sessionStorage.getItem("stats-token");
+    if (cached) { __token = cached; document.getElementById("loginGate").style.display = "none"; document.getElementById("mainWrap").style.display = "block"; loadAssignments(); return; }
+  } catch (e) {}
+  input.focus();
+}
+
+setupGate();
 </script>
 </body>
 </html>

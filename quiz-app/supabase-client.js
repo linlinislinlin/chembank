@@ -71,15 +71,34 @@ window.HomeworkDB = (() => {
     if (error) throw error;
   }
 
-  // ---- 统计查询 ----
-  async function getAssignmentStats(assignmentId) {
-    const c = ready(); if (!c) throw new Error("Supabase 未配置");
-    const { data: answers, error } = await c.from("answers")
-      .select("*, students(name, student_no, class_name)")
-      .eq("assignment_id", assignmentId);
-    if (error) throw error;
-    return answers || [];
+  // ---- 统计查询（教师端）----
+  // ⚠️ 安全收紧后，anon 已无法直接 select students/answers（REST 返回空/报错）。
+  //    教师读取统计改走 Supabase Edge Function（stats-edge）：
+  //    - 用每次请求携带的服务端密钥（x-teacher-token）在函数内鉴权
+  //    - 函数用 service_role 查库（绕开 RLS），浏览器拿不到 service_role
+  //    返回结构与原 REST 一致：[ { ...answer字段, students:{name,student_no,class_name} } ]
+  async function readTeacherStats(assignmentId, teacherToken) {
+    const cfg = window.SUPABASE_CONFIG || {};
+    const url = (cfg.statsEdgeUrl || "").replace(/\/+$/, "");
+    if (!url) throw new Error("教师统计接口未配置（config.js 的 statsEdgeUrl）");
+    if (!teacherToken) throw new Error("缺少教师口令");
+    const resp = await fetch(url + "/run", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-teacher-token": teacherToken,
+      },
+      body: JSON.stringify({ assignment_id: assignmentId }),
+    });
+    if (resp.status === 401 || resp.status === 403) {
+      throw new Error("教师口令错误或无权访问");
+    }
+    if (!resp.ok) {
+      throw new Error("统计接口错误（HTTP " + resp.status + "）");
+    }
+    const data = await resp.json();
+    return data.rows || [];
   }
 
-  return { ready, createAssignment, listAssignments, getAssignment, ensureStudent, recordAnswer, getAssignmentStats };
+  return { ready, createAssignment, listAssignments, getAssignment, ensureStudent, recordAnswer, readTeacherStats };
 })();

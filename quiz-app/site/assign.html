@@ -13,9 +13,10 @@
   header h1 { font-size:17px; margin:0; }
   header .nav a { margin-right:18px; font-size:14px; color:var(--muted); text-decoration:none; }
   header .nav a.on { color:#fff; font-weight:600; }
-  .wrap { max-width:1080px; margin:0 auto; padding:22px; }
-  .grid { display:grid; grid-template-columns:340px 1fr; gap:20px; }
-  @media(max-width:880px){ .grid{ grid-template-columns:1fr; } }
+  .wrap { max-width:1180px; margin:0 auto; padding:22px; }
+  .grid { display:grid; grid-template-columns:300px 260px 1fr; gap:18px; align-items:start; }
+  @media(max-width:1060px){ .grid{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:720px){ .grid{ grid-template-columns:1fr; } }
   .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
   .card h2 { font-size:15px; margin-top:0; }
   .input, textarea, select { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:9px 12px; width:100%; font-size:14px; }
@@ -43,6 +44,19 @@
   .msg.ok { color:var(--green); }
   .msg.err { color:var(--red); }
   .empty { color:var(--muted); padding:30px; text-align:center; }
+  /* 考纲树 */
+  .syl { overflow:auto; max-height:72vh; }
+  .syl-chap { font-size:12px; font-weight:700; color:var(--text); padding:8px 10px; cursor:pointer; border-radius:7px; display:flex; justify-content:space-between; align-items:center; user-select:none; }
+  .syl-chap:hover { background:var(--panel-2); }
+  .syl-chap .caret { transition:transform .15s; font-size:10px; color:var(--muted); }
+  .syl-chap.open .caret { transform:rotate(90deg); }
+  .syl-sub { padding-left:14px; }
+  .syl-topic { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:6px 10px; cursor:pointer; border-radius:6px; color:var(--muted); }
+  .syl-topic:hover { background:var(--panel-2); color:var(--text); }
+  .syl-topic.on { background:var(--accent); color:#fff; font-weight:600; }
+  .syl-topic .n { font-size:11px; color:var(--muted); background:var(--panel-2); border-radius:10px; padding:0 7px; }
+  .syl-topic.on .n { color:#fff; background:rgba(255,255,255,.2); }
+  .selpill { display:inline-block; background:var(--panel-2); border-radius:6px; padding:1px 7px; font-size:10px; color:var(--muted); margin-left:6px; }
 </style>
 </head>
 <body>
@@ -77,13 +91,20 @@
       </div>
     </div>
 
-    <!-- 右栏：选题 -->
+    <!-- 中栏：考纲树 -->
     <div class="card">
-      <h2>从题库选题（Paper 1 MCQ）</h2>
-      <input class="input search" id="qsearch" placeholder="🔍 搜索题目 / 考点关键词…" />
+      <h2>按考纲选题</h2>
+      <div class="syl" id="sylTree"></div>
+    </div>
+
+    <!-- 右栏：题目列表 -->
+    <div class="card">
+      <h2 id="topicTitle">题目</h2>
+      <input class="input search" id="qsearch" placeholder="🔍 在当前考点内搜索…" />
       <div class="filters" id="filters">
-        <button data-f="all" class="on">全部</button>
-        <button data-f="my">仅看已选</button>
+        <button data-f="cur" class="on">当前考点</button>
+        <button data-f="all">全库</button>
+        <button data-f="my">仅已选</button>
       </div>
       <div id="qlist"></div>
       <div class="empty" id="qempty" style="display:none">没有匹配的题</div>
@@ -94,20 +115,97 @@
 <script src="data.js"></script>
 <script>
 "use strict";
-const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+const DATA = window.CHEMBANK_DATA || {};
+const ALL = DATA.questions || [];
+const SYL = DATA.syllabus || [];
 const selected = new Set();
 
 const $ = (id) => document.getElementById(id);
 
-function renderList(filter) {
-  const q = $("qsearch").value.trim().toLowerCase();
-  const mode = document.querySelector("#filters button.on").dataset.f;
-  let list = ALL.filter(item => {
-    if (mode === "my" && !selected.has(item.id)) return false;
-    if (!q) return true;
-    const hay = (item.topics||[]).join(" ") + " " + (item.id) + " " + (item.codes||[]).join(" ");
-    return hay.toLowerCase().includes(q);
+// code -> questions map
+const BYCODE = new Map();
+ALL.forEach(q => (q.codes||[]).forEach(c => {
+  if (!BYCODE.has(c)) BYCODE.set(c, []);
+  BYCODE.get(c).push(q);
+}));
+
+let curCode = null;   // 当前选中的考点代码，null = 显示全部（搜索/仅已选时用）
+
+// ---- 考纲树 ----
+function renderSyl() {
+  const box = $("sylTree");
+  box.innerHTML = "";
+  SYL.forEach(chap => {
+    const wrap = document.createElement("div");
+    const head = document.createElement("div");
+    head.className = "syl-chap open";
+    const chapCount = countQuestionsIn(chap);
+    head.innerHTML = `<span><b>${chap.code}</b> ${escapeHtml(chap.title)} <span class="selpill">${chapCount} 题</span></span>
+      <span class="caret">▸</span>`;
+    const sub = document.createElement("div");
+    sub.className = "syl-sub";
+    // 章节内所有叶子考点
+    (collectTopics(chap)||[]).forEach(t => {
+      const n = (BYCODE.get(t.code)||[]).length;
+      const row = document.createElement("div");
+      row.className = "syl-topic" + (curCode === t.code ? " on" : "");
+      const html = `<span>${t.code} ${escapeHtml(t.title||"")}</span><span class="n">${n} 题</span>`;
+      row.innerHTML = html;
+      row.onclick = () => {
+        $("sylTree").querySelectorAll(".syl-topic").forEach(x => x.classList.remove("on"));
+        row.classList.add("on");
+        curCode = t.code; setFilter("cur"); renderList();
+      };
+      sub.appendChild(row);
+    });
+    head.onclick = () => {
+      head.classList.toggle("open");
+      sub.style.display = sub.style.display === "none" ? "" : "none";
+    };
+    wrap.appendChild(head); wrap.appendChild(sub);
+    box.appendChild(wrap);
   });
+}
+function countQuestionsIn(chap) {
+  let n = 0;
+  (collectTopics(chap)||[]).forEach(t => n += (BYCODE.get(t.code)||[]).length);
+  return n;
+}
+function collectTopics(chap) {
+  const out = [];
+  (chap.children||[]).forEach(child => {
+    (child.children||[]).forEach(leaf => { if (leaf && leaf.code && leaf.code.includes(".")) out.push(leaf); });
+  });
+  return out;
+}
+
+// ---- 题目列表 ----
+function currentList() {
+  const mode = document.querySelector("#filters button.on").dataset.f;
+  if (mode === "all") return ALL;
+  if (mode === "cur") return curCode ? (BYCODE.get(curCode)||[]) : ALL;
+  if (mode === "my") return ALL.filter(q => selected.has(q.id));
+  return ALL;
+}
+function renderList() {
+  const q = $("qsearch").value.trim().toLowerCase();
+  let list = currentList();
+  if (q) {
+    list = list.filter(item => {
+      const hay = (item.topics||[]).join(" ") + " " + (item.codes||[]).join(" ") + " " + (item.body||"");
+      return hay.toLowerCase().includes(q);
+    });
+  }
+  // 标题
+  const mode = document.querySelector("#filters button.on").dataset.f;
+  let ttl;
+  if (mode === "cur" && curCode) {
+    ttl = `当前考点：${curCode}`;
+  } else if (mode === "all") ttl = "全部题目";
+  else if (mode === "my") ttl = "已选题目";
+  else ttl = "题目";
+  $("topicTitle").textContent = ttl;
+
   const box = $("qlist");
   box.innerHTML = "";
   $("qempty").style.display = list.length ? "none" : "block";
@@ -120,7 +218,10 @@ function renderOne(q) {
   item.className = "qitem";
   const cb = document.createElement("input");
   cb.type = "checkbox"; cb.checked = selected.has(q.id);
-  cb.onchange = () => { if (cb.checked) selected.add(q.id); else selected.delete(q.id); renderList(); };
+  cb.onchange = () => {
+    if (cb.checked) selected.add(q.id); else selected.delete(q.id);
+    renderList(); refreshTreeSide();
+  };
   const img = document.createElement("img");
   img.className = "thumb"; img.src = q.figures && q.figures[0] ? q.figures[0] : "";
   img.loading = "lazy";
@@ -136,6 +237,20 @@ function renderOne(q) {
   item.appendChild(cb); item.appendChild(img); item.appendChild(info);
   return item;
 }
+function refreshTreeSide() {
+  // 更新考纲树里每个考点的已选数标记
+  $("sylTree").querySelectorAll(".syl-topic").forEach(row => {
+    const code = row.querySelector("span").textContent.trim().split(" ")[0];
+    const selCount = (BYCODE.get(code)||[]).filter(q => selected.has(q.id)).length;
+    const total = (BYCODE.get(code)||[]).length;
+    const n = row.querySelector(".n");
+    n.textContent = selCount ? `${selCount}/${total} 题` : `${total} 题`;
+  });
+}
+
+function setFilter(mode) {
+  document.querySelectorAll("#filters button").forEach(x => x.classList.toggle("on", x.dataset.f === mode));
+}
 
 document.querySelectorAll("#filters button").forEach(b => {
   b.onclick = () => { document.querySelectorAll("#filters button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); renderList(); };
@@ -147,7 +262,7 @@ $("createBtn").onclick = async () => {
   const idArr = [...selected];
   const msg = $("createMsg");
   if (!title) { msg.className="msg err"; msg.textContent="请输入作业标题"; return; }
-  if (!idArr.length) { msg.className="msg err"; msg.textContent="请至少选 1 道题"; return; }
+  if (!idArr.length) { msg.className="msg err"; msg.textContent="请选择题目（在考纲树点一个考点，再勾选题目）"; return; }
   if (!window.HomeworkDB || !window.HomeworkDB.ready()) {
     msg.className="msg err"; msg.textContent="Supabase 未配置：请先填 config.js 再刷新。";
     return;
@@ -170,8 +285,13 @@ function copyLink() {
     const b = $("createMsg"); b.className="msg ok"; b.textContent="链接已复制！发给学生即可。";
   });
 }
+function escapeHtml(s) {
+  const d = document.createElement("div"); d.textContent = s==null?"":String(s); return d.innerHTML;
+}
 
+renderSyl();
 renderList();
+refreshTreeSide();
 </script>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

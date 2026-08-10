@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>布置作业 · ChemBank</title>
+<style>
+  :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+  a { color:var(--accent); }
+  header { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:10; }
+  header h1 { font-size:17px; margin:0; }
+  header .nav a { margin-right:18px; font-size:14px; color:var(--muted); text-decoration:none; }
+  header .nav a.on { color:#fff; font-weight:600; }
+  .wrap { max-width:1080px; margin:0 auto; padding:22px; }
+  .grid { display:grid; grid-template-columns:340px 1fr; gap:20px; }
+  @media(max-width:880px){ .grid{ grid-template-columns:1fr; } }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .card h2 { font-size:15px; margin-top:0; }
+  .input, textarea, select { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:9px 12px; width:100%; font-size:14px; }
+  .input:focus { outline:none; border-color:var(--accent); }
+  label { display:block; font-size:12px; color:var(--muted); margin:12px 0 4px; }
+  .btn { background:var(--accent); color:#fff; border:none; border-radius:10px; padding:11px 18px; font-size:14px; font-weight:600; cursor:pointer; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .btn.green { background:var(--green); color:#06241a; }
+  .btn.ghost { background:var(--panel-2); color:var(--text); }
+  .search { margin-bottom:12px; }
+  #selbar { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  #selbar .count { background:var(--accent); color:#fff; border-radius:20px; padding:3px 12px; font-size:13px; }
+  #qlist { display:flex; flex-direction:column; gap:8px; max-height:72vh; overflow:auto; }
+  .qitem { display:flex; gap:10px; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:8px 10px; align-items:center; cursor:pointer; }
+  .qitem input { accent-color:var(--accent); width:17px; height:17px; }
+  .qitem .thumb { width:56px; height:56px; object-fit:contain; background:#fff; border-radius:6px; flex:0 0 56px; }
+  .qitem .info { flex:1; font-size:12px; }
+  .qitem .info b { display:block; font-size:13px; }
+  .qitem .info .sub { color:var(--muted); }
+  .filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .filters button { background:var(--panel-2); border:1px solid var(--line); color:var(--muted); border-radius:20px; padding:4px 12px; font-size:12px; cursor:pointer; }
+  .filters button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .linkbox { background:#0b0a14; border:1px dashed var(--line); border-radius:9px; padding:10px; font-size:12px; word-break:break-all; margin-top:10px; white-space:pre-wrap; }
+  .msg { margin-top:10px; font-size:13px; }
+  .msg.ok { color:var(--green); }
+  .msg.err { color:var(--red); }
+  .empty { color:var(--muted); padding:30px; text-align:center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚗️ ChemBank 作业后台</h1>
+  <div class="nav">
+    <a href="assign.html" class="on">布置作业</a>
+    <a href="stats.html">查看统计</a>
+    <a href="index.html">刷题库</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <!-- 左栏：作业设置 -->
+    <div>
+      <div class="card">
+        <h2>1 · 新建作业</h2>
+        <label>作业标题</label>
+        <input class="input" id="title" placeholder="例如：5.1 键能 & 焓变 · 第3周作业" />
+        <label>截止时间（可选）</label>
+        <input class="input" type="datetime-local" id="due" />
+        <label>已选题目</label>
+        <div id="selbar"><span class="count" id="selCount">已选 0 题</span></div>
+        <button class="btn green" id="createBtn" style="width:100%">创建作业并生成链接 →</button>
+        <div class="msg" id="createMsg"></div>
+      </div>
+      <div class="card" id="linkCard" style="display:none;margin-top:14px">
+        <h2>2 · 把链接发给学生</h2>
+        <div class="linkbox" id="linkBox"></div>
+        <button class="btn ghost" style="margin-top:8px" onclick="copyLink()">复制链接</button>
+      </div>
+    </div>
+
+    <!-- 右栏：选题 -->
+    <div class="card">
+      <h2>从题库选题（Paper 1 MCQ）</h2>
+      <input class="input search" id="qsearch" placeholder="🔍 搜索题目 / 考点关键词…" />
+      <div class="filters" id="filters">
+        <button data-f="all" class="on">全部</button>
+        <button data-f="my">仅看已选</button>
+      </div>
+      <div id="qlist"></div>
+      <div class="empty" id="qempty" style="display:none">没有匹配的题</div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+const selected = new Set();
+
+const $ = (id) => document.getElementById(id);
+
+function renderList(filter) {
+  const q = $("qsearch").value.trim().toLowerCase();
+  const mode = document.querySelector("#filters button.on").dataset.f;
+  let list = ALL.filter(item => {
+    if (mode === "my" && !selected.has(item.id)) return false;
+    if (!q) return true;
+    const hay = (item.topics||[]).join(" ") + " " + (item.id) + " " + (item.codes||[]).join(" ");
+    return hay.toLowerCase().includes(q);
+  });
+  const box = $("qlist");
+  box.innerHTML = "";
+  $("qempty").style.display = list.length ? "none" : "block";
+  list.slice(0, 200).forEach(qItem => box.appendChild(renderOne(qItem)));
+  $("selCount").textContent = "已选 " + selected.size + " 题";
+}
+
+function renderOne(q) {
+  const item = document.createElement("div");
+  item.className = "qitem";
+  const cb = document.createElement("input");
+  cb.type = "checkbox"; cb.checked = selected.has(q.id);
+  cb.onchange = () => { if (cb.checked) selected.add(q.id); else selected.delete(q.id); renderList(); };
+  const img = document.createElement("img");
+  img.className = "thumb"; img.src = q.figures && q.figures[0] ? q.figures[0] : "";
+  img.loading = "lazy";
+  const info = document.createElement("div");
+  info.className = "info";
+  const b = document.createElement("b");
+  b.textContent = `${q.year||"?"} ${q.session||""} P${q.paper} · Q${q.question} ${q.marks?"(" + q.marks + "分)":""} · 答案 ${q.ms_answer||"–"}`;
+  info.appendChild(b);
+  const sub = document.createElement("div");
+  sub.className = "sub";
+  sub.textContent = (q.topics||[]).join(" / ") || q.body?.slice(0,50) || q.id;
+  info.appendChild(sub);
+  item.appendChild(cb); item.appendChild(img); item.appendChild(info);
+  return item;
+}
+
+document.querySelectorAll("#filters button").forEach(b => {
+  b.onclick = () => { document.querySelectorAll("#filters button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); renderList(); };
+});
+$("qsearch").addEventListener("input", () => renderList());
+
+$("createBtn").onclick = async () => {
+  const title = $("title").value.trim();
+  const idArr = [...selected];
+  const msg = $("createMsg");
+  if (!title) { msg.className="msg err"; msg.textContent="请输入作业标题"; return; }
+  if (!idArr.length) { msg.className="msg err"; msg.textContent="请至少选 1 道题"; return; }
+  if (!window.HomeworkDB || !window.HomeworkDB.ready()) {
+    msg.className="msg err"; msg.textContent="Supabase 未配置：请先填 config.js 再刷新。";
+    return;
+  }
+  try {
+    const dueAt = $("due").value ? new Date($("due").value).toISOString() : null;
+    const ass = await window.HomeworkDB.createAssignment(title, idArr, dueAt);
+    const link = location.origin + location.pathname.replace("assign.html","") + "homework.html?id=" + ass.id;
+    $("linkBox").textContent = link;
+    $("linkCard").style.display = "block";
+    msg.className = "msg ok"; msg.textContent = "作业已创建！ID=" + ass.id;
+  } catch (e) {
+    msg.className = "msg err"; msg.textContent = "创建失败：" + e.message;
+  }
+};
+
+function copyLink() {
+  const t = $("linkBox").textContent;
+  navigator.clipboard.writeText(t).then(() => {
+    const b = $("createMsg"); b.className="msg ok"; b.textContent="链接已复制！发给学生即可。";
+  });
+}
+
+renderList();
+</script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+</body>
+</html>

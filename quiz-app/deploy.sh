@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # 一键部署：本地重新生成题库网页 -> 提交 -> 推到 GitHub，触发 Actions 自动上线。
-# 用法：在仓库根目录执行  ./deploy.sh   （打包进一个 commit）
+# 用法：在仓库根目录执行  ./quiz-app/deploy.sh  （打包进一个 commit）
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_DIR"
 
 echo "==> 重新构建题库网页 (quiz-app/build.py)"

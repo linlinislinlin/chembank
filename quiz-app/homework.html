@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>化学作业 · ChemBank</title>
+<style>
+  :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; --amber:#f0c17c; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; min-height:100vh; }
+  .top { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:10; }
+  .top h1 { font-size:16px; margin:0; }
+  .top .meta { font-size:12px; color:var(--muted); }
+  .wrap { max-width:760px; margin:0 auto; padding:24px 20px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.3); padding:22px; }
+  .center { text-align:center; }
+  .big { font-size:40px; margin:10px 0; }
+  label { display:block; font-size:13px; color:var(--muted); margin:14px 0 4px; }
+  .input { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; width:100%; font-size:16px; }
+  .input:focus { outline:none; border-color:var(--accent); }
+  .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:13px 20px; font-size:16px; font-weight:600; cursor:pointer; width:100%; margin-top:18px; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .qhead { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--line); margin-bottom:16px; }
+  .qhead b { color:var(--accent); }
+  .qfig img { max-width:100%; max-height:70vh; border:1px solid var(--line); border-radius:9px; background:#fff; }
+  .qfig { text-align:center; margin:16px 0; }
+  .topics { font-size:12px; color:var(--muted); margin:12px 0; display:flex; gap:6px; flex-wrap:wrap; }
+  .topics span { background:var(--panel-2); padding:2px 8px; border-radius:6px; }
+  .ans { display:flex; gap:10px; margin-top:16px; }
+  .abtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:19px; font-weight:700; color:var(--text); cursor:pointer; }
+  .abtn.correct { border-color:var(--green); background:rgba(78,206,157,.15); color:var(--green); }
+  .abtn.wrong { border-color:var(--red); background:rgba(240,124,124,.15); color:var(--red); }
+  .fb { border-radius:11px; padding:14px; margin-top:16px; font-size:14px; display:none; }
+  .fb.show { display:block; }
+  .fb.ok { background:rgba(78,206,157,.12); border:1px solid var(--green); }
+  .fb.no { background:rgba(240,124,124,.12); border:1px solid var(--red); }
+  .fb b { color:var(--amber); }
+  .next { margin-top:14px; }
+  .pbar { height:6px; background:var(--panel-2); border-radius:4px; overflow:hidden; margin-top:14px; }
+  .pbar i { display:block; height:100%; background:var(--accent); width:0; transition:width .2s; }
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin:20px 0; }
+  .stat { background:var(--panel-2); border-radius:11px; padding:14px; text-align:center; }
+  .stat .v { font-size:24px; font-weight:800; color:var(--green); }
+  .stat .k { font-size:12px; color:var(--muted); margin-top:3px; }
+  .done-link { margin-top:16px; font-size:13px; color:var(--muted); word-break:break-all; }
+  .state-pill { font-size:12px; padding:3px 10px; border-radius:20px; background:var(--panel-2); color:var(--muted); }
+  .err { color:var(--red); font-size:13px; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>📝 化学作业</h1>
+  <span class="meta" id="topMeta">加载中…</span>
+</div>
+
+<div class="wrap">
+  <!-- 身份 -->
+  <div class="card center" id="idCard">
+    <div class="big">🧑‍🎓</div>
+    <h2>先告诉我你是谁</h2>
+    <label>姓名</label>
+    <input class="input" id="iname" placeholder="你的姓名" />
+    <label>学号</label>
+    <input class="input" id="ino" placeholder="学号 / 考号" />
+    <button class="btn" id="startBtn">开始做题 →</button>
+    <div class="err" id="idErr"></div>
+  </div>
+
+  <!-- 做题 -->
+  <div class="card" id="quizCard" style="display:none">
+    <div class="qhead"><span id="prog"></span><span class="state-pill" id="pill"></span></div>
+    <div class="qfig" id="fig"></div>
+    <div class="topics" id="topics"></div>
+    <div class="ans" id="ans"></div>
+    <div class="fb" id="fb"></div>
+    <div class="next" id="nextWrap"></div>
+    <div class="pbar"><i id="pbarFill"></i></div>
+  </div>
+
+  <!-- 完成 -->
+  <div class="card center" id="doneCard" style="display:none">
+    <div class="big">🎉</div>
+    <h2 id="doneTitle">作业已完成！</h2>
+    <div class="stat-grid" id="doneStats"></div>
+    <div class="done-link" id="doneLink"></div>
+    <button class="btn green" style="background:var(--green);color:#06241a" onclick="location.reload()">重新查看</button>
+  </div>
+
+  <div class="card" id="errCard" style="display:none">
+    <div class="big">⚠️</div>
+    <h2 id="errMsg">加载失败</h2>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+"use strict";
+const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+const BYID = new Map(ALL.map(q => [q.id, q]));
+const DB = window.HomeworkDB;
+
+init();
+
+function init() {
+  const id = new URLSearchParams(location.search).get("id");
+  if (!id) { showErr("缺少作业链接参数（?id=）"); return; }
+  DB.getAssignment(Number(id)).then(ass => {
+    if (!ass) throw new Error("作业不存在或已被删除");
+    window.__ASSIGN = ass;
+    const qs = (ass.question_ids||[]).map(qid => BYID.get(qid)).filter(Boolean);
+    if (!qs.length) throw new Error("作业里没有可用的题目");
+    window.__QS = qs;
+    const cn = ass.title || "作业";
+    document.title = cn + " · ChemBank";
+    document.querySelector("#topMeta").textContent = cn;
+    // 恢复已答进度（localStorage 记住这个作业该生答到哪/身份）
+    restoreState(id);
+    // 如果之前已做完，直接显示完成页
+    if (window.__local && window.__local.done) { showDone(); return; }
+    document.getElementById("idCard").style.display = "block";
+  }).catch(e => showErr(e.message));
+}
+
+function restoreState(assId) {
+  const key = "hw-" + assId;
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(key)); } catch(e){}
+  window.__local = s || { answers: {} };
+}
+
+function saveLocal() {
+  const assId = window.__ASSIGN.id;
+  localStorage.setItem("hw-" + assId, JSON.stringify(window.__local));
+}
+
+async function ensureIdentity() {
+  const name = document.getElementById("iname").value.trim();
+  const no = document.getElementById("ino").value.trim();
+  const err = document.getElementById("idErr");
+  if (!name || !no) { err.textContent = "请填写姓名和学号"; return; }
+  try {
+    const stu = await DB.ensureStudent(name, no, "");
+    window.__STU = stu;
+    document.getElementById("idCard").style.display = "none";
+    document.getElementById("quizCard").style.display = "block";
+    window.__idx = 0;
+    renderQ();
+  } catch (e) { err.textContent = "无法保存身份：" + e.message; }
+}
+document.getElementById("startBtn").onclick = ensureIdentity;
+
+function renderQ() {
+  const q = window.__QS[window.__idx];
+  const total = window.__QS.length;
+  document.getElementById("prog").textContent = `第 ${window.__idx+1} / ${total} 题 · ${window.__QS[window.__idx-1] ? "" : ""}`.replace(" · ","");
+  document.getElementById("prog").innerHTML = `第 <b>${window.__idx+1}</b> / ${total} 题`;
+  document.getElementById("pbarFill").style.width = (window.__idx / total * 100) + "%";
+
+  const pre = window.__local.answers[q.id]; // 之前是否答过
+  document.getElementById("pill").textContent = pre ? "已答" : "未答";
+
+  const fig = document.getElementById("fig");
+  fig.innerHTML = "";
+  const img = document.createElement("img");
+  img.src = q.figures && q.figures[0] ? q.figures[0] : "";
+  img.onerror = () => img.style.display = "none";
+  fig.appendChild(img);
+
+  const tp = document.getElementById("topics");
+  tp.innerHTML = "";
+  (q.topics||[]).slice(0,3).forEach(t => { const s=document.createElement("span"); s.textContent=t; tp.appendChild(s); });
+
+  const ans = document.getElementById("ans");
+  ans.innerHTML = "";
+  const fb = document.getElementById("fb");
+  fb.classList.remove("show", "ok", "no");
+
+  ["A","B","C","D"].forEach(letter => {
+    const b = document.createElement("button");
+    b.className = "abtn"; b.textContent = letter;
+    if (pre) {
+      b.disabled = true;
+      if (letter === q.ms_answer) b.classList.add("correct");
+      else if (pre.chosen === letter) b.classList.add("wrong");
+    } else {
+      b.onclick = () => choose(letter, q);
+    }
+    ans.appendChild(b);
+  });
+
+  const nw = document.getElementById("nextWrap");
+  nw.innerHTML = "";
+  if (pre) {
+    showFeedback(pre);
+    // 已有答案：显示下一题/完成
+    const next = document.createElement("button");
+    next.className = "btn";
+    next.style.background = "var(--panel-2)";
+    if (window.__idx + 1 < window.__QS.length) { next.textContent = "下一题 →"; next.onclick = () => { window.__idx++; renderQ(); }; }
+    else { next.textContent = "完成并提交 ✔"; next.onclick = () => { window.__local.done = true; saveLocal(); showDone(); }; }
+    nw.appendChild(next);
+  }
+}
+
+function choose(letter, q) {
+  const correct = letter === q.ms_answer;
+  // 记录
+  window.__local.answers[q.id] = { chosen: letter, correct };
+  saveLocal();
+  // 异步提交到后端（失败不阻断本地）
+  submitAnswer(q, letter, correct);
+  renderQ();
+}
+
+async function submitAnswer(q, letter, correct) {
+  const stu = window.__STU, ass = window.__ASSIGN;
+  try { await DB.recordAnswer(ass.id, stu.id, q.id, letter, correct); }
+  catch (e) { console.warn("submit fail", e.message); }
+}
+
+function showFeedback(pre) {
+  const q = window.__QS[window.__idx];
+  const fb = document.getElementById("fb");
+  fb.classList.remove("show","ok","no");
+  fb.classList.add("show", pre.correct ? "ok" : "no");
+  fb.innerHTML = pre.correct
+    ? "✅ 答对了！"
+    : `❌ 答错了。<br>正确答案：<b>${q.ms_answer}</b>`;
+}
+
+function showDone() {
+  document.getElementById("quizCard").style.display = "none";
+  document.getElementById("doneCard").style.display = "block";
+  const qs = window.__QS;
+  const ansMap = window.__local.answers || {};
+  let done = 0, okc = 0;
+  qs.forEach(q => { if (ansMap[q.id]) { done++; if (ansMap[q.id].correct) okc++; } });
+  const acc = done ? Math.round(okc / done * 100) : 0;
+  document.getElementById("doneTitle").textContent = window.__ASSIGN.title + " · 完成！";
+  const st = document.getElementById("doneStats");
+  st.innerHTML = "";
+  const mk = (v,k)=>{const d=document.createElement("div");d.className="stat";d.innerHTML=`<div class="v">${v}</div><div class="k">${k}</div>`;return d;};
+  st.appendChild(mk(qs.length, "题目"));
+  st.appendChild(mk(done, "已作答"));
+  st.appendChild(mk(acc+"%", "正确率"));
+  document.getElementById("doneLink").textContent = "已提交给老师。可关闭此页。";
+}
+
+function showErr(msg) {
+  document.getElementById("errCard").style.display = "block";
+  document.getElementById("errMsg").textContent = msg;
+}
+</script>
+
+</body>
+</html>

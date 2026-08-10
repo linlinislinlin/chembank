@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>作业统计 · ChemBank</title>
+<style>
+  :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; --amber:#f0c17c; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+  a { color:var(--accent); }
+  header { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:17px; margin:0; }
+  header .nav a { margin-right:18px; font-size:14px; color:var(--muted); text-decoration:none; }
+  header .nav a.on { color:#fff; font-weight:600; }
+  .wrap { max-width:1000px; margin:0 auto; padding:22px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:18px; }
+  .card h2 { font-size:15px; margin:0 0 12px; }
+  .pick { display:flex; gap:8px; flex-wrap:wrap; }
+  .pill { background:var(--panel-2); border:1px solid var(--line); padding:6px 12px; border-radius:20px; font-size:13px; cursor:pointer; color:var(--muted); }
+  .pill.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; font-size:12px; }
+  .bar { height:8px; background:var(--panel-2); border-radius:5px; overflow:hidden; min-width:80px; }
+  .bar i { display:block; height:100%; }
+  .green { color:var(--green); } .red { color:var(--red); } .amber{color:var(--amber);}
+  .sum-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:18px; }
+  .sum { background:var(--panel); border:1px solid var(--line); border-radius:11px; padding:15px; text-align:center; }
+  .sum .v { font-size:22px; font-weight:800; color:var(--amber); }
+  .sum .k { font-size:12px; color:var(--muted); margin-top:3px; }
+  .empty { color:var(--muted); padding:30px; text-align:center; }
+  .err { color:var(--red); font-size:13px; }
+  .btn { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:8px 14px; cursor:pointer; font-size:13px; }
+  .tag { display:inline-block; background:var(--panel-2); border-radius:6px; padding:1px 7px; font-size:11px; margin:2px; color:var(--muted); }
+  .topic-row { display:flex; justify-content:space-between; align-items:center; padding:7px 4px; border-bottom:1px solid var(--line); font-size:13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 作业统计</h1>
+  <div class="nav">
+    <a href="assign.html">布置作业</a>
+    <a href="stats.html" class="on">查看统计</a>
+    <a href="index.html">刷题库</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>选择作业</h2>
+    <div class="pick" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
+  </div>
+
+  <div id="overview" style="display:none">
+    <div class="sum-cards" id="sumCards"></div>
+    <div class="card">
+      <h2>学生作答情况（按正确率排序）</h2>
+      <table><thead><tr><th>姓名</th><th>学号</th><th>已做 / 总</th><th>正确率</th></tr></thead>
+      <tbody id="stuRows"></tbody></table>
+      <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
+    </div>
+    <div class="card">
+      <h2>每题正确率（错得多的题建议重点讲）</h2>
+      <table><thead><tr><th>题号</th><th>正确率</th><th>答对/答次数</th><th>考点</th></tr></thead>
+      <tbody id="qRows"></tbody></table>
+      <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
+    </div>
+    <div class="card">
+      <h2>错题知识点分布（哪些考点大家最容易错）</h2>
+      <div id="topicDist"></div>
+      <div class="empty" id="tEmpty" style="display:none">暂无数据</div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+"use strict";
+const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+const BYID = new Map(ALL.map(q => [q.id, q]));
+const DB = window.HomeworkDB;
+
+let assignments = [];
+async function loadAssignments() {
+  try {
+    assignments = await DB.listAssignments();
+    const pl = document.getElementById("pickList");
+    pl.innerHTML = "";
+    if (!assignments.length) { pl.innerHTML = '<span class="empty">还没有布置作业。去 <a href="assign.html">布置作业</a></span>'; return; }
+    assignments.forEach(a => {
+      const p = document.createElement("span");
+      p.className = "pill";
+      p.textContent = `${a.title} · ${(a.question_ids||[]).length}题`;
+      p.onclick = () => selectAssignment(a.id, p);
+      pl.appendChild(p);
+    });
+  } catch (e) {
+    document.getElementById("pickList").innerHTML = '<span class="err">加载失败：' + e.message + '</span>';
+  }
+}
+
+let currentAss = null;
+async function selectAssignment(id, pillEl) {
+  document.querySelectorAll(".pick .pill").forEach(x=>x.classList.remove("on"));
+  if (pillEl) pillEl.classList.add("on");
+  const ass = assignments.find(a => a.id === id);
+  if (!ass) return;
+  const qs = (ass.question_ids||[]).map(qid => BYID.get(qid)).filter(Boolean);
+  try {
+    const rows = await DB.getAssignmentStats(id);
+    renderOverview(ass, qs, rows);
+  } catch (e) {
+    document.getElementById("overview").style.display = "block";
+    document.getElementById("overview").innerHTML = '<div class="card err">统计失败：' + e.message + '</div>';
+  }
+}
+
+function renderOverview(ass, qs, rows) {
+  document.getElementById("overview").style.display = "block";
+
+  // 汇总
+  const attemptCount = rows.length;
+  const correctCount = rows.filter(r => r.correct).length;
+  const attr = new Map();
+  rows.forEach(r => { const k = r.students; if (!attr.has(k)) attr.set(k, []); attr.get(k).push(r); });
+  const stuRows = [...attr.entries()]
+    .map(([stu, list]) => ({ stu, n:list.length, ok:list.filter(x=>x.correct).length }))
+    .sort((a,b) => (b.ok/b.n) - (a.ok/a.n));
+
+  document.getElementById("sumCards").innerHTML = "";
+  const mk = (v,k)=>{const d=document.createElement("div");d.className="sum";d.innerHTML=`<div class="v">${v}</div><div class="k">${k}</div>`;return d;};
+  const sc = document.getElementById("sumCards");
+  sc.appendChild(mk(stuRows.length, "已提交学生"));
+  sc.appendChild(mk(attemptCount, "作答次数"));
+  sc.appendChild(mk(attemptCount?Math.round(correctCount/attemptCount*100)+"%":"–", "整体正确率"));
+
+  // 学生表
+  const st = document.getElementById("stuRows"); st.innerHTML = "";
+  const sEmpty = document.getElementById("stuEmpty");
+  sEmpty.style.display = stuRows.length ? "none" : "block";
+  stuRows.forEach(({stu, n, ok}) => {
+    const acc = Math.round(ok/n*100);
+    const tr = document.createElement("tr");
+    const color = acc>=80?"green":acc>=50?"amber":"red";
+    tr.innerHTML = `<td>${esc(stu?.name||"?")}</td><td>${esc(stu?.student_no||"–")}</td><td>${ok}/${n}</td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div>
+        <b class="${color}">${acc}%</b></div></td>`;
+    st.appendChild(tr);
+  });
+
+  // 每题
+  const qt = document.getElementById("qRows"); qt.innerHTML = "";
+  const qEmpty = document.getElementById("qEmpty");
+  const perQ = qs.map(q => {
+    const hits = rows.filter(r => r.question_id === q.id);
+    const ok = hits.filter(h => h.correct).length;
+    return { q, n:hits.length, ok };
+  }).filter(x => x.n > 0);
+  qEmpty.style.display = perQ.length ? "none" : "block";
+  perQ.forEach(({q, n, ok}) => {
+    const acc = Math.round(ok/n*100);
+    const color = acc>=80?"green":acc>=50?"amber":"red";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${q.year||""} ${q.session||""} P${q.paper} Q${q.question}</td>
+      <td><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div></td>
+      <td><b class="${color}">${ok}</b> / ${n}</td>
+      <td>${(q.topics||[]).slice(0,1).map(esc).join("")}</td>`;
+    qt.appendChild(tr);
+  });
+  qEmpty.style.display = perQ.length? "none":"block";
+
+  // 错题知识点分布
+  const tEmpty = document.getElementById("tEmpty");
+  const wrongRows = rows.filter(r => !r.correct);
+  const topicCnt = new Map();
+  wrongRows.forEach(r => {
+    const q = BYID.get(r.question_id);
+    (q?.topics||[]).forEach(t => topicCnt.set(t, (topicCnt.get(t)||0)+1));
+  });
+  const td = document.getElementById("topicDist");
+  td.innerHTML = "";
+  tEmpty.style.display = topicCnt.size ? "none" : "block";
+  [...topicCnt.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15).forEach(([t,c]) => {
+    const d = document.createElement("div");
+    d.className = "topic-row";
+    d.innerHTML = `<span>${esc(t)}</span><b class="red">${c} 次做错</b>`;
+    td.appendChild(d);
+  });
+}
+
+function esc(s){ const d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }
+
+loadAssignments();
+</script>
+</body>
+</html>

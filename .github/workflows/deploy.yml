@@ -1,0 +1,40 @@
+name: Deploy ChemBank quiz to GitHub Pages
+
+# 触发：推到 main 分支时自动部署。
+# 前提：本仓库的 quiz-app/site/ 已由本地 build.py 生成并提交（见 deploy.sh）。
+# 部署的正是 quiz-app/site 这个静态文件夹。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 也允许在 GitHub 网页上手动点“Run workflow”重新部署
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: quiz-app/site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

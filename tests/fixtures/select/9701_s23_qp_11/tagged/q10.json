@@ -1,0 +1,22 @@
+{
+  "id": "cie-9701-2023-mj-p11-q10",
+  "exam_board": "CIE",
+  "syllabus_code": "9701",
+  "level": "AS",
+  "year": 2023,
+  "session": "MJ",
+  "paper": 11,
+  "question": "10",
+  "marks": 1,
+  "syllabus_codes": ["5.1", "5.2"],
+  "topic_titles": ["Enthalpy changes", "Lattice energy"],
+  "question_type": "mcq",
+  "difficulty": 4,
+  "ms_answer": "A",
+  "source_qp": "raw/papers/9701_s23_qp_11.pdf",
+  "source_ms": "raw/papers/9701_s23_ms_11.pdf",
+  "page_qp": 5,
+  "body": "Which lattice-energy sign is correct for an exothermic change?",
+  "mark_scheme": "Answer: A",
+  "figures": ["assets/cie-9701-2023-mj-p11-q10-paper.png"]
+}

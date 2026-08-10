@@ -1,0 +1,23 @@
+{
+  "id": "cie-9701-2021-mj-p21-q9a",
+  "exam_board": "CIE",
+  "syllabus_code": "9701",
+  "level": "AS",
+  "year": 2021,
+  "session": "MJ",
+  "paper": 21,
+  "question": "9(a)",
+  "parent_question": "9",
+  "part": "a",
+  "marks": 2,
+  "syllabus_codes": ["5.1"],
+  "topic_titles": ["Enthalpy changes"],
+  "question_type": "structured",
+  "difficulty": 3,
+  "source_qp": "raw/papers/9701_s21_qp_21.pdf",
+  "source_ms": "raw/papers/9701_s21_ms_21.pdf",
+  "page_qp": 6,
+  "body": "Define standard enthalpy change of neutralisation.",
+  "mark_scheme": "…",
+  "figures": ["assets/cie-9701-2021-mj-p21-q9a-paper.png"]
+}

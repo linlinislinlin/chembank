@@ -1,0 +1,30 @@
+# Selection rules for the Enthalpy (5.1) quick-review handout.
+# Used by: chembank select pick/5.1-demo.yaml -o build/pick.json
+#
+# Field reference (all keys optional except `title`):
+#   syllabus_codes   : list of CIE 9701 topic codes to keep (OR matching).
+#   topic_title      : substring filter on topic_titles.
+#   year_min/year_max: inclusive year bounds.
+#   difficulty_min/max: 1–5 (from examiner-report qualitative band, when present).
+#   max_marks        : only questions worth at most this many marks.
+#   question_type    : mcq | structured | extended | practical | data.
+#   count            : how many questions the pick should hold (truncate).
+#   sort             : list of fields; default [year, question]. Using
+#                      [year, paper, question] spreads MCQ/structured/practical
+#                      and keeps Paper 1/2/3 thumbnails grouped nicely.
+#   shuffle          : bool; randomise order before truncation (seeded).
+#   exclude_after    : optional cutoff code (e.g. "5.2"); drop any question
+#                      whose syllabus_codes contains a code >= this cutoff.
+title: "Enthalpy 5.1 复习单"
+syllabus_codes: ["5.1"]
+# 5.1 讲义不混入 ≥5.2 的题，避免与 5.2 讲义重复 / 学生未学的后续知识。
+exclude_after: "5.2"
+# Enthalpy = energetics; 5.2 (lattice energy) is A Level, so we keep this sheet
+# focused on 5.1 only to avoid mixing AS+A content. Uncomment to broaden:
+#   syllabus_codes: ["5.1", "5.2"]
+topic_title: "Enthalpy"
+year_min: 2016
+year_max: 2024
+count: 12
+sort: [year, paper, question]
+shuffle: false

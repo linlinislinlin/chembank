@@ -1,0 +1,31 @@
+# Selection rules for the Hess's law (5.2) handout demo.
+# Used by: chembank select pick/5.2-demo.yaml -o build/pick52.json
+#
+# NOTE — syllabus mapping (syllabus/cie-9701-as-a-level-chemistry.yaml):
+#   topic 5  "Chemical energetics" (AS):
+#      5.1 = Enthalpy change, ΔH
+#      5.2 = Hess's law            <- this rules file
+#   23.1 = Lattice energy and Born-Haber cycles (A Level, SEPARATE code).
+# Lattice energy is 23.1, NOT 5.2. Dedicated lattice handout → pick/... with
+# syllabus_codes: ["23.1"] (only tagged 23.1 questions when the corpus has them).
+#
+# Field reference (all keys optional except `title`):
+#   syllabus_codes   : list of CIE 9701 topic codes to keep (OR matching).
+#   topic_title      : substring filter on topic_titles.
+#   year_min/year_max: inclusive year bounds.
+#   difficulty_min/max: 1–5 (from examiner-report qualitative band, when present).
+#   max_marks        : only questions worth at most this many marks.
+#   question_type    : mcq | structured | extended | practical | data.
+#   count            : how many questions the pick should hold (truncate).
+#   sort             : list of fields; default [year, question]. Using
+#                      [year, paper, question] spreads MCQ/structured/practical
+#                      and keeps Paper 1/2/3 thumbnails grouped nicely.
+#   shuffle          : bool; randomise order before truncation (seeded).
+title: "Hess's law 5.2 讲义"
+syllabus_codes: ["5.2"]
+# Hess's law (5.2) is AS; lattice energy is a SEPARATE A Level code 23.1, so we
+# keep this sheet focused on 5.2 only to avoid mixing Hess + lattice questions.
+topic_title: "Hess"
+count: 10
+sort: [year, paper, question]
+shuffle: false

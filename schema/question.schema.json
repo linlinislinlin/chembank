@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.chembank/schema/question.schema.json",
+  "title": "ChemistryPastPaperQuestion",
+  "type": "object",
+  "required": ["id", "exam_board", "syllabus_code", "syllabus_codes", "question", "mark_scheme"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable question id, e.g. cie-9701-2021-mj-p11-q1"
+    },
+    "exam_board": { "type": "string", "const": "CIE" },
+    "syllabus_code": { "type": "string", "const": "9701" },
+    "level": { "type": "string", "enum": ["AS", "A", "AS/A"] },
+    "year": { "type": "integer" },
+    "session": { "type": "string", "examples": ["MJ", "ON", "FM"] },
+    "paper": {
+      "type": ["integer", "string"],
+      "description": "Paper code, e.g. 11 for Paper 1 variant 1"
+    },
+    "question": { "type": "string", "description": "Question number label, e.g. 1 or 3(b)" },
+    "marks": { "type": ["integer", "null"] },
+    "syllabus_codes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^\\d{1,2}(\\.\\d{1,2})?$" },
+      "description": "Must match codes in syllabus/cie-9701-as-a-level-chemistry.yaml"
+    },
+    "topic_titles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Human-readable titles resolved from syllabus_codes"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "recall",
+          "explain",
+          "calculate",
+          "data-analysis",
+          "practical",
+          "compare",
+          "evaluate",
+          "draw"
+        ]
+      }
+    },
+    "question_type": {
+      "type": "string",
+      "enum": ["mcq", "structured", "extended", "practical", "data"]
+    },
+    "practical_topic": {
+      "type": "string",
+      "enum": [
+        "Titrations",
+        "Thermometric experiments",
+        "Gravimetric experiments",
+        "Gas volume experiments",
+        "Rate experiments",
+        "Qualitative analysis"
+      ],
+      "description": "Controlled Paper 3 experiment taxonomy (topic grain, not part-level)"
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "difficulty_source": {
+      "type": ["string", "null"],
+      "description": "e.g. examiner_report_qualitative — only when difficulty came from that year's ER"
+    },
+    "examiner_report_source": {
+      "type": ["string", "null"],
+      "description": "Path to ER PDF for this year/session, e.g. raw/reports/9701_2021_s21_er.pdf"
+    },
+    "examiner_report": {
+      "type": ["object", "null"],
+      "description": "Year-scoped ER identity; future years add their own report without overwriting",
+      "properties": {
+        "year": { "type": ["integer", "null"] },
+        "session": { "type": ["string", "null"] },
+        "paper": { "type": ["integer", "string", "null"] },
+        "source": { "type": ["string", "null"] }
+      }
+    },
+    "er_year": {
+      "type": ["integer", "null"],
+      "description": "Examiner report year (scoped; not universal LO difficulty)"
+    },
+    "er_session": {
+      "type": ["string", "null"],
+      "examples": ["MJ", "ON", "FM"]
+    },
+    "er_paper": {
+      "type": ["integer", "string", "null"]
+    },
+    "facility": {
+      "type": ["number", "null"],
+      "description": "Numeric facility if present in ER; CIE ERs usually omit this"
+    },
+    "percent_correct": {
+      "type": ["number", "null"],
+      "description": "Percent correct if present in ER; do not invent"
+    },
+    "discrimination": {
+      "type": ["number", "null"]
+    },
+    "examiner_band": {
+      "type": ["string", "null"],
+      "description": "Qualitative band from ER general comments, e.g. easy / particularly_difficult"
+    },
+    "common_incorrect": {
+      "type": ["string", "null"],
+      "description": "Most commonly chosen wrong MCQ option from ER"
+    },
+    "common_errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "examiner_notes": {
+      "type": ["string", "null"],
+      "description": "Per-question comments from the Principal Examiner Report"
+    },
+    "command_words": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "misconceptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "learning_outcomes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d{1,2}\\.\\d{1,2}-\\d{1,2}[a-z]?$"
+      },
+      "description": "Controlled CIE 9701 learning-outcome ids from syllabus YAML (e.g. 3.1-1, 2.4-1a). Always also set parent syllabus_codes."
+    },
+    "learning_outcome_texts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Resolved official LO wording for learning_outcomes (optional cache; exporters may regenerate)"
+    },
+    "learning_objectives": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional free-text lesson objectives / notes — NOT syllabus LO ids (use learning_outcomes for those)"
+    },
+    "ms_answer": {
+      "type": ["string", "null"],
+      "description": "For Paper 1 MCQ: correct option letter A–D"
+    },
+    "source_qp": { "type": "string" },
+    "source_ms": { "type": "string" },
+    "page_qp": { "type": ["integer", "null"] },
+    "page_ms": { "type": ["integer", "null"] },
+    "body": { "type": "string" },
+    "mark_scheme": { "type": "string" }
+  },
+  "additionalProperties": true
+}

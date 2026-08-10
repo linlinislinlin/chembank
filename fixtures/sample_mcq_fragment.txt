@@ -1,0 +1,30 @@
+----- PAGE 1 -----
+CHEMISTRY
+9701/11
+Paper 1 Multiple Choice
+There are forty questions on this paper.
+
+----- PAGE 2 -----
+Section A
+
+1
+Which contains the largest number of hydrogen atoms?
+A
+0.10 mol of pentane
+B
+0.20 mol of but-2-ene
+C
+1.00 mol of hydrogen molecules
+D
+6.02 × 10^23 hydrogen atoms
+
+2
+In which pair of species do both species have only one unpaired p electron?
+A
+Ar+ and C–
+B
+B and Ti+
+C
+F and Ga
+D
+Se– and Si–

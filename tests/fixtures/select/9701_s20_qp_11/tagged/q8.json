@@ -1,0 +1,22 @@
+{
+  "id": "cie-9701-2020-mj-p11-q8",
+  "exam_board": "CIE",
+  "syllabus_code": "9701",
+  "level": "AS",
+  "year": 2020,
+  "session": "MJ",
+  "paper": 11,
+  "question": "8",
+  "marks": 1,
+  "syllabus_codes": ["5.1"],
+  "topic_titles": ["Enthalpy changes"],
+  "question_type": "mcq",
+  "difficulty": 3,
+  "ms_answer": "D",
+  "source_qp": "raw/papers/9701_s20_qp_11.pdf",
+  "source_ms": "raw/papers/9701_s20_ms_11.pdf",
+  "page_qp": 4,
+  "body": "Use the bond energies to find the enthalpy change.",
+  "mark_scheme": "Answer: D",
+  "figures": ["assets/cie-9701-2020-mj-p11-q8-paper.png"]
+}

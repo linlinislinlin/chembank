@@ -1,0 +1,84 @@
+# Past papers — keep code open, keep copyrighted PDFs local
+raw/papers/**
+!raw/papers/.gitkeep
+!raw/papers/README.md
+
+# Examiner reports (copyrighted) — year-scoped names under raw/reports/
+raw/reports/**
+!raw/reports/.gitkeep
+!raw/reports/README.md
+
+# Intermediate & local outputs
+draft/**
+!draft/.gitkeep
+!draft/README.md
+.cache/
+*.pyc
+__pycache__/
+.venv/
+venv/
+.env
+.DS_Store
+
+# Large local syllabus extract (regenerable)
+draft/syllabus_9701_extract.txt
+
+# Tagged question bodies (may include copyrighted past-paper text)
+questions/**
+!questions/.gitkeep
+questions-structured/**
+!questions-structured/.gitkeep
+!questions-structured/README.md
+questions-practical/**
+!questions-practical/.gitkeep
+!questions-practical/README.md
+
+# Local Obsidian vault — keep only the (open-source) syllabus taxonomy.
+# Ignore question bodies / mark-scheme screenshots / papers / handouts,
+# which are copyrighted past-paper content and duplicated in quiz-app/site.
+vault/.obsidian/
+vault/assets/**
+vault/questions/**
+!vault/questions/.gitkeep
+vault/papers/**
+vault/handouts/**
+vault/queries/**
+vault/questions.md
+vault/Home.md
+vault/题库首页.md
+vault/*.canvas
+
+# Practical vault (Paper 3) — local source, ignore copyrighted content
+vault-practical/.obsidian/
+vault-practical/assets/**
+vault-practical/questions/**
+vault-practical/papers/**
+vault-practical/queries/**
+vault-practical/questions.md
+vault-practical/Home.md
+vault-practical/题库首页.md
+vault-practical/*.canvas
+
+# Structured vault (Paper 2/4) — keep scaffold; ignore exported notes/assets
+vault-structured/.obsidian/
+vault-structured/questions/**
+!vault-structured/questions/.gitkeep
+vault-structured/assets/**
+!vault-structured/assets/.gitkeep
+vault-structured/papers/**
+!vault-structured/papers/.gitkeep
+vault-structured/queries/**
+vault-structured/题库首页.md
+
+# Editor / tooling
+.idea/
+.vscode/
+*.egg-info/
+dist/
+build/
+
+# ChemBank quiz web app — the generated site IS committed to the (private) repo
+# so GitHub Actions can deploy it without needing the copyrighted source data
+# (which stays local / gitignored). Rebuild via quiz-app/build.py, then deploy.sh.
+# Do NOT re-ignore quiz-app/site/ — the deploy workflow uploads that folder.
+

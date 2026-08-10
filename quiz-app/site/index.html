@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#1e1b2e" />
+<title>ChemBank 刷题 · CIE 9701</title>
+<style>
+  :root {
+    --bg: #0f0d1a;
+    --bg-soft: #171427;
+    --panel: #1e1b2e;
+    --panel-2: #262241;
+    --line: #2f2a4a;
+    --text: #eceaf6;
+    --muted: #9b95b8;
+    --accent: #7c6cf0;
+    --accent-2: #4ece9d;
+    --red: #f07c7c;
+    --amber: #f0c17c;
+    --radius: 14px;
+    --shadow: 0 8px 30px rgba(0,0,0,.35);
+    --sidebar-w: 320px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.55;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ---------- Layout ---------- */
+  #app { display: flex; flex: 1; min-width: 0; height: 100vh; }
+
+  /* Sidebar */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--bg-soft);
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  #brand {
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  #brand h1 { margin: 0; font-size: 18px; letter-spacing: .5px; font-weight: 700; }
+  #brand .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  #brand .count { color: var(--accent-2); font-weight: 600; }
+
+  #search {
+    margin: 12px 14px 6px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    width: calc(100% - 28px);
+  }
+  #search::placeholder { color: var(--muted); }
+  #search:focus { border-color: var(--accent); }
+
+  #tree {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 8px 20px;
+  }
+  .t-node { user-select: none; }
+  .t-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 13.5px;
+  }
+  .t-row:hover { background: var(--panel); }
+  .t-row.active { background: var(--accent); color: #fff; }
+  .t-caret {
+    width: 16px; height: 16px; flex: 0 0 16px;
+    display: grid; place-items: center;
+    color: var(--muted); font-size: 10px;
+    transition: transform .15s;
+  }
+  .t-caret.open { transform: rotate(90deg); }
+  .t-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .t-count {
+    font-size: 11px; color: var(--muted);
+    background: var(--panel-2); padding: 1px 7px; border-radius: 20px;
+  }
+  .t-row.active .t-count { background: rgba(255,255,255,.2); color: #fff; }
+  .t-children { margin-left: 16px; border-left: 1px solid var(--line); padding-left: 4px; }
+  .empty-hint { padding: 24px 16px; color: var(--muted); font-size: 13px; text-align: center; }
+
+  /* Footer stats in sidebar */
+  #sideFoot {
+    border-top: 1px solid var(--line);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Main ---------- */
+  #main { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--bg); }
+
+  #topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-soft);
+  }
+  #menuBtn { display: none; font-size: 20px; padding: 4px 8px; }
+  #crumb { font-size: 14px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #crumb b { color: var(--accent); }
+  .chip {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  #content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  /* question */
+  .q-head {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+  .q-head .meta { color: var(--muted); font-size: 13px; }
+  .q-head .diff { display: inline-flex; gap: 2px; margin-left: 4px; }
+  .q-head .diff i { width: 6px; height: 6px; border-radius: 2px; background: #453d6b; }
+  .q-head .diff i.on { background: var(--amber); }
+
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--panel-2); color: var(--muted); }
+  .badge.as { background: rgba(124,108,240,.18); color: var(--accent-2); }
+
+  .q-figure { text-align: center; margin: 18px 0; }
+  .q-figure img {
+    max-width: 100%; max-height: 78vh;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: #fff;
+  }
+
+  .q-topics { font-size: 12px; color: var(--muted); margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .answers { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .ans-btn {
+    flex: 1 1 100px; max-width: 120px;
+    padding: 14px 0; border-radius: 12px;
+    background: var(--panel-2); border: 2px solid var(--line);
+    font-size: 17px; font-weight: 700; letter-spacing: 1px;
+    transition: transform .08s, border-color .15s, background .15s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .ans-btn:active { transform: scale(.95); }
+  .ans-btn.selected { border-color: var(--accent); background: rgba(124,108,240,.18); color: #fff; }
+  .ans-btn.correct { border-color: var(--accent-2); background: rgba(78,206,157,.18); color: var(--accent-2); }
+  .ans-btn.wrong { border-color: var(--red); background: rgba(240,124,124,.18); color: var(--red); }
+
+  #feedback {
+    min-height: 0; overflow: hidden;
+    transition: all .25s ease;
+    border-radius: 12px; margin-top: 16px;
+    padding: 0 16px; display: none;
+  }
+  #feedback.show { display: block; padding: 16px; }
+  #feedback .verdict { font-size: 15px; font-weight: 700; }
+  #feedback .verdict.right { color: var(--accent-2); }
+  #feedback .verdict.wrong { color: var(--red); }
+  #feedback .ms { margin-top: 8px; color: var(--muted); font-size: 13px; }
+  #feedback .ms b { color: var(--amber); }
+
+  .actions { display: flex; gap: 10px; margin-top: 18px; }
+  .btn {
+    padding: 12px 22px; border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    background: var(--accent); color: #fff;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.ghost { background: var(--panel-2); color: var(--text); }
+  .btn.ghost.warn { color: var(--red); }
+  .btn.green { background: var(--accent-2); color: #07241a; }
+
+  /* home / empty */
+  #empty {
+    text-align: center; padding: 60px 20px; color: var(--muted);
+  }
+  #empty .big { font-size: 40px; margin-bottom: 12px; }
+  #empty h2 { color: var(--text); margin: 8px 0 12px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 14px; margin-top: 24px; }
+  .stat { background: var(--panel-2); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat .v { font-size: 26px; font-weight: 800; color: var(--accent-2); }
+  .stat .k { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* wrong answers list */
+  .wrow { display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--line); }
+  .wrow:last-child { border-bottom: none; }
+  .wrow .mini { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; background: #fff; border: 1px solid var(--line); }
+  .wrow .info { flex: 1; font-size: 13px; }
+  .wrow .info .t { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  #snack {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: var(--panel-2); border: 1px solid var(--line);
+    padding: 12px 20px; border-radius: 30px; font-size: 13px;
+    box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+    transition: opacity .25s; z-index: 50;
+  }
+  #snack.show { opacity: 1; }
+
+  /* auto-update banner */
+  #updateBar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    background: linear-gradient(90deg,#7c6cf0,#4ece9d);
+    color: #0a0816; padding: 11px 18px; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    box-shadow: var(--shadow); transform: translateY(-100%);
+    transition: transform .28s ease;
+  }
+  #updateBar.show { transform: translateY(0); }
+  #updateBar .ubtn {
+    background: #0a0816; color: #fff; border-radius: 20px;
+    padding: 5px 16px; font-size: 13px; font-weight: 700;
+  }
+
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: #2c2744; border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  /* mobile */
+  @media (max-width: 860px) {
+    #sidebar {
+      position: fixed; left: 0; top: 0; z-index: 40;
+      transform: translateX(-100%);
+      transition: transform .22s ease;
+      box-shadow: var(--shadow);
+    }
+    #sidebar.open { transform: translateX(0); }
+    #menuBtn { display: block; }
+    #content { padding: 14px; }
+    .card { padding: 16px; }
+    #scrim { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 35; }
+    #scrim.show { display: block; }
+  }
+</style>
+</head>
+<body>
+<div id="updateBar">📥 有新题目更新！<button class="ubtn" onclick="location.reload()">点击刷新</button></div>
+<div id="app">
+  <div id="scrim" onclick="closeSidebar()"></div>
+  <aside id="sidebar">
+    <div id="brand">
+      <h1>⚗️ ChemBank 刷题</h1>
+      <div class="sub">CIE 9701 · AS 化学 · Paper 1 MCQ</div>
+      <div class="sub">共 <span class="count" id="globalCount">–</span> 题</div>
+    </div>
+    <input id="search" placeholder="搜索考纲 / 知识点…" autocomplete="off" />
+    <div id="tree"></div>
+    <div id="sideFoot">
+      <span>已做 <b id="doneCount">0</b> / <span id="footTotal">0</span></span>
+      <span>正确率 <b id="acc">–</b></span>
+      <span style="cursor:pointer;color:var(--red)" onclick="resetAll()">重置</span>
+    </div>
+  </aside>
+
+  <main id="main">
+    <div id="topbar">
+      <button id="menuBtn" onclick="toggleSidebar()">☰</button>
+      <div id="crumb">考题库，选择左侧考纲开始刷题</div>
+      <div class="chip" id="orderChip" style="cursor:pointer">顺序 ▲</div>
+    </div>
+    <div id="content"></div>
+  </main>
+</div>
+
+<div id="snack"></div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+
+/* ============ data model ============ */
+const DATA = window.CHEMBANK_DATA || { questions: [], syllabus: [] };
+const QUESTIONS = DATA.questions;
+const SYLLABUS = DATA.syllabus;
+
+/* ---------- localStorage progress ----------
+ * progress: { qid: { seen:bool, lastAnswer:'A', ok:bool, mistakes:int } }
+ */
+const PROGRESS_KEY = "chembank-progress-v1";
+let progress = loadProgress();
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+}
+function rec(qid) {
+  if (!progress[qid]) progress[qid] = { seen: false, ok: false, mistakes: 0 };
+  return progress[qid];
+}
+
+/* ---------- session state ---------- */
+let selCodes = [];          // selected syllabus codes (walk the node subtree)
+let selTitle = "";
+let filtered = [];          // currently playable questions (shuffled or not)
+let idx = 0;
+let answered = null;        // { picked: 'A' }
+let shuffleMode = false;
+
+const SESSION = sessionStorage;
+
+/* ============ helpers ============ */
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+};
+function fmtPaper(y, s, p, q) {
+  const SY = { FM: "春", MJ: "夏", ON: "冬" };
+  return `${y} ${SY[s] || s} · P${p} · Q${q}`;
+}
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s == null ? "" : String(s);
+  return d.innerHTML;
+}
+function snack(msg) {
+  const s = $("snack"); s.textContent = msg; s.classList.add("show");
+  clearTimeout(s._t); s._t = setTimeout(() => s.classList.remove("show"), 1800);
+}
+
+/* Question -> all syllabus codes (walk subtree) */
+function collectCodes(node, out = []) {
+  if (node.code) out.push(node.code);
+  (node.children || []).forEach(c => collectCodes(c, out));
+  return out;
+}
+
+/* ============ filtering ============ */
+function withinCodes(q, codes) {
+  const set = new Set(codes);
+  return q.codes.some(c => set.has(c));
+}
+function filterQuestions(codes) {
+  const set = new Set(codes);
+  return QUESTIONS.filter(q => q.codes.length && q.codes.some(c => set.has(c)));
+}
+
+/* ============ nav tree ============ */
+function renderTree() {
+  const box = $("tree");
+  box.innerHTML = "";
+  const q = ($("search").value || "").trim().toLowerCase();
+  const roots = SYLLABUS.filter(n => {
+    if (!q) return true;
+    return (n.title || "").toLowerCase().includes(q) ||
+           collectCodes(n).some(c => (n.title + " " + c).toLowerCase().includes(q));
+  }).map(n => {
+    if (!q) return n;
+    // when searching, flatten so matches show
+    return n;
+  });
+  roots.forEach(r => box.appendChild(renderNode(r, 0, q)));
+  if (!roots.length) box.appendChild(el("div", "empty-hint", "无匹配考纲"));
+}
+
+function renderNode(node, depth, q) {
+  const wrap = el("div", "t-node");
+  const row = el("div", "t-row");
+  const kids = node.children || [];
+  const hasKids = kids.length > 0;
+  const isSel = selCodes.length && withinCodes({ codes: [selCodes[0]] }, [node.code]);
+
+  const caret = el("span", "t-caret" + (hasKids ? " open" : ""), hasKids ? "▶" : "");
+  row.appendChild(caret);
+  const title = el("span", "t-title", node.title || node.code);
+  if (q && (node.title || "").toLowerCase().includes(q)) title.style.color = "var(--amber)";
+  row.appendChild(title);
+  const cnt = el("span", "t-count", node.count || 0);
+  row.appendChild(cnt);
+
+  const targetCodes = hasKids ? collectCodes(node) : [node.code];
+  const onClick = () => {
+    selCodes = targetCodes; selTitle = node.title || node.code;
+    shuffleMode = false;
+    startPlay(targetCodes);
+    renderTree();
+    closeSidebar();
+    updateCrumb();
+  };
+  if (isSel) { row.classList.add("active"); } else { row.onclick = onClick; }
+  wrap.appendChild(row);
+
+  if (hasKids) {
+    const children = el("div", "t-children");
+    // show/skip children when searching that hides parent content
+    kids.forEach(k => children.appendChild(renderNode(k, depth + 1, q)));
+    wrap.appendChild(children);
+    // clicking a parent with children toggles the caret (and selects too)
+    caret.parentElement.onclick = onClick;
+  }
+  row.style.paddingLeft = (10 + depth * 8) + "px";
+  return wrap;
+}
+
+function toggleSidebar() {
+  $("sidebar").classList.toggle("open");
+  $("scrim").classList.toggle("show", $("sidebar").classList.contains("open"));
+}
+function closeSidebar() {
+  $("sidebar").classList.remove("open");
+  $("scrim").classList.remove("show");
+}
+
+/* ============ playing ============ */
+function startPlay(codes) {
+  filtered = filterQuestions(codes);
+  if (!shuffleMode) filtered = [...filtered].sort(sessionCmp);
+  else filtered = shuffle(filtered);
+  idx = 0;
+  answered = null;
+  renderQuestion();
+}
+
+function sessionCmp(a, b) {
+  return (a.year - b.year) || norm(a.paper) - norm(b.paper) || norm(a.question) - norm(b.question);
+}
+function norm(x) { return (parseInt(x, 10) || 0); }
+function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function currentQ() { return filtered[idx]; }
+
+function setOrder() {
+  shuffleMode = !shuffleMode;
+  saveIntent();
+  $("orderChip").textContent = shuffleMode ? "随机 🔀" : "顺序 ▲";
+  startPlay(selCodes);
+}
+
+/* ============ render question ============ */
+function renderQuestion() {
+  const q = currentQ();
+  const content = $("content");
+  content.innerHTML = "";
+
+  if (!q) { renderEmpty(); return; }
+
+  const card = el("div", "card");
+
+  // header
+  const head = el("div", "q-head");
+  head.appendChild(el("span", "meta", `${idx + 1} / ${filtered.length}`));
+  const src = fmtPaper(q.year, q.session, q.paper, q.question);
+  const srcEl = el("span", "meta", sourceLabel(q) + " · " + src);
+  head.appendChild(srcEl);
+  if (q.marks) head.appendChild(el("span", "badge", q.marks + " 分"));
+  if (q.session) head.appendChild(el("span", "badge as", "AS"));
+  const diff = el("span", "diff");
+  for (let i = 1; i <= 5; i++) { diff.appendChild(el("i", i <= (q.difficulty || 1) ? "on" : "")); }
+  head.appendChild(diff);
+  card.appendChild(head);
+
+  const fig = el("div", "q-figure");
+  const img = document.createElement("img");
+  img.src = q.figures && q.figures[0] ? q.figures[0] : "";
+  img.alt = q.topic_titles ? q.topic_titles.join(" / ") : q.id;
+  img.loading = "lazy";
+  fig.appendChild(img);
+  card.appendChild(fig);
+
+  // topics
+  if (q.topics && q.topics.length) {
+    const tp = el("div", "q-topics");
+    q.topics.forEach(t => tp.appendChild(el("span", "badge", t)));
+    card.appendChild(tp);
+  }
+
+  // answer bar
+  const answers = el("div", "answers");
+  ["A", "B", "C", "D"].forEach(letter => {
+    const b = el("button", "ans-btn", letter);
+    if (answered) {
+      b.disabled = true;
+      if (letter === q.ms_answer) b.classList.add("correct");
+      else if (answered.picked === letter) { b.classList.add("wrong"); b.classList.add("selected"); }
+      else b.classList.add("selected");
+    } else {
+      b.onclick = () => submitAnswer(letter);
+    }
+    answers.appendChild(b);
+  });
+  card.appendChild(answers);
+
+  // feedback (only after answering)
+  if (answered) {
+    const fb = el("div", "feedback");
+    fb.id = "feedback";
+    fb.classList.add("show");
+    const r = progress[q.id];
+    const ok = answered.picked === q.ms_answer;
+    const verdict = el("div", "verdict " + (ok ? "right" : "wrong"),
+      ok ? "✓ 回答正确！" : "✗ 答错了");
+    fb.appendChild(verdict);
+    const ms = el("div", "ms", "正确答案：");
+    const msAns = el("b", "", q.ms_answer || "—");
+    ms.appendChild(msAns);
+    const qn = el("span", "", q.body ? "　·　" + stripNewlines(q.body, 140) : "");
+    ms.appendChild(qn);
+    fb.appendChild(ms);
+    if (!ok && q.learning_outcome_texts && q.learning_outcome_texts[0]) {
+      const lo = el("div", "ms", "© " + q.learning_outcome_texts[0].replace(/\s+/g, " "));
+      fb.appendChild(lo);
+    }
+    card.appendChild(fb);
+  }
+
+  // prev / check / next
+  const acts = el("div", "actions");
+  if (idx > 0) {
+    const p = el("button", "btn ghost", "← 上一题");
+    p.onclick = () => { idx--; answered = null; renderQuestion(); };
+    acts.appendChild(p);
+  }
+  if (answered) {
+    if (idx + 1 < filtered.length) {
+      const n = el("button", "btn", "下一题 →");
+      n.onclick = () => { idx++; answered = null; renderQuestion(); };
+      acts.appendChild(n);
+    } else {
+      const d = el("button", "btn green", "完成本轮 ✔");
+      d.onclick = renderDone;
+      acts.appendChild(d);
+    }
+  }
+  card.appendChild(acts);
+
+  content.appendChild(card);
+  updateFooter();
+}
+
+function stripNewlines(s, max) {
+  if (!s) return "";
+  let t = s.replace(/\s+/g, " ").trim();
+  if (t.length > max) t = t.slice(0, max) + "…";
+  return t;
+}
+
+function sourceLabel(q) {
+  let s = `${q.year || "?"} `;
+  if (q.session) s += q.session + " ";
+  if (q.paper) s += "P" + q.paper;
+  return s;
+}
+
+function submitAnswer(letter) {
+  if (answered) return;
+  answered = { picked: letter };
+  const q = currentQ();
+  const r = rec(q.id);
+  r.seen = true;
+  const correct = letter === q.ms_answer;
+  r.ok = r.ok || correct;
+  r.mistakes = correct ? 0 : (r.mistakes || 0) + 1;
+  saveProgress();
+  renderQuestion();
+}
+
+function renderEmpty() {
+  const c = $("content");
+  const box = el("div", "card");
+  box.id = "empty"; box.style.textAlign = "center"; box.style.padding = "48px 20px";
+  box.innerHTML = `<div style="font-size:44px">📚</div><h2>ChemBank 刷题</h2>
+    <p style="color:var(--muted)">在左侧选择考纲节点，即可开始刷该知识点的真题。<br>支持自动判分、错题本、随机抽题。</p>`;
+  const stats = el("div", "stat-grid");
+  const done = Object.values(progress).filter(x => x.seen).length;
+  const wrong = Object.values(progress).filter(x => x.mistakes > 0).length;
+  const mk = (v, k) => { const d = el("div", "stat"); d.appendChild(el("div", "v", String(v))); d.appendChild(el("div", "k", k)); return d; };
+  stats.appendChild(mk(QUESTIONS.length, "总题数"));
+  stats.appendChild(mk(done, "已做"));
+  stats.appendChild(mk(wrong, "错题"));
+  box.appendChild(stats);
+  c.appendChild(box);
+  updateFooter();
+}
+
+function renderDone() {
+  const c = $("content");
+  const card = el("div", "card");
+  card.style.textAlign = "center"; card.style.padding = "48px 20px";
+  const set = new Set(filtered.map(q => q.id));
+  const seen = new Set(Object.keys(progress).filter(id => set.has(id) && progress[id].seen));
+  let correct = 0, wrong = 0;
+  seen.forEach(id => { progress[id].ok ? correct++ : wrong++; });
+  const acc = seen.size ? Math.round(correct / seen.size * 100) : 0;
+  card.innerHTML = `<div style="font-size:46px">🎉</div><h2>本轮完成</h2>`;
+  const stats = el("div", "stat-grid");
+  const mk = (v, k) => { const d = el("div", "stat"); d.appendChild(el("div", "v", String(v))); d.appendChild(el("div", "k", k)); return d; };
+  stats.appendChild(mk(filtered.length, "题目"));
+  stats.appendChild(mk(correct + wrong, "已作答"));
+  stats.appendChild(mk(acc + "%", "正确率"));
+  card.appendChild(stats);
+  const acts = el("div", "actions");
+  acts.style.justifyContent = "center"; acts.style.marginTop = "22px";
+  const again = el("button", "btn green", "随机再来一轮");
+  again.onclick = () => { shuffleMode = true; startPlay(selCodes); };
+  const browse = el("button", "btn ghost", "返回首页");
+  browse.onclick = () => { selCodes = []; selTitle = ""; filtered = []; idx = 0; answered = null; renderQuestion(); renderTree(); updateCrumb(); };
+  acts.appendChild(again); acts.appendChild(browse);
+  card.appendChild(acts);
+  c.appendChild(card);
+}
+
+function updateCrumb() {
+  $("crumb").innerHTML = selTitle ? `当前：<b>${esc(selTitle)}</b><span style="color:var(--muted)"> · ${filtered.length} 题</span>` : "考题库，选择左侧考纲开始刷题";
+}
+
+function updateFooter() {
+  const seen = Object.values(progress).filter(x => x.seen).length;
+  const wrong = Object.values(progress).filter(x => x.mistakes > 0).length;
+  $("doneCount").textContent = seen;
+  $("footTotal").textContent = QUESTIONS.length;
+  $("globalCount").textContent = QUESTIONS.length;
+  $("acc").textContent = (seen ? Math.round(Object.values(progress).filter(x => x.seen && x.ok).length / seen * 100) : 0) + "%";
+  // wrong list quick link handled by default
+}
+
+function resetAll() {
+  if (!confirm("确定清空所有答题记录？")) return;
+  progress = {}; saveProgress(); renderTree(); renderQuestion(); updateFooter(); snack("已重置");
+}
+
+/* ============ boot ============ */
+const UPDATE_VER_KEY = "chembank-data-ver";
+const UPDATE_POLL_MS = 45000;
+function saveIntent() { sessionStorage.setItem("chembank-shuffle", shuffleMode ? "1" : "0"); }
+
+/* Auto-update detection: periodically re-fetch the version field of remote data.js.
+   File uses cache-busting so the browser never serves a stale copy. */
+function currentVersion() {
+  return (DATA && DATA.version) ? DATA.version : "";
+}
+function showUpdateBar() {
+  const bar = $("updateBar");
+  if (bar && !bar.classList.contains("show")) {
+    bar.classList.add("show");
+  }
+}
+async function pollForUpdate() {
+  try {
+    const r = await fetch("data.js?_=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) return;
+    const text = await r.text();
+    const m = text.match(/"version"\s*:\s*"([^"]+)"/);
+    if (!m) return;
+    const remoteVer = m[1];
+    if (remoteVer && remoteVer !== currentVersion()) {
+      showUpdateBar();
+    }
+  } catch (e) { /* transient network error — ignore, retry next tick */ }
+}
+function initUpdatePolling() {
+  try { localStorage.setItem(UPDATE_VER_KEY, currentVersion()); } catch (e) {}
+  pollForUpdate();
+  setInterval(pollForUpdate, UPDATE_POLL_MS);
+  if (navigator && navigator.onLine === false) {
+    window.addEventListener("online", () => pollForUpdate());
+  }
+}
+
+function init() {
+  if (/^1$/.test(SESSION.getItem("chembank-shuffle") || "")) shuffleMode = true;
+  $("orderChip").textContent = shuffleMode ? "随机 🔀" : "顺序 ▲";
+  $("orderChip").onclick = setOrder;
+  $("search").addEventListener("input", renderTree);
+  renderTree();
+  renderQuestion();   // shows home/stats
+  updateCrumb();
+  updateFooter();
+  initUpdatePolling();
+}
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

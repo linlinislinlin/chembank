@@ -124,7 +124,17 @@ init();
 
 function init() {
   const id = new URLSearchParams(location.search).get("id");
-  if (!id) { showErr("Missing assignment link parameter (?id=)"); return; }
+  if (!id) {
+    const el = document.getElementById("errMsg");
+    el.textContent = "This is a homework page — open it from a teacher-provided assignment link.";
+    const lnk = document.createElement("a");
+    lnk.href = "home.html";
+    lnk.textContent = "Go to the ChemBank home page ↵";
+    lnk.style.marginLeft = "8px";
+    el.appendChild(lnk);
+    showErr("");
+    return;
+  }
   DB.getAssignment(Number(id)).then(ass => {
     if (!ass) throw new Error("Assignment not found or has been deleted");
     window.__ASSIGN = ass;

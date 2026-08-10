@@ -27,6 +27,7 @@
   .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
   .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:28px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.3); transition:transform .15s, border-color .15s; }
   .card:hover { transform:translateY(-4px); border-color:var(--accent); }
+  button.card { width:100%; font-family:inherit; cursor:pointer; color:inherit; }
   .card .icon { font-size:44px; }
   .card h3 { font-size:22px; margin:14px 0 8px; font-weight:800; }
   .card .desc { color:var(--muted); font-size:14px; margin-bottom:22px; min-height:42px; }
@@ -78,15 +79,15 @@
       <p class="desc">No login needed. Instantly draw any number of questions from the whole bank, with instant marking and Mark Schemes.</p>
       <span class="cta practice">Start practicing →</span>
     </a>
-    <a class="card" href="homework.html" id="assignCard">
+    <button class="card assign-cta" id="assignCard" type="button">
       <div class="icon">📝</div>
       <h3>Assignment</h3>
       <p class="desc">Complete a homework set assigned by your teacher. Enter the assignment number or paste the link your teacher gave you.</p>
-      <span class="cta assignment">Open assignment →</span>
-    </a>
+      <span class="cta assignment">Enter assignment ID →</span>
+    </button>
   </div>
 
-  <div class="assign-panel">
+  <div class="assign-panel" id="assignPanel">
     <div class="assign-card">
       <h4>Enter an assignment</h4>
       <p class="sub">Use the number from your teacher (e.g. 5), or paste the full assignment link.</p>
@@ -99,7 +100,6 @@
         <button class="btn" id="goLink">Open</button>
       </div>
       <div class="err" id="assignErr"></div>
-      <div class="hint">You can also just click the "Assignment" card above to try one.</div>
     </div>
   </div>
 
@@ -154,6 +154,15 @@ document.getElementById("aid").addEventListener("keydown", e => {
 });
 document.getElementById("alink").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("goLink").click();
+});
+// The Assignment card is NOT a direct link (homework.html needs ?id=).
+// Clicking it focuses the assignment input so students enter a number/link.
+document.getElementById("assignCard").addEventListener("click", (e) => {
+  e.preventDefault();
+  const panel = document.getElementById("assignPanel");
+  const inp = document.getElementById("aid");
+  if (panel) panel.scrollIntoView({ behavior: "smooth", block: "center" });
+  if (inp) inp.focus();
 });
 </script>
 </body>

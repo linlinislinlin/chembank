@@ -1,0 +1,8 @@
+# Supabase Edge Functions 项目配置
+# 参考: https://supabase.com/docs/guides/functions/deploy#configtoml
+
+project_id = "jrobrcaiqtfwuomzycui"
+
+[functions.stats-edge]
+enabled = true
+verify_jwt = false

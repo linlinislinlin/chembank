@@ -13,16 +13,28 @@ Supabase 项目（就是你在 config.js 里填 url/anonKey 的那个）。
 
 ```bash
 # 1) 把真正的教师密钥写进 Supabase secrets（不要和前端 statsToken 相同更安全）
-supabase secrets set --env-name TEACHER_TOKEN --project-ref <你的项目ref> '一套只有老师知道的随机长口令'
+#    注意：secrets set 的语法是 NAME=VALUE（不是 --env-name），且先 cd 到 quiz-app/
+#    确保能找到 quiz-app/supabase/config.toml 与函数目录。
+cd /Users/tsinglan-school/Desktop/题库/quiz-app
+supabase secrets set TEACHER_TOKEN='一套只有老师知道的随机长口令' --project-ref <你的项目ref>
 
-# 2) 部署函数（--no-verify-jwt：因为本函数自己用 x-teacher-token 鉴权，不依赖 Supabase JWT）
-supabase functions deploy stats-edge --project-ref <你的项目ref> --no-verify-jwt
+# 2) 部署函数
+#    文件 quiz-app/supabase/config.toml 已为该函数设置 verify_jwt = false
+#    （这是让浏览器 CORS 预检 OPTIONS 不被网关 500 的关键）。
+#    部署前请确保 config.toml 存在。
+supabase functions deploy stats-edge --project-ref <你的项目ref>
 ```
 
-> 项目 ref 是 Supabase URL 里 `https://<ref>.supabase.co` 中间那串短 id。
+> 项目 ref 是 Supabase URL 里 `https://<ref>.supabase.co` 中间那串短 id
+> （例如你的 `jrobrcaiqtfwuomzycui`）。
 
 部署完会返回一个 URL，形如：
 `https://<ref>.functions.supabase.co/stats-edge`
+
+> ⚠️ 若重新部署后浏览器仍报 `Preflight response ... Status code: 500`，
+> 请到 Supabase Dashboard → Edge Functions → 该函数 → **JWT 验证(Verify JWT)必须为「关闭/Off」**。
+> 若显示「开启/On」，在 Dashboard 里把它关掉（或先跑到官网 `.functions.supabase.co` 面板点一下），
+> 否则带自定义头的跨域 POST 会在网关层被 500 拦截。
 
 ## 二、把 URL 填进前端 config.js
 

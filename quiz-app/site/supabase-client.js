@@ -82,13 +82,12 @@ window.HomeworkDB = (() => {
     const url = (cfg.statsEdgeUrl || "").replace(/\/+$/, "");
     if (!url) throw new Error("教师统计接口未配置（config.js 的 statsEdgeUrl）");
     if (!teacherToken) throw new Error("缺少教师口令");
+    // 用 text/plain + body 携带口令，避免自定义 header 触发浏览器 CORS 预检
+    // （否则 Supabase Edge Function 的 OPTIONS 预检可能被网关 500 拦截）。
     const resp = await fetch(url, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-teacher-token": teacherToken,
-      },
-      body: JSON.stringify({ assignment_id: assignmentId }),
+      headers: { "content-type": "text/plain" },
+      body: JSON.stringify({ assignment_id: assignmentId, teacher_token: teacherToken }),
     });
     if (resp.status === 401 || resp.status === 403) {
       throw new Error("教师口令错误或无权访问");

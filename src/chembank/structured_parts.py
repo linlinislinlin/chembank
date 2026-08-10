@@ -153,6 +153,16 @@ def _normalize_part_layout(text: str) -> str:
         count=1,
         flags=re.I,
     )
+    # CIE prints "(ii) …" / "(e)(ii) …" glued to the "DO NOT WRITE IN THIS
+    # MARGIN" trailer at the end of the preceding line. Split it to its own line
+    # so the part is recognised as a new unit rather than swallowed by the
+    # previous part.
+    text = re.sub(
+        r"(?m)(DO\s+NOT\s+WRITE\s+IN\s+THIS\s+MARGIN[\s\S]*?)(\([a-z]\)(?:\([ivx]+\))?|\([ivx]+\))(?=\s|\Z)",
+        lambda m: m.group(1).rstrip() + "\n" + m.group(2),
+        text,
+        flags=re.I,
+    )
     return text
 
 

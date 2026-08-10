@@ -177,7 +177,10 @@ def _is_plausible_main(
     body = re.sub(r"^\d{1,2}\s*[.)]?\s*", "", line).strip()
     if not body:
         return True
-    if SKIP_BODY.match(body):
+    # Front-matter words ("Information", "Instructions"…) only indicate boilerplate
+    # when they are short fragments, not a full question stem. A real MCQ stem can
+    # legitimately begin with these words (e.g. "Information about two substances…").
+    if SKIP_BODY.match(body) and len(body.split()) <= 4 and len(body) < 60:
         return False
     if QA_NOTES_START.match(body):
         return False
@@ -251,7 +254,10 @@ def _select_question_matches(
             line_end = text.find("\n", m.start())
             line = text[m.start() : line_end if line_end != -1 else m.start() + 160]
             body = re.sub(r"^\d{1,2}\s*[.)]?\s*", "", line).strip()
-            if re.match(r"^\d{1,2}\s+[A-Za-z]", body):
+            # A glued page number before a stem yields a SHORT body ("9 Bromine").
+            # Long stems may legitimately begin with a digit ("1 mole of ..."),
+            # so only treat short bodies as page-number false starts.
+            if re.match(r"^\d{1,2}\s+[A-Za-z]", body) and len(body.split()) <= 3:
                 return (2, m.start())  # page number false start
             if re.match(r"^BLANK\s+PAGE\b", body, re.I):
                 return (3, m.start())

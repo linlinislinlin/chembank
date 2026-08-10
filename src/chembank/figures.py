@@ -261,6 +261,10 @@ def _merge_horizontal_row_clusters(
 # CIE Paper 1: real question numbers sit ~x=50; Section B statement
 # numbers (1)/(2)/(3) sit indented ~x=71. Keep the cut between them.
 _QUESTION_NUMBER_X_MAX = 62.0
+# Some 2023+ cover/instructions pages carry a far-left digit column (x~18/21)
+# that is NOT the question-number column; real question numbers start ~x=50.
+# Excluding x<40 stops those stray digits impersonating question numbers.
+_QUESTION_NUMBER_X_MIN = 40.0
 
 
 def question_y_ranges_on_page(page: Any) -> dict[str, tuple[float, float]]:
@@ -278,6 +282,8 @@ def question_y_ranges_on_page(page: Any) -> dict[str, tuple[float, float]]:
         # Question numbers sit at the far left margin (~50pt), not at the
         # indented statement column (~71pt) used in Q31–40.
         if x0 > _QUESTION_NUMBER_X_MAX:
+            continue
+        if x0 < _QUESTION_NUMBER_X_MIN:
             continue
         n = int(word)
         if 1 <= n <= 40:
@@ -335,6 +341,8 @@ def _clip_text(page: Any, region: FigureRegion) -> str:
             continue
         if x0 > _QUESTION_NUMBER_X_MAX:
             continue
+        if x0 < _QUESTION_NUMBER_X_MIN:
+            continue
         if y0 < region.y0 - 2 or y0 > region.y1 + 2:
             continue
         cand = (y0, x0, word)
@@ -360,6 +368,8 @@ def _clip_text(page: Any, region: FigureRegion) -> str:
                         continue
                     x0, y0 = float(span["bbox"][0]), float(span["bbox"][1])
                     if x0 > _QUESTION_NUMBER_X_MAX:
+                        continue
+                    if x0 < _QUESTION_NUMBER_X_MIN:
                         continue
                     if y0 < region.y0 - 2 or y0 > region.y1 + 2:
                         continue
@@ -801,6 +811,12 @@ def _clip_contains_next_question(text: str, qnum: str) -> bool:
     not a bare option letter or table cell (``3`` then ``B`` in a Group/Period
     options grid). PDF extracts often insert C0 controls between the number
     and the stem (``2\\t\\x07Carbon``), so those are skipped.
+
+    For statement-combo questions (numbered statements 1/2/3 followed by a
+    "Which statements are correct?" stem and an A–D combination key) the
+    interior statement numbers (``2 Ammonia has a higher boiling point…``) must
+    NOT be mistaken for a next-question opener. Only a genuine bleed — a later
+    question opener that appears *after* the combination key — is reported.
     """
     if not text or not qnum.isdigit():
         return False
@@ -808,14 +824,27 @@ def _clip_contains_next_question(text: str, qnum: str) -> bool:
     nxt = n + 1
     if nxt > 40:
         return False
-    # Next-question opener: "<n> <CapitalizedWord…>" — at least 3 letters so
-    # single option letters (A–D) and short table cells do not false-trigger.
-    return bool(
-        re.search(
-            rf"(?:^|\n)\s*{nxt}(?:\s|[\x00-\x1f\ufeff])+[A-Z][A-Za-z]{{2,}}\b",
-            text,
-        )
-    )
+    nxt_re = rf"(?:^|\n)\s*{nxt}(?:\s|[\x00-\x1f\ufeff])+([A-Z][A-Za-z]{{2,}})\b"
+    _nxt_searcher = re.compile(nxt_re)
+
+    def _is_real_next_question(s: str) -> bool:
+        m = _nxt_searcher.search(s)
+        if not m:
+            return False
+        return m.group(1).lower() not in {"fig", "figure"}
+    if not _is_real_next_question(text):
+        return False
+    # Statement/step-combo questions (numbered statements 1/2/3, mechanism
+    # steps 1/2/3/4, …) precede the A–D combination key. Their interior
+    # numbered items (e.g. statement "2 Ammonia…", step "4 CH3CH2NH2…") must
+    # NOT be mistaken for a next-question opener. Report a later-question
+    # opener only AFTER the combination key, so interior items don't
+    # false-trigger while genuine bleeds (which follow the key) are still seen.
+    if _ABCD_COMBO_KEY_RE.search(text):
+        key_m = _ABCD_COMBO_KEY_RE.search(text)
+        return _is_real_next_question(text[key_m.end():])
+    # Ordinary question: report the first later-question opener anywhere.
+    return True
 
 
 def _attach_abcd_combo_for_statements(
@@ -972,7 +1001,7 @@ def _pdf_requires_mcq_options(pdf_path: Path) -> bool:
 # Paper 3 examiner mark grids (I–IV boxes) sit ~30pt from the page edge;
 # the default 32pt inset clips their right border.
 _PAPER_CLIP_RIGHT_INSET_DEFAULT = 32.0
-_PAPER_CLIP_RIGHT_INSET_PRACTICAL = 8.0
+_PAPER_CLIP_RIGHT_INSET_PRACTICAL = 0.0
 _PAPER_CLIP_LEFT_X0 = 40.0
 
 

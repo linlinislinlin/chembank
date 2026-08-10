@@ -303,12 +303,15 @@ def _audit_markdown(
             findings.append(Finding(qid, "atom_salad", ln[:60]))
             break
 
-    for ln in lines:
-        if "|" in ln:
-            continue
-        if OPTIONS_RUN_RE.search(ln) and len(ln) > 40:
-            findings.append(Finding(qid, "options_run_together", ln[:60]))
-            break
+    # MCQ-only: options must not run together / be glued. Structured questions
+    # legitimately name species A/B/C in stems and reaction figures, so skip.
+    if not is_structured:
+        for ln in lines:
+            if "|" in ln:
+                continue
+            if OPTIONS_RUN_RE.search(ln) and len(ln) > 40:
+                findings.append(Finding(qid, "options_run_together", ln[:60]))
+                break
 
     if lines and re.fullmatch(r"\d{1,2}", lines[-1]):
         # Trailing lone page number (not the question number alone as stem)

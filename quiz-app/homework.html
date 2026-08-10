@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>化学作业 · ChemBank</title>
+<title>Homework · ChemBank</title>
 <style>
   :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; --amber:#f0c17c; }
   * { box-sizing:border-box; }
@@ -30,7 +30,7 @@
   .abtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:19px; font-weight:700; color:var(--text); cursor:pointer; }
   .abtn.correct { border-color:var(--green); background:rgba(78,206,157,.15); color:var(--green); }
   .abtn.wrong { border-color:var(--red); background:rgba(240,124,124,.15); color:var(--red); }
-  /* 结构题 */
+  /* Structured question */
   .typebadge { display:inline-block; font-size:11px; padding:2px 9px; border-radius:20px; background:rgba(124,108,240,.18); color:var(--accent); margin-left:8px; }
   .msbtn { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:8px 14px; font-size:13px; cursor:pointer; }
   .msbtn:hover { border-color:var(--accent); }
@@ -62,24 +62,24 @@
 </head>
 <body>
 <div class="top">
-  <h1>📝 化学作业</h1>
-  <span class="meta" id="topMeta">加载中…</span>
+  <h1>📝 Chemistry Homework</h1>
+  <span class="meta" id="topMeta">Loading…</span>
 </div>
 
 <div class="wrap">
-  <!-- 身份 -->
+  <!-- identity -->
   <div class="card center" id="idCard">
     <div class="big">🧑‍🎓</div>
-    <h2>先告诉我你是谁</h2>
-    <label>姓名</label>
-    <input class="input" id="iname" placeholder="你的姓名" />
-    <label>学号</label>
-    <input class="input" id="ino" placeholder="学号 / 考号" />
-    <button class="btn" id="startBtn">开始做题 →</button>
+    <h2>First, tell us who you are</h2>
+    <label>Name</label>
+    <input class="input" id="iname" placeholder="Your name" />
+    <label>Student / Exam number</label>
+    <input class="input" id="ino" placeholder="Student / exam number" />
+    <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
 
-  <!-- 做题 -->
+  <!-- quiz -->
   <div class="card" id="quizCard" style="display:none">
     <div class="qhead"><span id="prog"></span><span class="state-pill" id="pill"></span></div>
     <div class="qfig" id="fig"></div>
@@ -90,18 +90,18 @@
     <div class="pbar"><i id="pbarFill"></i></div>
   </div>
 
-  <!-- 完成 -->
+  <!-- done -->
   <div class="card center" id="doneCard" style="display:none">
     <div class="big">🎉</div>
-    <h2 id="doneTitle">作业已完成！</h2>
+    <h2 id="doneTitle">Homework complete!</h2>
     <div class="stat-grid" id="doneStats"></div>
     <div class="done-link" id="doneLink"></div>
-    <button class="btn green" style="background:var(--green);color:#06241a" onclick="location.reload()">重新查看</button>
+    <button class="btn green" style="background:var(--green);color:#06241a" onclick="location.reload()">View again</button>
   </div>
 
   <div class="card" id="errCard" style="display:none">
     <div class="big">⚠️</div>
-    <h2 id="errMsg">加载失败</h2>
+    <h2 id="errMsg">Failed to load</h2>
   </div>
 </div>
 
@@ -114,7 +114,7 @@
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
 const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) || [];
-// 合并两个数据源：MCQ 在 data.js，结构题在 structured-data.js（id 全局不冲突）
+// Merge both data sources: MCQs in data.js, structured in structured-data.js (ids never collide)
 const BYID = new Map(ALL.map(q => [q.id, q]));
 STRUCTURED.forEach(q => BYID.set(q.id, q));
 const DB = window.HomeworkDB;
@@ -123,19 +123,19 @@ init();
 
 function init() {
   const id = new URLSearchParams(location.search).get("id");
-  if (!id) { showErr("缺少作业链接参数（?id=）"); return; }
+  if (!id) { showErr("Missing assignment link parameter (?id=)"); return; }
   DB.getAssignment(Number(id)).then(ass => {
-    if (!ass) throw new Error("作业不存在或已被删除");
+    if (!ass) throw new Error("Assignment not found or has been deleted");
     window.__ASSIGN = ass;
     const qs = (ass.question_ids||[]).map(qid => BYID.get(qid)).filter(Boolean);
-    if (!qs.length) throw new Error("作业里没有可用的题目");
+    if (!qs.length) throw new Error("No available questions in this assignment");
     window.__QS = qs;
-    const cn = ass.title || "作业";
+    const cn = ass.title || "Homework";
     document.title = cn + " · ChemBank";
     document.querySelector("#topMeta").textContent = cn;
-    // 恢复已答进度（localStorage 记住这个作业该生答到哪/身份）
+    // restore answered progress (localStorage remembers where this student got to)
     restoreState(id);
-    // 如果之前已做完，直接显示完成页
+    // if already finished, go straight to the done screen
     if (window.__local && window.__local.done) { showDone(); return; }
     document.getElementById("idCard").style.display = "block";
   }).catch(e => showErr(e.message));
@@ -157,7 +157,7 @@ async function ensureIdentity() {
   const name = document.getElementById("iname").value.trim();
   const no = document.getElementById("ino").value.trim();
   const err = document.getElementById("idErr");
-  if (!name || !no) { err.textContent = "请填写姓名和学号"; return; }
+  if (!name || !no) { err.textContent = "Please fill in your name and student number"; return; }
   try {
     const stu = await DB.ensureStudent(name, no, "");
     window.__STU = stu;
@@ -165,19 +165,18 @@ async function ensureIdentity() {
     document.getElementById("quizCard").style.display = "block";
     window.__idx = 0;
     renderQ();
-  } catch (e) { err.textContent = "无法保存身份：" + e.message; }
+  } catch (e) { err.textContent = "Could not save identity: " + e.message; }
 }
 document.getElementById("startBtn").onclick = ensureIdentity;
 
 function renderQ() {
   const q = window.__QS[window.__idx];
   const total = window.__QS.length;
-  document.getElementById("prog").textContent = `第 ${window.__idx+1} / ${total} 题 · ${window.__QS[window.__idx-1] ? "" : ""}`.replace(" · ","");
-  document.getElementById("prog").innerHTML = `第 <b>${window.__idx+1}</b> / ${total} 题`;
+  document.getElementById("prog").innerHTML = `Q <b>${window.__idx+1}</b> / ${total}`;
   document.getElementById("pbarFill").style.width = (window.__idx / total * 100) + "%";
 
-  const pre = window.__local.answers[q.id]; // 之前是否答过
-  document.getElementById("pill").textContent = pre ? "已答" : "未答";
+  const pre = window.__local.answers[q.id]; // previously answered?
+  document.getElementById("pill").textContent = pre ? "Answered" : "Pending";
 
   const fig = document.getElementById("fig");
   fig.innerHTML = "";
@@ -218,44 +217,44 @@ function renderQ() {
   nw.innerHTML = "";
   if (pre) {
     showFeedback(pre);
-    // 已有答案：显示下一题/完成
+    // already answered: show next / finish button
     const next = document.createElement("button");
     next.className = "btn";
     next.style.background = "var(--panel-2)";
-    if (window.__idx + 1 < window.__QS.length) { next.textContent = "下一题 →"; next.onclick = () => { window.__idx++; renderQ(); }; }
-    else { next.textContent = "完成并提交 ✔"; next.onclick = () => { window.__local.done = true; saveLocal(); showDone(); }; }
+    if (window.__idx + 1 < window.__QS.length) { next.textContent = "Next →"; next.onclick = () => { window.__idx++; renderQ(); }; }
+    else { next.textContent = "Finish & Submit ✔"; next.onclick = () => { window.__local.done = true; saveLocal(); showDone(); }; }
     nw.appendChild(next);
   }
 }
 
-// 结构题渲染：先给题目图，默认隐藏 MS 答案图，看完再自评对错
+// Structured render: show the paper image, MS answer hidden by default, then self-assess
 function renderStructure(q, ans, pre) {
   const badge = document.getElementById("pill");
-  if (badge) badge.textContent = (pre ? "已自评" : "未做") + (q.marks ? ` · ${q.marks}分` : "");
+  if (badge) badge.textContent = (pre ? "Self-assessed" : "Not done") + (q.marks ? ` · ${q.marks} marks` : "");
 
   if (pre) {
-    // 已自评：显示静止的对错按钮
+    // already assessed: show static right/wrong buttons
     const sg = document.createElement("div");
     sg.className = "selfgrade";
     const good = document.createElement("button");
-    good.className = "sbtn good"; good.textContent = "✅ 我做对了"; good.disabled = true;
+    good.className = "sbtn good"; good.textContent = "✅ I got it right"; good.disabled = true;
     const bad = document.createElement("button");
-    bad.className = "sbtn bad"; bad.textContent = "❌ 我做错了"; bad.disabled = true;
-    // 高亮学生自己选的
+    bad.className = "sbtn bad"; bad.textContent = "❌ I got it wrong"; bad.disabled = true;
+    // highlight the option the student chose
     if (pre.chosen === "self-ok") good.style.borderColor = "var(--green)";
     if (pre.chosen === "self-no") { bad.style.borderColor = "var(--red)"; good.style.opacity = ".5"; }
     sg.appendChild(good); sg.appendChild(bad);
     ans.appendChild(sg);
-    // 已自评时始终显示 MS 答案图供对照
+    // when already assessed, always show the MS image for comparison
     const msfig = makeMsFig(q);
     if (msfig) ans.appendChild(msfig);
     return;
   }
 
-  // 未做：说明 + 查看答案按钮 + 自评按钮
+  // not done: hint + view-answer button + self-assess buttons
   const hint = document.createElement("div");
   hint.className = "hint";
-  hint.textContent = "先作答，然后点「查看答案」核对 Mark Scheme，最后如实自评对错。";
+  hint.textContent = "Answer first, then check the Mark Scheme to mark your own answer right or wrong.";
   ans.appendChild(hint);
 
   const msWrap = document.createElement("div");
@@ -264,7 +263,7 @@ function renderStructure(q, ans, pre) {
   msBtns.style.cssText = "display:flex;gap:8px";
   const showBtn = document.createElement("button");
   showBtn.className = "msbtn";
-  showBtn.textContent = "📖 查看答案 (MS)";
+  showBtn.textContent = "📖 View answer (MS)";
   showBtn.onclick = () => { msfig.style.display = "block"; showBtn.style.display = "none"; };
   msBtns.appendChild(showBtn);
   msWrap.appendChild(msBtns);
@@ -275,10 +274,10 @@ function renderStructure(q, ans, pre) {
   const sg = document.createElement("div");
   sg.className = "selfgrade";
   const good = document.createElement("button");
-  good.className = "sbtn good"; good.textContent = "✅ 我做对了";
+  good.className = "sbtn good"; good.textContent = "✅ I got it right";
   good.onclick = () => selfGrade(q, true);
   const bad = document.createElement("button");
-  bad.className = "sbtn bad"; bad.textContent = "❌ 我做错了";
+  bad.className = "sbtn bad"; bad.textContent = "❌ I got it wrong";
   bad.onclick = () => selfGrade(q, false);
   sg.appendChild(good); sg.appendChild(bad);
   ans.appendChild(sg);
@@ -305,10 +304,10 @@ function selfGrade(q, correct) {
 
 function choose(letter, q) {
   const correct = letter === q.ms_answer;
-  // 记录
+  // record
   window.__local.answers[q.id] = { chosen: letter, correct };
   saveLocal();
-  // 异步提交到后端（失败不阻断本地）
+  // submit to backend asynchronously (don't block local if it fails)
   submitAnswer(q, letter, correct);
   renderQ();
 }
@@ -326,12 +325,12 @@ function showFeedback(pre) {
   fb.classList.add("show", pre.correct ? "ok" : "no");
   if (q.type === "structured") {
     fb.innerHTML = pre.correct
-      ? "✅ 你标记为做对了。请对照答案确实理解，若存疑请及时问老师。"
-      : "❌ 你标记为做错了。建议对照 Mark Scheme 弄清错因。";
+      ? "✅ You marked this as correct. Check the answer carefully and ask your teacher if unsure."
+      : "❌ You marked this as incorrect. Review the Mark Scheme to understand your mistake.";
   } else {
     fb.innerHTML = pre.correct
-      ? "✅ 答对了！"
-      : `❌ 答错了。<br>正确答案：<b>${q.ms_answer}</b>`;
+      ? "✅ Correct!"
+      : `❌ Incorrect.<br>Correct answer: <b>${q.ms_answer}</b>`;
   }
 }
 
@@ -343,14 +342,14 @@ function showDone() {
   let done = 0, okc = 0;
   qs.forEach(q => { if (ansMap[q.id]) { done++; if (ansMap[q.id].correct) okc++; } });
   const acc = done ? Math.round(okc / done * 100) : 0;
-  document.getElementById("doneTitle").textContent = window.__ASSIGN.title + " · 完成！";
+  document.getElementById("doneTitle").textContent = window.__ASSIGN.title + " · Complete!";
   const st = document.getElementById("doneStats");
   st.innerHTML = "";
   const mk = (v,k)=>{const d=document.createElement("div");d.className="stat";d.innerHTML=`<div class="v">${v}</div><div class="k">${k}</div>`;return d;};
-  st.appendChild(mk(qs.length, "题目"));
-  st.appendChild(mk(done, "已作答"));
-  st.appendChild(mk(acc+"%", "正确率"));
-  document.getElementById("doneLink").textContent = "已提交给老师。可关闭此页。";
+  st.appendChild(mk(qs.length, "Questions"));
+  st.appendChild(mk(done, "Answered"));
+  st.appendChild(mk(acc+"%", "Accuracy"));
+  document.getElementById("doneLink").textContent = "Submitted to your teacher. You may close this page.";
 }
 
 function showErr(msg) {

@@ -82,7 +82,7 @@ window.HomeworkDB = (() => {
     const url = (cfg.statsEdgeUrl || "").replace(/\/+$/, "");
     if (!url) throw new Error("教师统计接口未配置（config.js 的 statsEdgeUrl）");
     if (!teacherToken) throw new Error("缺少教师口令");
-    const resp = await fetch(url + "/run", {
+    const resp = await fetch(url, {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -30,6 +30,19 @@
   .abtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:19px; font-weight:700; color:var(--text); cursor:pointer; }
   .abtn.correct { border-color:var(--green); background:rgba(78,206,157,.15); color:var(--green); }
   .abtn.wrong { border-color:var(--red); background:rgba(240,124,124,.15); color:var(--red); }
+  /* 结构题 */
+  .typebadge { display:inline-block; font-size:11px; padding:2px 9px; border-radius:20px; background:rgba(124,108,240,.18); color:var(--accent); margin-left:8px; }
+  .msbtn { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:8px 14px; font-size:13px; cursor:pointer; }
+  .msbtn:hover { border-color:var(--accent); }
+  .msfig { margin-top:12px; text-align:center; display:none; }
+  .msfig img { max-width:100%; max-height:70vh; border:1px solid var(--line); border-radius:9px; background:#fff; }
+  .selfgrade { display:flex; gap:10px; margin-top:16px; }
+  .sbtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:16px; font-weight:700; color:var(--text); cursor:pointer; }
+  .sbtn.good { border-color:var(--green); }
+  .sbtn.good:disabled { background:rgba(78,206,157,.15); color:var(--green); }
+  .sbtn.bad { border-color:var(--red); }
+  .sbtn.bad:disabled { background:rgba(240,124,124,.15); color:var(--red); }
+  .hint { font-size:12px; color:var(--muted); margin-top:10px; }
   .fb { border-radius:11px; padding:14px; margin-top:16px; font-size:14px; display:none; }
   .fb.show { display:block; }
   .fb.ok { background:rgba(78,206,157,.12); border:1px solid var(--green); }
@@ -93,13 +106,17 @@
 </div>
 
 <script src="data.js"></script>
+<script src="structured-data.js"></script>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) || [];
+// 合并两个数据源：MCQ 在 data.js，结构题在 structured-data.js（id 全局不冲突）
 const BYID = new Map(ALL.map(q => [q.id, q]));
+STRUCTURED.forEach(q => BYID.set(q.id, q));
 const DB = window.HomeworkDB;
 
 init();
@@ -165,7 +182,8 @@ function renderQ() {
   const fig = document.getElementById("fig");
   fig.innerHTML = "";
   const img = document.createElement("img");
-  img.src = q.figures && q.figures[0] ? q.figures[0] : "";
+  const imgSrc = (q.type === "structured") ? (q.paper_img || "") : (q.figures && q.figures[0] || "");
+  img.src = imgSrc;
   img.onerror = () => img.style.display = "none";
   fig.appendChild(img);
 
@@ -178,18 +196,23 @@ function renderQ() {
   const fb = document.getElementById("fb");
   fb.classList.remove("show", "ok", "no");
 
-  ["A","B","C","D"].forEach(letter => {
-    const b = document.createElement("button");
-    b.className = "abtn"; b.textContent = letter;
-    if (pre) {
-      b.disabled = true;
-      if (letter === q.ms_answer) b.classList.add("correct");
-      else if (pre.chosen === letter) b.classList.add("wrong");
-    } else {
-      b.onclick = () => choose(letter, q);
-    }
-    ans.appendChild(b);
-  });
+  const isStruct = q.type === "structured";
+  if (isStruct) {
+    renderStructure(q, ans, pre);
+  } else {
+    ["A","B","C","D"].forEach(letter => {
+      const b = document.createElement("button");
+      b.className = "abtn"; b.textContent = letter;
+      if (pre) {
+        b.disabled = true;
+        if (letter === q.ms_answer) b.classList.add("correct");
+        else if (pre.chosen === letter) b.classList.add("wrong");
+      } else {
+        b.onclick = () => choose(letter, q);
+      }
+      ans.appendChild(b);
+    });
+  }
 
   const nw = document.getElementById("nextWrap");
   nw.innerHTML = "";
@@ -203,6 +226,81 @@ function renderQ() {
     else { next.textContent = "完成并提交 ✔"; next.onclick = () => { window.__local.done = true; saveLocal(); showDone(); }; }
     nw.appendChild(next);
   }
+}
+
+// 结构题渲染：先给题目图，默认隐藏 MS 答案图，看完再自评对错
+function renderStructure(q, ans, pre) {
+  const badge = document.getElementById("pill");
+  if (badge) badge.textContent = (pre ? "已自评" : "未做") + (q.marks ? ` · ${q.marks}分` : "");
+
+  if (pre) {
+    // 已自评：显示静止的对错按钮
+    const sg = document.createElement("div");
+    sg.className = "selfgrade";
+    const good = document.createElement("button");
+    good.className = "sbtn good"; good.textContent = "✅ 我做对了"; good.disabled = true;
+    const bad = document.createElement("button");
+    bad.className = "sbtn bad"; bad.textContent = "❌ 我做错了"; bad.disabled = true;
+    // 高亮学生自己选的
+    if (pre.chosen === "self-ok") good.style.borderColor = "var(--green)";
+    if (pre.chosen === "self-no") { bad.style.borderColor = "var(--red)"; good.style.opacity = ".5"; }
+    sg.appendChild(good); sg.appendChild(bad);
+    ans.appendChild(sg);
+    // 已自评时始终显示 MS 答案图供对照
+    const msfig = makeMsFig(q);
+    if (msfig) ans.appendChild(msfig);
+    return;
+  }
+
+  // 未做：说明 + 查看答案按钮 + 自评按钮
+  const hint = document.createElement("div");
+  hint.className = "hint";
+  hint.textContent = "先作答，然后点「查看答案」核对 Mark Scheme，最后如实自评对错。";
+  ans.appendChild(hint);
+
+  const msWrap = document.createElement("div");
+  msWrap.style.marginTop = "12px";
+  const msBtns = document.createElement("div");
+  msBtns.style.cssText = "display:flex;gap:8px";
+  const showBtn = document.createElement("button");
+  showBtn.className = "msbtn";
+  showBtn.textContent = "📖 查看答案 (MS)";
+  showBtn.onclick = () => { msfig.style.display = "block"; showBtn.style.display = "none"; };
+  msBtns.appendChild(showBtn);
+  msWrap.appendChild(msBtns);
+  const msfig = makeMsFig(q);
+  if (msfig) msWrap.appendChild(msfig);
+  ans.appendChild(msWrap);
+
+  const sg = document.createElement("div");
+  sg.className = "selfgrade";
+  const good = document.createElement("button");
+  good.className = "sbtn good"; good.textContent = "✅ 我做对了";
+  good.onclick = () => selfGrade(q, true);
+  const bad = document.createElement("button");
+  bad.className = "sbtn bad"; bad.textContent = "❌ 我做错了";
+  bad.onclick = () => selfGrade(q, false);
+  sg.appendChild(good); sg.appendChild(bad);
+  ans.appendChild(sg);
+}
+
+function makeMsFig(q) {
+  if (!q.ms_img) return null;
+  const div = document.createElement("div");
+  div.className = "msfig";
+  const img = document.createElement("img");
+  img.src = q.ms_img;
+  img.onerror = () => div.style.display = "none";
+  div.appendChild(img);
+  return div;
+}
+
+function selfGrade(q, correct) {
+  const chosen = correct ? "self-ok" : "self-no";
+  window.__local.answers[q.id] = { chosen, correct };
+  saveLocal();
+  submitAnswer(q, chosen, correct);
+  renderQ();
 }
 
 function choose(letter, q) {
@@ -226,9 +324,15 @@ function showFeedback(pre) {
   const fb = document.getElementById("fb");
   fb.classList.remove("show","ok","no");
   fb.classList.add("show", pre.correct ? "ok" : "no");
-  fb.innerHTML = pre.correct
-    ? "✅ 答对了！"
-    : `❌ 答错了。<br>正确答案：<b>${q.ms_answer}</b>`;
+  if (q.type === "structured") {
+    fb.innerHTML = pre.correct
+      ? "✅ 你标记为做对了。请对照答案确实理解，若存疑请及时问老师。"
+      : "❌ 你标记为做错了。建议对照 Mark Scheme 弄清错因。";
+  } else {
+    fb.innerHTML = pre.correct
+      ? "✅ 答对了！"
+      : `❌ 答错了。<br>正确答案：<b>${q.ms_answer}</b>`;
+  }
 }
 
 function showDone() {

@@ -75,13 +75,16 @@
 </div>
 
 <script src="data.js"></script>
+<script src="structured-data.js"></script>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) || [];
 const BYID = new Map(ALL.map(q => [q.id, q]));
+STRUCTURED.forEach(q => BYID.set(q.id, q));
 const DB = window.HomeworkDB;
 
 let assignments = [];
@@ -166,7 +169,8 @@ function renderOverview(ass, qs, rows) {
     const acc = Math.round(ok/n*100);
     const color = acc>=80?"green":acc>=50?"amber":"red";
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${q.year||""} ${q.session||""} P${q.paper} Q${q.question}</td>
+    const tag = q.type === "structured" ? ' <span class="tag">自评</span>' : "";
+    tr.innerHTML = `<td>${q.year||""} ${q.session||""} P${q.paper} Q${q.question}${tag}</td>
       <td><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div></td>
       <td><b class="${color}">${ok}</b> / ${n}</td>
       <td>${(q.topics||[]).slice(0,1).map(esc).join("")}</td>`;

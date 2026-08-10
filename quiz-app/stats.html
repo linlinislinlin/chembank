@@ -34,6 +34,22 @@
   .btn { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:8px 14px; cursor:pointer; font-size:13px; }
   .tag { display:inline-block; background:var(--panel-2); border-radius:6px; padding:1px 7px; font-size:11px; margin:2px; color:var(--muted); }
   .topic-row { display:flex; justify-content:space-between; align-items:center; padding:7px 4px; border-bottom:1px solid var(--line); font-size:13px; }
+  .muted { color:var(--muted); }
+  .small-note { color:var(--muted); font-size:12px; margin:-6px 0 12px; }
+  /* 学生钻取表 */
+  tr.stu-main { cursor:pointer; border-bottom:none; }
+  tr.stu-main:focus { outline:1px solid var(--accent); outline-offset:-1px; }
+  tr.stu-main:hover { background:rgba(124,108,240,.06); }
+  tr.stu-main .caret { display:inline-block; width:12px; color:var(--muted); font-size:10px; transition:transform .15s; }
+  tr.stu-main.open .caret { transform:rotate(90deg); color:var(--accent); }
+  tr.stu-detail { display:none; background:rgba(255,255,255,.03); }
+  tr.stu-detail.open { display:table-row; }
+  tr.stu-detail.open td { padding:12px 14px; }
+  .each-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; }
+  .each-item { background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .each-q { color:var(--muted); }
+  .sort-btn { cursor:pointer; user-select:none; }
+  .sort-btn:hover { color:var(--text); }
 </style>
 </head>
 <body>
@@ -55,14 +71,16 @@
   <div id="overview" style="display:none">
     <div class="sum-cards" id="sumCards"></div>
     <div class="card">
-      <h2>学生作答情况（按正确率排序）</h2>
-      <table><thead><tr><th>姓名</th><th>学号</th><th>已做 / 总</th><th>正确率</th></tr></thead>
+      <h2>学生作答情况（按正确率排序，点击行展开每题对错）</h2>
+      <div class="small-note">点击某学生行可展开，查看该生在每道题的作答对错。</div>
+      <table><thead><tr><th>姓名</th><th>学号</th><th>已做 / 总</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow">▾</span></th></tr></thead>
       <tbody id="stuRows"></tbody></table>
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
     <div class="card">
-      <h2>每题正确率（错得多的题建议重点讲）</h2>
-      <table><thead><tr><th>题号</th><th>正确率</th><th>答对/答次数</th><th>考点</th></tr></thead>
+      <h2>讲义题目分析（每题正确率，错得多的题建议重点讲）</h2>
+      <div class="small-note">按正确率从低到高排序，最常做错的题在最上方。</div>
+      <table><thead><tr><th>题目</th><th>类型</th><th>分数</th><th>已做 / 总</th><th>正确率</th><th>标准答案</th><th>考点</th></tr></thead>
       <tbody id="qRows"></tbody></table>
       <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
     </div>
@@ -122,61 +140,27 @@ async function selectAssignment(id, pillEl) {
   }
 }
 
+let stuSort = { field:"acc", dir:-1 }; // 默认正确率降序
+function stuKey(r){ return r.student_id ?? (r.students ? (r.students.student_no+"|"+r.students.name) : JSON.stringify(r.students)); }
+function qLabel(q){ return `${q.year||""} ${q.session||""} P${q.paper} Q${q.question}`.replace(/\s+/g," ").trim() || (q.id||""); }
+
 function renderOverview(ass, qs, rows) {
   document.getElementById("overview").style.display = "block";
 
-  // 汇总
+  const totalStudents = new Set(rows.map(stuKey)).size;
   const attemptCount = rows.length;
   const correctCount = rows.filter(r => r.correct).length;
-  const attr = new Map();
-  rows.forEach(r => { const k = r.students; if (!attr.has(k)) attr.set(k, []); attr.get(k).push(r); });
-  const stuRows = [...attr.entries()]
-    .map(([stu, list]) => ({ stu, n:list.length, ok:list.filter(x=>x.correct).length }))
-    .sort((a,b) => (b.ok/b.n) - (a.ok/a.n));
 
+  // 汇总
   document.getElementById("sumCards").innerHTML = "";
   const mk = (v,k)=>{const d=document.createElement("div");d.className="sum";d.innerHTML=`<div class="v">${v}</div><div class="k">${k}</div>`;return d;};
   const sc = document.getElementById("sumCards");
-  sc.appendChild(mk(stuRows.length, "已提交学生"));
+  sc.appendChild(mk(totalStudents, "已提交学生"));
   sc.appendChild(mk(attemptCount, "作答次数"));
   sc.appendChild(mk(attemptCount?Math.round(correctCount/attemptCount*100)+"%":"–", "整体正确率"));
 
-  // 学生表
-  const st = document.getElementById("stuRows"); st.innerHTML = "";
-  const sEmpty = document.getElementById("stuEmpty");
-  sEmpty.style.display = stuRows.length ? "none" : "block";
-  stuRows.forEach(({stu, n, ok}) => {
-    const acc = Math.round(ok/n*100);
-    const tr = document.createElement("tr");
-    const color = acc>=80?"green":acc>=50?"amber":"red";
-    tr.innerHTML = `<td>${esc(stu?.name||"?")}</td><td>${esc(stu?.student_no||"–")}</td><td>${ok}/${n}</td>
-      <td><div style="display:flex;align-items:center;gap:8px">
-        <div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div>
-        <b class="${color}">${acc}%</b></div></td>`;
-    st.appendChild(tr);
-  });
-
-  // 每题
-  const qt = document.getElementById("qRows"); qt.innerHTML = "";
-  const qEmpty = document.getElementById("qEmpty");
-  const perQ = qs.map(q => {
-    const hits = rows.filter(r => r.question_id === q.id);
-    const ok = hits.filter(h => h.correct).length;
-    return { q, n:hits.length, ok };
-  }).filter(x => x.n > 0);
-  qEmpty.style.display = perQ.length ? "none" : "block";
-  perQ.forEach(({q, n, ok}) => {
-    const acc = Math.round(ok/n*100);
-    const color = acc>=80?"green":acc>=50?"amber":"red";
-    const tr = document.createElement("tr");
-    const tag = q.type === "structured" ? ' <span class="tag">自评</span>' : "";
-    tr.innerHTML = `<td>${q.year||""} ${q.session||""} P${q.paper} Q${q.question}${tag}</td>
-      <td><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div></td>
-      <td><b class="${color}">${ok}</b> / ${n}</td>
-      <td>${(q.topics||[]).slice(0,1).map(esc).join("")}</td>`;
-    qt.appendChild(tr);
-  });
-  qEmpty.style.display = perQ.length? "none":"block";
+  renderStudentTable(rows, qs, totalStudents);
+  renderHandoutTable(rows, qs, totalStudents);
 
   // 错题知识点分布
   const tEmpty = document.getElementById("tEmpty");
@@ -194,6 +178,114 @@ function renderOverview(ass, qs, rows) {
     d.className = "topic-row";
     d.innerHTML = `<span>${esc(t)}</span><b class="red">${c} 次做错</b>`;
     td.appendChild(d);
+  });
+}
+
+// 学生作答情况：一行一名学生，按正确率排序；点击展开每题对错
+function renderStudentTable(rows, qs, totalStudents) {
+  // 汇总每位学生
+  const byStu = new Map();
+  const ansMapByStu = new Map();
+  rows.forEach(r => {
+    const k = stuKey(r);
+    if(!byStu.has(k)) byStu.set(k, { stu:r.students, n:0, ok:0, acc:0 });
+    const s = byStu.get(k);
+    s.n++; if(r.correct) s.ok++;
+    if(!ansMapByStu.has(k)) ansMapByStu.set(k, new Map());
+    ansMapByStu.get(k).set(r.question_id, r);
+  });
+  const list = [...byStu.entries()].map(([key, s]) => ({...s, key, acc: s.n? s.ok/s.n : 0}));
+  list.sort((a,b) => stuSort.dir * (a.acc - b.acc));
+
+  const st = document.getElementById("stuRows"); st.innerHTML = "";
+  document.getElementById("stuEmpty").style.display = list.length ? "none" : "block";
+  document.getElementById("stuAccArrow").textContent = stuSort.dir < 0 ? "▾" : "▴";
+  document.getElementById("stuAccTh").onclick = () => { stuSort.dir *= -1; renderStudentTable(rows, qs, totalStudents); };
+
+  list.forEach(({stu, n, ok, acc, key}) => {
+    const accPct = Math.round(acc*100);
+    const color = accPct>=80?"green":accPct>=50?"amber":"red";
+    const main = document.createElement("tr");
+    main.className = "stu-main";
+    main.setAttribute("tabindex","0");
+    main.setAttribute("aria-expanded","false");
+    main.innerHTML = `<td><span class="caret">▶</span> ${esc(stu?.name||"?")}</td>
+      <td>${esc(stu?.student_no||"–")}</td>
+      <td>${ok}/${n}</td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="bar"><i style="width:${accPct}%;background:var(--${color});height:100%;border-radius:5px"></i></div>
+        <b class="${color}">${accPct}%</b></div></td>`;
+
+    // 展开行：列出作业中每道题，标记本生作答对错
+    const det = document.createElement("tr");
+    det.className = "stu-detail";
+    const ansMap = ansMapByStu.get(key) || new Map();
+    const items = qs.map(q => {
+      const a = ansMap.get(q.id);
+      let cls, icon;
+      if(!a){ cls = "muted"; icon = "–"; }
+      else if(a.correct){ cls = "green"; icon = "✓ 对"; }
+      else { cls = "red"; icon = "✗ 错"; }
+      return `<div class="each-item"><span class="each-q">${esc(qLabel(q))}</span><b class="${cls}">${icon}</b></div>`;
+    }).join("");
+    det.innerHTML = `<td colspan="4"><div class="each-list">${items}</div></td>`;
+
+    const toggle = () => {
+      const opening = !main.classList.contains("open");
+      main.classList.toggle("open", opening);
+      det.classList.toggle("open", opening);
+      main.setAttribute("aria-expanded", String(opening));
+    };
+    main.onclick = toggle;
+    main.onkeydown = (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } };
+
+    st.appendChild(main);
+    st.appendChild(det);
+  });
+}
+
+// 讲义题目分析：每道题 正确率/答卷数/标准答案/考点，错得多的在前
+function renderHandoutTable(rows, qs, totalStudents) {
+  const qt = document.getElementById("qRows"); qt.innerHTML = "";
+  const qEmpty = document.getElementById("qEmpty");
+  const perQ = qs.map(q => {
+    const hits = rows.filter(r => r.question_id === q.id);
+    const ok = hits.filter(h => h.correct).length;
+    return { q, answered:hits.length, ok };
+  });
+  perQ.sort((a,b) => {
+    const aa = a.answered ? a.ok/a.answered : 1; // 无人作答视为满分，排在最后
+    const bb = b.answered ? b.ok/b.answered : 1;
+    if(aa !== bb) return aa - bb;              // 正确率升序 → 最常做错的在前
+    return qs.indexOf(a.q) - qs.indexOf(b.q);  // 相同时按作业顺序
+  });
+  qEmpty.style.display = perQ.length ? "none" : "block";
+
+  perQ.forEach(({q, answered, ok}) => {
+    const acc = answered ? Math.round(ok/answered*100) : null;
+    const color = acc==null ? "" : (acc>=80?"green":acc>=50?"amber":"red");
+    const isStructured = q.type === "structured";
+    const typeTag = isStructured
+      ? '<span class="tag" style="color:var(--amber)">自评</span>'
+      : '<span class="tag">选择</span>';
+    const ms = isStructured
+      ? '<span class="muted">自评题 · 无标准答案</span>'
+      : (q.ms_answer ? `<b class="green">${esc(q.ms_answer)}</b>` : '<span class="muted">–</span>');
+    const marksCell = q.marks!=null ? q.marks : '<span class="muted">–</span>';
+    const accCell = acc==null
+      ? '<span class="muted">–</span>'
+      : `<div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div><b class="${color}">${acc}%</b></div>`;
+    const topic = (q.topics&&q.topics.length) ? q.topics.slice(0,2).map(esc).join("；") : '<span class="muted">–</span>';
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${esc(qLabel(q))}</td>
+      <td>${typeTag}</td>
+      <td>${marksCell}</td>
+      <td>${answered} / ${totalStudents}</td>
+      <td>${accCell}</td>
+      <td>${ms}</td>
+      <td>${topic}</td>`;
+    qt.appendChild(tr);
   });
 }
 

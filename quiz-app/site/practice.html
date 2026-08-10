@@ -47,6 +47,33 @@
   .hint { font-size:12px; color:var(--muted); margin-top:10px; }
   .err { color:var(--red); font-size:13px; margin-top:12px; }
 
+  /* Syllabus tree */
+  .syll-toggle { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .syll-toggle .btn.ghost { padding:9px 14px; font-size:13px; }
+  .syll-status { font-size:12px; color:var(--muted); }
+  .syll-status b { color:var(--accent); }
+  .syll-panel { margin-top:14px; border:1px solid var(--line); border-radius:12px; background:var(--bg-soft); padding:10px; max-height:360px; overflow-y:auto; display:none; }
+  .syll-panel.open { display:block; }
+  .syll-panel::-webkit-scrollbar { width:9px; }
+  .syll-panel::-webkit-scrollbar-thumb { background:#2c2744; border-radius:8px; }
+  .syll-clear-row { padding:8px 10px; margin-bottom:6px; border-bottom:1px dashed var(--line); }
+  .syll-all { display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:9px 12px; font-size:13px; cursor:pointer; }
+  .syll-all:hover { border-color:var(--accent); }
+  .syll-all.selected { background:rgba(124,108,240,.18); border-color:var(--accent); color:#cfc6ff; }
+  .t-node { user-select:none; }
+  .t-row { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:8px; cursor:pointer; font-size:13.5px; }
+  .t-row:hover { background:var(--panel); }
+  .t-row.selected { background:rgba(124,108,240,.18); border:1px solid var(--accent); color:#cfc6ff; }
+  .t-caret { width:16px; height:16px; flex:0 0 16px; display:grid; place-items:center; color:var(--muted); font-size:10px; transition:transform .15s; }
+  .t-caret.closed { transform:rotate(-90deg); }
+  .t-title { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .t-code { font-size:11px; color:var(--muted); font-weight:600; }
+  .t-count { font-size:11px; color:var(--muted); background:var(--panel-2); padding:1px 7px; border-radius:20px; }
+  .t-row.selected .t-count { background:rgba(124,108,240,.25); color:#cfc6ff; }
+  .t-children { margin-left:14px; border-left:1px solid var(--line); padding-left:4px; }
+  .t-children.hidden { display:none; }
+  .syll-empty { padding:14px 12px; color:var(--muted); font-size:13px; text-align:center; }
+
   /* Quiz screen */
   .qhead { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--line); margin-bottom:16px; }
   .qhead b { color:var(--accent); }
@@ -104,6 +131,19 @@
     <div class="stat-grid" id="statGrid"></div>
 
     <div class="filter-card">
+      <div class="fgroup">
+        <div class="flabel">0 · Filter by syllabus (by topic)</div>
+        <div class="syll-toggle">
+          <button class="btn ghost" id="syllToggle">☰ Choose a topic</button>
+          <span class="syll-status" id="syllStatus">Whole bank (all topics)</span>
+        </div>
+        <div class="syll-panel" id="syllPanel">
+          <div class="syll-clear-row">
+            <button class="syll-all selected" id="syllAll">All topics (entire bank)</button>
+          </div>
+          <div id="syllTree"></div>
+        </div>
+      </div>
       <div class="fgroup">
         <div class="flabel">1 · Question type</div>
         <div class="chiprow" id="typeRow">
@@ -179,13 +219,27 @@ const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) 
 const BYID = new Map(ALL.map(q => [q.id, q]));
 STRUCTURED.forEach(q => BYID.set(q.id, q));
 
+const SYLLABUS = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.syllabus) || [];
+
 const pool = {
   mcq:    ALL,
   st:     STRUCTURED,
   type:   "all",
   paper:  "all",
   limit:  10,
+  // Active syllabus filter. null => whole bank. Otherwise an array of leaf
+  // codes collected from the selected node's subtree (see selectNode).
+  syll:   null,
 };
+let syllTitle = "";              // display label of the selected syllabus node
+const settled = new Set();       // node codes expanded by default (sections)
+
+function collectCodes(node, out) {
+  out = out || [];
+  if (node.code) out.push(node.code);
+  (node.children || []).forEach(c => collectCodes(c, out));
+  return out;
+}
 
 function byType(qs) {
   if (pool.type === "mcq") return qs.filter(q => q.type !== "structured");
@@ -204,7 +258,23 @@ function byPaper(qs) {
   if (p === "p4") return qs.filter(q => q.type === "structured" && first(q) === "4");
   return qs;
 }
-function filteredPool() { return byPaper(byType([...pool.mcq, ...pool.st])); }
+function filteredPool() {
+  let base = [...pool.mcq, ...pool.st];
+  // When a syllabus topic is chosen, only drill that topic's MCQ. Structured
+  // questions carry no syllabus codes in this dataset, so they are excluded
+  // while a topic filter is active.
+  if (pool.syll) {
+    const set = new Set(pool.syll);
+    base = pool.mcq.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c)));
+  }
+  return byPaper(byType(base));
+}
+
+// Number of MCQ questions whose codes touch this syllabus node's subtree.
+function countQuestions(node) {
+  const set = new Set(collectCodes(node));
+  return ALL.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
+}
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -245,6 +315,131 @@ function bindChips() {
   document.querySelector('.chip[data-var="type"][data-mode="all"]').classList.add("on");
   document.querySelector('.chip[data-var="paper"][data-mode="all"]').classList.add("on");
 }
+
+// ---------- Syllabus topic tree ----------
+function buildTreeNode(node, depth) {
+  const wrap = document.createElement("div");
+  wrap.className = "t-node";
+  const kids = node.children || [];
+  const hasKids = kids.length > 0;
+  const nodeCodes = collectCodes(node);
+
+  const row = document.createElement("div");
+  row.className = "t-row";
+  row.style.paddingLeft = (8 + depth * 14) + "px";
+
+  const caret = document.createElement("span");
+  caret.className = "t-caret" + (settled.has(node.code) ? "" : " closed");
+  caret.textContent = hasKids ? "▶" : "";
+  row.appendChild(caret);
+
+  // Show the topic code. Blank-titled wrapper rows (which duplicate the
+  // section code) get a lighter label so students see the hierarchy clearly.
+  const codeEl = document.createElement("span");
+  codeEl.className = "t-code";
+  codeEl.textContent = node.code;
+  row.appendChild(codeEl);
+
+  const title = document.createElement("span");
+  title.className = "t-title";
+  const ttext = (node.title && node.title.trim()) ? node.title : "";
+  if (ttext) {
+    title.textContent = ttext;
+  } else {
+    // Blank-title wrapper row: keep it slim (code + count only) so the real
+    // topics read as direct children of the section.
+    title.style.minWidth = "0";
+  }
+  row.appendChild(title);
+
+  const cnt = document.createElement("span");
+  cnt.className = "t-count";
+  cnt.textContent = countQuestions(node);
+  row.appendChild(cnt);
+
+  // Highlight when this node is the active single selection: its collected
+  // codes must exactly equal the current filter.
+  const isSelected = !!(pool.syll &&
+    nodeCodes.length === pool.syll.length &&
+    nodeCodes.every(c => pool.syll.includes(c)));
+  if (isSelected) row.classList.add("selected");
+
+  const handleClick = () => {
+    selectNode(node);
+    renderSyllTree();
+    updateSyllStatus();
+  };
+  row.addEventListener("click", handleClick);
+
+  // The caret alone toggles expand / collapse; clicking elsewhere selects.
+  if (hasKids) {
+    caret.style.cursor = "pointer";
+    caret.addEventListener("click", (e) => {
+      e.stopPropagation();
+      settled.has(node.code) ? settled.delete(node.code) : settled.add(node.code);
+      renderSyllTree();
+    });
+  }
+  wrap.appendChild(row);
+
+  if (hasKids) {
+    const children = document.createElement("div");
+    children.className = "t-children" + (settled.has(node.code) ? "" : " hidden");
+    kids.forEach(k => children.appendChild(buildTreeNode(k, depth + 1)));
+    wrap.appendChild(children);
+  }
+  return wrap;
+}
+
+function renderSyllTree() {
+  const box = document.getElementById("syllTree");
+  box.innerHTML = "";
+  if (!SYLLABUS.length) {
+    const e = document.createElement("div");
+    e.className = "syll-empty";
+    e.textContent = "No syllabus topics available.";
+    box.appendChild(e);
+    return;
+  }
+  SYLLABUS.forEach(r => box.appendChild(buildTreeNode(r, 0)));
+}
+
+// Select a syllabus node, or clear back to the whole bank.
+function selectNode(node) {
+  if (!node) {
+    pool.syll = null;
+    syllTitle = "";
+  } else {
+    pool.syll = collectCodes(node);
+    syllTitle = (node.title && node.title.trim()) ? node.title : node.code;
+  }
+  updateSyllAllButton();
+}
+
+function updateSyllAllButton() {
+  const btn = document.getElementById("syllAll");
+  btn.classList.toggle("selected", !pool.syll);
+}
+
+function updateSyllStatus() {
+  let msg;
+  if (!pool.syll) {
+    msg = "Whole bank (all topics) — " + (BYID.size) + " questions";
+  } else {
+    const set = new Set(pool.syll);
+    const mcqMatch = ALL.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
+    msg = `Selected: <b>${escHtml(syllTitle)}</b> · ${mcqMatch} MCQ question${mcqMatch === 1 ? "" : "s"}`;
+    if (pool.type !== "structured") msg += " · structured not included (no topic codes)";
+  }
+  document.getElementById("syllStatus").innerHTML = msg;
+}
+
+function escHtml(s) {
+  const d = document.createElement("div");
+  d.textContent = s == null ? "" : String(s);
+  return d.innerHTML;
+}
+
 
 function startRun(spec) {
   let qs;
@@ -491,8 +686,26 @@ document.getElementById("startRandom").onclick = () => startRun("random");
 document.getElementById("startAll").onclick = () => startRun("all");
 document.getElementById("startOne").onclick = () => startRun("one");
 
+// Syllabus tree controls
+const syllToggle = document.getElementById("syllToggle");
+const syllPanel = document.getElementById("syllPanel");
+syllToggle.addEventListener("click", () => {
+  syllPanel.classList.toggle("open");
+  syllToggle.textContent = syllPanel.classList.contains("open") ? "☰ Hide topics" : "☰ Choose a topic";
+  if (syllPanel.classList.contains("open")) renderSyllTree();
+});
+document.getElementById("syllAll").addEventListener("click", () => {
+  selectNode(null);
+  renderSyllTree();
+  updateSyllStatus();
+});
+
 buildStats();
 bindChips();
+updateSyllStatus();
+updateSyllAllButton();
+// Default to expanding the top-level sections so teachers can see topics at a glance.
+SYLLABUS.forEach(r => { if ((r.children || []).some(c => (c.children || []).length)) settled.add(r.code); });
 </script>
 </body>
 </html>

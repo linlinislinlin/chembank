@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#1e1b2e" />
+<title>ChemBank · CIE 9701 Chemistry</title>
+<style>
+  :root { --accent:#7c6cf0; --accent-2:#4ece9d; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --red:#f07c7c; --amber:#f0c17c; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Helvetica Neue",Arial,sans-serif; min-height:100vh; line-height:1.55; }
+  a { color:var(--accent); text-decoration:none; }
+  .top { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:12px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .top h1 { font-size:16px; margin:0; letter-spacing:.3px; }
+  .top .navline { display:flex; gap:14px; margin-left:auto; font-size:13px; }
+  .top .navline a { color:var(--muted); }
+  .top .navline a:hover { color:var(--accent); }
+  .wrap { max-width:980px; margin:0 auto; padding:40px 20px 80px; }
+
+  .hero { text-align:center; max-width:640px; margin:0 auto 40px; }
+  .hero .logo { font-size:56px; line-height:1.1; }
+  .hero h2 { font-size:30px; margin:14px 0 8px; font-weight:800; letter-spacing:.5px; }
+  .hero .sub { color:var(--muted); font-size:16px; margin:0; }
+  .hero .meta { margin-top:16px; display:flex; justify-content:center; gap:18px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+  .hero .meta span b { color:var(--accent-2); }
+
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:28px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.3); transition:transform .15s, border-color .15s; }
+  .card:hover { transform:translateY(-4px); border-color:var(--accent); }
+  .card .icon { font-size:44px; }
+  .card h3 { font-size:22px; margin:14px 0 8px; font-weight:800; }
+  .card .desc { color:var(--muted); font-size:14px; margin-bottom:22px; min-height:42px; }
+  .card .cta { display:inline-block; padding:13px 26px; border-radius:12px; font-weight:700; font-size:15px; color:#fff; }
+  .cta.practice { background:var(--accent); }
+  .cta.assignment { background:var(--accent-2); color:#06241a; }
+
+  .assign-panel { margin-top:30px; max-width:580px; margin-left:auto; margin-right:auto; }
+  .assign-card { background:var(--bg-soft); border:1px solid var(--line); border-radius:16px; padding:24px; }
+  .assign-card h4 { margin:0 0 4px; font-size:16px; }
+  .assign-card .sub { color:var(--muted); font-size:13px; margin:0 0 16px; }
+  .assign-row { display:flex; gap:10px; }
+  .input { background:var(--panel); border:1px solid var(--line); color:var(--text); border-radius:11px; padding:13px 16px; font-size:15px; }
+  .input:focus { outline:none; border-color:var(--accent); }
+  #aid { flex:1; min-width:0; }
+  #alink { flex:1.6; min-width:0; }
+  .assign-row .btn { background:var(--accent-2); color:#06241a; border:none; border-radius:11px; padding:13px 20px; font-weight:700; font-size:15px; cursor:pointer; white-space:nowrap; }
+  .assign-row .btn:hover { filter:brightness(1.08); }
+  .hint { font-size:12px; color:var(--muted); margin-top:10px; }
+  .err { color:var(--red); font-size:13px; margin-top:10px; min-height:16px; }
+  .foot { text-align:center; color:var(--muted); font-size:12px; margin-top:50px; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>🧪 ChemBank · CIE 9701</h1>
+  <div class="navline">
+    <a href="practice.html">Practice</a>
+    <a href="index.html">Teacher Bank</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="logo">🧪</div>
+    <h2>ChemBank Chemistry Practice</h2>
+    <p class="sub">Cambridge IGCSE / A Level 9701 past papers, organised for revision.</p>
+    <div class="meta">
+      <span><b id="mcqCount">–</b> multiple choice</span>
+      <span><b id="structCount">–</b> structured questions</span>
+    </div>
+  </div>
+
+  <div class="cards">
+    <a class="card" href="practice.html">
+      <div class="icon">🎲</div>
+      <h3>Free Practice</h3>
+      <p class="desc">No login needed. Instantly draw any number of questions from the whole bank, with instant marking and Mark Schemes.</p>
+      <span class="cta practice">Start practicing →</span>
+    </a>
+    <a class="card" href="homework.html" id="assignCard">
+      <div class="icon">📝</div>
+      <h3>Assignment</h3>
+      <p class="desc">Complete a homework set assigned by your teacher. Enter the assignment number or paste the link your teacher gave you.</p>
+      <span class="cta assignment">Open assignment →</span>
+    </a>
+  </div>
+
+  <div class="assign-panel">
+    <div class="assign-card">
+      <h4>Enter an assignment</h4>
+      <p class="sub">Use the number from your teacher (e.g. 5), or paste the full assignment link.</p>
+      <div class="assign-row">
+        <input class="input" id="aid" type="text" placeholder="Assignment number, e.g. 5" inputmode="numeric" />
+        <button class="btn" id="goId">Go</button>
+      </div>
+      <div class="assign-row" style="margin-top:10px">
+        <input class="input" id="alink" type="text" placeholder="or paste full assignment link (…homework.html?id=5)" />
+        <button class="btn" id="goLink">Open</button>
+      </div>
+      <div class="err" id="assignErr"></div>
+      <div class="hint">You can also just click the "Assignment" card above to try one.</div>
+    </div>
+  </div>
+
+  <div class="foot">ChemBank · CIE 9701 Chemistry · Past-paper revision tool</div>
+</div>
+
+<script src="data.js"></script>
+<script src="structured-data.js"></script>
+<script>
+"use strict";
+
+// Gentle stat counts (best-effort; page still works without the data files)
+try {
+  const mcq = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
+  const st = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) || [];
+  document.getElementById("mcqCount").textContent = mcq.length;
+  document.getElementById("structCount").textContent = st.length;
+} catch (e) {}
+
+function parseId(v) {
+  v = (v || "").trim();
+  if (!v) return null;
+  // If it looks like a URL, extract the ?id= parameter
+  const m = v.match(/[?&#]id=(\d+)/);
+  if (m) return Number(m[1]);
+  // Otherwise treat as a plain number
+  if (/^\d+$/.test(v)) return Number(v);
+  return null;
+}
+
+function go(id) {
+  const err = document.getElementById("assignErr");
+  if (!id) { err.textContent = "Please enter a valid assignment number (e.g. 5) or a full link."; return; }
+  location.href = "homework.html?id=" + id;
+}
+
+document.getElementById("goId").onclick = () => {
+  const n = parseId(document.getElementById("aid").value);
+  if (n === null) {
+    const linkId = parseId(document.getElementById("alink").value);
+    if (linkId !== null) { go(linkId); return; }
+  }
+  go(n);
+};
+document.getElementById("goLink").onclick = () => {
+  go(parseId(document.getElementById("alink").value) ||
+    parseId(document.getElementById("aid").value));
+};
+// allow Enter to submit
+document.getElementById("aid").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("goId").click();
+});
+document.getElementById("alink").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("goLink").click();
+});
+</script>
+</body>
+</html>

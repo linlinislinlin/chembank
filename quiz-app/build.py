@@ -332,6 +332,7 @@ def main() -> int:
     # Copy front-end pages/assets into site/ (any quiz-app/*.{html,js}).
     FRONTEND_SOURCES = [INDEX_SRC, INDEX_SRC.parent / "assign.html",
                         INDEX_SRC.parent / "homework.html", INDEX_SRC.parent / "stats.html",
+                        INDEX_SRC.parent / "home.html", INDEX_SRC.parent / "practice.html",
                         INDEX_SRC.parent / "config.js", INDEX_SRC.parent / "supabase-client.js"]
     for src in FRONTEND_SOURCES:
         if src.exists():

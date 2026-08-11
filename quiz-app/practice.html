@@ -47,6 +47,42 @@
   .hint { font-size:12px; color:var(--muted); margin-top:10px; }
   .err { color:var(--red); font-size:13px; margin-top:12px; }
 
+  /* Student identity + progress sync */
+  .idline { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:4px; }
+  .idline .input { flex:1 1 140px; padding:9px 12px; font-size:14px; }
+  .idline .btn { padding:9px 16px; font-size:14px; width:auto; }
+  .idbadge { font-size:12px; color:var(--muted); margin-top:8px; }
+  .idbadge button.ghost2 { background:none; border:none; color:var(--accent); cursor:pointer; font-size:12px; padding:0; margin-left:6px; text-decoration:underline; }
+  .records-btn { font-size:13px; color:var(--accent); background:var(--panel-2); border:1px solid var(--line); border-radius:9px; padding:8px 14px; cursor:pointer; margin-top:12px; }
+  .records-btn:hover { border-color:var(--accent); }
+
+  /* My progress / review modal */
+  .overlay { position:fixed; inset:0; background:rgba(10,8,18,.7); z-index:50; display:none; align-items:flex-start; justify-content:center; padding:30px 16px; overflow-y:auto; }
+  .overlay.open { display:flex; }
+  .modal { background:var(--panel); border:1px solid var(--line); border-radius:14px; max-width:760px; width:100%; padding:22px; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+  .modal h3 { margin:0 0 4px; }
+  .modal .sub { font-size:12px; color:var(--muted); margin-bottom:16px; }
+  .rec-tabs { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .rec-tabs .tab { font-size:13px; padding:7px 14px; border-radius:20px; background:var(--panel-2); border:1px solid var(--line); color:var(--muted); cursor:pointer; }
+  .rec-tabs .tab.on { background:rgba(124,108,240,.18); border-color:var(--accent); color:#cfc6ff; }
+  .rec-list { max-height:52vh; overflow-y:auto; display:flex; flex-direction:column; gap:8px; }
+  .rec-item { display:flex; gap:10px; align-items:center; background:var(--bg-soft); border:1px solid var(--line); border-radius:10px; padding:10px 12px; cursor:pointer; }
+  .rec-item:hover { border-color:var(--accent); }
+  .rec-item .tag { font-size:11px; color:var(--muted); background:var(--panel-2); padding:2px 8px; border-radius:20px; white-space:nowrap; }
+  .rec-item .src { font-size:12px; color:var(--muted); flex:1; }
+  .rec-item .type { font-size:11px; padding:2px 8px; border-radius:20px; }
+  .rec-item .type.mcq { background:rgba(124,108,240,.18); color:var(--accent); }
+  .rec-item .type.structured { background:rgba(240,193,124,.18); color:var(--amber); }
+  .rec-item .okdot { font-size:14px; flex:0 0 auto; }
+  .rec-empty { color:var(--muted); text-align:center; padding:20px; font-size:13px; }
+  .modal-actions { display:flex; gap:10px; margin-top:16px; justify-content:flex-end; }
+  .modal-actions .btn { width:auto; padding:9px 18px; font-size:14px; }
+  /* review preview inside modal */
+  .rec-preview { margin-top:12px; display:none; }
+  .rec-preview.show { display:block; }
+  .rec-preview .qfig img { max-height:40vh; }
+  .rec-preview .meta { font-size:12px; color:var(--muted); margin-bottom:6px; }
+
   /* Syllabus tree */
   .syll-toggle { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
   .syll-toggle .btn.ghost { padding:9px 14px; font-size:13px; }
@@ -68,6 +104,8 @@
   .t-caret.closed { transform:rotate(-90deg); }
   .t-title { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .t-code { font-size:11px; color:var(--muted); font-weight:600; }
+  .t-box { font-size:14px; color:var(--muted); flex:0 0 auto; width:16px; text-align:center; }
+  .t-row.selected .t-box { color:#cfc6ff; }
   .t-count { font-size:11px; color:var(--muted); background:var(--panel-2); padding:1px 7px; border-radius:20px; }
   .t-row.selected .t-count { background:rgba(124,108,240,.25); color:#cfc6ff; }
   .t-children { margin-left:14px; border-left:1px solid var(--line); padding-left:4px; }
@@ -128,13 +166,24 @@
     <h2 class="setup-title">Practice anywhere, instantly.</h2>
     <div class="setup-sub">Choose how many questions, pick a type, or just dive in.</div>
 
+    <!-- Student identity (optional) -->
+    <div style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
+      <div class="idline">
+        <input class="input" id="idName" placeholder="Your name (optional)" autocomplete="off" />
+        <input class="input" id="idNo" placeholder="Student / exam number (optional)" autocomplete="off" />
+        <button class="btn ghost" id="idSave">Save identity</button>
+      </div>
+      <div class="idbadge" id="idBadge"></div>
+      <button class="records-btn" id="recordsBtn">📈 My progress &amp; review</button>
+    </div>
+
     <div class="stat-grid" id="statGrid"></div>
 
     <div class="filter-card">
       <div class="fgroup">
-        <div class="flabel">0 · Filter by syllabus (by topic)</div>
+        <div class="flabel">0 · Filter by syllabus (multi-select)</div>
         <div class="syll-toggle">
-          <button class="btn ghost" id="syllToggle">☰ Choose a topic</button>
+          <button class="btn ghost" id="syllToggle">☰ Choose topics</button>
           <span class="syll-status" id="syllStatus">Whole bank (all topics)</span>
         </div>
         <div class="syll-panel" id="syllPanel">
@@ -168,6 +217,16 @@
           <button class="btn" id="startRandom">🎲 Start random</button>
         </div>
         <div class="hint">Leave "All types / All papers" on to sample the whole bank fully at random.</div>
+      </div>
+      <div class="fgroup">
+        <div class="flabel">4 · Order</div>
+        <div class="chiprow" id="orderRow">
+          <button class="chip" data-mode="random" data-var="order">Random</button>
+          <button class="chip" data-mode="number" data-var="order">By question no.</button>
+          <button class="chip" data-mode="year" data-var="order">By year (old→new)</button>
+          <button class="chip" data-mode="yearDesc" data-var="order">By year (new→old)</button>
+        </div>
+        <div class="hint">Chooses the order questions appear in. "Random" shuffles each run; others sort the filtered bank.</div>
       </div>
     </div>
 
@@ -208,8 +267,31 @@
   </div>
 </div>
 
+<!-- My progress / review -->
+<div class="overlay" id="recordsOverlay">
+  <div class="modal">
+    <h3 id="recTitle">My progress</h3>
+    <div class="sub" id="recSub"></div>
+    <div class="rec-tabs">
+      <button class="tab on" data-tab="records">📖 All records</button>
+      <button class="tab" data-tab="correct">✅ Practised correct</button>
+      <button class="tab" data-tab="wrong">❌ Wrong book</button>
+    </div>
+    <div class="rec-list" id="recList"></div>
+    <div class="rec-preview" id="recPreview"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="recClose">Close</button>
+      <button class="btn" id="recResync" style="display:none">Sync to cloud</button>
+    </div>
+  </div>
+</div>
+</body>
+
 <script src="data.js"></script>
 <script src="structured-data.js"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
 <script>
 "use strict";
 
@@ -220,6 +302,8 @@ const BYID = new Map(ALL.map(q => [q.id, q]));
 STRUCTURED.forEach(q => BYID.set(q.id, q));
 
 const SYLLABUS = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.syllabus) || [];
+const PDB = window.PracticeDB;                // progress/records backend (may be null if not configured)
+const SUP = window.SUPABASE_CONFIG || {};
 
 const pool = {
   mcq:    ALL,
@@ -227,12 +311,23 @@ const pool = {
   type:   "all",
   paper:  "all",
   limit:  10,
-  // Active syllabus filter. null => whole bank. Otherwise an array of leaf
-  // codes collected from the selected node's subtree (see selectNode).
-  syll:   null,
+  order:  "random",
+  // Multi-select syllabus filter: a Set of selected *node* codes. Empty set
+  // => whole bank. Non-empty => union of codes across all selected nodes.
+  syll:   new Set(),
 };
-let syllTitle = "";              // display label of the selected syllabus node
 const settled = new Set();       // node codes expanded by default (sections)
+
+// ---- Per-device / per-student progress store (always local, never lost) ----
+// pr-store = { <studentKey>: { <question_id>: { correct, chosen, qtype, year, session, paper, qno, t } } }
+//   studentKey is the cloud student id when registered+synced, else "guest".
+const LS_STORE = "pr-store";
+const LS_IDENTITY = "pr-identity";
+const LS_STUDENT_ID = "pr-student-id";
+function loadStore() { try { return JSON.parse(localStorage.getItem(LS_STORE)) || {}; } catch (e) { return {}; } }
+function saveStore(store) { try { localStorage.setItem(LS_STORE, JSON.stringify(store)); } catch (e) {} }
+let __store = loadStore();
+let __cloudWarned = false;       // to avoid spamming "sync failed" every answer
 
 function collectCodes(node, out) {
   out = out || [];
@@ -258,13 +353,25 @@ function byPaper(qs) {
   if (p === "p4") return qs.filter(q => q.type === "structured" && first(q) === "4");
   return qs;
 }
+
+// Active syllabus filter = union of all codes across the selected nodes.
+function selectedCodesSet() {
+  const set = new Set();
+  const chosen = new Set(pool.syll);
+  const walk = (node) => {
+    if (chosen.has(node.code)) collectCodes(node).forEach(c => set.add(c));
+    (node.children || []).forEach(walk);
+  };
+  SYLLABUS.forEach(walk);
+  return set;
+}
+
 function filteredPool() {
   let base = [...pool.mcq, ...pool.st];
-  // When a syllabus topic is chosen, only drill that topic's MCQ. Structured
-  // questions carry no syllabus codes in this dataset, so they are excluded
-  // while a topic filter is active.
-  if (pool.syll) {
-    const set = new Set(pool.syll);
+  // Multi-select topic filter: when nodes are selected, only drill the union
+  // of their subtrees' MCQ. Structured questions carry no codes, so excluded.
+  if (pool.syll.size > 0) {
+    const set = selectedCodesSet();
     base = pool.mcq.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c)));
   }
   return byPaper(byType(base));
@@ -283,6 +390,33 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+// Sort the filtered bank per the chosen order (random handled by startRun).
+function sortPool(qs) {
+  const o = pool.order;
+  if (o === "number") {
+    return qs.slice().sort((a, b) => {
+      const ps = cmp(String(a.paper == null ? "" : a.paper), String(b.paper == null ? "" : b.paper));
+      if (ps) return ps;
+      return qNum(a) - qNum(b);
+    });
+  }
+  if (o === "year")       return qs.slice().sort((a, b) => (a.year || 0) - (b.year || 0) || qNum(a) - qNum(b));
+  if (o === "yearDesc")   return qs.slice().sort((a, b) => (b.year || 0) - (a.year || 0) || qNum(a) - qNum(b));
+  return shuffle(qs);
+}
+// Compare two strings numerically-aware but stable: "2" < "10".
+function cmp(a, b) {
+  const na = parseInt(a.match(/^\d+/)?.[0] || "0", 10);
+  const nb = parseInt(b.match(/^\d+/)?.[0] || "0", 10);
+  if (na !== nb) return na - nb;
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+function qNum(q) {
+  const s = String(q.question || "");
+  const m = s.match(/\d+/);
+  return m ? parseInt(m[0], 10) : 0;
 }
 
 // ---------- Setup UI ----------
@@ -308,12 +442,16 @@ function bindChips() {
       document.querySelectorAll(`.chip[data-var="${ch.dataset.var}"]`)
         .forEach(c => c.classList.remove("on"));
       ch.classList.add("on");
-      pool[ch.dataset.var === "type" ? "type" : "paper"] = ch.dataset.mode;
+      const v = ch.dataset.var;
+      if (v === "type") pool.type = ch.dataset.mode;
+      else if (v === "paper") pool.paper = ch.dataset.mode;
+      else if (v === "order") pool.order = ch.dataset.mode;
     };
   });
   // default: All types / All papers highlighted
   document.querySelector('.chip[data-var="type"][data-mode="all"]').classList.add("on");
   document.querySelector('.chip[data-var="paper"][data-mode="all"]').classList.add("on");
+  document.querySelector('.chip[data-var="order"][data-mode="random"]').classList.add("on");
 }
 
 // ---------- Syllabus topic tree ----------
@@ -322,7 +460,6 @@ function buildTreeNode(node, depth) {
   wrap.className = "t-node";
   const kids = node.children || [];
   const hasKids = kids.length > 0;
-  const nodeCodes = collectCodes(node);
 
   const row = document.createElement("div");
   row.className = "t-row";
@@ -357,17 +494,23 @@ function buildTreeNode(node, depth) {
   cnt.textContent = countQuestions(node);
   row.appendChild(cnt);
 
-  // Highlight when this node is the active single selection: its collected
-  // codes must exactly equal the current filter.
-  const isSelected = !!(pool.syll &&
-    nodeCodes.length === pool.syll.length &&
-    nodeCodes.every(c => pool.syll.includes(c)));
+  // Multi-select indicator (checkbox glyph). Disabled-looking when the whole
+  // bank is active (no filter), otherwise toggles this node on/off.
+  const box = document.createElement("span");
+  box.className = "t-box";
+  box.textContent = pool.syll.has(node.code) ? "☑" : "☐";
+  row.appendChild(box);
+
+  // Fully-selected (subtree entirely in filter) for a stronger highlight.
+  const isSelected = pool.syll.has(node.code);
   if (isSelected) row.classList.add("selected");
 
   const handleClick = () => {
-    selectNode(node);
+    if (!pool.syll.has(node.code)) pool.syll.add(node.code);
+    else pool.syll.delete(node.code);
     renderSyllTree();
     updateSyllStatus();
+    updateSyllAllButton();
   };
   row.addEventListener("click", handleClick);
 
@@ -404,34 +547,29 @@ function renderSyllTree() {
   SYLLABUS.forEach(r => box.appendChild(buildTreeNode(r, 0)));
 }
 
-// Select a syllabus node, or clear back to the whole bank.
+// Clear all selected syllabus nodes (=> whole bank).
 function selectNode(node) {
-  if (!node) {
-    pool.syll = null;
-    syllTitle = "";
-  } else {
-    pool.syll = collectCodes(node);
-    syllTitle = (node.title && node.title.trim()) ? node.title : node.code;
-  }
+  pool.syll = new Set();
   updateSyllAllButton();
 }
 
 function updateSyllAllButton() {
   const btn = document.getElementById("syllAll");
-  btn.classList.toggle("selected", !pool.syll);
+  btn.classList.toggle("selected", pool.syll.size === 0);
 }
 
 function updateSyllStatus() {
-  let msg;
-  if (!pool.syll) {
-    msg = "Whole bank (all topics) — " + (BYID.size) + " questions";
-  } else {
-    const set = new Set(pool.syll);
-    const mcqMatch = ALL.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
-    msg = `Selected: <b>${escHtml(syllTitle)}</b> · ${mcqMatch} MCQ question${mcqMatch === 1 ? "" : "s"}`;
-    if (pool.type !== "structured") msg += " · structured not included (no topic codes)";
+  const el = document.getElementById("syllStatus");
+  if (pool.syll.size === 0) {
+    el.innerHTML = "Whole bank (all topics) — " + (BYID.size) + " questions";
+    return;
   }
-  document.getElementById("syllStatus").innerHTML = msg;
+  const set = selectedCodesSet();
+  const mcqMatch = ALL.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
+  const n = pool.syll.size;
+  let msg = `Selected <b>${n}</b> topic${n === 1 ? "" : "s"} · ${mcqMatch} MCQ question${mcqMatch === 1 ? "" : "s"}`;
+  if (pool.type !== "structured") msg += " · structured not included";
+  el.innerHTML = msg;
 }
 
 function escHtml(s) {
@@ -444,22 +582,22 @@ function escHtml(s) {
 function startRun(spec) {
   let qs;
   if (spec === "all") {
-    qs = filteredPool();           // all matching the filter
+    qs = sortPool(filteredPool());                    // all matching the filter, in chosen order
   } else if (spec === "one") {
-    qs = filteredPool();
-    if (qs.length) qs = [qs[Math.floor(Math.random() * qs.length)]];
+    const f = filteredPool();
+    qs = f.length ? [f[Math.floor(Math.random() * f.length)]] : [];
   } else {
     const n = Math.max(1, Math.floor(Number(document.getElementById("countInput").value) || 10));
-    qs = shuffle(filteredPool()).slice(0, n);
+    qs = sortPool(filteredPool()).slice(0, n);
   }
   if (!qs.length) {
     document.getElementById("setupErr").textContent =
       "No questions match those filters - try All types / All papers.";
     return;
   }
-  window.__qs = shuffle(qs);
+  window.__qs = qs;
   window.__idx = 0;
-  window.__results = {};   // q.id -> {correct:boolean}
+  window.__results = {};   // q.id -> {chosen, correct, ...}
   document.getElementById("setupCard").style.display = "none";
   document.getElementById("doneCard").style.display = "none";
   document.getElementById("quizCard").style.display = "block";
@@ -612,12 +750,54 @@ function makeMsFig(q) {
 function choose(letter, q) {
   const correct = letter === q.ms_answer;
   window.__results[q.id] = { chosen: letter, correct };
+  recordAnswered(q, { correct, chosen: letter });
   renderQ();
 }
 
 function selfGrade(q, correct) {
   window.__results[q.id] = { assessed: true, chosen: correct ? "self-ok" : "self-no", correct };
+  recordAnswered(q, { correct, chosen: correct ? "self-ok" : "self-no" });
   renderQ();
+}
+
+// ---- Progress recording (local always + cloud when registered) ----
+// Local (localStorage) is the source of truth for the on-device 对/错 book and
+// never fails. Cloud is a best-effort sync so history follows the student.
+function recordAnswered(q, r) {
+  const rec = {
+    correct: !!r.correct,
+    chosen: r.chosen || null,
+    qtype: q.type === "structured" ? "structured" : "mcq",
+    year: q.year ?? null,
+    session: q.session ?? null,
+    paper: q.paper != null ? String(q.paper) : null,
+    qno: q.question != null ? String(q.question) : null,
+    t: Date.now(),
+  };
+  const key = currentStudentKey();
+  __store[key] = __store[key] || {};
+  __store[key][q.id] = rec;
+  saveStore(__store);
+  pushCloud(q.id, rec);
+}
+
+async function pushCloud(qid, rec) {
+  const stu = currentCloudStudent();
+  if (!stu || !PDB) return;               // guest / not configured -> local only
+  try {
+    await PDB.recordPractice(stu.id, Object.assign({ question_id: qid }, rec));
+  } catch (e) {
+    if (!__cloudWarned) { __cloudWarned = true; }
+  }
+}
+
+// ---- Student identity ----
+function currentCloudStudent() {
+  const id = localStorage.getItem(LS_STUDENT_ID);
+  return id ? { id: id } : null;
+}
+function currentStudentKey() {
+  return localStorage.getItem(LS_STUDENT_ID) || "guest";
 }
 
 function showFeedback(res, q) {
@@ -691,7 +871,7 @@ const syllToggle = document.getElementById("syllToggle");
 const syllPanel = document.getElementById("syllPanel");
 syllToggle.addEventListener("click", () => {
   syllPanel.classList.toggle("open");
-  syllToggle.textContent = syllPanel.classList.contains("open") ? "☰ Hide topics" : "☰ Choose a topic";
+  syllToggle.textContent = syllPanel.classList.contains("open") ? "☰ Hide topics" : "☰ Choose topics";
   if (syllPanel.classList.contains("open")) renderSyllTree();
 });
 document.getElementById("syllAll").addEventListener("click", () => {
@@ -700,10 +880,196 @@ document.getElementById("syllAll").addEventListener("click", () => {
   updateSyllStatus();
 });
 
+// ---------- Student identity ----------
+const idNameEl = document.getElementById("idName");
+const idNoEl = document.getElementById("idNo");
+const idBadgeEl = document.getElementById("idBadge");
+
+function loadIdentity() {
+  try { const s = JSON.parse(localStorage.getItem(LS_IDENTITY) || "{}"); if (s && s.name && s.no) return s; } catch (e) {}
+  return null;
+}
+let __identity = loadIdentity();
+
+function identityLabel(i) { return i ? i.name : "Guest"; }
+
+function renderIdentityBadge() {
+  const stuId = localStorage.getItem(LS_STUDENT_ID);
+  if (__identity && stuId) {
+    idBadgeEl.innerHTML =
+      `Signed in as <b>${escHtml(__identity.name)}</b> (${escHtml(__identity.no)}) · progress syncs across devices.` +
+      `<button class="ghost2" id="idClear">switch</button>`;
+  } else if (__identity && PDB) {
+    idBadgeEl.innerHTML =
+      `Signed in as <b>${escHtml(__identity.name)}</b> (${escHtml(__identity.no)}) · not yet synced.` +
+      `<button class="ghost2" id="idClear">switch</button>`;
+  } else {
+    idBadgeEl.innerHTML =
+      `Guest — progress saved on this device only. Add your name + number to sync across devices.`;
+  }
+  const c = document.getElementById("idClear");
+  if (c) c.onclick = () => { __identity = null; localStorage.removeItem(LS_IDENTITY); localStorage.removeItem(LS_STUDENT_ID); idNameEl.value = ""; idNoEl.value = ""; renderIdentityBadge(); };
+}
+
+async function saveIdentity() {
+  const name = idNameEl.value.trim();
+  const no = idNoEl.value.trim();
+  if (!name || !no) { idBadgeEl.textContent = "Enter both name and student number to sync."; return; }
+  const prev = identityLabel(__identity);
+  __identity = { name, no };
+  localStorage.setItem(LS_IDENTITY, JSON.stringify(__identity));
+  // Best-effort cloud resolve; on failure we still keep local recording under "guest".
+  if (PDB) {
+    try {
+      const stu = await PDB.resolveStudent(name, no);
+      localStorage.setItem(LS_STUDENT_ID, String(stu.id));
+    } catch (e) {
+      localStorage.removeItem(LS_STUDENT_ID);
+    }
+  }
+  if (localStorage.getItem(LS_STUDENT_ID) && prev !== identityLabel(__identity)) {
+    // moving from guest to a real identity: migrate this device's guest records
+    const guestRecs = __store["guest"];
+    if (guestRecs) {
+      const stuId = localStorage.getItem(LS_STUDENT_ID);
+      __store[stuId] = Object.assign({}, __store[stuId], guestRecs);
+      saveStore(__store);
+    }
+  }
+  renderIdentityBadge();
+}
+
+document.getElementById("idSave").onclick = saveIdentity;
+if (__identity) {
+  idNameEl.value = __identity.name;
+  idNoEl.value = __identity.no;
+}
+
+// ---------- My progress / review modal ----------
+let __recTab = "records";
+let __recData = [];   // array of { qid, rec }
+function openRecords() {
+  const stuId = localStorage.getItem(LS_STUDENT_ID);
+  (async () => {
+    // Merge cloud history into local store so cross-device answers appear too.
+    if (PDB && __identity && stuId) {
+      try {
+        const rows = await PDB.readHistory(__identity.name, __identity.no, 500);
+        const key = stuId;
+        __store[key] = __store[key] || {};
+        rows.forEach(rt => {
+          if (!__store[key][rt.question_id]) {
+            __store[key][rt.question_id] = {
+              correct: rt.correct, qtype: rt.qtype, year: rt.year, session: rt.session,
+              paper: rt.paper, qno: rt.qno, t: Date.parse(rt.answered_at || 0) || Date.now(),
+            };
+          }
+        });
+        saveStore(__store);
+      } catch (e) { /* keep local-only */ }
+    }
+    __recData = [];
+    const key = localStorage.getItem(LS_STUDENT_ID) || "guest";
+    const recs = __store[key] || {};
+    Object.keys(recs).forEach(qid => { if (BYID.has(qid)) __recData.push({ qid, rec: recs[qid] }); });
+    __recData.sort((a, b) => (b.rec.t || 0) - (a.rec.t || 0));
+    document.getElementById("recordsOverlay").classList.add("open");
+    renderRecList();
+  })();
+}
+function renderRecList() {
+  const title = document.getElementById("recTitle");
+  title.textContent = `My progress${__identity ? " · " + __identity.name : ""}`;
+  const stuId = localStorage.getItem(LS_STUDENT_ID);
+  document.getElementById("recSub").textContent =
+    (stuId ? "Synced — shows answers from any device." : "Local only — add name + number to sync across devices.") +
+    ` · ${__recData.length} recorded question${__recData.length === 1 ? "" : "s"}`;
+  document.getElementById("recResync").style.display =
+    (PDB && __identity && stuId) ? "" : "none";
+
+  const list = document.getElementById("recList");
+  document.getElementById("recPreview").classList.remove("show");
+  list.innerHTML = "";
+  const filtered = __recData.filter(x => {
+    if (__recTab === "correct") return x.rec.correct;
+    if (__recTab === "wrong") return !x.rec.correct;
+    return true;
+  });
+  if (!filtered.length) {
+    const e = document.createElement("div");
+    e.className = "rec-empty";
+    e.textContent = __recTab === "wrong"
+      ? "No wrong questions yet — keep practising! 🎉"
+      : "No recorded questions yet. Answer some questions first.";
+    list.appendChild(e);
+    return;
+  }
+  filtered.forEach(x => {
+    const q = BYID.get(x.qid);
+    const item = document.createElement("div");
+    item.className = "rec-item";
+    item.innerHTML =
+      `<span class="okdot">${x.rec.correct ? "✅" : "❌"}</span>` +
+      `<span class="type ${x.rec.qtype === "structured" ? "structured" : "mcq"}">${x.rec.qtype === "structured" ? "Structured" : "MCQ"}</span>` +
+      `<span class="src">${escHtml(sourceLabel(q))}</span>` +
+      `<span class="tag">${escHtml((q.topics || [])[0] || "")}</span>`;
+    item.onclick = () => showRecPreview(x.qid);
+    list.appendChild(item);
+  });
+}
+
+function showRecPreview(qid) {
+  const q = BYID.get(qid);
+  const pv = document.getElementById("recPreview");
+  pv.classList.add("show");
+  let body = `<div class="meta">${escHtml(sourceLabel(q))} · ${q.type === "structured" ? "Structured (self-assessed)" : "Answer: " + escHtml(q.ms_answer)}</div>`;
+  const imgSrc = (q.type === "structured") ? (q.paper_img || "") : (q.figures && q.figures[0] || "");
+  if (imgSrc) body += `<div class="qfig"><img src="${escHtml(imgSrc)}" onerror="this.style.display='none'" /></div>`;
+  if (q.type === "structured" && q.ms_img) body += `<div class="meta" style="margin-top:6px">Review the Mark Scheme when revising this one.</div>`;
+  pv.innerHTML = body;
+}
+
+function closeRecords() {
+  document.getElementById("recordsOverlay").classList.remove("open");
+  document.getElementById("recPreview").classList.remove("show");
+}
+document.getElementById("recordsBtn").onclick = openRecords;
+document.getElementById("recClose").onclick = closeRecords;
+document.getElementById("recordsOverlay").addEventListener("click", (e) => { if (e.target === e.currentTarget) closeRecords(); });
+document.querySelectorAll(".rec-tabs .tab").forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll(".rec-tabs .tab").forEach(t => t.classList.remove("on"));
+    tab.classList.add("on");
+    __recTab = tab.dataset.tab;
+    renderRecList();
+  };
+});
+document.getElementById("recResync").onclick = async () => {
+  const stuId = localStorage.getItem(LS_STUDENT_ID);
+  if (!PDB || !__identity || !stuId) return;
+  const btn = document.getElementById("recResync");
+  btn.textContent = "Syncing…"; btn.disabled = true;
+  try {
+    const key = stuId;
+    const recs = __store[key] || {};
+    for (const qid of Object.keys(recs)) {
+      const rec = recs[qid];
+      await PDB.recordPractice(stuId, Object.assign({ question_id: qid }, rec));
+    }
+    btn.textContent = "✓ Synced";
+  } catch (e) {
+    btn.textContent = "Sync failed (offline?)";
+  } finally {
+    setTimeout(() => { btn.disabled = false; if (btn.textContent !== "Sync failed (offline?)") btn.textContent = "Sync to cloud"; }, 1200);
+  }
+};
+
+// ---------- Init ----------
 buildStats();
 bindChips();
 updateSyllStatus();
 updateSyllAllButton();
+renderIdentityBadge();
 // Default to expanding the top-level sections so teachers can see topics at a glance.
 SYLLABUS.forEach(r => { if ((r.children || []).some(c => (c.children || []).length)) settled.add(r.code); });
 </script>

@@ -29,4 +29,10 @@ window.SUPABASE_CONFIG = {
   //    留空表示尚未部署，stats.html 会提示“接口未配置”。
   statsToken: "123456",
   statsEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/stats-edge",
+
+  // ---- 自由刷题（practice.html）配置 ----
+  // 回看自己的练习记录走 Edge Function practice-log（service_role + 姓名+学号鉴权）。
+  // 部署见 quiz-app/practice-logs.sql 与 supabase/functions/practice-log/。
+  // 留空表示尚未部署：practice 页会降级为"仅本地(localStorage)记录"，读写同步上不去但仍可用。
+  practiceEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/practice-log",
 };

@@ -6,3 +6,7 @@ project_id = "jrobrcaiqtfwuomzycui"
 [functions.stats-edge]
 enabled = true
 verify_jwt = false
+
+[functions.practice-log]
+enabled = true
+verify_jwt = false

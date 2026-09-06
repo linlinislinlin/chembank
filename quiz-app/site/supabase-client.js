@@ -76,10 +76,16 @@ window.HomeworkDB = (() => {
 
   async function listAssignments() {
     const c = ready(); if (!c) throw new Error("Supabase 未配置");
-    const { data, error } = await c.from("assignments")
+    let { data, error } = await c.from("assignments")
       .select("id, title, question_ids, question_snapshot, created_at, due_at, instructions, status")
       .order("created_at", { ascending: false });
-    if (error) throw error;
+    if (error) {
+      const retry = await c.from("assignments")
+        .select("id, title, question_ids, created_at, due_at")
+        .order("created_at", { ascending: false });
+      if (retry.error) throw retry.error;
+      return retry.data || [];
+    }
     return data || [];
   }
 

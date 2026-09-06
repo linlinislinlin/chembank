@@ -190,13 +190,13 @@
         <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
         <div class="pick-menu" id="inameMenu"></div>
       </div>
-      <label>Last 4 digits of student number</label>
+      <label id="idNoLabel">Last 4 digits of student number</label>
       <div class="idline">
         <input class="input" id="idNo" placeholder="e.g. 0178" autocomplete="off" maxlength="8" />
         <button class="btn ghost" id="idSave">Save identity</button>
       </div>
       <div class="idbadge" id="idBadge"></div>
-      <button class="records-btn" id="recordsBtn">📈 My progress &amp; review</button>
+      <button class="records-btn" id="recordsBtn" style="display:none">📈 My progress &amp; review</button>
     </div>
 
     <div class="stat-grid" id="statGrid"></div>
@@ -309,12 +309,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906ah"></script>
-<script src="structured-data.js?v=20260906ah"></script>
-<script src="roster.js?v=20260906ah"></script>
-<script src="config.js?v=20260906ah"></script>
+<script src="data.js?v=20260906ai"></script>
+<script src="structured-data.js?v=20260906ai"></script>
+<script src="roster.js?v=20260906ai"></script>
+<script src="config.js?v=20260906ai"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ah"></script>
+<script src="supabase-client.js?v=20260906ai"></script>
 <script>
 "use strict";
 
@@ -941,28 +941,41 @@ function fillPick(menuId, btnId, items, current, onPick) {
   btn.querySelector(".lab").textContent = chosen ? chosen.label : items[0].label;
 }
 
+function isTesterPick() {
+  return nameValue === "TESTER" || classValue === "T";
+}
+
+function allRoster() {
+  return Portal.roster("as");
+}
+
 function rosterStudents() {
-  return Portal.roster("as").filter((s) => s.class !== "T" && s.student_no !== "TESTER");
+  const all = allRoster();
+  const testers = all.filter((s) => s.class === "T" || s.student_no === "TESTER");
+  const rest = all
+    .filter((s) => s.class !== "T" && s.student_no !== "TESTER")
+    .slice()
+    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  if (classValue === "T") return testers;
+  if (classValue) return rest.filter((s) => s.class === classValue);
+  return testers.concat(rest);
 }
 
 function fillClassOptions() {
-  const items = Portal.classOptions("as").filter((o) => o.value !== "T");
+  const items = Portal.classOptions("as");
   if (!items.some((o) => o.value === classValue)) classValue = items[0] ? items[0].value : "";
   fillPick("iclassMenu", "iclassBtn", items, classValue, (value) => {
     classValue = value;
     nameValue = "";
     fillClassOptions();
     fillRoster();
+    syncIdField();
   });
 }
 
 function fillRoster() {
-  const list = rosterStudents()
-    .filter((s) => !classValue || s.class === classValue)
-    .slice()
-    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
   const items = [{ value: "", label: "Select your name…" }].concat(
-    list.map((s) => ({
+    rosterStudents().map((s) => ({
       value: s.student_no,
       label: s.name + "  " + s.name_zh + "  (" + s.class_name + ")",
     }))
@@ -971,15 +984,28 @@ function fillRoster() {
   fillPick("inameMenu", "inameBtn", items, nameValue, (value) => {
     nameValue = value;
     fillRoster();
+    syncIdField();
   });
 }
 
+function syncIdField() {
+  const tester = isTesterPick();
+  const lab = document.getElementById("idNoLabel");
+  idNoEl.type = tester ? "password" : "text";
+  idNoEl.placeholder = tester ? "Tester code" : "e.g. 0178";
+  idNoEl.maxLength = tester ? 16 : 8;
+  idNoEl.value = "";
+  lab.textContent = tester ? "Tester code" : "Last 4 digits of student number";
+}
+
 function selectedStudent() {
-  return rosterStudents().find((s) => s.student_no === nameValue) || null;
+  return allRoster().find((s) => s.student_no === nameValue) || null;
 }
 
 function renderIdentityBadge() {
   const stuId = localStorage.getItem(LS_STUDENT_ID);
+  const recBtn = document.getElementById("recordsBtn");
+  recBtn.style.display = __identity ? "inline-block" : "none";
   if (__identity && stuId) {
     idBadgeEl.innerHTML =
       `Signed in as <b>${escHtml(__identity.name)}</b> · progress syncs across devices.` +
@@ -990,7 +1016,7 @@ function renderIdentityBadge() {
       `<button class="ghost2" id="idClear">switch</button>`;
   } else {
     idBadgeEl.innerHTML =
-      `Guest — progress saved on this device only. Pick your name to sync across devices.`;
+      `Guest — you can still practise. Pick your name to save and review your record.`;
   }
   const c = document.getElementById("idClear");
   if (c) c.onclick = () => {
@@ -1000,6 +1026,7 @@ function renderIdentityBadge() {
     localStorage.removeItem(LS_STUDENT_ID);
     idNoEl.value = "";
     fillRoster();
+    syncIdField();
     renderIdentityBadge();
   };
 }
@@ -1008,10 +1035,15 @@ async function saveIdentity() {
   const stu = selectedStudent();
   const typed = (idNoEl.value || "").replace(/\s+/g, "");
   const last4 = (s) => String(s || "").slice(-4).toUpperCase();
+  const testerCode = String((SUP && SUP.testerCode) || "");
+  const isTester = stu.student_no === "TESTER" || stu.class === "T";
   if (!stu) { idBadgeEl.textContent = "Please select your name from the list."; return; }
-  if (!typed) { idBadgeEl.textContent = "Type the last 4 digits of your student number."; return; }
-  if (last4(typed) !== last4(stu.student_no) && typed.toUpperCase() !== String(stu.student_no).toUpperCase()) {
-    idBadgeEl.textContent = "Those 4 digits do not match this name.";
+  if (!typed) { idBadgeEl.textContent = isTester ? "Enter the Tester code." : "Type the last 4 digits of your student number."; return; }
+  const ok = isTester
+    ? (!!testerCode && typed === testerCode)
+    : (last4(typed) === last4(stu.student_no) || typed.toUpperCase() === String(stu.student_no).toUpperCase());
+  if (!ok) {
+    idBadgeEl.textContent = isTester ? "Wrong Tester code." : "Those 4 digits do not match this name.";
     return;
   }
   const prev = identityLabel(__identity);
@@ -1054,7 +1086,7 @@ document.getElementById("inameBtn").onclick = (e) => {
 document.addEventListener("click", closePicks);
 
 if (__identity) {
-  const saved = rosterStudents().find((s) => s.student_no === __identity.no && s.name === __identity.name);
+  const saved = allRoster().find((s) => s.student_no === __identity.no && s.name === __identity.name);
   if (saved) {
     classValue = saved.class || "";
     nameValue = saved.student_no;
@@ -1066,11 +1098,16 @@ if (__identity) {
 }
 fillClassOptions();
 fillRoster();
+syncIdField();
 
 // ---------- My progress / review modal ----------
 let __recTab = "records";
 let __recData = [];   // array of { qid, rec }
 function openRecords() {
+  if (!__identity) {
+    idBadgeEl.textContent = "Select your name first to see your record.";
+    return;
+  }
   const stuId = localStorage.getItem(LS_STUDENT_ID);
   (async () => {
     // Merge cloud history into local store so cross-device answers appear too.

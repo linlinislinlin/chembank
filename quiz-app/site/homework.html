@@ -1,73 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-course="as">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E85D6A" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>Homework · ChemBank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
 <style>
-  :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; --amber:#f0c17c; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; min-height:100vh; }
-  .top { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:10; }
-  .top h1 { font-size:16px; margin:0; }
-  .top .meta { font-size:12px; color:var(--muted); }
-  .wrap { max-width:760px; margin:0 auto; padding:24px 20px 80px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.3); padding:22px; margin-bottom:16px; }
-  .center { text-align:center; }
-  .big { font-size:40px; margin:10px 0; }
-  label { display:block; font-size:13px; color:var(--muted); margin:14px 0 4px; }
-  .input, textarea { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; width:100%; font-size:16px; font-family:inherit; }
-  .input:focus, textarea:focus { outline:none; border-color:var(--accent); }
-  .pick { position:relative; text-align:left; }
-  .pick-btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; background:#262241; border:1px solid var(--line); border-radius:12px; padding:14px 16px; color:var(--text); font-family:inherit; font-size:16px; cursor:pointer; }
-  .pick-btn .lab { flex:1; }
-  .pick-btn .chev { color:var(--muted); font-size:13px; }
-  .pick-btn:hover, .pick.open .pick-btn { border-color:var(--accent); }
-  .pick-menu { display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20; background:#262241; border:1px solid var(--line); border-radius:12px; max-height:260px; overflow:auto; }
-  .pick.open .pick-menu { display:block; }
-  .pick-opt { display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); font-family:inherit; font-size:15px; padding:12px 16px; cursor:pointer; }
-  .pick-opt:hover, .pick-opt.on { background:#1e1b2e; }
-  textarea { min-height:88px; resize:vertical; }
-  .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:13px 20px; font-size:16px; font-weight:600; cursor:pointer; width:100%; margin-top:18px; }
-  .btn:disabled { opacity:.5; cursor:not-allowed; }
-  .qhead { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--line); margin-bottom:16px; }
-  .qhead b { color:var(--accent); }
-  .qfig img { max-width:100%; max-height:70vh; border:1px solid var(--line); border-radius:9px; background:#fff; }
-  .qfig { text-align:center; margin:16px 0; }
-  .topics { font-size:12px; color:var(--muted); margin:12px 0; display:flex; gap:6px; flex-wrap:wrap; }
-  .topics span { background:var(--panel-2); padding:2px 8px; border-radius:6px; }
-  .ans { display:flex; gap:10px; margin-top:16px; }
-  .abtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:19px; font-weight:700; color:var(--text); cursor:pointer; }
-  .abtn.on { border-color:var(--accent); background:rgba(124,108,240,.18); }
-  .abtn.correct { border-color:var(--green); background:rgba(78,206,157,.15); color:var(--green); }
-  .abtn.wrong { border-color:var(--red); background:rgba(240,124,124,.15); color:var(--red); }
-  .typebadge { display:inline-block; font-size:11px; padding:2px 9px; border-radius:20px; background:rgba(124,108,240,.18); color:var(--accent); margin-left:8px; }
-  .msfig { margin-top:12px; text-align:center; }
-  .msfig img { max-width:100%; max-height:70vh; border:1px solid var(--line); border-radius:9px; background:#fff; }
-  .hint { font-size:12px; color:var(--muted); margin-top:10px; }
-  .instr { color:var(--text); font-size:14px; line-height:1.55; white-space:pre-wrap; }
-  .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin:20px 0; }
-  .stat { background:var(--panel-2); border-radius:11px; padding:14px; text-align:center; }
-  .stat .v { font-size:24px; font-weight:800; color:var(--green); }
-  .stat .k { font-size:12px; color:var(--muted); margin-top:3px; }
-  .err { color:var(--red); font-size:13px; margin-top:8px; }
-  .review { font-size:14px; margin-top:12px; }
-  .review .ok { color:var(--green); }
-  .review .no { color:var(--red); }
-  .review .pend { color:var(--amber); }
+  .stage-icon {
+    width: 56px; height: 56px; margin: 4px auto 12px;
+    display: grid; place-items: center; border-radius: 16px;
+  }
+  .stage-icon svg { width: 28px; height: 28px; }
+  .stage-icon.neutral { background: var(--bg-soft); color: var(--muted); border: 1px solid var(--line); }
+  .stage-icon.success { background: var(--green-soft); color: var(--green-deep); border: 1px solid #A6F4C5; }
+  .stage-icon.warn { background: var(--amber-soft); color: var(--amber); border: 1px solid #FDE9C8; }
+  .stage-title { font-size: 22px; font-weight: 800; letter-spacing: -.3px; margin: 0 0 6px; }
+  .top .home-link { margin-left: auto; }
 </style>
 </head>
 <body>
+
 <div class="top">
-  <h1>📝 Chemistry Homework</h1>
+  <h1><span class="brand-flask">🧪</span> Chemistry Homework</h1>
   <span class="meta" id="topMeta">Loading…</span>
-  <span class="meta" style="margin-left:auto;text-decoration:underline;"><a href="home.html" id="homeLink" style="color:var(--accent)">🏠 Home</a></span>
+  <span class="navline home-link"><a href="home.html" id="homeLink">Home</a></span>
 </div>
 
 <div class="wrap">
   <div class="card center" id="idCard" style="display:none">
-    <div class="big">🧑‍🎓</div>
-    <h2 id="idTitle">First, tell us who you are</h2>
+    <div class="stage-icon neutral">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-3.3 3.6-5 8-5s8 1.7 8 5"/>
+      </svg>
+    </div>
+    <h2 class="stage-title" id="idTitle">First, tell us who you are</h2>
     <p class="hint" id="idInstr"></p>
     <label>Class</label>
     <div class="pick" id="iclassPick">
@@ -81,33 +53,43 @@
     </div>
     <label id="idNoLabel">Last 4 digits of student number</label>
     <input class="input" id="istudentNo" placeholder="e.g. 1111" autocomplete="off" maxlength="8" />
-    <button class="btn" id="startBtn">Start →</button>
+    <button class="btn block" id="startBtn" style="margin-top:18px">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
 
   <div id="quizWrap" style="display:none">
     <div class="card" id="instrCard" style="display:none">
-      <h2 style="margin-top:0;font-size:16px">Instructions</h2>
+      <h2 style="margin-top:0;font-size:17px">Instructions</h2>
       <div class="instr" id="instrText"></div>
     </div>
     <div id="qCards"></div>
     <div class="card">
-      <div class="hint">Answer every question, then submit. You will not see the mark scheme until you submit.</div>
-      <button class="btn" id="submitBtn">Submit assignment</button>
+      <div class="hint" style="margin-top:0">Answer every question, then submit. You will not see the mark scheme until you submit.</div>
+      <button class="btn block" id="submitBtn">Submit assignment</button>
       <div class="err" id="subErr"></div>
     </div>
   </div>
 
   <div class="card center" id="doneCard" style="display:none">
-    <div class="big">🎉</div>
-    <h2 id="doneTitle">Submitted</h2>
+    <div class="stage-icon success">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12.5 10 17 19 7"/>
+      </svg>
+    </div>
+    <h2 class="stage-title" id="doneTitle">Submitted</h2>
     <div class="stat-grid" id="doneStats"></div>
     <div id="doneReview"></div>
   </div>
 
-  <div class="card" id="errCard" style="display:none">
-    <div class="big">⚠️</div>
-    <h2 id="errMsg">Failed to load</h2>
+  <div class="card center" id="errCard" style="display:none">
+    <div class="stage-icon warn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 8v5"/>
+        <circle cx="12" cy="16.5" r="1" fill="currentColor" stroke="none"/>
+        <path d="M10.3 4.5 3.4 16.5a2 2 0 0 0 1.7 3h13.8a2 2 0 0 0 1.7-3L13.7 4.5a2 2 0 0 0-3.4 0Z"/>
+      </svg>
+    </div>
+    <h2 class="stage-title" id="errMsg">Failed to load</h2>
   </div>
 </div>
 
@@ -133,6 +115,12 @@ function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");
   if (q === "ig" || q === "as") return q;
   return Portal.trackOf(assignment || {});
+}
+
+function applyTrackTheme(t) {
+  document.documentElement.setAttribute("data-course", t === "ig" ? "ig" : "as");
+  const mc = document.querySelector('meta[name="theme-color"]');
+  if (mc) mc.setAttribute("content", t === "ig" ? "#169C96" : "#E85D6A");
 }
 
 function closePicks() {
@@ -191,6 +179,7 @@ async function init() {
       ? assignment.instructions.slice(0, 240)
       : "Select your name from the class list. Answers stay hidden until you submit.";
     track = currentTrack();
+    applyTrackTheme(track);
     document.getElementById("homeLink").href = Portal.homeHref(track);
     if (fromTeacherLink) {
       classValue = "T";
@@ -434,17 +423,19 @@ function showResult(result) {
     const card = document.createElement("div");
     card.className = "card";
     card.style.textAlign = "left";
+    card.style.marginTop = "14px";
     let verdict = '<span class="pend">Awaiting teacher mark</span>';
     if (it.is_correct === true) verdict = '<span class="ok">Correct</span>';
     if (it.is_correct === false) verdict = '<span class="no">Incorrect</span>';
     const img = qImg(q);
-    card.innerHTML = `<div class="qhead"><span>${qLabel(q, i)}</span><span class="review">${verdict}</span></div>
+    card.innerHTML = `<div class="qhead"><span>${qLabel(q, i)}</span><span class="review" style="margin-top:0">${verdict}</span></div>
       ${img ? `<div class="qfig"><img src="${img}"></div>` : ""}
       <div class="review">Your answer: <b>${esc(it.chosen || "–")}</b></div>
       ${it.ms_answer ? `<div class="review">Correct answer: <b class="ok">${esc(it.ms_answer)}</b></div>` : ""}`;
     if (it.ms_img) {
       const ms = document.createElement("div");
       ms.className = "msfig";
+      ms.style.display = "block";
       ms.innerHTML = `<img src="${esc(it.ms_img)}" alt="Mark scheme">`;
       card.appendChild(ms);
     }

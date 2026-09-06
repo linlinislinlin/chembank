@@ -1,58 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-course="ig">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#1e1b2e" />
+<meta name="theme-color" content="#169C96" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>ChemBank · IGCSE Chemistry 0620</title>
-<style>
-  :root { --accent:#7c6cf0; --accent-2:#4ece9d; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --red:#f07c7c; }
-  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Helvetica Neue",Arial,sans-serif; min-height:100vh; line-height:1.55; }
-  a { color:var(--accent); text-decoration:none; }
-  .top { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:12px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
-  .top h1 { font-size:16px; margin:0; }
-  .top .navline { display:flex; gap:14px; margin-left:auto; font-size:13px; }
-  .top .navline a { color:var(--muted); }
-  .wrap { max-width:980px; margin:0 auto; padding:40px 20px 80px; }
-  .hero { text-align:center; max-width:640px; margin:0 auto 40px; }
-  .hero .logo { font-size:56px; }
-  .hero h2 { font-size:30px; margin:14px 0 8px; font-weight:800; }
-  .hero .sub { color:var(--muted); font-size:16px; margin:0; }
-  .assign-panel { max-width:640px; margin:0 auto; }
-  .assign-card { background:var(--bg-soft); border:1px solid var(--line); border-radius:16px; padding:24px; }
-  .assign-card h4 { margin:0 0 4px; font-size:16px; }
-  .assign-card .sub { color:var(--muted); font-size:13px; margin:0 0 16px; }
-  .hw-folder { margin-bottom:10px; }
-  .hw-folder-btn { width:100%; display:flex; align-items:center; gap:10px; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; color:inherit; cursor:pointer; font-family:inherit; }
-  .hw-folder-btn:hover, .hw-folder.open .hw-folder-btn { border-color:var(--accent-2); }
-  .hw-folder-btn .chev { color:var(--accent-2); font-size:13px; width:16px; }
-  .hw-folder-btn .lab { flex:1; font-size:16px; font-weight:800; }
-  .hw-folder-btn .count { color:var(--muted); font-size:12px; font-weight:600; }
-  .hw-list { display:none; flex-direction:column; gap:8px; margin-top:8px; padding-left:8px; }
-  .hw-folder.open .hw-list { display:flex; }
-  .hw-item { display:block; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 16px; color:inherit; }
-  .hw-item:hover { border-color:var(--accent-2); }
-  .hw-item b { display:block; font-size:15px; }
-  .hw-item .meta { color:var(--muted); font-size:12px; margin-top:3px; }
-  .err { color:var(--red); font-size:13px; margin-top:10px; min-height:16px; }
-  .foot { text-align:center; color:var(--muted); font-size:12px; margin-top:50px; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
 </head>
 <body>
+
 <div class="top">
-  <h1>🧪 ChemBank · IGCSE 0620</h1>
+  <h1><span class="brand-flask">🧪</span> ChemBank · IGCSE 0620</h1>
   <div class="navline">
     <a href="home.html">Switch course</a>
   </div>
 </div>
-<div class="wrap">
+
+<div class="wrap wide">
   <div class="hero">
-    <div class="logo">📗</div>
+    <div class="eyebrow">IGCSE Chemistry · CIE 0620</div>
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M10 2v6.5L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8.5V2"/>
+        <path d="M8.5 2h7"/>
+        <path d="M7 15h10"/>
+      </svg>
+    </div>
     <h2>IGCSE Chemistry</h2>
     <p class="sub">CIE 0620 · Qingyun class only. AS homework will not appear here.</p>
   </div>
+
   <div class="assign-panel">
     <div class="assign-card">
       <h4>IGCSE Homework</h4>
@@ -61,8 +42,10 @@
       <div class="err" id="assignErr"></div>
     </div>
   </div>
+
   <div class="foot">ChemBank · IGCSE Chemistry 0620 · Qingyun</div>
 </div>
+
 <script src="roster.js?v=20260906aq"></script>
 <script src="config.js?v=20260906aq"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

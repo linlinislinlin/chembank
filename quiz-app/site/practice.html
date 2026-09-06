@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-course="as">
 <head>
 <meta charset="UTF-8" />
 <meta name="theme-color" content="#E95D6A" />
@@ -9,32 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
 <style>
-  /* AS Free Practice — light pastel theme (visual pass only) */
-  :root {
-    --accent:#E95D6A;
-    --accent-soft:#FFF1F3;
-    --accent-border:#F5B9C0;
-    --accent-hover:#FBE3E6;
-    --accent-deep:#D74C5A;
-    --bg:#FCFCFD;
-    --bg-soft:#F7F9FC;
-    --panel:#FFFFFF;
-    --panel-2:#F7F9FC;
-    --line:#E7EAF0;
-    --text:#111827;
-    --muted:#667085;
-    --green:#12B76A;
-    --green-soft:#ECFDF3;
-    --red:#E95D6A;
-    --red-soft:#FFF1F3;
-    --amber:#F79009;
-    --amber-soft:#FFFAEB;
-    --shadow:0 1px 2px rgba(16,24,40,.04), 0 4px 12px rgba(16,24,40,.04);
-    --radius:14px;
-    --radius-sm:10px;
-    --ease:150ms ease;
-  }
+  /* Free Practice — shared tokens & primitives come from theme.css.
+     Below are page-specific styles only. */
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body {
     margin:0; background:var(--bg); color:var(--text);
@@ -282,15 +260,22 @@
   .msbtn:hover { border-color:var(--accent-border); background:var(--accent-hover); }
   .msfig { margin-top:12px; text-align:center; display:none; }
   .msfig img { max-width:100%; max-height:70vh; border:1px solid var(--line); border-radius:9px; background:#fff; }
-  .selfgrade { display:flex; gap:10px; margin-top:16px; }
+  .selfgrade { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  .selfgrade-label { flex-basis:100%; font-size:14px; font-weight:500; color:var(--muted); margin-bottom:-2px; }
   .sbtn {
-    flex:1; padding:16px 0; border-radius:var(--radius-sm); background:var(--panel);
-    border:1.5px solid var(--line); font-size:18px; font-weight:700; color:var(--text); cursor:pointer; font-family:inherit;
+    flex:1 1 0; min-width:150px; height:46px; display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:0 16px; border-radius:11px; background:var(--panel); border:1px solid var(--line);
+    font-size:15px; font-weight:600; color:var(--text); cursor:pointer; font-family:inherit;
+    white-space:nowrap; transition:border-color var(--ease), background var(--ease), color var(--ease), box-shadow var(--ease);
   }
-  .sbtn.good { border-color:#A6F4C5; }
-  .sbtn.good.selected { background:var(--green-soft); color:var(--green); border-color:var(--green); }
-  .sbtn.bad { border-color:var(--accent-border); }
-  .sbtn.bad.selected { background:var(--red-soft); color:var(--accent-deep); border-color:var(--accent); }
+  .sbtn .glyph { font-size:16px; line-height:1; font-weight:700; }
+  .sbtn.good { background:var(--green-soft); border-color:#A6F4C5; color:#0B7A47; }
+  .sbtn.good:hover { border-color:var(--green); }
+  .sbtn.good.selected { border-color:var(--green); box-shadow:0 0 0 2px var(--green-soft); font-weight:700; }
+  .sbtn.bad { background:var(--red-soft); border-color:var(--accent-border); color:var(--accent-deep); }
+  .sbtn.bad:hover { border-color:var(--accent); }
+  .sbtn.bad.selected { border-color:var(--accent); box-shadow:0 0 0 2px var(--red-soft); font-weight:700; }
+  .sbtn:disabled { cursor:default; }
   .fb { border-radius:var(--radius-sm); padding:14px; margin-top:16px; font-size:16px; display:none; }
   .fb.show { display:block; }
   .fb.ok { background:var(--green-soft); border:1px solid #A6F4C5; }
@@ -930,13 +915,17 @@ function renderStructure(q, ans, res, srcEl) {
   if (res && res.assessed) {
     const sg = document.createElement("div");
     sg.className = "selfgrade";
+    const label = document.createElement("div");
+    label.className = "selfgrade-label";
+    label.textContent = "How did you do?";
+    sg.appendChild(label);
     const good = document.createElement("button");
     good.className = "sbtn good" + (res.correct ? " selected" : "");
-    good.textContent = "✅ I got it right";
+    good.innerHTML = '<span class="glyph">✓</span> Got it';
     good.disabled = true;
     const bad = document.createElement("button");
     bad.className = "sbtn bad" + (!res.correct ? " selected" : "");
-    bad.textContent = "❌ I got it wrong";
+    bad.innerHTML = '<span class="glyph">↻</span> Need review';
     bad.disabled = true;
     sg.appendChild(good);
     sg.appendChild(bad);
@@ -967,13 +956,17 @@ function renderStructure(q, ans, res, srcEl) {
 
   const sg = document.createElement("div");
   sg.className = "selfgrade";
+  const label = document.createElement("div");
+  label.className = "selfgrade-label";
+  label.textContent = "How did you do?";
+  sg.appendChild(label);
   const good = document.createElement("button");
   good.className = "sbtn good";
-  good.textContent = "✅ I got it right";
+  good.innerHTML = '<span class="glyph">✓</span> Got it';
   good.onclick = () => selfGrade(q, true);
   const bad = document.createElement("button");
   bad.className = "sbtn bad";
-  bad.textContent = "❌ I got it wrong";
+  bad.innerHTML = '<span class="glyph">↻</span> Need review';
   bad.onclick = () => selfGrade(q, false);
   sg.appendChild(good);
   sg.appendChild(bad);

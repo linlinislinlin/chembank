@@ -387,6 +387,7 @@ def main() -> int:
                         INDEX_SRC.parent / "homework.html", INDEX_SRC.parent / "stats.html",
                         INDEX_SRC.parent / "home.html", INDEX_SRC.parent / "as.html",
                         INDEX_SRC.parent / "ig.html", INDEX_SRC.parent / "practice.html",
+                        INDEX_SRC.parent / "theme.css",
                         INDEX_SRC.parent / "config.js", INDEX_SRC.parent / "supabase-client.js",
                         INDEX_SRC.parent / "roster.js"]
     for src in FRONTEND_SOURCES:

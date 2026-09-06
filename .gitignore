@@ -77,6 +77,9 @@ vault-structured/题库首页.md
 dist/
 build/
 
+# Supabase CLI local state (do not commit)
+quiz-app/supabase/.temp/
+
 # ChemBank quiz web app — the generated site IS committed to the (private) repo
 # so GitHub Actions can deploy it without needing the copyrighted source data
 # (which stays local / gitignored). Rebuild via quiz-app/build.py, then deploy.sh.

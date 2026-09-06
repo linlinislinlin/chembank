@@ -1,0 +1,571 @@
+/* ==========================================================================
+   ChemBank — Student Design System
+   --------------------------------------------------------------------------
+   One shared visual language for every student-facing page.
+
+   Course themes are driven by `data-course` on <html>:
+     <html data-course="as">  → soft coral / red   (AS Chemistry)
+     <html data-course="ig">  → calm teal           (IGCSE Chemistry)
+
+   The default (no attribute) is the AS coral theme.
+
+   Tokens are consumed by every page via the `--*` CSS custom properties.
+   Do not hard-code course colors inside individual pages — use the tokens.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. NEUTRAL + SEMANTIC TOKENS (shared by both courses)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Neutrals */
+  --bg:            #FCFCFD;   /* page background */
+  --bg-soft:       #F7F9FC;   /* muted section / subtle fills */
+  --panel:         #FFFFFF;   /* card surface */
+  --panel-2:       #F7F9FC;   /* inset surface */
+  --line:          #E7EAF0;   /* border */
+  --line-soft:     #EEF1F5;   /* lighter border */
+  --text:          #101828;   /* primary text */
+  --muted:         #667085;   /* secondary text */
+  --muted-2:       #98A2B3;   /* tertiary / placeholder text */
+
+  /* Aliases (semantic names for readability) */
+  --surface:        var(--panel);
+  --surface-muted:  var(--panel-2);
+  --text-primary:   var(--text);
+  --text-secondary: var(--muted);
+  --text-muted:     var(--muted-2);
+  --border:         var(--line);
+  --border-light:   var(--line-soft);
+
+  /* Semantic (correctness / feedback) — same on every course */
+  --green:      #12B76A;
+  --green-soft: #ECFDF3;
+  --green-deep: #0B7A47;
+  --red:        #E5484D;   /* incorrect */
+  --red-soft:   #FFF1F2;
+  --amber:      #F79009;
+  --amber-soft: #FFFAEB;
+  --info:       #0E79C9;
+  --info-soft:  #EAF4FD;
+
+  /* Elevation / shape / motion */
+  --shadow:    0 1px 2px rgba(16,24,40,.04), 0 4px 12px rgba(16,24,40,.04);
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.04);
+  --shadow-lg: 0 12px 40px rgba(16,24,40,.12);
+  --radius:     14px;
+  --radius-sm:  10px;
+  --radius-lg:  18px;
+  --ease:       150ms ease;
+
+  /* Spacing scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+}
+
+/* --------------------------------------------------------------------------
+   2. COURSE ACCENT TOKENS
+   -------------------------------------------------------------------------- */
+
+/* AS Chemistry — soft coral / red (also the default) */
+:root,
+[data-course="as"] {
+  --accent:        #E85D6A;   /* primary solid */
+  --accent-deep:   #C94252;   /* darker solid (hover / emphasis text) */
+  --accent-soft:   #FFF2F3;   /* selected / very light fill */
+  --accent-soft-2: #FCE7E9;   /* stronger light fill */
+  --accent-hover:  #FBE3E6;   /* hover fill */
+  --accent-border: #F4B9BF;   /* light accent border */
+}
+
+/* IGCSE Chemistry — calm teal */
+[data-course="ig"] {
+  --accent:        #169C96;
+  --accent-deep:   #087C78;
+  --accent-soft:   #EAF8F6;
+  --accent-soft-2: #DDF3F0;
+  --accent-hover:  #E6F5F2;
+  --accent-border: #A9DDD8;
+}
+
+/* --------------------------------------------------------------------------
+   3. RESET / BASE
+   -------------------------------------------------------------------------- */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  line-height: 1.55;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-decoration: none; transition: color var(--ease); }
+a:hover { color: var(--accent-deep); }
+
+button { font-family: inherit; }
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: #D0D5DD; border-radius: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* --------------------------------------------------------------------------
+   4. TOP BAR
+   -------------------------------------------------------------------------- */
+.top {
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-wrap: wrap;
+}
+.top h1 {
+  font-size: 17px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  color: var(--text);
+}
+.top h1 .brand-flask { color: var(--accent); }
+.top .meta { font-size: 13px; color: var(--muted); }
+.top .navline { display: flex; gap: 16px; margin-left: auto; font-size: 14.5px; font-weight: 500; flex-wrap: wrap; }
+.top .navline a { color: var(--muted); }
+.top .navline a:hover { color: var(--accent); }
+.top .navline a.on { color: var(--accent); font-weight: 650; }
+
+/* --------------------------------------------------------------------------
+   5. LAYOUT WRAPPERS
+   -------------------------------------------------------------------------- */
+.wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 72px; }
+.wrap.wide { max-width: 980px; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 22px;
+}
+.card + .card { margin-top: 16px; }
+
+.center { text-align: center; }
+.hint { font-size: 14px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+.err { color: var(--accent-deep); font-size: 14.5px; margin-top: 12px; min-height: 0; font-weight: 500; }
+
+/* --------------------------------------------------------------------------
+   6. PAGE HEADER / HERO (landing pages)
+   -------------------------------------------------------------------------- */
+.hero { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+.hero .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; font-weight: 700; letter-spacing: .12em;
+  color: var(--accent-deep); text-transform: uppercase;
+}
+.hero .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--accent); border-radius: 2px; }
+.hero .logo {
+  width: 64px; height: 64px; margin: 0 auto 16px;
+  display: grid; place-items: center;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: 18px;
+}
+.hero .logo svg { width: 32px; height: 32px; }
+.hero h2 { font-size: 34px; margin: 14px 0 8px; font-weight: 800; letter-spacing: -.6px; color: var(--text); }
+.hero .sub { color: var(--muted); font-size: 16px; margin: 0; }
+.hero .meta {
+  margin-top: 16px; display: flex; justify-content: center; gap: 18px;
+  flex-wrap: wrap; color: var(--muted); font-size: 13.5px;
+}
+.hero .meta b { color: var(--accent-deep); font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   7. BUTTONS
+   -------------------------------------------------------------------------- */
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 13px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.2;
+  transition: background var(--ease), filter var(--ease), border-color var(--ease), color var(--ease);
+}
+.btn:hover { background: var(--accent-deep); }
+.btn:active { filter: brightness(.96); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.ghost { background: var(--panel); color: var(--text); border: 1px solid var(--line); }
+.btn.ghost:hover { background: var(--bg-soft); border-color: var(--accent-border); }
+.btn.green { background: var(--green); color: #fff; }
+.btn.green:hover { filter: brightness(.95); }
+.btn.amber { background: var(--amber); color: #fff; }
+.btn.amber:hover { filter: brightness(.95); }
+.btn.block { width: 100%; }
+
+.big-actions { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+.big-actions .btn { flex: 1; min-width: 140px; padding: 14px 18px; font-size: 16px; }
+
+.cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 26px; border-radius: 12px;
+  font-weight: 700; font-size: 15px; color: #fff;
+  background: var(--accent);
+  transition: background var(--ease), transform var(--ease);
+}
+.cta:hover { background: var(--accent-deep); color: #fff; }
+
+/* --------------------------------------------------------------------------
+   8. INPUTS
+   -------------------------------------------------------------------------- */
+label { display: block; font-size: 14px; color: var(--muted); margin: 12px 0 4px; font-weight: 500; }
+
+.input, textarea, select {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  width: 100%;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.input::placeholder, textarea::placeholder { color: var(--muted-2); }
+.input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+textarea { min-height: 88px; resize: vertical; }
+
+/* --------------------------------------------------------------------------
+   9. FILTER CHIPS / SEGMENTED CONTROLS
+   -------------------------------------------------------------------------- */
+.flabel { font-size: 15.5px; color: var(--text); margin-bottom: 10px; font-weight: 600; }
+.fgroup { margin-bottom: 22px; }
+
+.chiprow { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--ease), border-color var(--ease), color var(--ease);
+}
+.chip:hover { border-color: var(--accent-border); background: var(--accent-hover); color: var(--text); }
+.chip.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-deep);
+  font-weight: 650;
+}
+
+/* --------------------------------------------------------------------------
+   10. STATS
+   -------------------------------------------------------------------------- */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 16px 0; }
+.stat {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-align: center;
+}
+.stat .v { font-size: 25px; font-weight: 800; color: var(--accent); letter-spacing: -.3px; }
+.stat .k { font-size: 13.5px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+/* --------------------------------------------------------------------------
+   11. DROPDOWN PICKERS
+   -------------------------------------------------------------------------- */
+.pick { position: relative; text-align: left; }
+.pick-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  text-align: left; background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 12px 14px; color: var(--text);
+  font-family: inherit; font-size: 16px; cursor: pointer;
+  transition: border-color var(--ease), background var(--ease);
+}
+.pick-btn .lab { flex: 1; }
+.pick-btn .chev { color: var(--muted); font-size: 14px; }
+.pick-btn:hover, .pick.open .pick-btn { border-color: var(--accent-border); background: var(--accent-hover); }
+.pick-menu {
+  display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 20;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  max-height: 260px; overflow: auto; box-shadow: var(--shadow-lg);
+}
+.pick.open .pick-menu { display: block; }
+.pick-opt {
+  display: block; width: 100%; text-align: left; background: transparent; border: none;
+  color: var(--text); font-family: inherit; font-size: 15.5px; padding: 11px 14px; cursor: pointer;
+  transition: background var(--ease);
+}
+.pick-opt:hover, .pick-opt.on { background: var(--accent-soft); color: var(--accent-deep); }
+
+/* --------------------------------------------------------------------------
+   12. IDENTITY / SIGN-IN BOX
+   -------------------------------------------------------------------------- */
+.idbox {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 22px;
+}
+.id-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: transparent; border: none; color: var(--muted); font-size: 15px; font-weight: 600;
+  padding: 0; cursor: pointer; font-family: inherit; text-align: left; transition: color var(--ease);
+}
+.id-toggle:hover { color: var(--text); }
+.id-body { display: none; margin-top: 10px; }
+.id-body.open { display: block; }
+.idline { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 4px; }
+.idline .input { flex: 1 1 140px; padding: 10px 12px; font-size: 15.5px; }
+.idline .btn { padding: 10px 16px; font-size: 15.5px; width: auto; }
+.idbadge { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+.idbadge b { color: var(--text); }
+button.ghost2 {
+  background: none; border: none; color: var(--accent); cursor: pointer; font-size: 14px;
+  padding: 0; margin-left: 6px; text-decoration: underline; font-family: inherit;
+}
+button.ghost2:hover { color: var(--accent-deep); }
+.records-btn {
+  font-size: 14.5px; color: var(--accent-deep); background: var(--accent-soft);
+  border: 1px solid var(--accent-border); border-radius: 9px; padding: 8px 14px;
+  cursor: pointer; margin-top: 12px; font-family: inherit; font-weight: 600;
+  transition: background var(--ease), border-color var(--ease);
+}
+.records-btn:hover { background: var(--accent-hover); border-color: var(--accent); }
+
+/* --------------------------------------------------------------------------
+   13. QUESTION VIEW (shared by practice + homework)
+   -------------------------------------------------------------------------- */
+.qhead {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 14.5px; color: var(--muted);
+  padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 16px;
+  flex-wrap: wrap; gap: 6px;
+}
+.qhead b { color: var(--accent-deep); font-weight: 700; }
+.source {
+  font-size: 13.5px; color: var(--muted);
+  background: var(--bg-soft); border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px 12px;
+}
+.qfig { text-align: center; margin: 16px 0; }
+.qfig img {
+  max-width: 100%; max-height: 70vh;
+  border: 1px solid var(--line); border-radius: 9px; background: #fff;
+}
+.topics { font-size: 13.5px; color: var(--muted); margin: 12px 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.topics span { background: var(--bg-soft); border: 1px solid var(--line); padding: 2px 8px; border-radius: 6px; }
+
+.ans { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.abtn {
+  flex: 1 1 72px; min-width: 64px;
+  padding: 16px 0; border-radius: var(--radius-sm);
+  background: var(--panel); border: 1.5px solid var(--line);
+  font-size: 20px; font-weight: 700; color: var(--text); cursor: pointer;
+  font-family: inherit;
+  transition: border-color var(--ease), background var(--ease), color var(--ease);
+}
+.abtn:not(:disabled):hover { border-color: var(--accent-border); background: var(--accent-hover); }
+.abtn.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); }
+.abtn.correct { border-color: var(--green); background: var(--green-soft); color: var(--green-deep); }
+.abtn.wrong { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+
+.typebadge {
+  display: inline-block; font-size: 12.5px; padding: 2px 9px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-deep); margin-left: 8px; font-weight: 600;
+}
+
+.msbtn {
+  background: var(--panel); border: 1px solid var(--line); color: var(--text); border-radius: 9px;
+  padding: 9px 14px; font-size: 14.5px; cursor: pointer; font-family: inherit; font-weight: 500;
+  transition: border-color var(--ease), background var(--ease);
+}
+.msbtn:hover { border-color: var(--accent-border); background: var(--accent-hover); }
+.msfig { margin-top: 12px; text-align: center; display: none; }
+.msfig img { max-width: 100%; max-height: 70vh; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+
+/* self-mark buttons ("Got it" / "Need review") */
+.selfgrade { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.selfgrade-label { flex-basis: 100%; font-size: 14px; font-weight: 500; color: var(--muted); margin-bottom: -2px; }
+.sbtn {
+  flex: 1 1 0; min-width: 150px; height: 46px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0 16px; border-radius: 11px; background: var(--panel); border: 1px solid var(--line);
+  font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; font-family: inherit;
+  white-space: nowrap;
+  transition: border-color var(--ease), background var(--ease), color var(--ease), box-shadow var(--ease);
+}
+.sbtn .glyph { font-size: 16px; line-height: 1; font-weight: 700; }
+.sbtn.good { background: var(--green-soft); border-color: #A6F4C5; color: var(--green-deep); }
+.sbtn.good:hover { border-color: var(--green); }
+.sbtn.good.selected { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-soft); font-weight: 700; }
+.sbtn.bad { background: var(--red-soft); border-color: #F7C2C6; color: var(--red); }
+.sbtn.bad:hover { border-color: var(--red); }
+.sbtn.bad.selected { border-color: var(--red); box-shadow: 0 0 0 2px var(--red-soft); font-weight: 700; }
+.sbtn:disabled { cursor: default; }
+
+/* feedback panels */
+.fb { border-radius: var(--radius-sm); padding: 14px; margin-top: 16px; font-size: 15.5px; display: none; }
+.fb.show { display: block; }
+.fb.ok { background: var(--green-soft); border: 1px solid #A6F4C5; color: var(--green-deep); }
+.fb.no { background: var(--red-soft); border: 1px solid #F7C2C6; color: var(--red); }
+.fb b { color: var(--amber); }
+
+.ctrl-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.ctrl-row .btn { flex: 1; min-width: 120px; }
+.run-stats { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.run-stat { font-size: 14.5px; color: var(--muted); }
+.run-stat b { color: var(--text); font-size: 17px; }
+
+/* --------------------------------------------------------------------------
+   14. RESULT / DONE VIEW
+   -------------------------------------------------------------------------- */
+.big { font-size: 40px; margin: 10px 0; }
+.review { font-size: 14.5px; margin-top: 12px; line-height: 1.55; }
+.review .ok { color: var(--green-deep); font-weight: 600; }
+.review .no { color: var(--red); font-weight: 600; }
+.review .pend { color: var(--amber); font-weight: 600; }
+.instr { color: var(--text); font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+
+/* --------------------------------------------------------------------------
+   15. RECORD LIST (progress history)
+   -------------------------------------------------------------------------- */
+.rec-list { max-height: 52vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.rec-item {
+  display: flex; gap: 10px; align-items: center;
+  background: var(--bg-soft); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 10px 12px; cursor: pointer;
+  transition: border-color var(--ease), background var(--ease);
+}
+.rec-item:hover { border-color: var(--accent-border); background: var(--accent-hover); }
+.rec-item .tag {
+  font-size: 12.5px; color: var(--muted); background: var(--panel);
+  border: 1px solid var(--line); padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+}
+.rec-item .src { font-size: 14px; color: var(--muted); flex: 1; }
+.rec-item .type { font-size: 12.5px; padding: 2px 8px; border-radius: 999px; }
+.rec-item .type.mcq { background: var(--accent-soft); color: var(--accent-deep); }
+.rec-item .type.structured { background: var(--amber-soft); color: #B54708; }
+.rec-item .okdot { font-size: 15px; flex: 0 0 auto; }
+.rec-empty { color: var(--muted); text-align: center; padding: 20px; font-size: 15px; }
+
+/* --------------------------------------------------------------------------
+   16. COURSE CHOOSER CARDS (home.html)
+   -------------------------------------------------------------------------- */
+.course-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.course-card {
+  display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: 28px; color: var(--text); box-shadow: var(--shadow);
+  transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
+}
+.course-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.course-card .icon {
+  width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 16px;
+  border-radius: 14px;
+}
+.course-card .icon svg { width: 26px; height: 26px; }
+.course-card h3 { font-size: 20px; margin: 0 0 6px; font-weight: 800; letter-spacing: -.3px; }
+.course-card .desc { color: var(--muted); font-size: 14px; margin-bottom: 20px; min-height: 42px; line-height: 1.5; }
+
+/* AS course card accent */
+.course-card.as .icon { background: #FFF2F3; color: #E85D6A; border: 1px solid #F4B9BF; }
+.course-card.as:hover { border-color: #F4B9BF; }
+.course-card.as .cta { background: #E85D6A; }
+.course-card.as .cta:hover { background: #C94252; }
+
+/* IG course card accent */
+.course-card.ig .icon { background: #EAF8F6; color: #169C96; border: 1px solid #A9DDD8; }
+.course-card.ig:hover { border-color: #A9DDD8; }
+.course-card.ig .cta { background: #169C96; }
+.course-card.ig .cta:hover { background: #087C78; }
+
+/* --------------------------------------------------------------------------
+   17. HOMEWORK FOLDER LIST (as.html / ig.html)
+   -------------------------------------------------------------------------- */
+.assign-panel { max-width: 640px; margin: 0 auto 28px; }
+.assign-card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);
+}
+.assign-card h4 { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
+.assign-card .sub { color: var(--muted); font-size: 13.5px; margin: 0 0 16px; }
+.hw-folder { margin-bottom: 10px; }
+.hw-folder-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 16px; color: var(--text); cursor: pointer; font-family: inherit;
+  transition: border-color var(--ease), background var(--ease);
+}
+.hw-folder-btn:hover, .hw-folder.open .hw-folder-btn { border-color: var(--accent-border); background: var(--accent-hover); }
+.hw-folder-btn .chev { color: var(--accent); font-size: 12px; width: 16px; }
+.hw-folder-btn .lab { flex: 1; font-size: 15.5px; font-weight: 700; }
+.hw-folder-btn .count { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.hw-list { display: none; flex-direction: column; gap: 8px; margin-top: 8px; padding-left: 8px; }
+.hw-folder.open .hw-list { display: flex; }
+.hw-item {
+  display: block; text-align: left; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; color: var(--text);
+  transition: border-color var(--ease), background var(--ease);
+}
+.hw-item:hover { border-color: var(--accent-border); background: var(--accent-hover); color: var(--text); }
+.hw-item b { display: block; font-size: 15px; }
+.hw-item .meta { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+
+/* --------------------------------------------------------------------------
+   18. FOOTER
+   -------------------------------------------------------------------------- */
+.foot { text-align: center; color: var(--muted-2); font-size: 12.5px; margin-top: 50px; }
+
+/* --------------------------------------------------------------------------
+   19. RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .wrap { padding: 20px 14px 56px; }
+  .card { padding: 20px 16px; }
+  .hero h2 { font-size: 28px; }
+  .chip { padding: 9px 12px; font-size: 13.5px; }
+  .top { padding: 12px 14px; }
+  .sbtn { min-width: 0; }
+  .abtn { font-size: 18px; }
+}

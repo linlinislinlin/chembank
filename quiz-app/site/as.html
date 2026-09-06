@@ -1,66 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-course="as">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#1e1b2e" />
+<meta name="theme-color" content="#E85D6A" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>ChemBank · AS Chemistry 9701</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
 <style>
-  :root { --accent:#7c6cf0; --accent-2:#4ece9d; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --red:#f07c7c; }
-  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Helvetica Neue",Arial,sans-serif; min-height:100vh; line-height:1.55; }
-  a { color:var(--accent); text-decoration:none; }
-  .top { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:12px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
-  .top h1 { font-size:16px; margin:0; }
-  .top .navline { display:flex; gap:14px; margin-left:auto; font-size:13px; }
-  .top .navline a { color:var(--muted); }
-  .wrap { max-width:980px; margin:0 auto; padding:40px 20px 80px; }
-  .hero { text-align:center; max-width:640px; margin:0 auto 40px; }
-  .hero .logo { font-size:56px; }
-  .hero h2 { font-size:30px; margin:14px 0 8px; font-weight:800; }
-  .hero .sub { color:var(--muted); font-size:16px; margin:0; }
-  .hero .meta { margin-top:16px; display:flex; justify-content:center; gap:18px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
-  .hero .meta span b { color:var(--accent-2); }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:28px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.3); transition:transform .15s, border-color .15s; }
-  .card:hover { transform:translateY(-4px); border-color:var(--accent); }
-  .card .icon { font-size:44px; }
-  .card h3 { font-size:22px; margin:14px 0 8px; font-weight:800; }
-  .card .desc { color:var(--muted); font-size:14px; margin-bottom:22px; min-height:42px; }
-  .cta { display:inline-block; padding:13px 26px; border-radius:12px; font-weight:700; font-size:15px; color:#fff; background:var(--accent); }
-  .assign-panel { max-width:640px; margin:0 auto 28px; }
-  .assign-card { background:var(--bg-soft); border:1px solid var(--line); border-radius:16px; padding:24px; }
-  .assign-card h4 { margin:0 0 4px; font-size:16px; }
-  .assign-card .sub { color:var(--muted); font-size:13px; margin:0 0 16px; }
-  .hw-folder { margin-bottom:10px; }
-  .hw-folder-btn { width:100%; display:flex; align-items:center; gap:10px; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; color:inherit; cursor:pointer; font-family:inherit; }
-  .hw-folder-btn:hover, .hw-folder.open .hw-folder-btn { border-color:var(--accent-2); }
-  .hw-folder-btn .chev { color:var(--accent-2); font-size:13px; width:16px; }
-  .hw-folder-btn .lab { flex:1; font-size:16px; font-weight:800; }
-  .hw-folder-btn .count { color:var(--muted); font-size:12px; font-weight:600; }
-  .hw-list { display:none; flex-direction:column; gap:8px; margin-top:8px; padding-left:8px; }
-  .hw-folder.open .hw-list { display:flex; }
-  .hw-item { display:block; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 16px; color:inherit; }
-  .hw-item:hover { border-color:var(--accent-2); }
-  .hw-item b { display:block; font-size:15px; }
-  .hw-item .meta { color:var(--muted); font-size:12px; margin-top:3px; }
-  .practice-wrap { max-width:640px; margin:0 auto; }
-  .err { color:var(--red); font-size:13px; margin-top:10px; min-height:16px; }
-  .foot { text-align:center; color:var(--muted); font-size:12px; margin-top:50px; }
+  .practice-card {
+    max-width: 640px; margin: 0 auto;
+    display: flex; align-items: center; gap: 16px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
+    transition: border-color var(--ease), box-shadow var(--ease);
+  }
+  .practice-card:hover { border-color: var(--accent-border); box-shadow: var(--shadow-lg); }
+  .practice-card .icon {
+    width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid var(--accent-border); border-radius: 13px;
+  }
+  .practice-card .icon svg { width: 24px; height: 24px; }
+  .practice-card .body { flex: 1; }
+  .practice-card h3 { margin: 0 0 3px; font-size: 17px; font-weight: 700; }
+  .practice-card p { margin: 0; color: var(--muted); font-size: 14px; }
 </style>
 </head>
 <body>
+
 <div class="top">
-  <h1>🧪 ChemBank · AS 9701</h1>
+  <h1><span class="brand-flask">🧪</span> ChemBank · AS 9701</h1>
   <div class="navline">
     <a href="home.html">Switch course</a>
     <a href="practice.html?v=20260906at">Practice</a>
   </div>
 </div>
-<div class="wrap">
+
+<div class="wrap wide">
   <div class="hero">
-    <div class="logo">📘</div>
+    <div class="eyebrow">AS Chemistry · CIE 9701</div>
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>
+        <ellipse cx="12" cy="12" rx="9" ry="4"/>
+        <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(60 12 12)"/>
+        <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(120 12 12)"/>
+      </svg>
+    </div>
     <h2>AS Chemistry</h2>
     <p class="sub">CIE 9701 · Class C and Class F only. IGCSE homework is on the other door.</p>
     <div class="meta">
@@ -68,6 +58,7 @@
       <span><b id="structCount">–</b> structured questions</span>
     </div>
   </div>
+
   <div class="assign-panel">
     <div class="assign-card">
       <h4>AS Homework</h4>
@@ -76,16 +67,24 @@
       <div class="err" id="assignErr"></div>
     </div>
   </div>
-  <div class="cards practice-wrap">
-    <a class="card" href="practice.html?v=20260906at">
-      <div class="icon">🎲</div>
+
+  <div class="practice-card">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M10 8.5 15.5 12 10 15.5Z" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="body">
       <h3>Free Practice</h3>
-      <p class="desc">Pick your name to save progress. Or just start as a guest.</p>
-      <span class="cta">Start practicing →</span>
-    </a>
+      <p>Pick your name to save progress, or just start as a guest.</p>
+    </div>
+    <a class="cta" href="practice.html?v=20260906at">Start practicing →</a>
   </div>
+
   <div class="foot">ChemBank · AS Chemistry 9701</div>
 </div>
+
 <script src="data.js?v=20260906w"></script>
 <script src="structured-data.js?v=20260906w"></script>
 <script src="roster.js?v=20260906aq"></script>

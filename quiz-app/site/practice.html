@@ -15,38 +15,63 @@
   .top .navline { display:flex; gap:14px; margin-left:auto; font-size:13px; }
   .top .navline a { color:var(--muted); }
   .top .navline a:hover { color:var(--accent); }
-  .wrap { max-width:820px; margin:0 auto; padding:24px 20px 60px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.3); padding:22px; }
+  .wrap { max-width:760px; margin:0 auto; padding:28px 20px 72px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:0 8px 30px rgba(0,0,0,.3); padding:26px 24px; }
 
   /* Setup screen */
-  .setup-title { text-align:center; margin-bottom:6px; }
-  .setup-sub { color:var(--muted); font-size:14px; text-align:center; margin-bottom:22px; }
-  .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin:20px 0 24px; }
+  .setup-title { text-align:center; margin:0 0 6px; font-size:26px; font-weight:800; letter-spacing:-.3px; }
+  .setup-sub { color:var(--muted); font-size:15px; text-align:center; margin:0 0 28px; }
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin:16px 0; }
   .stat { background:var(--panel-2); border-radius:11px; padding:16px; text-align:center; }
   .stat .v { font-size:26px; font-weight:800; color:var(--green); }
   .stat .k { font-size:12px; color:var(--muted); margin-top:4px; }
-  .filter-card { margin-top:20px; }
-  .fgroup { margin-bottom:18px; }
-  .flabel { font-size:13px; color:var(--muted); margin-bottom:10px; font-weight:600; letter-spacing:.3px; }
+  .filter-card { margin:0; }
+  .fgroup { margin-bottom:22px; }
+  .flabel { font-size:14px; color:var(--text); margin-bottom:10px; font-weight:700; }
   .chiprow { display:flex; gap:8px; flex-wrap:wrap; }
-  .chip { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:20px; padding:8px 14px; font-size:13px; cursor:pointer; }
-  .chip:hover { border-color:var(--accent); }
-  .chip.on { background:rgba(124,108,240,.18); border-color:var(--accent); color:#cfc6ff; }
-  .count-ctrl { display:flex; align-items:center; gap:10px; }
-  .count-ctrl .input { flex:1; }
+  .chip { background:var(--panel-2); border:1px solid var(--line); color:var(--muted); border-radius:22px; padding:9px 14px; font-size:13px; cursor:pointer; font-family:inherit; }
+  .chip:hover { border-color:var(--accent); color:var(--text); }
+  .chip.on { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  .count-ctrl { display:none; margin-top:10px; max-width:160px; }
+  .count-ctrl.show { display:block; }
   .input { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:11px 14px; width:100%; font-size:15px; }
   .input:focus { outline:none; border-color:var(--accent); }
-  .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:14px 22px; font-size:16px; font-weight:600; cursor:pointer; }
+  .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:14px 22px; font-size:16px; font-weight:600; cursor:pointer; font-family:inherit; }
   .btn:hover { filter:brightness(1.08); }
   .btn:disabled { opacity:.5; cursor:not-allowed; }
   .btn.ghost { background:var(--panel-2); color:var(--text); border:1px solid var(--line); }
   .btn.green { background:var(--green); color:#06241a; }
   .btn.amber { background:var(--amber); color:#3a2a0a; }
+  .cta-start { width:100%; padding:16px 22px; font-size:17px; font-weight:800; border-radius:14px; letter-spacing:.2px; }
+  .practice-sum { font-size:13px; color:var(--muted); text-align:center; margin:4px 0 12px; line-height:1.45; }
+  .more-btn { width:100%; background:transparent; border:none; color:var(--muted); font-size:13px; padding:4px 0 10px; cursor:pointer; text-align:left; font-family:inherit; }
+  .more-btn:hover { color:var(--text); }
+  .more-panel { display:none; padding:4px 0 6px; }
+  .more-panel.open { display:block; }
+  .more-panel .fgroup { margin-bottom:16px; }
+  .more-panel .flabel { font-size:13px; color:var(--muted); font-weight:600; }
+  .topic-pick { width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; background:var(--bg-soft); border:1px solid var(--line); border-radius:14px; padding:14px 16px; color:var(--text); font-family:inherit; cursor:pointer; }
+  .topic-pick:hover, .topic-pick.open { border-color:var(--accent); }
+  .topic-pick .lab { flex:1; font-size:14px; line-height:1.4; }
+  .topic-pick .lab b { color:#cfc6ff; font-weight:700; }
+  .topic-pick .chev { color:var(--muted); font-size:14px; flex:0 0 auto; }
   .big-actions { display:flex; gap:12px; margin-top:6px; flex-wrap:wrap; }
-  .big-actions .btn { flex:1; min-width:180px; padding:18px 20px; font-size:17px; }
+  .big-actions .btn { flex:1; min-width:140px; padding:14px 18px; font-size:15px; }
   .center { text-align:center; }
   .hint { font-size:12px; color:var(--muted); margin-top:10px; }
-  .err { color:var(--red); font-size:13px; margin-top:12px; }
+  .err { color:var(--red); font-size:13px; margin-top:12px; min-height:0; }
+  .id-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; background:transparent; border:none; color:var(--muted); font-size:13px; padding:0; cursor:pointer; font-family:inherit; text-align:left; }
+  .id-toggle:hover { color:var(--text); }
+  .id-body { display:none; margin-top:10px; }
+  .id-body.open { display:block; }
+  .qstack { background:var(--bg-soft); border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin-bottom:14px; }
+  @media (max-width:640px) {
+    .wrap { padding:20px 14px 56px; }
+    .card { padding:20px 16px; }
+    .setup-title { font-size:22px; }
+    .chip { padding:9px 12px; font-size:12px; }
+    .cta-start { font-size:16px; }
+  }
 
   /* Student identity + progress sync */
   .idline { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:4px; }
@@ -95,11 +120,7 @@
   .rec-preview .meta { font-size:12px; color:var(--muted); margin-bottom:6px; }
 
   /* Syllabus tree */
-  .syll-toggle { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  .syll-toggle .btn.ghost { padding:9px 14px; font-size:13px; }
-  .syll-status { font-size:12px; color:var(--muted); }
-  .syll-status b { color:var(--accent); }
-  .syll-panel { margin-top:14px; border:1px solid var(--line); border-radius:12px; background:var(--bg-soft); padding:10px; max-height:360px; overflow-y:auto; display:none; }
+  .syll-panel { margin-top:10px; border:1px solid var(--line); border-radius:12px; background:var(--bg-soft); padding:10px; max-height:360px; overflow-y:auto; display:none; }
   .syll-panel.open { display:block; }
   .syll-panel::-webkit-scrollbar { width:9px; }
   .syll-panel::-webkit-scrollbar-thumb { background:#2c2744; border-radius:8px; }
@@ -174,94 +195,100 @@
 <div class="wrap">
   <!-- SETUP -->
   <div class="card" id="setupCard">
-    <h2 class="setup-title">Practice anywhere, instantly.</h2>
-    <div class="setup-sub">Choose how many questions, pick a type, or just dive in.</div>
-
-    <!-- Student identity (optional, roster + last 4) -->
-    <div class="idbox" style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
-      <div class="flabel">Save progress online</div>
-      <p class="hint" style="margin-top:0">Pick your name and last 4 digits. Your record is saved on the server, so any phone or computer can open it after you confirm the same name. Guests stay on this device only.</p>
-      <label>Class</label>
-      <div class="pick" id="iclassPick">
-        <button type="button" class="pick-btn" id="iclassBtn"><span class="lab">All AS students</span><span class="chev">▼</span></button>
-        <div class="pick-menu" id="iclassMenu"></div>
-      </div>
-      <label>Your name</label>
-      <div class="pick" id="inamePick">
-        <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
-        <div class="pick-menu" id="inameMenu"></div>
-      </div>
-      <label id="idNoLabel">Last 4 digits of student number</label>
-      <div class="idline">
-        <input class="input" id="idNo" placeholder="e.g. 1111" autocomplete="off" maxlength="8" />
-        <button class="btn ghost" id="idSave">Save identity</button>
-      </div>
-      <div class="idbadge" id="idBadge"></div>
-      <div id="recPanel" style="display:none;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
-        <div class="flabel">My progress</div>
-        <div class="stat-grid" id="recSum" style="margin:10px 0 12px"></div>
-        <div class="rec-list" id="recMini" style="max-height:260px"></div>
-      </div>
-      <button class="records-btn" id="recordsBtn" style="display:none">View all records</button>
-
-    <div class="stat-grid" id="statGrid"></div>
+    <h2 class="setup-title">Practice Chemistry</h2>
+    <div class="setup-sub">Choose what you want to practise.</div>
 
     <div class="filter-card">
       <div class="fgroup">
-        <div class="flabel">0 · Filter by syllabus (multi-select)</div>
-        <div class="syll-toggle">
-          <button class="btn ghost" id="syllToggle">☰ Choose topics</button>
-          <span class="syll-status" id="syllStatus">Whole bank (all topics)</span>
-        </div>
+        <div class="flabel">Choose topics</div>
+        <button type="button" class="topic-pick" id="syllToggle">
+          <span class="lab" id="syllStatus">All topics · 0 questions available</span>
+          <span class="chev" id="syllChev">▾</span>
+        </button>
         <div class="syll-panel" id="syllPanel">
           <div class="syll-clear-row">
-            <button class="syll-all selected" id="syllAll">All topics (entire bank)</button>
+            <button class="syll-all selected" id="syllAll">All topics</button>
           </div>
           <div id="syllTree"></div>
         </div>
       </div>
+
       <div class="fgroup">
-        <div class="flabel">1 · Question type</div>
-        <div class="chiprow" id="typeRow">
-          <button class="chip" data-mode="all" data-var="type">All types</button>
-          <button class="chip" data-mode="mcq" data-var="type">Multiple choice</button>
-          <button class="chip" data-mode="structured" data-var="type">Structured</button>
-        </div>
-      </div>
-      <div class="fgroup">
-        <div class="flabel">2 · Paper level</div>
+        <div class="flabel">Choose paper</div>
         <div class="chiprow" id="paperRow">
-          <button class="chip" data-mode="all" data-var="paper">All papers</button>
-          <button class="chip" data-mode="p1" data-var="paper">AS MC (P1)</button>
-          <button class="chip" data-mode="p2" data-var="paper">AS Struct (P2)</button>
-          <button class="chip" data-mode="p4" data-var="paper">A2 Struct (P4)</button>
+          <button type="button" class="chip on" data-mode="all" data-var="paper">Mixed</button>
+          <button type="button" class="chip" data-mode="p1" data-var="paper">P1 Multiple Choice</button>
+          <button type="button" class="chip" data-mode="p2" data-var="paper">P2 AS Structured</button>
+          <button type="button" class="chip" data-mode="p4" data-var="paper">P4 A2 Structured</button>
         </div>
       </div>
+
       <div class="fgroup">
-        <div class="flabel">3 · How many questions?</div>
-        <div class="count-ctrl">
+        <div class="flabel">Number of questions</div>
+        <div class="chiprow" id="countRow">
+          <button type="button" class="chip" data-mode="5" data-var="count">5</button>
+          <button type="button" class="chip on" data-mode="10" data-var="count">10</button>
+          <button type="button" class="chip" data-mode="20" data-var="count">20</button>
+          <button type="button" class="chip" data-mode="custom" data-var="count">Custom</button>
+        </div>
+        <div class="count-ctrl" id="countCustom">
           <input class="input" id="countInput" type="number" min="1" value="10" />
-          <button class="btn" id="startRandom">🎲 Start random</button>
         </div>
-        <div class="hint">Leave "All types / All papers" on to sample the whole bank fully at random.</div>
       </div>
-      <div class="fgroup">
-        <div class="flabel">4 · Order</div>
-        <div class="chiprow" id="orderRow">
-          <button class="chip" data-mode="random" data-var="order">Random</button>
-          <button class="chip" data-mode="number" data-var="order">By question no.</button>
-          <button class="chip" data-mode="year" data-var="order">By year (old→new)</button>
-          <button class="chip" data-mode="yearDesc" data-var="order">By year (new→old)</button>
+
+      <button type="button" class="more-btn" id="moreToggle">More options ▾</button>
+      <div class="more-panel" id="morePanel">
+        <div class="fgroup">
+          <div class="flabel">Question order</div>
+          <div class="chiprow" id="orderRow">
+            <button type="button" class="chip on" data-mode="random" data-var="order">Random</button>
+            <button type="button" class="chip" data-mode="number" data-var="order">By question number</button>
+            <button type="button" class="chip" data-mode="year" data-var="order">Oldest → Newest</button>
+            <button type="button" class="chip" data-mode="yearDesc" data-var="order">Newest → Oldest</button>
+          </div>
         </div>
-        <div class="hint">Chooses the order questions appear in. "Random" shuffles each run; others sort the filtered bank.</div>
+        <div class="fgroup">
+          <div class="flabel">Practice style</div>
+          <div class="chiprow" id="styleRow">
+            <button type="button" class="chip on" data-mode="one" data-var="style">One question at a time</button>
+            <button type="button" class="chip" data-mode="stack" data-var="style">Show all questions</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="big-actions">
-      <button class="btn green" id="startAll">📚 Practice all</button>
-      <button class="btn amber" id="startOne">⭐ One at a time</button>
-    </div>
+    <div class="practice-sum" id="practiceSum">10 questions · All topics · Mixed papers · Random</div>
+    <button type="button" class="btn cta-start" id="startPractice">Start Practice →</button>
     <div class="err" id="setupErr"></div>
+
+    <div class="idbox" style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:22px;">
+      <button type="button" class="id-toggle" id="idToggle"><span id="idToggleLab">Save progress (optional)</span><span id="idToggleChev">▾</span></button>
+      <div class="id-body" id="idBody">
+        <p class="hint" style="margin-top:0">Pick your name and last 4 digits. Your record is saved on the server, so any phone or computer can open it after you confirm the same name. Guests stay on this device only.</p>
+        <label>Class</label>
+        <div class="pick" id="iclassPick">
+          <button type="button" class="pick-btn" id="iclassBtn"><span class="lab">All AS students</span><span class="chev">▼</span></button>
+          <div class="pick-menu" id="iclassMenu"></div>
+        </div>
+        <label>Your name</label>
+        <div class="pick" id="inamePick">
+          <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
+          <div class="pick-menu" id="inameMenu"></div>
+        </div>
+        <label id="idNoLabel">Last 4 digits of student number</label>
+        <div class="idline">
+          <input class="input" id="idNo" placeholder="e.g. 1111" autocomplete="off" maxlength="8" />
+          <button class="btn ghost" id="idSave">Save identity</button>
+        </div>
+        <div class="idbadge" id="idBadge"></div>
+        <div id="recPanel" style="display:none;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
+          <div class="flabel">My progress</div>
+          <div class="stat-grid" id="recSum" style="margin:10px 0 12px"></div>
+          <div class="rec-list" id="recMini" style="max-height:260px"></div>
+        </div>
+        <button class="records-btn" id="recordsBtn" style="display:none">View all records</button>
+      </div>
+    </div>
   </div>
 
   <!-- QUIZ -->
@@ -280,6 +307,14 @@
       <button class="btn green" id="restartBtn">Re-run</button>
     </div>
     <div class="run-stats" id="runStats"></div>
+  </div>
+
+  <div class="card" id="stackCard" style="display:none">
+    <div id="stackList"></div>
+    <div class="ctrl-row">
+      <button class="btn ghost" id="stackBack">Back</button>
+      <button class="btn" id="stackFinish">Finish & see results ✔</button>
+    </div>
   </div>
 
   <!-- DONE -->
@@ -316,12 +351,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906aq"></script>
-<script src="structured-data.js?v=20260906aq"></script>
-<script src="roster.js?v=20260906aq"></script>
-<script src="config.js?v=20260906aq"></script>
+<script src="data.js?v=20260906ar"></script>
+<script src="structured-data.js?v=20260906ar"></script>
+<script src="roster.js?v=20260906ar"></script>
+<script src="config.js?v=20260906ar"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906aq"></script>
+<script src="supabase-client.js?v=20260906ar"></script>
 <script>
 "use strict";
 
@@ -342,7 +377,9 @@ const pool = {
   type:   "all",
   paper:  "all",
   limit:  10,
+  countMode: "10",
   order:  "random",
+  style:  "one",
   // Multi-select syllabus filter: a Set of selected *node* codes. Empty set
   // => whole bank. Non-empty => union of codes across all selected nodes.
   syll:   new Set(),
@@ -451,20 +488,59 @@ function qNum(q) {
 }
 
 // ---------- Setup UI ----------
-function buildStats() {
-  const g = document.getElementById("statGrid");
-  g.innerHTML = "";
-  const cards = [
-    ["All questions", BYID.size, "struct"],
-    ["Multiple choice", pool.mcq.length, "struct"],
-    ["Structured", pool.st.length, "struct"],
-  ];
-  cards.forEach(([k, v]) => {
-    const d = document.createElement("div");
-    d.className = "stat";
-    d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`;
-    g.appendChild(d);
-  });
+function fmtNum(n) {
+  return Number(n).toLocaleString("en-US");
+}
+
+function paperLabel() {
+  return ({ all: "Mixed papers", p1: "P1 Multiple Choice", p2: "P2 AS Structured", p4: "P4 A2 Structured" })[pool.paper] || "Mixed papers";
+}
+
+function orderLabel() {
+  return ({ random: "Random", number: "By question number", year: "Oldest → Newest", yearDesc: "Newest → Oldest" })[pool.order] || "Random";
+}
+
+function selectedTopicLabels() {
+  const labels = [];
+  const walk = (node) => {
+    if (pool.syll.has(node.code)) {
+      const t = (node.title && node.title.trim()) ? node.title : node.code;
+      labels.push(t);
+    }
+    (node.children || []).forEach(walk);
+  };
+  SYLLABUS.forEach(walk);
+  return labels;
+}
+
+function topicSummary() {
+  if (pool.syll.size === 0) return "All topics";
+  const labels = selectedTopicLabels();
+  if (labels.length <= 2) return labels.join(", ") || "Selected topics";
+  return labels.slice(0, 2).join(", ") + " +" + (labels.length - 2) + " more";
+}
+
+function chosenCount() {
+  if (pool.countMode === "custom") {
+    return Math.max(1, Math.floor(Number(document.getElementById("countInput").value) || 10));
+  }
+  return pool.limit;
+}
+
+function syncCountCustom() {
+  const box = document.getElementById("countCustom");
+  box.classList.toggle("show", pool.countMode === "custom");
+}
+
+function updatePracticeSummary() {
+  const n = Math.min(chosenCount(), Math.max(filteredPool().length, 0));
+  const want = chosenCount();
+  const shown = filteredPool().length ? Math.min(want, filteredPool().length) : want;
+  document.getElementById("practiceSum").textContent =
+    shown + (shown === 1 ? " question" : " questions") +
+    " · " + topicSummary() +
+    " · " + paperLabel() +
+    " · " + orderLabel();
 }
 
 function bindChips() {
@@ -474,15 +550,21 @@ function bindChips() {
         .forEach(c => c.classList.remove("on"));
       ch.classList.add("on");
       const v = ch.dataset.var;
-      if (v === "type") pool.type = ch.dataset.mode;
-      else if (v === "paper") pool.paper = ch.dataset.mode;
+      if (v === "paper") pool.paper = ch.dataset.mode;
       else if (v === "order") pool.order = ch.dataset.mode;
+      else if (v === "style") pool.style = ch.dataset.mode;
+      else if (v === "count") {
+        pool.countMode = ch.dataset.mode;
+        if (ch.dataset.mode !== "custom") pool.limit = Number(ch.dataset.mode);
+        syncCountCustom();
+      }
+      updateSyllStatus();
     };
   });
-  // default: All types / All papers highlighted
-  document.querySelector('.chip[data-var="type"][data-mode="all"]').classList.add("on");
-  document.querySelector('.chip[data-var="paper"][data-mode="all"]').classList.add("on");
-  document.querySelector('.chip[data-var="order"][data-mode="random"]').classList.add("on");
+  document.getElementById("countInput").addEventListener("input", () => {
+    pool.limit = chosenCount();
+    updatePracticeSummary();
+  });
 }
 
 // ---------- Syllabus topic tree ----------
@@ -591,16 +673,14 @@ function updateSyllAllButton() {
 
 function updateSyllStatus() {
   const el = document.getElementById("syllStatus");
+  const n = filteredPool().length;
+  const avail = fmtNum(n) + " question" + (n === 1 ? "" : "s") + " available";
   if (pool.syll.size === 0) {
-    el.innerHTML = "Whole bank (all topics) — " + (BYID.size) + " questions";
-    return;
+    el.innerHTML = "All topics · " + avail;
+  } else {
+    el.innerHTML = "<b>" + escHtml(topicSummary()) + "</b> · " + avail;
   }
-  const set = selectedCodesSet();
-  const mcqMatch = ALL.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
-  const n = pool.syll.size;
-  let msg = `Selected <b>${n}</b> topic${n === 1 ? "" : "s"} · ${mcqMatch} MCQ question${mcqMatch === 1 ? "" : "s"}`;
-  if (pool.type !== "structured") msg += " · structured not included";
-  el.innerHTML = msg;
+  updatePracticeSummary();
 }
 
 function escHtml(s) {
@@ -610,29 +690,40 @@ function escHtml(s) {
 }
 
 
-function startRun(spec) {
-  let qs;
-  if (spec === "all") {
-    qs = sortPool(filteredPool());                    // all matching the filter, in chosen order
-  } else if (spec === "one") {
-    const f = filteredPool();
-    qs = f.length ? [f[Math.floor(Math.random() * f.length)]] : [];
-  } else {
-    const n = Math.max(1, Math.floor(Number(document.getElementById("countInput").value) || 10));
-    qs = sortPool(filteredPool()).slice(0, n);
-  }
-  if (!qs.length) {
-    document.getElementById("setupErr").textContent =
-      "No questions match those filters - try All types / All papers.";
-    return;
-  }
-  window.__qs = qs;
-  window.__idx = 0;
-  window.__results = {};   // q.id -> {chosen, correct, ...}
+function hidePracticeViews() {
   document.getElementById("setupCard").style.display = "none";
   document.getElementById("doneCard").style.display = "none";
-  document.getElementById("quizCard").style.display = "block";
-  renderQ();
+  document.getElementById("quizCard").style.display = "none";
+  document.getElementById("stackCard").style.display = "none";
+}
+
+function startRun() {
+  const n = chosenCount();
+  const qs = sortPool(filteredPool()).slice(0, n);
+  if (!qs.length) {
+    document.getElementById("setupErr").textContent =
+      "No questions match those filters. Try Mixed papers or clear topics.";
+    return;
+  }
+  document.getElementById("setupErr").textContent = "";
+  window.__qs = qs;
+  window.__idx = 0;
+  window.__results = {};
+  window.__mode = pool.style === "stack" ? "stack" : "one";
+  hidePracticeViews();
+  if (window.__mode === "stack") {
+    document.getElementById("stackCard").style.display = "block";
+    renderStack();
+  } else {
+    document.getElementById("quizCard").style.display = "block";
+    renderQ();
+  }
+}
+
+function showSetup() {
+  hidePracticeViews();
+  document.getElementById("setupCard").style.display = "block";
+  updateSyllStatus();
 }
 
 // ---------- Quiz rendering ----------
@@ -708,9 +799,9 @@ function paperType(p) {
   return s.startsWith("2") ? "AS Struct" : s.startsWith("4") ? "A2 Struct" : "Struct";
 }
 
-function renderStructure(q, ans, res) {
-  const src = document.getElementById("source");
-  if (q.marks && !src.textContent.endsWith(`· ${q.marks} marks`)) {
+function renderStructure(q, ans, res, srcEl) {
+  const src = srcEl || document.getElementById("source");
+  if (src && q.marks && !src.textContent.endsWith(`· ${q.marks} marks`)) {
     src.textContent += ` · ${q.marks} marks`;
   }
 
@@ -778,17 +869,93 @@ function makeMsFig(q) {
   return div;
 }
 
+function refreshActiveView() {
+  if (window.__mode === "stack") renderStack();
+  else renderQ();
+}
+
 function choose(letter, q) {
   const correct = letter === q.ms_answer;
   window.__results[q.id] = { chosen: letter, correct };
   recordAnswered(q, { correct, chosen: letter });
-  renderQ();
+  refreshActiveView();
 }
 
 function selfGrade(q, correct) {
   window.__results[q.id] = { assessed: true, chosen: correct ? "self-ok" : "self-no", correct };
   recordAnswered(q, { correct, chosen: correct ? "self-ok" : "self-no" });
-  renderQ();
+  refreshActiveView();
+}
+
+function renderStack() {
+  const box = document.getElementById("stackList");
+  box.innerHTML = "";
+  (window.__qs || []).forEach((q, i) => {
+    const card = document.createElement("div");
+    card.className = "qstack";
+    const res = window.__results[q.id];
+    const head = document.createElement("div");
+    head.className = "qhead";
+    const src = document.createElement("span");
+    src.className = "source";
+    src.textContent = sourceLabel(q);
+    head.innerHTML = `<span>Q <b>${i + 1}</b> / ${window.__qs.length}</span>`;
+    head.appendChild(src);
+    card.appendChild(head);
+
+    const fig = document.createElement("div");
+    fig.className = "qfig";
+    const imgSrc = (q.type === "structured") ? (q.paper_img || "") : (q.figures && q.figures[0] || "");
+    if (imgSrc) {
+      const img = document.createElement("img");
+      img.src = imgSrc;
+      img.onerror = () => (img.style.display = "none");
+      fig.appendChild(img);
+    }
+    card.appendChild(fig);
+
+    const tp = document.createElement("div");
+    tp.className = "topics";
+    (q.topics || []).slice(0, 3).forEach((t) => {
+      const s = document.createElement("span");
+      s.textContent = t;
+      tp.appendChild(s);
+    });
+    card.appendChild(tp);
+
+    const ans = document.createElement("div");
+    ans.className = "ans";
+    if (q.type === "structured") {
+      renderStructure(q, ans, res, src);
+    } else {
+      ["A", "B", "C", "D"].forEach((letter) => {
+        const b = document.createElement("button");
+        b.className = "abtn";
+        b.textContent = letter;
+        if (res) {
+          b.disabled = true;
+          if (letter === q.ms_answer) b.classList.add("correct");
+          else if (res.chosen === letter) b.classList.add("wrong");
+        } else {
+          b.onclick = () => choose(letter, q);
+        }
+        ans.appendChild(b);
+      });
+    }
+    card.appendChild(ans);
+
+    if (res) {
+      const fb = document.createElement("div");
+      fb.className = "fb show " + (res.correct ? "ok" : "no");
+      if (q.type === "structured") {
+        fb.textContent = res.correct ? "✅ You marked this correct." : "❌ You marked this incorrect — review the Mark Scheme.";
+      } else {
+        fb.innerHTML = res.correct ? "✅ Correct!" : `❌ Incorrect — correct answer: <b>${escHtml(q.ms_answer)}</b>`;
+      }
+      card.appendChild(fb);
+    }
+    box.appendChild(card);
+  });
 }
 
 // ---- Progress recording (local always + cloud when registered) ----
@@ -895,11 +1062,7 @@ function renderControls(res) {
   const pb = document.getElementById("prevBtn");
   pb.disabled = window.__idx === 0;
   pb.onclick = () => { window.__idx--; renderQ(); };
-  document.getElementById("restartBtn").onclick = () => {
-    document.getElementById("quizCard").style.display = "none";
-    document.getElementById("doneCard").style.display = "none";
-    document.getElementById("setupCard").style.display = "block";
-  };
+  document.getElementById("restartBtn").onclick = showSetup;
   if (res) showFeedback(res, window.__qs[window.__idx]);
   else { const fb = document.getElementById("fb"); fb.classList.remove("show","ok","no"); }
 }
@@ -921,7 +1084,7 @@ function showDone() {
   const done = run.length;
   const ok = run.filter(r => r.correct).length;
   const acc = done ? Math.round(ok / done * 100) : 0;
-  document.getElementById("quizCard").style.display = "none";
+  hidePracticeViews();
   document.getElementById("doneCard").style.display = "block";
   const g = document.getElementById("doneStats");
   g.innerHTML = "";
@@ -945,8 +1108,7 @@ function showDone() {
   });
   refreshRecordPanel();
   document.getElementById("againBtn").onclick = () => {
-    document.getElementById("doneCard").style.display = "none";
-    document.getElementById("setupCard").style.display = "block";
+    showSetup();
     refreshRecordPanel();
   };
   document.getElementById("homeBtn").onclick = () => (location.href = "home.html");
@@ -954,17 +1116,30 @@ function showDone() {
 }
 
 // ---------- onClick wiring ----------
-document.getElementById("startRandom").onclick = () => startRun("random");
-document.getElementById("startAll").onclick = () => startRun("all");
-document.getElementById("startOne").onclick = () => startRun("one");
+document.getElementById("startPractice").onclick = () => startRun();
+document.getElementById("stackBack").onclick = showSetup;
+document.getElementById("stackFinish").onclick = showDone;
+
+document.getElementById("moreToggle").onclick = () => {
+  const panel = document.getElementById("morePanel");
+  const open = panel.classList.toggle("open");
+  document.getElementById("moreToggle").textContent = open ? "More options ▴" : "More options ▾";
+};
+
+document.getElementById("idToggle").onclick = () => {
+  const body = document.getElementById("idBody");
+  const open = body.classList.toggle("open");
+  document.getElementById("idToggleChev").textContent = open ? "▴" : "▾";
+};
 
 // Syllabus tree controls
 const syllToggle = document.getElementById("syllToggle");
 const syllPanel = document.getElementById("syllPanel");
 syllToggle.addEventListener("click", () => {
-  syllPanel.classList.toggle("open");
-  syllToggle.textContent = syllPanel.classList.contains("open") ? "☰ Hide topics" : "☰ Choose topics";
-  if (syllPanel.classList.contains("open")) renderSyllTree();
+  const open = syllPanel.classList.toggle("open");
+  syllToggle.classList.toggle("open", open);
+  document.getElementById("syllChev").textContent = open ? "▴" : "▾";
+  if (open) renderSyllTree();
 });
 document.getElementById("syllAll").addEventListener("click", () => {
   selectNode(null);
@@ -1079,10 +1254,20 @@ function signOutIdentity() {
   renderIdentityBadge();
 }
 
+function setIdentityOpen(open) {
+  const body = document.getElementById("idBody");
+  body.classList.toggle("open", open);
+  document.getElementById("idToggleChev").textContent = open ? "▴" : "▾";
+}
+
 function renderIdentityBadge() {
   const recBtn = document.getElementById("recordsBtn");
   recBtn.style.display = __identity ? "inline-block" : "none";
   document.getElementById("recPanel").style.display = __identity ? "block" : "none";
+  document.getElementById("idToggleLab").textContent = __identity
+    ? ("Signed in as " + __identity.name)
+    : "Save progress (optional)";
+  if (__identity) setIdentityOpen(true);
   if (__identity && __cloudId) {
     idBadgeEl.innerHTML =
       `Signed in as <b>${escHtml(__identity.name)}</b> · Saved online. You can open this on any device. ` +
@@ -1317,13 +1502,13 @@ document.getElementById("recResync").onclick = async () => {
 };
 
 // ---------- Init ----------
-buildStats();
 bindChips();
+syncCountCustom();
 updateSyllStatus();
 updateSyllAllButton();
 renderIdentityBadge();
 refreshRecordPanel();
-// Default to expanding the top-level sections so teachers can see topics at a glance.
+// Default to expanding the top-level sections so students can see topics at a glance.
 SYLLABUS.forEach(r => { if ((r.children || []).some(c => (c.children || []).length)) settled.add(r.code); });
 </script>
 </body>

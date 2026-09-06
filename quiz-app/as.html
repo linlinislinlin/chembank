@@ -29,7 +29,7 @@
   .card h3 { font-size:22px; margin:14px 0 8px; font-weight:800; }
   .card .desc { color:var(--muted); font-size:14px; margin-bottom:22px; min-height:42px; }
   .cta { display:inline-block; padding:13px 26px; border-radius:12px; font-weight:700; font-size:15px; color:#fff; background:var(--accent); }
-  .assign-panel { margin-top:28px; max-width:640px; margin-left:auto; margin-right:auto; }
+  .assign-panel { max-width:640px; margin:0 auto 28px; }
   .assign-card { background:var(--bg-soft); border:1px solid var(--line); border-radius:16px; padding:24px; }
   .assign-card h4 { margin:0 0 4px; font-size:16px; }
   .assign-card .sub { color:var(--muted); font-size:13px; margin:0 0 16px; }
@@ -45,7 +45,7 @@
   .hw-item:hover { border-color:var(--accent-2); }
   .hw-item b { display:block; font-size:15px; }
   .hw-item .meta { color:var(--muted); font-size:12px; margin-top:3px; }
-  .practice-wrap { max-width:640px; margin:0 auto 8px; }
+  .practice-wrap { max-width:640px; margin:0 auto; }
   .err { color:var(--red); font-size:13px; margin-top:10px; min-height:16px; }
   .foot { text-align:center; color:var(--muted); font-size:12px; margin-top:50px; }
 </style>
@@ -68,14 +68,6 @@
       <span><b id="structCount">–</b> structured questions</span>
     </div>
   </div>
-  <div class="cards practice-wrap">
-    <a class="card" href="practice.html">
-      <div class="icon">🎲</div>
-      <h3>Free Practice</h3>
-      <p class="desc">No login needed. Draw questions from the AS bank, with instant marking.</p>
-      <span class="cta">Start practicing →</span>
-    </a>
-  </div>
   <div class="assign-panel">
     <div class="assign-card">
       <h4>AS Homework</h4>
@@ -83,6 +75,14 @@
       <div id="hwList"><span class="sub">Loading…</span></div>
       <div class="err" id="assignErr"></div>
     </div>
+  </div>
+  <div class="cards practice-wrap">
+    <a class="card" href="practice.html">
+      <div class="icon">🎲</div>
+      <h3>Free Practice</h3>
+      <p class="desc">No login needed. Draw questions from the AS bank, with instant marking.</p>
+      <span class="cta">Start practicing →</span>
+    </a>
   </div>
   <div class="foot">ChemBank · AS Chemistry 9701</div>
 </div>

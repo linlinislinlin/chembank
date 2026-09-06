@@ -194,10 +194,32 @@ def split_main_question_into_parts(
             cur_letter = m.group("lr_letter").lower()
             nodes.append((cur_letter, m.group("lr_roman").lower(), m.start()))
         elif m.group("letter"):
-            cur_letter = m.group("letter").lower()
+            letter = m.group("letter").lower()
+            # Skip state-symbol leftovers like CaF2(s) becoming letter (s).
+            if (
+                cur_letter
+                and letter != "i"
+                and (ord(letter) - ord(cur_letter) > 1)
+            ):
+                continue
+            cur_letter = letter
             nodes.append((cur_letter, None, m.start()))
         elif m.group("roman") and cur_letter:
-            nodes.append((cur_letter, m.group("roman").lower(), m.start()))
+            roman = m.group("roman").lower()
+            # List questions letter (h)(i)(j). PART_START_RE prefers roman, so
+            # a lone "(i)" after "(h)" is letter i unless "(ii)" follows.
+            if roman == "i" and cur_letter == "h":
+                later = [x for x in matches if x.start() > m.start()]
+                has_ii = any(
+                    (x.group("roman") or "").lower() == "ii"
+                    or (x.group("lr_roman") or "").lower() == "ii"
+                    for x in later[:4]
+                )
+                if not has_ii:
+                    cur_letter = "i"
+                    nodes.append(("i", None, m.start()))
+                    continue
+            nodes.append((cur_letter, roman, m.start()))
 
     if not nodes:
         return []
@@ -269,7 +291,7 @@ def parse_structured_ms_parts(text: str, *, max_q: int = 20) -> dict[str, str]:
         block = re.sub(r"\n?----- PAGE \d+ -----\n?", "\n", block)
         # Drop footer noise lightly
         block = re.sub(
-            r"(?m)^\s*(?:©\s*UCLES.*|Page \d+ of \d+|9701/\d+.*)\s*$",
+            r"(?m)^\s*(?:©\s*UCLES.*|Page \d+ of \d+|(?:9701|0620)/\d+.*)\s*$",
             "",
             block,
         )

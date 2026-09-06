@@ -44,7 +44,14 @@ from typing import Any
 import yaml
 
 # Vault roots (repo-relative) to search for assets, regardless of ``--vault``.
-KNOWN_VAULTS = ("vault", "vault-structured", "vault-practical")
+KNOWN_VAULTS = (
+    "vault",
+    "vault-structured",
+    "vault-practical",
+    "vault-igcse",
+    "vault-igcse-structured",
+    "vault-igcse-practical",
+)
 
 TEMPLATE = "tiles"
 
@@ -209,17 +216,28 @@ def render_tiles(
         out_path.write_text("\n".join(lines), encoding="utf-8")
         return out_path
 
-    lines.extend(_syllabus_section(syllabus_codes, rules))
+    lines.extend(_syllabus_section(syllabus_codes, rules, questions=questions))
     lines.append("")
 
     # Group questions by primary learning outcome. The flat, re-ordered list is
     # shared by both the grid and the answer section so the sequential numbers
     # (第1题, 第2题, …) stay global and continuous across every LO group.
-    groups = _group_questions(questions)
-    ordered = [q for _lo, _text, group in groups for q in group]
+    if rules.get("preserve_order"):
+        groups = [("", "", questions)]
+        ordered = list(questions)
+    else:
+        groups = _group_questions(questions)
+        ordered = [q for _lo, _text, group in groups for q in group]
 
     # If a prior "---" was emitted by the syllabus section, no extra divider needed.
-    lines.extend(_render_grid(groups, vault_root, out_path))
+    lines.extend(
+        _render_grid(
+            groups,
+            vault_root,
+            out_path,
+            skip_lo_headers=bool(rules.get("preserve_order")),
+        )
+    )
     lines.append("")
     lines.extend(_answer_section(ordered, vault_root))
     lines.append("→ [[题库首页]]")
@@ -230,7 +248,17 @@ def render_tiles(
 
 
 def _meta_line(questions: list[dict[str, Any]], total_marks: int) -> str:
-    subjects = {str(q.get("subject") or "CIE 9701") for q in questions}
+    subjects: set[str] = set()
+    for q in questions:
+        if q.get("subject"):
+            subjects.add(str(q["subject"]))
+            continue
+        syl = str(q.get("syllabus_code") or "")
+        board = str(q.get("exam_board") or "CIE")
+        if syl:
+            subjects.add(f"{board} {syl}")
+        else:
+            subjects.add("CIE 9701")
     subject = ", ".join(sorted(subjects)) if subjects else "CIE 9701"
     return (
         f"**{subject}** · {len(questions)} 题 · "
@@ -312,10 +340,13 @@ def _tile_caption(seq: int, question: dict[str, Any]) -> str:
 
 
 _SYLLABUS_PATH = "syllabus/cie-9701-as-a-level-chemistry.yaml"
+_SYLLABUS_PATH_0620 = "syllabus/cie-0620-igcse-chemistry.yaml"
 
 
 def _syllabus_section(
-    syllabus_codes: list[str], rules: dict[str, Any]
+    syllabus_codes: list[str],
+    rules: dict[str, Any],
+    questions: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Render a '考纲范围' (syllabus scope) block for the handout's codes.
 
@@ -326,6 +357,8 @@ def _syllabus_section(
     YAML is missing or no subtopics are found.
     """
     path = Path(_SYLLABUS_PATH)
+    if questions and any(str(q.get("syllabus_code") or "") == "0620" for q in questions):
+        path = Path(_SYLLABUS_PATH_0620)
     if not path.is_file():
         return []
     try:
@@ -346,7 +379,7 @@ def _syllabus_section(
                 continue
             found = True
             title = st.get("title") or ""
-            group = topic.get("group") or "Chemistry"
+            group = topic.get("group") or topic.get("title") or "Chemistry"
             out.append(f"**{code} — {title}**（{group}）")
             out.append("")
             for lo in st.get("learning_outcomes") or []:
@@ -431,7 +464,11 @@ def _group_questions(questions: list[dict[str, Any]]) -> list[tuple[str, str, li
 
 
 def _render_grid(
-    groups: list[tuple[str, str, list[dict]]], vault_root: Path, note_path: Path
+    groups: list[tuple[str, str, list[dict]]],
+    vault_root: Path,
+    note_path: Path,
+    *,
+    skip_lo_headers: bool = False,
 ) -> list[str]:
     """Render each LO group as a header plus full-width stacked blocks.
 
@@ -451,15 +488,16 @@ def _render_grid(
     out: list[str] = []
     seq = 0
     for lo, lo_text, group in groups:
-        if lo:
-            header = f"### {lo}"
-            if lo_text:
-                header += f" — {html.escape(lo_text)}"
-            out.append(header)
-            out.append("")
-        elif group:
-            out.append("### （未标 LO）")
-            out.append("")
+        if not skip_lo_headers:
+            if lo:
+                header = f"### {lo}"
+                if lo_text:
+                    header += f" — {html.escape(lo_text)}"
+                out.append(header)
+                out.append("")
+            elif group:
+                out.append("### （未标 LO）")
+                out.append("")
         for q in group:
             seq += 1
             out.append("---")

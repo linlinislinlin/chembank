@@ -38,3 +38,26 @@ After dropping QP + MS:
 chembank ingest s21 12    # MCQ → vault/
 chembank ingest s21 21    # structured → vault-structured/
 ```
+
+## IGCSE 0620 (isolated from 9701)
+
+```text
+0620_<season>_qp_<paper>.pdf
+0620_<season>_ms_<paper>.pdf
+```
+
+| Token | 0620 Extended |
+|-------|----------------|
+| `21` / `22` / `23` | Paper 2 MCQ → `vault-igcse/` |
+| `41` / `42` / `43` | Paper 4 theory → `vault-igcse-structured/` |
+| `61` / `62` / `63` | Paper 6 ATP → `vault-igcse-practical/` |
+
+Always use the full stem so ingest does not treat these as 9701 Paper 2 structured:
+
+```bash
+chembank ingest 0620_s25_qp_21
+chembank ingest 0620_s25_qp_21 --export
+chembank audit 0620_s25_qp_21
+```
+
+Examiner reports: `raw/reports/0620_<year>_<season>_er.pdf`. Registry: `papers-igcse.yaml`.

@@ -1,0 +1,444 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/QLS/AS/Homework/Stoichiometry/2-stoichiometry-homework-2.md
+  title: AS stoichiometry homework 2 · limiting reagent and yield
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS stoichiometry homework 2 · limiting reagent and yield
+- id: I01
+  type: instruction
+  source_loc: instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Circle one letter A-D. Show working.
+- id: S01
+  type: heading
+  source_loc: section-1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 5 · Excess and limiting reagent
+- id: S08
+  type: heading
+  source_loc: section-8
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 6 · Significant figures / precise $A_\mathrm{r}$
+- id: S10
+  type: heading
+  source_loc: section-10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 7 · Percentage yield and purity
+- id: S13
+  type: heading
+  source_loc: section-13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Earlier skills · mole, reacting masses, combustion
+- id: Q01
+  type: mcq
+  source_loc: Q01
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Calcium oxide and magnesium sulfide each react with acid.
+
+    \begin{align*}
+
+    \ce{CaO(s) + 2H+(aq) &-> Ca^{2+}(aq) + H2O(l)}\\
+
+    \ce{MgS(s) + 2H+(aq) &-> Mg^{2+}(aq) + H2S(g)}
+
+    \end{align*}
+
+    A mixture of these two compounds, X, reacts with exactly 0.125\,mol of dilute
+    hydrochloric acid.
+
+
+    The amount of hydrogen sulfide formed is 0.0250\,mol.
+
+
+    What was the mass of calcium oxide in mixture X?
+
+    \optrow{1.4\,g}{2.1\,g}{2.8\,g}{4.2\,g}'
+- id: CLIP-Q01
+  type: mcq
+  source_loc: Q01-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q01
+  reason: full paper-clip of typeset question
+  image: images/img-001.png
+- id: Q02
+  type: mcq
+  source_loc: Q02
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A 3.7\,g sample of copper(II) carbonate is added to 25\,cm$^3$ of 2.0\,mol\,dm$^{-3}$
+    hydrochloric acid.
+
+
+    Which volume of gas is produced at room conditions?
+
+    \optrow{0.60\,dm$^3$}{0.72\,dm$^3$}{1.20\,dm$^3$}{2.40\,dm$^3$}'
+- id: CLIP-Q02
+  type: mcq
+  source_loc: Q02-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q02
+  reason: full paper-clip of typeset question
+  image: images/img-002.png
+- id: Q03
+  type: mcq
+  source_loc: Q03
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Methane and steam react to produce hydrogen.
+
+    \[\ce{CH4(g) + 2H2O(g) -> CO2(g) + 4H2(g)}\]
+
+    0.80\,g of methane and 1.35\,g of steam react. One of the reactants is used up.
+
+
+    Which volume of hydrogen, measured at room conditions, will be produced?
+
+    \optrow{1.80\,dm$^3$}{3.60\,dm$^3$}{4.80\,dm$^3$}{7.20\,dm$^3$}'
+- id: CLIP-Q03
+  type: mcq
+  source_loc: Q03-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q03
+  reason: full paper-clip of typeset question
+  image: images/img-003.png
+- id: Q04
+  type: mcq
+  source_loc: Q04
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'In separate experiments, 5.0\,g samples of each of four s-block metals are
+    added to an excess of water. The gas evolved is collected and its volume measured
+    under the same conditions of temperature and pressure for each sample.
+
+
+    Which metal produces the largest volume of gas?
+
+    \optlist{calcium}{potassium}{rubidium}{strontium}'
+- id: CLIP-Q04
+  type: mcq
+  source_loc: Q04-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q04
+  reason: full paper-clip of typeset question
+  image: images/img-004.png
+- id: Q05
+  type: mcq
+  source_loc: Q05
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Crystals of copper(II) nitrate are prepared by adding an excess of malachite
+    to nitric acid.
+
+
+    The formula of malachite is \ce{Cu(OH)2.CuCO3}. ($M_\mathrm{r}=221.0$)
+
+
+    12.0\,g of malachite is added to 30.0\,cm$^3$ of 1.50\,mol\,dm$^{-3}$ nitric acid.
+
+
+    Which mass of malachite is left unreacted when the reaction is complete?
+
+    \optrow{2.05\,g}{2.49\,g}{7.03\,g}{9.51\,g}'
+- id: CLIP-Q05
+  type: mcq
+  source_loc: Q05-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q05
+  reason: full paper-clip of typeset question
+  image: images/img-005.png
+- id: Q06
+  type: mcq
+  source_loc: Q06
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'X is an impure sample of a Group 2 metal carbonate, \ce{MCO3}. X contains
+    57\% by mass of \ce{MCO3}. The impurities in X do \textbf{not} react with hydrochloric
+    acid.
+
+
+    7.4\,g of X is reacted with an excess of dilute hydrochloric acid.
+
+
+    0.050\,mol of the Group 2 metal chloride is produced.
+
+
+    What is the identity of the Group 2 metal?
+
+    \optrow{\ce{Mg}}{\ce{Ca}}{\ce{Sr}}{\ce{Ba}}'
+- id: CLIP-Q06
+  type: mcq
+  source_loc: Q06-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q06
+  reason: full paper-clip of typeset question
+  image: images/img-006.png
+- id: Q07
+  type: mcq
+  source_loc: Q07
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'In an experiment, 0.600\,mol of chlorine gas, \ce{Cl2}, is reacted with an
+    excess of hot aqueous sodium hydroxide. One of the products is \ce{NaClO3}.
+
+
+    Which mass of \ce{NaClO3} is formed?
+
+    \optrow{21.3\,g}{44.7\,g}{63.9\,g}{128\,g}'
+- id: CLIP-Q07
+  type: mcq
+  source_loc: Q07-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q07
+  reason: full paper-clip of typeset question
+  image: images/img-007.png
+- id: Q08
+  type: mcq
+  source_loc: Q08
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'The relative atomic mass of antimony is 121.76.
+
+
+    Antimony has \textbf{two} isotopes. The mass numbers of the two isotopes differ
+    by two. The isotope with the lower mass number is the more abundant.
+
+
+    What is the percentage abundance of the isotope with the \textbf{higher} mass
+    number?
+
+    \optrow{12\%}{38\%}{62\%}{88\%}'
+- id: CLIP-Q08
+  type: mcq
+  source_loc: Q08-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q08
+  reason: full paper-clip of typeset question
+  image: images/img-008.png
+- id: Q09
+  type: mcq
+  source_loc: Q09
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A sample of magnesium contains the isotopes \ce{^{24}Mg}, \ce{^{25}Mg} and
+    \ce{^{26}Mg} only.
+
+
+    The percentage abundance of \ce{^{25}Mg} and \ce{^{26}Mg} is the same.
+
+
+    The relative atomic mass of magnesium in the sample is 24.3.
+
+
+    What is the percentage abundance of \ce{^{24}Mg}?
+
+    \optrow{10\%}{20\%}{60\%}{80\%}'
+- id: CLIP-Q09
+  type: mcq
+  source_loc: Q09-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q09
+  reason: full paper-clip of typeset question
+  image: images/img-009.png
+- id: Q10
+  type: mcq
+  source_loc: Q10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: '0.200\,mol ethanenitrile reacts with an excess of dilute sodium hydroxide.
+    The reaction produces organic compound S and ammonia gas only.
+
+
+    The reaction has an 80.0\% yield.
+
+
+    Which mass of S is produced?
+
+    \optrow{9.60\,g}{13.1\,g}{15.4\,g}{16.4\,g}'
+- id: CLIP-Q10
+  type: mcq
+  source_loc: Q10-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q10
+  reason: full paper-clip of typeset question
+  image: images/img-010.png
+- id: Q11
+  type: mcq
+  source_loc: Q11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A piece of rock has a mass of 2.00\,g. It contains calcium carbonate, but
+    no other basic substances. It neutralises exactly 36.0\,cm$^3$ of 0.500\,mol\,dm$^{-3}$
+    hydrochloric acid.
+
+
+    What is the percentage by mass of calcium carbonate in the 2.00\,g piece of rock?
+
+    \optrow{22.5\%}{45.0\%}{72.0\%}{90.1\%}'
+- id: CLIP-Q11
+  type: mcq
+  source_loc: Q11-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q11
+  reason: full paper-clip of typeset question
+  image: images/img-011.png
+- id: Q12
+  type: mcq
+  source_loc: Q12
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A sample of 2.30\,g of ethanol is mixed with an excess of aqueous acidified
+    potassium dichromate(VI). The reaction mixture is boiled under reflux for one
+    hour. The required organic product is then collected by distillation. The yield
+    of product is 60.0\%.
+
+
+    Which mass of product is collected?
+
+    \optrow{1.32\,g}{1.38\,g}{1.80\,g}{3.00\,g}'
+- id: CLIP-Q12
+  type: mcq
+  source_loc: Q12-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q12
+  reason: full paper-clip of typeset question
+  image: images/img-012.png
+- id: Q13
+  type: mcq
+  source_loc: Q13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Which sample contains the same number of the named species as the number
+    of molecules in 35.5\,g of chlorine?
+
+    \optlist{atoms in 16\,g of sulfur}{atoms in 23\,g of sodium}{ions in 74.5\,g of
+    potassium chloride}{molecules in 88\,g of carbon dioxide}'
+- id: CLIP-Q13
+  type: mcq
+  source_loc: Q13-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q13
+  reason: full paper-clip of typeset question
+  image: images/img-013.png
+- id: Q14
+  type: mcq
+  source_loc: Q14
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A 5.00\,g sample of an anhydrous Group 2 metal nitrate loses 3.29\,g in mass
+    when heated strongly.
+
+
+    Which metal is present?
+
+    \optrow{magnesium}{calcium}{strontium}{barium}'
+- id: CLIP-Q14
+  type: mcq
+  source_loc: Q14-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q14
+  reason: full paper-clip of typeset question
+  image: images/img-014.png
+- id: Q15
+  type: mcq
+  source_loc: Q15
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'An organic molecule W contains 3 carbon atoms. It requires 4.5 molecules
+    of oxygen for complete combustion.
+
+
+    What could W be?
+
+    \optrow{propane}{propanoic acid}{propanone}{propan-1-ol}'
+- id: CLIP-Q15
+  type: mcq
+  source_loc: Q15-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q15
+  reason: full paper-clip of typeset question
+  image: images/img-015.png

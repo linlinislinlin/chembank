@@ -19,7 +19,7 @@ from chembank.syllabus import flatten_codes, flatten_learning_outcomes, load_syl
 
 FM_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 FOOTER_RE = re.compile(
-    r"(?:©\s*UCLES|9701/\d+/[MWCOPJ]/\d+|\[Turn over\]|Page\s+\d+\s+of\s+\d+)",
+    r"(?:©\s*UCLES|(?:9701|0620)/\d+/[MWCOPJ]/\d+|\[Turn over\]|Page\s+\d+\s+of\s+\d+)",
     re.I,
 )
 PUA_RE = re.compile(r"[\uf000-\uf0ff]")
@@ -232,7 +232,7 @@ def _audit_markdown(
     if not is_practical and paper_val is not None:
         from chembank.registry import paper_kind
 
-        is_practical = paper_kind(paper_val) == "practical"
+        is_practical = paper_kind(paper_val, str(front.get("syllabus_code") or "9701")) == "practical"
 
     lo_ids = [str(x) for x in (front.get("learning_outcomes") or []) if str(x).strip()]
     # Paper 3: LO optional; practical_topic is the primary taxonomy
@@ -252,6 +252,11 @@ def _audit_markdown(
         "Gas volume experiments",
         "Rate experiments",
         "Qualitative analysis",
+        "Chromatography",
+        "Salt preparation",
+        "Planning",
+        "Measurement and apparatus",
+        "Separation and purification",
     }
     if is_practical:
         topic = str(front.get("practical_topic") or "").strip()
@@ -466,6 +471,10 @@ def _audit_structured_part_clips(
             letters = sorted({p.letter for p in siblings})
             if pid.letter in letters:
                 for nl in letters[letters.index(pid.letter) + 1 :]:
+                    # 1(e)(i) text contains roman "(i)"; do not treat that as
+                    # later letter (i) on the same parent question.
+                    if pid.roman and nl == pid.roman:
+                        continue
                     if re.search(rf"(?:^|\n)\s*\({nl}\)(?:\s|\n|\(|$)", text):
                         findings.append(
                             Finding(
@@ -771,7 +780,7 @@ def _is_mcq_export(front: dict[str, Any]) -> bool:
     if paper is not None:
         from chembank.registry import paper_kind
 
-        return paper_kind(paper) == "mcq"
+        return paper_kind(paper, str(front.get("syllabus_code") or "9701")) == "mcq"
     return True
 
 
@@ -788,7 +797,22 @@ def audit_vault_questions(
     questions_dir = Path(questions_dir) if questions_dir else None
     qp_by_prefix = qp_by_prefix or {}
 
-    syllabus = load_syllabus()
+    from chembank.syllabus import syllabus_path_for
+
+    syllabus_code = "9701"
+    if md_paths:
+        for p in md_paths:
+            front0, _ = _front_and_body(p)
+            sc = str(front0.get("syllabus_code") or "").strip()
+            if sc:
+                syllabus_code = sc
+                break
+            qid = str(front0.get("id") or p.stem)
+            m = re.match(r"^cie-(\d{4})-", qid)
+            if m:
+                syllabus_code = m.group(1)
+                break
+    syllabus = load_syllabus(syllabus_path_for(syllabus_code))
     allowed_codes = flatten_codes(syllabus)
     allowed_los = flatten_learning_outcomes(syllabus)
 
@@ -884,7 +908,7 @@ def resolve_md_paths(
     vault_dir: Path,
     *,
     prefixes: list[str] | None = None,
-    glob_pattern: str = "cie-9701-*.md",
+    glob_pattern: str = "cie-*.md",
 ) -> list[Path]:
     qdir = Path(vault_dir) / "questions"
     paths = sorted(qdir.glob(glob_pattern))
@@ -897,10 +921,12 @@ def resolve_md_paths(
     return paths
 
 
-def prefix_from_paper_meta(year: int, session: str, paper: int | str) -> str:
-    """Build vault id prefix like cie-9701-2021-mj-p11."""
+def prefix_from_paper_meta(
+    year: int, session: str, paper: int | str, syllabus_code: str = "9701"
+) -> str:
+    """Build vault id prefix like cie-9701-2021-mj-p11 or cie-0620-2025-mj-p21."""
     sess = str(session).lower()
-    return f"cie-9701-{year}-{sess}-p{paper}"
+    return f"cie-{syllabus_code}-{year}-{sess}-p{paper}"
 
 
 def audit_papers(
@@ -930,7 +956,9 @@ def audit_papers(
                 resolve_existing(ref, require_qp=False)
             except FileNotFoundError:
                 pass
-            pref = prefix_from_paper_meta(int(ref.year), str(ref.session), ref.paper)
+            pref = prefix_from_paper_meta(
+                int(ref.year), str(ref.session), ref.paper, ref.syllabus_code
+            )
             prefixes.append(pref)
             qp = Path(ref.qp) if ref.qp else None
             if qp and qp.exists():
@@ -942,10 +970,26 @@ def audit_papers(
                 resolve_existing(ref, require_qp=False)
             except FileNotFoundError:
                 pass
-            pref = prefix_from_paper_meta(int(ref.year), str(ref.session), ref.paper)
+            pref = prefix_from_paper_meta(
+                int(ref.year), str(ref.session), ref.paper, ref.syllabus_code
+            )
             qp = Path(ref.qp) if ref.qp else None
             if qp and qp.exists():
                 qp_by_prefix[pref] = qp
+        from chembank.registry import IGCSE_PAPERS_YAML
+
+        if IGCSE_PAPERS_YAML.is_file():
+            for ref in list_registry_papers(IGCSE_PAPERS_YAML):
+                try:
+                    resolve_existing(ref, require_qp=False)
+                except FileNotFoundError:
+                    pass
+                pref = prefix_from_paper_meta(
+                    int(ref.year), str(ref.session), ref.paper, ref.syllabus_code
+                )
+                qp = Path(ref.qp) if ref.qp else None
+                if qp and qp.exists():
+                    qp_by_prefix[pref] = qp
 
     md_paths = resolve_md_paths(vault_dir, prefixes=prefixes)
     if not md_paths:

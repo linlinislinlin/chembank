@@ -11,22 +11,35 @@ from typing import Any
 import yaml
 
 DEFAULT_PAPERS_YAML = Path("papers.yaml")
+IGCSE_PAPERS_YAML = Path("papers-igcse.yaml")
 DEFAULT_MANIFEST = Path("draft/manifest.json")
+IGCSE_MANIFEST = Path("draft/manifest-igcse.json")
 DEFAULT_VAULT_MCQ = Path("vault")
 DEFAULT_VAULT_STRUCTURED = Path("vault-structured")
 DEFAULT_VAULT_PRACTICAL = Path("vault-practical")
+DEFAULT_VAULT_IGCSE_MCQ = Path("vault-igcse")
+DEFAULT_VAULT_IGCSE_STRUCTURED = Path("vault-igcse-structured")
+DEFAULT_VAULT_IGCSE_PRACTICAL = Path("vault-igcse-practical")
 DEFAULT_QUESTIONS_MCQ = Path("questions")
 DEFAULT_QUESTIONS_STRUCTURED = Path("questions-structured")
 DEFAULT_QUESTIONS_PRACTICAL = Path("questions-practical")
+DEFAULT_QUESTIONS_IGCSE_MCQ = Path("questions-igcse")
+DEFAULT_QUESTIONS_IGCSE_STRUCTURED = Path("questions-igcse-structured")
+DEFAULT_QUESTIONS_IGCSE_PRACTICAL = Path("questions-igcse-practical")
 
 # CIE season letter in filenames: s=June(MJ), w=Nov(ON), m=March(FM)
 _SESSION_FROM_SEASON = {"s": "MJ", "w": "ON", "m": "FM"}
 _SEASON_FROM_SESSION = {"MJ": "s", "ON": "w", "FM": "m"}
 
-# Paper component (tens digit): 1=MCQ, 2/4/5=structured SAQ, 3=practical
+# Paper component (tens digit)
+# 9701: 1=MCQ, 2/4/5=structured SAQ, 3=practical
+# 0620 Extended: 2=MCQ, 4=theory structured, 6=ATP practical (NOT the 9701 mapping)
 _MCQ_COMPONENTS = {1}
 _STRUCTURED_COMPONENTS = {2, 4, 5}
 _PRACTICAL_COMPONENTS = {3}
+_IGCSE_MCQ_COMPONENTS = {2}
+_IGCSE_STRUCTURED_COMPONENTS = {4}
+_IGCSE_PRACTICAL_COMPONENTS = {6}
 
 _PAPER_STEM_RE = re.compile(
     r"^(?P<code>\d{4})_(?P<letter>[smw])(?P<yy>\d{2})_qp_(?P<paper>\d{1,2})$",
@@ -95,22 +108,66 @@ def paper_component(paper: int | str) -> int:
     return n // 10
 
 
-def paper_kind(paper: int | str) -> str:
-    """Return ``mcq`` (1x), ``structured`` (2/4/5x), or ``practical`` (3x)."""
+def registry_path_for(syllabus_code: str | None) -> Path:
+    if str(syllabus_code or "") == "0620":
+        return IGCSE_PAPERS_YAML
+    return DEFAULT_PAPERS_YAML
+
+
+def manifest_path_for(syllabus_code: str | None) -> Path:
+    if str(syllabus_code or "") == "0620":
+        return IGCSE_MANIFEST
+    return DEFAULT_MANIFEST
+
+
+def resolve_registry_path(
+    registry_arg: str | Path | None, syllabus_code: str | None = "9701"
+) -> Path:
+    """CLI default is papers.yaml; 0620 papers live in papers-igcse.yaml."""
+    default = registry_path_for(syllabus_code)
+    if registry_arg is None:
+        return default
+    given = Path(registry_arg)
+    if given == DEFAULT_PAPERS_YAML and str(syllabus_code) == "0620":
+        return default
+    return given
+
+
+def paper_kind(paper: int | str, syllabus_code: str = "9701") -> str:
+    """Return ``mcq``, ``structured``, or ``practical``.
+
+    9701 uses Paper 1x / 2·4·5x / 3x. IGCSE 0620 Extended is inverted:
+    Paper 2x MCQ, Paper 4x theory, Paper 6x ATP.
+    """
     comp = paper_component(paper)
+    if str(syllabus_code) == "0620":
+        if comp in _IGCSE_MCQ_COMPONENTS:
+            return "mcq"
+        if comp in _IGCSE_PRACTICAL_COMPONENTS:
+            return "practical"
+        if comp in _IGCSE_STRUCTURED_COMPONENTS:
+            return "structured"
+        return "structured"
     if comp in _MCQ_COMPONENTS:
         return "mcq"
     if comp in _PRACTICAL_COMPONENTS:
         return "practical"
     if comp in _STRUCTURED_COMPONENTS:
         return "structured"
-    # Fallback: treat unknown as structured (safer than MCQ A–D gates)
     return "structured"
 
 
-def default_vault_for_paper(paper: int | str) -> Path:
-    """Obsidian vault root for this paper number."""
-    kind = paper_kind(paper)
+def default_vault_for_paper(
+    paper: int | str, syllabus_code: str = "9701"
+) -> Path:
+    """Obsidian vault root for this paper number + syllabus."""
+    kind = paper_kind(paper, syllabus_code)
+    if str(syllabus_code) == "0620":
+        if kind == "mcq":
+            return DEFAULT_VAULT_IGCSE_MCQ
+        if kind == "practical":
+            return DEFAULT_VAULT_IGCSE_PRACTICAL
+        return DEFAULT_VAULT_IGCSE_STRUCTURED
     if kind == "mcq":
         return DEFAULT_VAULT_MCQ
     if kind == "practical":
@@ -118,9 +175,17 @@ def default_vault_for_paper(paper: int | str) -> Path:
     return DEFAULT_VAULT_STRUCTURED
 
 
-def default_questions_dir_for_paper(paper: int | str) -> Path:
-    """Canonical Markdown dual-write dir for this paper number."""
-    kind = paper_kind(paper)
+def default_questions_dir_for_paper(
+    paper: int | str, syllabus_code: str = "9701"
+) -> Path:
+    """Canonical Markdown dual-write dir for this paper number + syllabus."""
+    kind = paper_kind(paper, syllabus_code)
+    if str(syllabus_code) == "0620":
+        if kind == "mcq":
+            return DEFAULT_QUESTIONS_IGCSE_MCQ
+        if kind == "practical":
+            return DEFAULT_QUESTIONS_IGCSE_PRACTICAL
+        return DEFAULT_QUESTIONS_IGCSE_STRUCTURED
     if kind == "mcq":
         return DEFAULT_QUESTIONS_MCQ
     if kind == "practical":
@@ -226,15 +291,16 @@ def resolve_existing(ref: PaperRef, *, require_qp: bool = True) -> PaperRef:
 
 def load_papers_yaml(path: Path | None = None) -> dict[str, Any]:
     path = Path(path or DEFAULT_PAPERS_YAML)
+    default_syl = "0620" if path == IGCSE_PAPERS_YAML else "9701"
     if not path.is_file():
         return {
             "board": "CIE",
-            "syllabus": "9701",
+            "syllabus": default_syl,
             "papers": [],
         }
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     data.setdefault("board", "CIE")
-    data.setdefault("syllabus", "9701")
+    data.setdefault("syllabus", default_syl)
     data.setdefault("papers", [])
     return data
 
@@ -242,33 +308,52 @@ def load_papers_yaml(path: Path | None = None) -> dict[str, Any]:
 def save_papers_yaml(data: dict[str, Any], path: Path | None = None) -> Path:
     path = Path(path or DEFAULT_PAPERS_YAML)
     path.parent.mkdir(parents=True, exist_ok=True)
-    header = (
-        "# ChemBank paper registry — add a row when you drop new QP/MS PDFs.\n"
-        "# Naming: raw/papers/9701_<season>_qp_<paper>.pdf\n"
-        "#          raw/papers/9701_<season>_ms_<paper>.pdf\n"
-        "#          raw/reports/9701_<year>_<season>_er.pdf\n"
-        "# status: pending | extracted | tagged | exported\n"
-        "#\n"
-        "# Vaults (auto by paper number):\n"
-        "#   Paper 1x (11/12/13) MCQ           → vault/\n"
-        "#   Paper 2/4/5x structured SAQ      → vault-structured/\n"
-        "#   Paper 3x (31/32/33…) practical   → vault-practical/\n"
-        "#\n"
-        "# MCQ example (s21 qp12):\n"
-        "#   chembank ingest s21 12\n"
-        "#   # tag via chembank-syllabus-tag skill\n"
-        "#   chembank ingest s21 12 --export\n"
-        "#\n"
-        "# Structured example (s21 qp21):\n"
-        "#   chembank ingest s21 21\n"
-        "#   # tag via chembank-structured-tag skill\n"
-        "#   chembank ingest s21 21 --export   # → vault-structured/\n"
-        "#\n"
-        "# Practical example (s21 qp31):\n"
-        "#   chembank ingest s21 31\n"
-        "#   # tag via chembank-practical-tag skill (topic grain)\n"
-        "#   chembank ingest s21 31 --export   # → vault-practical/\n"
-    )
+    if path == IGCSE_PAPERS_YAML or str(data.get("syllabus")) == "0620":
+        header = (
+            "# ChemBank IGCSE 0620 paper registry (isolated from 9701 papers.yaml).\n"
+            "# Naming: raw/papers/0620_<season>_qp_<paper>.pdf\n"
+            "#          raw/papers/0620_<season>_ms_<paper>.pdf\n"
+            "#          raw/reports/0620_<year>_<season>_er.pdf\n"
+            "# status: pending | extracted | tagged | exported\n"
+            "#\n"
+            "# Vaults (0620 Extended — NOT the 9701 mapping):\n"
+            "#   Paper 2x (21/22/23) MCQ          → vault-igcse/\n"
+            "#   Paper 4x (41/42/43) theory       → vault-igcse-structured/\n"
+            "#   Paper 6x (61/62/63) ATP          → vault-igcse-practical/\n"
+            "#\n"
+            "# Example:\n"
+            "#   chembank ingest 0620_s25_qp_21\n"
+            "#   chembank ingest 0620_s25_qp_21 --export\n"
+            "#   chembank audit 0620_s25_qp_21\n"
+        )
+    else:
+        header = (
+            "# ChemBank paper registry — add a row when you drop new QP/MS PDFs.\n"
+            "# Naming: raw/papers/9701_<season>_qp_<paper>.pdf\n"
+            "#          raw/papers/9701_<season>_ms_<paper>.pdf\n"
+            "#          raw/reports/9701_<year>_<season>_er.pdf\n"
+            "# status: pending | extracted | tagged | exported\n"
+            "#\n"
+            "# Vaults (auto by paper number):\n"
+            "#   Paper 1x (11/12/13) MCQ           → vault/\n"
+            "#   Paper 2/4/5x structured SAQ      → vault-structured/\n"
+            "#   Paper 3x (31/32/33…) practical   → vault-practical/\n"
+            "#\n"
+            "# MCQ example (s21 qp12):\n"
+            "#   chembank ingest s21 12\n"
+            "#   # tag via chembank-syllabus-tag skill\n"
+            "#   chembank ingest s21 12 --export\n"
+            "#\n"
+            "# Structured example (s21 qp21):\n"
+            "#   chembank ingest s21 21\n"
+            "#   # tag via chembank-structured-tag skill\n"
+            "#   chembank ingest s21 21 --export   # → vault-structured/\n"
+            "#\n"
+            "# Practical example (s21 qp31):\n"
+            "#   chembank ingest s21 31\n"
+            "#   # tag via chembank-practical-tag skill (topic grain)\n"
+            "#   chembank ingest s21 31 --export   # → vault-practical/\n"
+        )
     body = yaml.safe_dump(
         data,
         allow_unicode=True,
@@ -337,7 +422,15 @@ def write_manifest(
     """Machine-readable snapshot under draft/manifest.json."""
     import json
 
-    path = Path(path or DEFAULT_MANIFEST)
+    path = Path(path) if path is not None else None
+    if path is None:
+        syl = None
+        if refs:
+            syl = refs[0].syllabus_code
+        elif registry_path is not None:
+            syl = load_papers_yaml(registry_path).get("syllabus")
+        path = manifest_path_for(syl)
+    path = Path(path)
     if refs is None:
         refs = list_registry_papers(registry_path)
     payload = {
@@ -360,8 +453,8 @@ def infer_status(draft_dir: Path, *, paper: PaperRef | None = None) -> str:
     # Prefer exported when vault notes already exist for this paper
     if paper is not None:
         sess = {"MJ": "mj", "ON": "on", "FM": "fm"}.get(paper.session.upper(), paper.session.lower())
-        pattern = f"cie-9701-{paper.year}-{sess}-p{paper.paper}-q*.md"
-        vault = default_vault_for_paper(paper.paper)
+        pattern = f"cie-{paper.syllabus_code}-{paper.year}-{sess}-p{paper.paper}-q*.md"
+        vault = default_vault_for_paper(paper.paper, paper.syllabus_code)
         if list((vault / "questions").glob(pattern)):
             return "exported"
         # Legacy: some early exports may still sit under vault/ only

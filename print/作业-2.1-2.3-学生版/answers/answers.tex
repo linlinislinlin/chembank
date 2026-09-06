@@ -1,0 +1,81 @@
+% TEACHER ONLY — do not give to students. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+
+\raggedbottom
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small IGCSE Chemistry homework · 2.1--2.3 · TEACHER}
+\fancyhead[R]{\small Answer key --- not for students}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2em}
+
+\newcommand{\msclip}[2]{%
+  \par
+  \sbox0{\includegraphics[width=\linewidth,keepaspectratio]{#2}}%
+  \Needspace{\dimexpr\ht0+1.1em\relax}%
+  \noindent\textbf{#1}\par\vspace{0.1em}%
+  \noindent\usebox0\par
+  \vspace{0.35em}%
+}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries Answer key --- teacher only}\\[0.2em]
+{\small IGCSE Chemistry homework · 2.1--2.3 · CIE 0620 · 42 marks}\\[0.15em]
+{\small\bfseries Do not issue this file to students.}
+\end{center}
+
+\section*{Section A --- Multiple-choice (20 marks)}
+
+{\small
+\begin{tabular}{@{}clc|clc@{}}
+\toprule
+\textbf{Q} & \textbf{Ans} & \textbf{Source} & \textbf{Q} & \textbf{Ans} & \textbf{Source} \\
+\midrule
+A1 & \textbf{B} & 2023 MJ P23 Q2 & A11 & \textbf{A} & 2024 MJ P21 Q5 \\
+A2 & \textbf{C} & 2023 MJ P21 Q2 & A12 & \textbf{D} & 2023 MJ P22 Q2 \\
+A3 & \textbf{A} & 2025 ON P22 Q4 & A13 & \textbf{B} & 2021 MJ P22 Q8 \\
+A4 & \textbf{B} & 2024 MJ P21 Q4 & A14 & \textbf{B} & 2023 MJ P21 Q3 \\
+A5 & \textbf{B} & 2024 ON P21 Q3 & A15 & \textbf{C} & 2024 MJ P22 Q3 \\
+A6 & \textbf{A} & 2023 ON P23 Q3 & A16 & \textbf{B} & 2025 ON P21 Q5 \\
+A7 & \textbf{C} & 2025 ON P21 Q3 & A17 & \textbf{C} & 2025 ON P23 Q4 \\
+A8 & \textbf{B} & 2021 ON P22 Q4 & A18 & \textbf{B} & 2023 ON P22 Q4 \\
+A9 & \textbf{B} & 2025 MJ P22 Q4 & A19 & \textbf{B} & 2025 MJ P21 Q4 \\
+A10 & \textbf{B} & 2023 MJ P21 Q5 & A20 & \textbf{C} & 2025 ON P23 Q6 \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.4em}
+{\small Quick string: B C A · B B A C B · B B A D · B B C B C · B B C}
+
+\section*{Section B --- Mark scheme clips}
+
+\subsection*{B1 · 2021 ON Paper 42 Question 3 (8 marks)}
+\msclip{B1(a) [3]}{b1a-ms.png}
+\msclip{B1(b) [5]}{b1b-ms.png}
+
+\subsection*{B2 · 2024 ON Paper 41 Question 2 (14 marks)}
+\msclip{B2(a) [1]}{b2a-ms.png}
+\msclip{B2(b) [1]}{b2b-ms.png}
+\msclip{B2(c) [2]}{b2c-ms.png}
+\msclip{B2(d) [5]}{b2d-ms.png}
+\msclip{B2(e)(i) [2]}{b2ei-ms.png}
+\msclip{B2(e)(ii) [2]}{b2eii-ms.png}
+\msclip{B2(e)(iii) [1]}{b2eiii-ms.png}
+
+\end{document}

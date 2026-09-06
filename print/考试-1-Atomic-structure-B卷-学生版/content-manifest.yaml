@@ -1,0 +1,412 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/题库/vault/handouts/1-atomic-structure-exam-B.md
+  title: "AS Chemistry — Topic 1 Atomic Structure (Exam · Paper B / 卷B)"
+  syllabus: "9701"
+  student_answers: false
+  language: en
+items:
+  - id: H01
+    type: heading
+    source_loc: title
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: AS Chemistry — Topic 1 Atomic Structure (Exam · Paper B / 卷B)
+  - id: H-META
+    type: instruction
+    source_loc: subtitle
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: CIE 9701 AS Chemistry · Paper B · 33 marks · about 40–45 minutes
+  - id: H-TOPIC
+    type: instruction
+    source_loc: topic-line
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: one-line topic replacing 考纲 LO dump
+    text: "Topic 1: particles and isotopes, mass spectrometry, electronic configuration / orbitals, and ionisation energy."
+  - id: INST
+    type: instruction
+    source_loc: exam-instructions
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: "Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; show working and give the usual CIE reasons (nuclear charge, radius, shielding, spin-pair repulsion) where asked. A Periodic Table may be used. This is Paper B (卷B)."
+  - id: TBL-MARKS
+    type: table
+    source_loc: marks-table
+    keep: true
+    render: table
+    duplicate_of: null
+    reason: first occurrence
+    text: A MCQ 13; B1 2025 MJ P22 Q2 10; B2 2023 MJ P21 Q1(b)–(d) 6; B3 2025 MJ P24 Q6(c) 4; total 33
+  - id: H-A
+    type: heading
+    source_loc: A-MCQ
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: Section A — Multiple-choice questions (13 marks)
+  - id: Q-A1
+    type: mcq
+    source_loc: A1
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      Which statement about 131/53 I is correct?
+      A A negative ion contains 53 neutrons and 52 electrons.
+      B A negative ion contains 53 neutrons and 54 electrons.
+      C A negative ion contains 78 neutrons and 52 electrons.
+      D A negative ion contains 78 neutrons and 54 electrons.
+  - id: Q-A2
+    type: mcq
+    source_loc: A2
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: Technetium isotope has 56 neutrons. Nucleon number? A 43 B 56 C 99 D 112
+  - id: Q-A3
+    type: mcq
+    source_loc: A3
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      In which row do the particles increase in size?
+      A N O F
+      B N3- O2- F-
+      C Na+ Mg2+ Al3+
+      D Na+ Ne F-
+  - id: Q-A4
+    type: mcq
+    source_loc: A4
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence; diagram kept as original CIE clip
+    marks: 1
+    text: A helium ion contains two protons, two neutrons and one electron. This helium ion and a proton are passed separately through a uniform electric field. The particles are travelling at the same velocity. Which arrow describes the path of each particle?
+  - id: Fig-A4
+    type: figure
+    source_loc: A4-diagram
+    keep: true
+    render: image
+    duplicate_of: null
+    reason: electric-field paths are visual
+    image: overleaf/images/fig-a4-field.png
+  - id: Q-A5
+    type: mcq
+    source_loc: A5
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: A sample of magnesium contains the isotopes 24Mg, 25Mg and 26Mg only. The percentage abundance of 25Mg and 26Mg is the same. The relative atomic mass of magnesium in the sample is 24.3. What is the percentage abundance of 24Mg? A 10% B 20% C 60% D 80%
+  - id: Q-A6
+    type: mcq
+    source_loc: A6
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      What is the electronic configuration for 27/13 Al+?
+      A 1s2 2s2 2p6 3s1 3p1
+      B 1s2 2s2 2p6 3s2
+      C 1s2 2s2 2p6 3s2 3p2
+      D 1s2 2s2 2p6 3s2 3p6 3d7 4s1
+  - id: Q-A7
+    type: mcq
+    source_loc: A7
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      Which statement about a 3p orbital is correct?
+      A It can hold a maximum of six electrons.
+      B It has the highest energy of the orbitals with principal quantum number 3.
+      C It is at a higher energy level than a 3s orbital but has the same shape.
+      D It is occupied by one electron in an isolated phosphorus atom.
+  - id: Q-A8
+    type: mcq
+    source_loc: A8
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      In which pair of species do both species have only one unpaired p electron?
+      A Ar+ and C-
+      B B and Ti+
+      C F and Ga
+      D Se- and Si-
+  - id: Q-A9
+    type: mcq
+    source_loc: A9
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      Why is the first ionisation energy of oxygen less than that of nitrogen?
+      A The nitrogen atom has its outer electron in a different subshell.
+      B The nuclear charge on the oxygen atom is greater than that on the nitrogen atom.
+      C The oxygen atom has a pair of electrons in one p orbital that repel one another.
+      D There is more shielding in an oxygen atom.
+  - id: Q-A10
+    type: mcq
+    source_loc: A10
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      The second ionisation energy of oxygen is greater than the second ionisation energy of fluorine. Which factor explains this difference?
+      A The atomic radius of an oxygen atom is smaller than that of fluorine.
+      B The covalent bond in a fluorine molecule is weaker than the bond in an oxygen molecule.
+      C A spin-paired electron is removed from fluorine but not from oxygen.
+      D Fluorine has more electrons in total than oxygen. This causes a greater shielding of the nuclear attraction in fluorine.
+  - id: Q-A11
+    type: mcq
+    source_loc: A11
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      The first seven ionisation energies of an element between lithium and neon are 1310, 3390, 5320, 7450, 11000, 13300, 71000 kJ mol−1.
+      What is the outer electronic configuration of the element?
+      A 2s2  B 2s2 2p1  C 2s2 2p4  D 2s2 2p6
+  - id: Q-A12
+    type: mcq
+    source_loc: A12
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: Which of these elements has the highest fifth ionisation energy? A C B N C P D Si
+  - id: Q-A13
+    type: mcq
+    source_loc: A13
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 1
+    text: |
+      The first ionisation energy of K is 418 kJ mol−1. The first ionisation energy of Sr is 548 kJ mol−1.
+      Which statement helps to explain why Sr has a greater first ionisation energy than K?
+      A The charge on a Sr nucleus is greater than the charge on a K nucleus.
+      B The outer electron in a Sr atom experiences greater shielding than the outer electron in a K atom.
+      C The outer electron in a Sr atom experiences spin-pair repulsion.
+      D The outer electron in a Sr atom is further from the nucleus than the outer electron in a K atom.
+  - id: H-B
+    type: heading
+    source_loc: B-structured
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: Section B — Structured questions (20 marks)
+  - id: Q-B1
+    type: structured
+    source_loc: B1
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 10
+    text: |
+      A sample of iron contains three different isotopes and has Ar 55.8.
+      (a)(i) Define relative atomic mass. [2]
+      (a)(ii) Use Table 2.1 (54Fe 53.9 / 6.0%; 56Fe 55.9 / 91.9%) to calculate the relative isotopic mass of the third isotope. [2]
+      (b) Number of pairs of electrons in the 3d sub-shell in Fe2+. [1]
+      (c) Sketch the shape of the lowest energy orbital in n=2. [1]
+      (d) Complete Table 2.2 for 56Fe3+ (electrons blank; one row given as 30). [2]
+      (e) Change in radius when Fe becomes Fe3+. Explain. [2]
+  - id: Q-B2
+    type: structured
+    source_loc: B2
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    marks: 6
+    text: |
+      Tellurium Group 16; most common isotope 130Te; config [Kr] 4d10 5s2 5p4.
+      DELETED CIE 1(a) Table 1.1. Paper letters: old (b)(c)(d) → new (a)(b)(c).
+      (a) Identify the lowest-energy sub-shell in Te. [1]
+      (b) Equation for first IE of Te. [1]
+      (c)(i) Two factors for the increase in the first six IE of Te. [2]
+      (c)(ii) Sketch first seven successive IE of Te (jumps 4→5 and 6→7). [2]
+  - id: Q-B3
+    type: structured
+    source_loc: B3
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence; spectrum kept as original CIE clip
+    marks: 4
+    text: |
+      P, Q and R are hydrocarbons. Mass spectrum of R; two peaks with m/e > 135 in Fig. 6.1.
+      (a) Deduce number of carbon atoms in R. [2]
+      (b) Deduce molecular formula of R. [1]
+      (c) Molecular formula of fragment m/e = 57. [1]
+  - id: Fig-B3
+    type: figure
+    source_loc: B3-spectrum
+    keep: true
+    render: image
+    duplicate_of: null
+    reason: mass spectrum — do not redraw
+    image: overleaf/images/fig-b3-spectrum.png
+  - id: CLIP-A4
+    type: figure
+    source_loc: A4-full-clip
+    keep: false
+    render: image
+    duplicate_of: Fig-A4
+    reason: full paper-clip replaced by typeset stem + cropped field diagram
+    image: images/img-004.png
+  - id: CLIP-A1
+    type: figure
+    source_loc: A1-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A1
+    reason: full paper-clip of typeset Q-A1
+    image: images/img-001.png
+  - id: CLIP-A2
+    type: figure
+    source_loc: A2-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A2
+    reason: full paper-clip of typeset Q-A2
+    image: images/img-002.png
+  - id: CLIP-A3
+    type: figure
+    source_loc: A3-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A3
+    reason: full paper-clip of typeset Q-A3
+    image: images/img-003.png
+  - id: CLIP-A5
+    type: figure
+    source_loc: A5-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A5
+    reason: full paper-clip of typeset Q-A5
+    image: images/img-005.png
+  - id: CLIP-A6
+    type: figure
+    source_loc: A6-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A6
+    reason: full paper-clip of typeset Q-A6
+    image: images/img-006.png
+  - id: CLIP-A7
+    type: figure
+    source_loc: A7-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A7
+    reason: full paper-clip of typeset Q-A7
+    image: images/img-007.png
+  - id: CLIP-A8
+    type: figure
+    source_loc: A8-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A8
+    reason: full paper-clip of typeset Q-A8
+    image: images/img-008.png
+  - id: CLIP-A9
+    type: figure
+    source_loc: A9-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A9
+    reason: full paper-clip of typeset Q-A9
+    image: images/img-009.png
+  - id: CLIP-A10
+    type: figure
+    source_loc: A10-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A10
+    reason: full paper-clip of typeset Q-A10
+    image: images/img-010.png
+  - id: CLIP-A11
+    type: figure
+    source_loc: A11-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A11
+    reason: full paper-clip of typeset Q-A11
+    image: images/img-011.png
+  - id: CLIP-A12
+    type: figure
+    source_loc: A12-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A12
+    reason: full paper-clip of typeset Q-A12
+    image: images/img-012.png
+  - id: CLIP-A13
+    type: figure
+    source_loc: A13-full-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A13
+    reason: full paper-clip of typeset Q-A13
+    image: images/img-013.png
+  - id: CLIP-B1
+    type: figure
+    source_loc: B1-full-clips
+    keep: false
+    render: image
+    duplicate_of: Q-B1
+    reason: full paper-clips replaced by typeset B1
+    image: images/img-014.png
+  - id: CLIP-B2
+    type: figure
+    source_loc: B2-full-clips
+    keep: false
+    render: image
+    duplicate_of: Q-B2
+    reason: full paper-clips (cover-page bleed) replaced by typeset B2
+    image: images/img-020.png
+  - id: ANS-MS
+    type: structured
+    source_loc: 答案区
+    keep: false
+    render: image
+    duplicate_of: null
+    reason: student-no-answers
+    image: images/img-025.png

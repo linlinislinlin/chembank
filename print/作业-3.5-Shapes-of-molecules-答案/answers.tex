@@ -1,0 +1,62 @@
+%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=18mm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\setmainfont{Helvetica Neue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 3.5 Shapes of molecules --- answers}
+\fancyhead[R]{\small CIE 9701}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\newcommand{\msblock}[2]{%
+  \par\vspace{0.8em}%
+  \noindent\begin{minipage}{\textwidth}%
+  {\normalsize\bfseries #1}\par\vspace{0.25em}%
+  \noindent\includegraphics[width=\textwidth,keepaspectratio]{#2}\par
+  \end{minipage}\par
+}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries 3.5 Shapes of molecules homework --- answers}
+\end{center}
+
+{\normalsize\bfseries Section A --- Multiple choice}
+
+\vspace{0.4em}
+A1 = A\\
+A2 = D\\
+A3 = C\\
+A4 = B\\
+A5 = B\\
+A6 = C\\
+A7 = B\\
+A8 = D
+
+\newpage
+
+{\normalsize\bfseries Section B --- Mark scheme clips}
+
+\msblock{B1(a)(iii)  [1]}{cie-9701-2021-on-p21-q1a-iii-ms.png}
+
+\msblock{B2(b)(i)  [2]}{cie-9701-2024-mj-p21-q2b-i-ms.png}
+
+\msblock{B2(b)(ii)  [2]}{cie-9701-2024-mj-p21-q2b-ii-ms.png}
+
+\msblock{B4(e)  [2]}{cie-9701-2023-mj-p21-q1e-ms.png}
+
+\msblock{B5(b)(ii)  [1]}{cie-9701-2025-fm-p22-q1b-ii-ms.png}
+
+\msblock{B6(b)(i)  [2]}{cie-9701-2025-mj-p23-q4b-i-ms.png}
+
+\end{document}

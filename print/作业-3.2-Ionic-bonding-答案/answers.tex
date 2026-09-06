@@ -1,0 +1,63 @@
+%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=18mm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\setmainfont{Helvetica Neue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 3.2 Ionic bonding --- answers}
+\fancyhead[R]{\small CIE 9701}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\newcommand{\msblock}[2]{%
+  \par\vspace{0.8em}%
+  \noindent\begin{minipage}{\textwidth}%
+  {\normalsize\bfseries #1}\par\vspace{0.25em}%
+  \noindent\includegraphics[width=\textwidth,keepaspectratio]{#2}\par
+  \end{minipage}\par
+}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries 3.2 Ionic bonding homework --- answers}
+\end{center}
+
+{\normalsize\bfseries Section A --- Multiple choice}
+
+\vspace{0.4em}
+A1 = B\\
+A2 = C\\
+A3 = B\\
+A4 = C\\
+A5 = D\\
+A6 = B\\
+A7 = C
+
+\newpage
+
+{\normalsize\bfseries Section B --- Mark scheme clips}
+
+\msblock{B1(a)  [2]}{cie-9701-2022-on-p22-q1a-ms.png}
+
+\msblock{B2(a)(i)  [1]}{cie-9701-2021-mj-p22-q2a-i-ms.png}
+
+\msblock{B2(a)(ii)  [2]}{cie-9701-2021-mj-p22-q2a-ii-ms.png}
+
+\msblock{B3(a)(i)  [1]}{cie-9701-2025-mj-p21-q1a-i-ms.png}
+
+\msblock{B3(a)(iii)  [1]}{cie-9701-2025-mj-p21-q1a-iii-ms.png}
+
+\msblock{B4(a)(i)  [1]}{cie-9701-2022-on-p23-q3a-i-ms.png}
+
+\msblock{B5(c)(ii)  [2]}{cie-9701-2025-mj-p23-q2c-ii-ms.png}
+
+\end{document}

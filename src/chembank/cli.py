@@ -27,6 +27,7 @@ from chembank.registry import (
     paper_kind,
     parse_paper_ref,
     resolve_existing,
+    resolve_registry_path,
     write_manifest,
 )
 from chembank.select import load_rules, select_questions, write_pick
@@ -161,49 +162,61 @@ def _cmd_ms_key(args: argparse.Namespace) -> int:
     return 0
 
 
-def _resolve_vault_arg(args: argparse.Namespace, *, paper: int | str | None) -> Path:
-    """Use explicit --vault, else auto-detect from paper number."""
+def _resolve_vault_arg(
+    args: argparse.Namespace, *, paper: int | str | None, syllabus_code: str = "9701"
+) -> Path:
+    """Use explicit --vault, else auto-detect from paper number + syllabus."""
     if getattr(args, "vault", None):
         return Path(args.vault)
     if paper is not None:
-        return default_vault_for_paper(paper)
+        return default_vault_for_paper(paper, syllabus_code)
     return Path("vault")
 
 
 def _resolve_export_md_arg(
-    args: argparse.Namespace, *, paper: int | str | None
+    args: argparse.Namespace,
+    *,
+    paper: int | str | None,
+    syllabus_code: str = "9701",
 ) -> Path | None:
     if getattr(args, "export_md", None) is not None:
-        # argparse may set default=""; treat empty as None (skip dual-write)
         raw = args.export_md
         if raw == "" or raw is False:
             return None
         return Path(raw)
     if paper is not None:
-        return default_questions_dir_for_paper(paper)
+        return default_questions_dir_for_paper(paper, syllabus_code)
     return Path("questions")
 
 
-def _paper_from_qp_or_draft(qp: Path | None, draft: Path | None) -> int | str | None:
-    """Best-effort paper number from QP stem or draft folder name."""
+def _ref_from_qp_or_draft(qp: Path | None, draft: Path | None):
+    """Best-effort PaperRef from QP stem or draft folder name."""
+    from chembank.registry import PaperRef
+
     for cand in (qp, draft):
         if cand is None:
             continue
         try:
-            ref = parse_paper_ref(Path(cand).stem if Path(cand).suffix else Path(cand).name)
-            return ref.paper
+            return parse_paper_ref(Path(cand).stem if Path(cand).suffix else Path(cand).name)
         except ValueError:
             continue
     return None
 
 
+def _paper_from_qp_or_draft(qp: Path | None, draft: Path | None) -> int | str | None:
+    ref = _ref_from_qp_or_draft(qp, draft)
+    return None if ref is None else ref.paper
+
+
 def _cmd_export_vault(args: argparse.Namespace) -> int:
     qp = Path(args.question_paper)
     draft = Path(args.draft)
-    paper = _paper_from_qp_or_draft(qp, draft)
-    vault = _resolve_vault_arg(args, paper=paper)
-    export_md = _resolve_export_md_arg(args, paper=paper)
-    kind = paper_kind(paper) if paper is not None else "unknown"
+    ref = _ref_from_qp_or_draft(qp, draft)
+    paper = None if ref is None else ref.paper
+    syl = "9701" if ref is None else ref.syllabus_code
+    vault = _resolve_vault_arg(args, paper=paper, syllabus_code=syl)
+    export_md = _resolve_export_md_arg(args, paper=paper, syllabus_code=syl)
+    kind = paper_kind(paper, syl) if paper is not None else "unknown"
     result = export_paper_to_vault(
         qp_pdf=qp,
         draft_dir=draft,
@@ -232,9 +245,12 @@ def _cmd_export_vault(args: argparse.Namespace) -> int:
 
 def _cmd_export_lo_hubs(args: argparse.Namespace) -> int:
     syllabus = Path(args.syllabus) if args.syllabus else None
+    as_only = not args.all_levels
+    if syllabus and "0620" in syllabus.name:
+        as_only = False
     result = export_all_lo_hubs(
         Path(args.vault),
-        as_only=not args.all_levels,
+        as_only=as_only,
         code=args.code,
         syllabus_path=syllabus,
     )
@@ -253,7 +269,9 @@ def _cmd_er_extract(args: argparse.Namespace) -> int:
     if not args.no_copy:
         reports_dir = Path(args.reports_dir)
         reports_dir.mkdir(parents=True, exist_ok=True)
-        dest_name = suggested_pdf_name(year, session)
+        dest_name = suggested_pdf_name(
+            year, session, str(data.get("syllabus_code") or "9701")
+        )
         dest = reports_dir / dest_name
         if pdf.resolve() != dest.resolve():
             shutil.copy2(pdf, dest)
@@ -318,8 +336,8 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
         ref.draft = args.draft
 
     vault = Path(args.vault) if args.vault else None
-    # Distinguish "user omitted --export-md" (auto) vs explicit path.
     export_md = Path(args.export_md) if args.export_md is not None else None
+    registry = resolve_registry_path(args.registry, ref.syllabus_code)
 
     result = ingest_paper(
         ref,
@@ -330,7 +348,7 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
         export_md=export_md,
         refresh_on_export=not args.no_refresh,
         update_registry=not args.no_registry,
-        registry_path=Path(args.registry) if args.registry else None,
+        registry_path=registry,
     )
     _print_ingest_result(result)
     return 0
@@ -350,7 +368,10 @@ def _cmd_batch(args: argparse.Namespace) -> int:
                 raise SystemExit(
                     f"Batch ref {token!r} must look like s21:12 or 9701_s21_qp_12"
                 )
+        if refs:
+            registry = resolve_registry_path(args.registry, refs[0].syllabus_code)
     else:
+        registry = resolve_registry_path(args.registry, "9701")
         refs = list_registry_papers(registry)
         if args.status:
             want = {s.strip() for s in args.status.split(",") if s.strip()}
@@ -410,11 +431,11 @@ def _cmd_audit(args: argparse.Namespace) -> int:
                 vault = Path("vault")
                 qdir: Path | None = Path("questions")
             else:
-                vault = default_vault_for_paper(pref.paper)
+                vault = default_vault_for_paper(pref.paper, pref.syllabus_code)
                 qdir = (
                     Path(args.export_md)
                     if args.export_md is not None
-                    else default_questions_dir_for_paper(pref.paper)
+                    else default_questions_dir_for_paper(pref.paper, pref.syllabus_code)
                 )
             groups.setdefault((vault, qdir), []).append(str(token))
         result = AuditResult()

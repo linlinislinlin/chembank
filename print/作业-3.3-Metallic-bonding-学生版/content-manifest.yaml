@@ -1,0 +1,312 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/题库/vault/handouts/3.3-metallic-bonding-homework.md
+  title: "AS Chemistry homework · 3.3 Metallic bonding"
+  syllabus: "9701"
+  student_answers: false
+  language: en
+items:
+  - id: H01
+    type: heading
+    source_loc: title
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: AS Chemistry homework · 3.3 Metallic bonding
+  - id: H-META
+    type: instruction
+    source_loc: subtitle
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: CIE 9701 AS Chemistry · 19 marks · about 40 minutes
+  - id: H-TOPIC
+    type: instruction
+    source_loc: topic-line
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: one-line topic replacing 考纲 LO dump
+    text: "Topic: 3.3 metallic bonding; 3.4 LO1 covalent and coordinate (dative) bonding, including Al2Cl6 and NH4+; 3.7 dot-and-cross."
+  - id: LO-DUMP
+    type: heading
+    source_loc: 考纲范围
+    keep: false
+    render: latex
+    duplicate_of: H-TOPIC
+    reason: long 考纲 LO dump replaced by one-line topic H-TOPIC
+    text: syllabus LO list from source Markdown (not printed)
+  - id: INST
+    type: instruction
+    source_loc: homework-instructions
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use CIE language (electrostatic attraction, delocalised electrons, shared pair, coordinate/dative).
+  - id: TBL-MARKS
+    type: table
+    source_loc: marks-table
+    keep: true
+    render: table
+    duplicate_of: null
+    reason: first occurrence
+    text: A MCQ 8; B1 metallic definition 2; B2 Na diagram 1; B3 covalent definition 1; B4 CO coordinate + dots 3; B5 NH4Cl 2; B6 Al2Cl6 2; total 19
+  - id: H-A
+    type: heading
+    source_loc: A-MCQ
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: Section A — Multiple-choice questions (8 marks)
+  - id: Q-A1
+    type: mcq
+    source_loc: A1
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset stem and four short options
+    marks: 1
+    text: A1 · 2023 MJ · P11 · Q2 · Ca vs Ba melting point
+  - id: CLIP-A1
+    type: mcq
+    source_loc: A1-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A1
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-001.png
+  - id: Q-A2
+    type: mcq
+    source_loc: A2
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset three statements plus combination key
+    marks: 1
+    text: A2 · 2021 MJ · P13 · Q36 · Na to Al melting point
+  - id: CLIP-A2
+    type: mcq
+    source_loc: A2-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A2
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-002.png
+  - id: Q-A3
+    type: mcq
+    source_loc: A3
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset stem and four formulae (underlined atoms)
+    marks: 1
+    text: A3 · 2024 MJ · P12 · Q6 · incomplete outer shell
+  - id: CLIP-A3
+    type: mcq
+    source_loc: A3-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A3
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-003.png
+  - id: Q-A4
+    type: mcq
+    source_loc: A4
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset three statements plus combination key
+    marks: 1
+    text: A4 · 2021 FM · P12 · Q34 · dative acceptors
+  - id: CLIP-A4
+    type: mcq
+    source_loc: A4-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A4
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-004.png
+  - id: Q-A5
+    type: mcq
+    source_loc: A5
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset stem and four bonding-type options
+    marks: 1
+    text: A5 · 2024 MJ · P11 · Q5 · bonding in Al2Cl6
+  - id: CLIP-A5
+    type: mcq
+    source_loc: A5-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A5
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-005.png
+  - id: Q-A6
+    type: mcq
+    source_loc: A6
+    keep: true
+    render: image
+    duplicate_of: null
+    reason: four Al2Cl6 vapour structures; keep CIE clip
+    image: images/img-006.png
+    marks: 1
+    text: A6 · 2023 ON · P11 · Q5 · Al2Cl6 vapour structure
+  - id: Q-A7
+    type: mcq
+    source_loc: A7
+    keep: true
+    render: image
+    duplicate_of: null
+    reason: four Al2Cl6 dot-and-cross diagrams; keep CIE clip
+    image: images/img-007.png
+    marks: 1
+    text: A7 · 2022 FM · P12 · Q5 · Al2Cl6 dot-and-cross
+  - id: Q-A8
+    type: mcq
+    source_loc: A8
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset three statements plus combination key
+    marks: 1
+    text: A8 · 2021 ON · P11 · Q35 · Al Si Mg chlorides covalent+dative
+  - id: CLIP-A8
+    type: mcq
+    source_loc: A8-clip
+    keep: false
+    render: image
+    duplicate_of: Q-A8
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-008.png
+  - id: H-B
+    type: heading
+    source_loc: B-structured
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: first occurrence
+    text: Section B — Structured questions (11 marks)
+  - id: Q-B1
+    type: structured
+    source_loc: B1
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset metallic-bonding definition; paper [2]
+    marks: 2
+    text: B1 · 2025 FM · P22 · Q2(a) · define metallic bonding
+  - id: CLIP-B1
+    type: structured
+    source_loc: B1-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B1
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-009.png
+  - id: Q-B2
+    type: structured
+    source_loc: B2
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset sodium bonding-diagram instruction plus drawing space
+    marks: 1
+    text: B2 · 2024 MJ · P22 · Q1(c) · structure and bonding in sodium
+  - id: CLIP-B2
+    type: structured
+    source_loc: B2-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B2
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-010.png
+  - id: Q-B3
+    type: structured
+    source_loc: B3
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset covalent-bond definition
+    marks: 1
+    text: B3 · 2024 MJ · P21 · Q5(a) · define covalent bond
+  - id: CLIP-B3
+    type: structured
+    source_loc: B3-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B3
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-011.png
+  - id: Q-B4i
+    type: structured
+    source_loc: B4i
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset coordinate-bond explanation; shared CO stem with B4ii
+    marks: 1
+    text: B4(i) · 2021 MJ · P22 · Q2(b)(i) · coordinate bond
+  - id: CLIP-B4i
+    type: structured
+    source_loc: B4i-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B4i
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-012.png
+  - id: Q-B4ii
+    type: structured
+    source_loc: B4ii
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset CO dot-and-cross instruction plus drawing space
+    marks: 2
+    text: B4(ii) · 2021 MJ · P22 · Q2(b)(ii) · CO dot-and-cross
+  - id: CLIP-B4ii
+    type: structured
+    source_loc: B4ii-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B4ii
+    reason: repeated CO parent stem; typeset once under B4
+    image: images/img-013.png
+  - id: Q-B5
+    type: structured
+    source_loc: B5
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset NH3+HCl → NH4Cl bonding-diagram instruction
+    marks: 2
+    text: B5 · 2024 MJ · P23 · Q4(a) · NH4Cl ionic covalent coordinate
+  - id: CLIP-B5
+    type: structured
+    source_loc: B5-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B5
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-014.png
+  - id: Q-B6
+    type: structured
+    source_loc: B6
+    keep: true
+    render: latex
+    duplicate_of: null
+    reason: typeset Al2Cl6 bond-types drawing instruction
+    marks: 2
+    text: B6 · 2021 FM · P22 · Q2(e)(i) · all bond types in Al2Cl6
+  - id: CLIP-B6
+    type: structured
+    source_loc: B6-clip
+    keep: false
+    render: image
+    duplicate_of: Q-B6
+    reason: typeset from paper.png; original clip not printed
+    image: images/img-015.png

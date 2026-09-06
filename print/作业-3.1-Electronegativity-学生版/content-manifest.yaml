@@ -1,0 +1,304 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/题库/vault/handouts/3.1-Electronegativity-homework.md
+  title: AS Chemistry homework · 3.1 Electronegativity
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS Chemistry homework · 3.1 Electronegativity
+- id: H-META
+  type: instruction
+  source_loc: subtitle
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: CIE 9701 AS Chemistry · 16 marks · about 35–40 minutes
+- id: H-TOPIC
+  type: instruction
+  source_loc: topic-line
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: one-line topic replacing 考纲 LO dump
+  text: 'Topic: 3.1 Electronegativity and bonding — definition, factors, Periodic Table trends, and using Pauling differences to predict ionic or covalent bonding.'
+- id: LO-DUMP
+  type: heading
+  source_loc: 考纲范围
+  keep: false
+  render: latex
+  duplicate_of: H-TOPIC
+  reason: long 考纲 LO dump replaced by one-line topic H-TOPIC
+  text: 3.1-1 … 3.1-4 learning-outcome list from source Markdown (not printed).
+- id: INST
+  type: instruction
+  source_loc: homework-instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 'Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; give the usual CIE reasons (nuclear charge, atomic radius, shielding). Pauling values are given on the paper where needed.'
+- id: TBL-MARKS
+  type: table
+  source_loc: marks-table
+  keep: true
+  render: table
+  duplicate_of: null
+  reason: first occurrence
+  text: A MCQ 11; B1 2023 FM P22 Q1(a) 3; B2 2023 MJ P22 Q1(b)(ii) 2; total 16
+- id: H-A
+  type: heading
+  source_loc: A-MCQ
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Section A — Multiple-choice questions (11 marks)
+- id: Q-A1
+  type: mcq
+  source_loc: A1
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: four scatter graphs; keep CIE clip (do not redraw)
+  image: images/img-001.png
+  marks: 1
+  text: A1 · 2022 MJ · P12 · Q19 · EN vs atomic radius Na–Si
+- id: Q-A2
+  type: mcq
+  source_loc: A2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset stem, radius table, and A–D (NEW)
+  marks: 1
+  text: A2 · 2023 FM · P12 · Q22 · V/Z atomic vs ionic radius → EN
+- id: CLIP-A2
+  type: mcq
+  source_loc: A2-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A2
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-002.png
+- id: Q-A3
+  type: mcq
+  source_loc: A3
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset Period 3 EN / oxide acid–base table
+  marks: 1
+  text: A3 · 2022 FM · P12 · Q18 · EN trend + oxide acid/base
+- id: CLIP-A3
+  type: mcq
+  source_loc: A3-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A3
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-003.png
+- id: Q-A4
+  type: mcq
+  source_loc: A4
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset At vs I EN / volatility table
+  marks: 1
+  text: A4 · 2023 MJ · P13 · Q17 · At vs I EN down Group 17
+- id: CLIP-A4
+  type: mcq
+  source_loc: A4-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A4
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-004.png
+- id: Q-A5
+  type: mcq
+  source_loc: A5
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: four scatter graphs; keep CIE clip (do not redraw)
+  image: images/img-005.png
+  marks: 1
+  text: A5 · 2025 MJ · P11 · Q20 · EN vs first IE Na–Si
+- id: Q-A6
+  type: mcq
+  source_loc: A6
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: four scatter graphs; keep CIE clip (do not redraw); NEW
+  image: images/img-006.png
+  marks: 1
+  text: A6 · 2025 ON · P14 · Q17 · MP vs EN Mg–P
+- id: Q-A7
+  type: mcq
+  source_loc: A7
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset one-line ΔEN stem and four formulae
+  marks: 1
+  text: A7 · 2022 MJ · P13 · Q5 · smallest ΔEN
+- id: CLIP-A7
+  type: mcq
+  source_loc: A7-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A7
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-007.png
+- id: Q-A8
+  type: mcq
+  source_loc: A8
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset L/M Pauling table and three statements
+  marks: 1
+  text: A8 · 2023 MJ · P13 · Q4 · highest/lowest Period 3 EN
+- id: CLIP-A8
+  type: mcq
+  source_loc: A8-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A8
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-008.png
+- id: Q-A9
+  type: mcq
+  source_loc: A9
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset Pauling EN table and melting-point order table
+  marks: 1
+  text: A9 · 2022 FM · P12 · Q7 · Pauling EN → MP order
+- id: CLIP-A9
+  type: mcq
+  source_loc: A9-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A9
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-009.png
+- id: Q-A10
+  type: mcq
+  source_loc: A10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset stem and four short options (NEW)
+  marks: 1
+  text: A10 · 2021 MJ · P13 · Q6 · bonding never found in elements
+- id: CLIP-A10
+  type: mcq
+  source_loc: A10-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A10
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-010.png
+- id: Q-A11
+  type: mcq
+  source_loc: A11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset three statements and A–D key (NEW)
+  marks: 1
+  text: A11 · 2023 MJ · P12 · Q19 · most EN elements form covalent chlorides
+- id: CLIP-A11
+  type: mcq
+  source_loc: A11-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A11
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-011.png
+- id: H-B
+  type: heading
+  source_loc: B-structured
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Section B — Structured questions (5 marks)
+- id: H-B1
+  type: heading
+  source_loc: B1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B1 · 2023 February/March Paper 22 Question 1(a) (3 marks)
+- id: Q-B1ai
+  type: structured
+  source_loc: B1(a)(i)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset Pauling Table 1.1 + define electronegativity; drop cover page
+  marks: 1
+  text: B1(a)(i) · 2023 FM · P22 · Q1(a)(i) · 1 mark
+- id: CLIP-B1ai
+  type: structured
+  source_loc: B1(a)(i)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B1ai
+  reason: typeset from paper.png; cover-page bleed not printed
+  image: images/img-012.png
+- id: Q-B1aii
+  type: structured
+  source_loc: B1(a)(ii)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset O vs S down Group 16; table already on B1(a)(i)
+  marks: 2
+  text: B1(a)(ii) · 2023 FM · P22 · Q1(a)(ii) · 2 marks
+- id: CLIP-B1aii
+  type: structured
+  source_loc: B1(a)(ii)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B1aii
+  reason: typeset from paper.png; repeated stem/table not printed
+  image: images/img-013.png
+- id: H-B2
+  type: heading
+  source_loc: B2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B2 · 2023 May/June Paper 22 Question 1(b)(ii) (2 marks)
+- id: Q-B2bii
+  type: structured
+  source_loc: B2(b)(ii)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset EN-across-a-period command only; drop cover + unrelated melting-point table
+  marks: 2
+  text: B2(b)(ii) · 2023 MJ · P22 · Q1(b)(ii) · 2 marks
+- id: CLIP-B2bii
+  type: structured
+  source_loc: B2(b)(ii)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B2bii
+  reason: typeset from paper.png; cover and melting-point stem not printed
+  image: images/img-014.png

@@ -1,0 +1,125 @@
+% Student paper — English only. Compact packing. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.15em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.72em]}%
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.12em}
+\setlength{\abovedisplayskip}{0.3em}
+\setlength{\belowdisplayskip}{0.3em}
+
+% Keep each clip with its label. Measure the image first so a question is
+% not started unless the whole block fits (avoids half-empty pages).
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.35em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+  \noindent\usebox0\par
+  \vspace{0.28em}%
+}
+
+\begin{document}
+\sethomework{IGCSE Chemistry homework · 2.1--2.3}{42 marks}
+
+\begin{center}
+{\large\bfseries IGCSE Chemistry homework · 2.1--2.3}\\[0.15em]
+{\small CIE 0620 IGCSE Chemistry (Extended) · 42 marks · 45 minutes · Periodic Table allowed}
+\end{center}
+
+{\small Topics: 2.1 elements, compounds and mixtures · 2.2 atomic structure and the Periodic Table · 2.3 isotopes (including relative atomic mass).
+Section A: 20 MCQ, 20 marks. Section B: B1 8 marks + B2 14 marks. Show working in structured questions.}
+
+\vspace{0.2em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 20 \\
+B1 & 2021 ON Paper 42 Question 3 & 8 \\
+B2 & 2024 ON Paper 41 Question 2 & 14 \\
+\midrule
+ & \textbf{Total} & \textbf{42} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.35em}
+{\large\bfseries Section A --- Multiple-choice questions (20 marks)}\par\vspace{0.25em}
+
+\clipq{A1.}{1}{img-001.png}
+\clipq{A2.}{1}{img-002.png}
+\clipq{A3.}{1}{img-003.png}
+\clipq{A4.}{1}{img-004.png}
+\clipq{A5.}{1}{img-005.png}
+\clipq{A6.}{1}{img-006.png}
+\clipq{A7.}{1}{img-007.png}
+\clipq{A8.}{1}{img-008.png}
+\clipq{A9.}{1}{img-009.png}
+\clipq{A10.}{1}{img-010.png}
+\clipq{A11.}{1}{img-011.png}
+\clipq{A12.}{1}{img-012.png}
+\clipq{A13.}{1}{img-013.png}
+\clipq{A14.}{1}{img-014.png}
+\clipq{A15.}{1}{img-015.png}
+\clipq{A16.}{1}{img-016.png}
+\clipq{A17.}{1}{img-017.png}
+\clipq{A18.}{1}{img-018.png}
+\clipq{A19.}{1}{img-019.png}
+\clipq{A20.}{1}{img-020.png}
+
+\vspace{0.2em}
+{\large\bfseries Section B --- Structured questions (22 marks)}\par\vspace{0.15em}
+{\normalsize\bfseries B1 · 2021 October/November Paper 42 Question 3 (8 marks)}\par\vspace{0.12em}
+
+\clipq{B1(a)}{3}{img-021.png}
+\clipq{B1(b)}{5}{img-022.png}
+
+\vspace{0.15em}
+{\normalsize\bfseries B2 · 2024 October/November Paper 41 Question 2 (14 marks)}\par\vspace{0.12em}
+
+\clipq{B2(a)}{1}{img-023.png}
+\clipq{B2(b)}{1}{img-024.png}
+\clipq{B2(c)}{2}{img-025.png}
+\clipq{B2(d)}{5}{img-026.png}
+\clipq{B2(e)(i)}{2}{img-027.png}
+\clipq{B2(e)(ii)}{2}{img-028.png}
+\vspace{0.35em}
+\clipq{B2(e)(iii)}{1}{img-029.png}
+
+\end{document}

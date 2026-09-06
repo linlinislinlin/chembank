@@ -1,0 +1,34 @@
+# CIE 9701 AS homework: 3.6 Intermolecular forces, electronegativity and bond properties
+# ~40 minutes · 8 MCQ + 6 structured parts (18 marks on the paper; 2025 P22 Q1(d)(i) is [3]).
+#
+#   chembank select pick/3.6-intermolecular-forces-hw.yaml -o build/3.6-intermolecular-forces-hw.json
+#   chembank assemble build/3.6-intermolecular-forces-hw.json -o vault/handouts/3.6-Intermolecular-forces-homework-answers.md --vault vault
+#
+# Curated include_ids. Pedagogical order:
+#   MCQ easy→medium (id-id only → IMF types → H₂O BP anomaly → BP trends → dipole →
+#   ice/H-bond network → ionic vs IMF strength → ice vs liquid water),
+#   then structured: NH₃ H-bond name + diagram → N₂/CO van der Waals table →
+#   forces broken on melting (id-id / pd / H / ionic / covalent) → HF bar-chart anomaly.
+#
+# Gaps: no clean tagged item asks only for surface tension or ice density by name;
+# 3.6-1b is covered indirectly via ethylene glycol / ice (ON P11 Q33) and ice vs water IMF (MJ P12 Q10).
+# 2023 MJ P22 Q1(a)(iii) is tagged 4.2 but assesses id-id (S vs P melting points).
+title: "3.6 Intermolecular forces homework"
+syllabus_codes: ["3.6"]
+preserve_order: true
+include_ids:
+  # A  MCQ · id-id / pd-pd / H-bonding and water anomalies
+  - cie-9701-2021-fm-p12-q5       # only id-id IMFs [1]
+  - cie-9701-2021-mj-p13-q5       # match substance to IMF type (pd-pd, id-id, H-bond) [1]
+  - cie-9701-2024-mj-p11-q8       # H₂O BP anomaly on Group 16 hydride graph (keep graph) [1]
+  - cie-9701-2024-mj-p12-q8       # BP order: alkane / alcohol / thiol [1]
+  - cie-9701-2021-on-p12-q6       # largest overall dipole (keep structures) [1]
+  - cie-9701-2021-on-p11-q33      # ethylene glycol disrupts ice H-bond network [1]
+  - cie-9701-2021-mj-p12-q3       # ionic > H-bond > pd-pd BP ordering (keep structures) [1]
+  - cie-9701-2025-mj-p12-q10      # ice vs water vs steam IMF strength [1]
+  # B  structured
+  - cie-9701-2023-mj-p22-q1b-iii  # name strongest IMF in NH₃(l) [1]
+  - cie-9701-2023-mj-p22-q1b-iv   # draw H-bond between two NH₃ molecules [2]
+  - cie-9701-2021-mj-p22-q2c-iii  # N₂ vs CO: all van der Waals types in table [2]
+  - cie-9701-2025-mj-p22-q1d-i    # forces broken on melting: id-id / pd / H / ionic / covalent [3]
+  - cie-9701-2021-on-p22-q1a-ii   # predict HF BP on bar chart; H-bond explain [2]

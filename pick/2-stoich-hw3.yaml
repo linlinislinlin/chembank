@@ -1,0 +1,30 @@
+# AS 9701 stoichiometry homework 3 · formulae + earlier skills (topics 1–12)
+# ~45 minutes · 18 MCQ
+title: "AS stoichiometry homework 3 · empirical and molecular formulae"
+syllabus_codes: ["2.3", "2.4"]
+preserve_order: true
+include_ids:
+  # 8 Empirical formulae
+  - cie-9701-2025-mj-p14-q2       # empirical formula of butanoic acid
+  - cie-9701-2021-on-p12-q1       # 40.0% C / 6.7% H / 53.3% O
+  - cie-9701-2021-mj-p13-q1       # C, H, O, Cl by mass
+  - cie-9701-2021-mj-p11-q19      # Period 3 oxide from 5.00 g R containing 2.50 g T
+  # 9 Molecular formulae
+  - cie-9701-2021-mj-p12-q32      # hydrocarbon Mr 84: empirical / molecular
+  - cie-9701-2023-fm-p12-q37      # carboxylic acid Mr from gas with Mg
+  - cie-9701-2025-mj-p11-q6       # 2.20 g P: 1.20 g C, 0.20 g H → identity
+  # 10 Hydrated and anhydrous compounds
+  - cie-9701-2023-on-p11-q4       # hydrated Na2CO3, mass of water (v04)
+  - cie-9701-2023-fm-p12-q15      # CoSO4·xH2O from mass loss
+  - cie-9701-2025-mj-p12-q11      # LiOH·xH2O from crucible masses
+  # 11 Combustion analysis
+  - cie-9701-2022-fm-p12-q3       # 2.00 g X → 4.00 g CO2 + 1.63 g H2O (v04)
+  - cie-9701-2021-fm-p12-q3       # 1.00 g Q → 3.22 g CO2
+  - cie-9701-2022-mj-p12-q4       # 3.52 g CO2 + 1.44 g H2O → structure
+  # 12 Chemical formulae and equations
+  - cie-9701-2024-mj-p12-q1       # which pair of formulae is correct (v04)
+  - cie-9701-2023-mj-p11-q14      # ClO2 + NaOH: mole ratio of salts (v04)
+  # Earlier skills (topics 1–7): combining masses, reacting masses, limiting + equations
+  - cie-9701-2021-fm-p12-q4       # In + O combining masses → old Ar of In
+  - cie-9701-2022-mj-p13-q21      # 4.00 g Group 2 nitrate → 1.37 g residue
+  - cie-9701-2021-mj-p13-q9       # Cu + dilute HNO3: moles of acid per 3 mol Cu

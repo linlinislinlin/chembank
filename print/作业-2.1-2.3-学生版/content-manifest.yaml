@@ -1,0 +1,379 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/题库/vault-igcse/handouts/作业-2.1-2.3-学生版.md
+  title: IGCSE Chemistry homework · 2.1–2.3
+  syllabus: '0620'
+  student_answers: false
+  language: zh-en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: IGCSE Chemistry homework · 2.1–2.3 原子与同位素
+- id: H-META
+  type: instruction
+  source_loc: subtitle
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: CIE 0620 IGCSE Chemistry (Extended) · 42 marks · 45 minutes
+- id: H-TOPIC
+  type: instruction
+  source_loc: topic-line
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: one-line topic replacing 考纲 LO dump
+  text: 'Topics: 2.1 elements / compounds / mixtures · 2.2 atomic structure and the Periodic Table · 2.3
+    isotopes (including relative atomic mass).'
+- id: LO-DUMP
+  type: heading
+  source_loc: 考纲范围
+  keep: false
+  render: latex
+  duplicate_of: H-TOPIC
+  reason: long 考纲 LO dump replaced by one-line topic H-TOPIC
+  text: 2.1-C1 … 2.3-S4 learning-outcome list from source Markdown (not printed).
+- id: INST
+  type: instruction
+  source_loc: 考试说明
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 'Section A: 20 multiple-choice questions, 1 mark each (20 marks). Section B: 2 structured questions
+    (22 marks: B1 8 + B2 14). A Periodic Table may be used. Show working on structured questions.'
+- id: TBL-MARKS
+  type: table
+  source_loc: marks-table
+  keep: true
+  render: table
+  duplicate_of: null
+  reason: first occurrence
+  text: A MCQ 20; B1 2021 ON P42 Q3 8; B2 2024 ON P41 Q2 14; total 42
+- id: H-A
+  type: heading
+  source_loc: 第A部分
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 第 A 部分 — 选择题（20 分）
+- id: Q-A1
+  type: mcq
+  source_loc: A1
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-001.png
+  marks: 1
+  text: A1 · 2023 MJ · P23 · Q2 · 1 mark
+- id: Q-A2
+  type: mcq
+  source_loc: A2
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-002.png
+  marks: 1
+  text: A2 · 2023 MJ · P21 · Q2 · 1 mark
+- id: Q-A3
+  type: mcq
+  source_loc: A3
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-003.png
+  marks: 1
+  text: A3 · 2025 ON · P22 · Q4 · 1 mark
+- id: Q-A4
+  type: mcq
+  source_loc: A4
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-004.png
+  marks: 1
+  text: A4 · 2024 MJ · P21 · Q4 · 1 mark
+- id: Q-A5
+  type: mcq
+  source_loc: A5
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-005.png
+  marks: 1
+  text: A5 · 2024 ON · P21 · Q3 · 1 mark
+- id: Q-A6
+  type: mcq
+  source_loc: A6
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-006.png
+  marks: 1
+  text: A6 · 2023 ON · P23 · Q3 · 1 mark
+- id: Q-A7
+  type: mcq
+  source_loc: A7
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-007.png
+  marks: 1
+  text: A7 · 2025 ON · P21 · Q3 · 1 mark
+- id: Q-A8
+  type: mcq
+  source_loc: A8
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-008.png
+  marks: 1
+  text: A8 · 2021 ON · P22 · Q4 · 1 mark
+- id: Q-A9
+  type: mcq
+  source_loc: A9
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-009.png
+  marks: 1
+  text: A9 · 2025 MJ · P22 · Q4 · 1 mark
+- id: Q-A10
+  type: mcq
+  source_loc: A10
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-010.png
+  marks: 1
+  text: A10 · 2023 MJ · P21 · Q5 · 1 mark
+- id: Q-A11
+  type: mcq
+  source_loc: A11
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-011.png
+  marks: 1
+  text: A11 · 2024 MJ · P21 · Q5 · 1 mark
+- id: Q-A12
+  type: mcq
+  source_loc: A12
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-012.png
+  marks: 1
+  text: A12 · 2023 MJ · P22 · Q2 · 1 mark
+- id: Q-A13
+  type: mcq
+  source_loc: A13
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-013.png
+  marks: 1
+  text: A13 · 2021 MJ · P22 · Q8 · 1 mark
+- id: Q-A14
+  type: mcq
+  source_loc: A14
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-014.png
+  marks: 1
+  text: A14 · 2023 MJ · P21 · Q3 · 1 mark
+- id: Q-A15
+  type: mcq
+  source_loc: A15
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-015.png
+  marks: 1
+  text: A15 · 2024 MJ · P22 · Q3 · 1 mark
+- id: Q-A16
+  type: mcq
+  source_loc: A16
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-016.png
+  marks: 1
+  text: A16 · 2025 ON · P21 · Q5 · 1 mark
+- id: Q-A17
+  type: mcq
+  source_loc: A17
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-017.png
+  marks: 1
+  text: A17 · 2025 ON · P23 · Q4 · 1 mark
+- id: Q-A18
+  type: mcq
+  source_loc: A18
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-018.png
+  marks: 1
+  text: A18 · 2023 ON · P22 · Q4 · 1 mark
+- id: Q-A19
+  type: mcq
+  source_loc: A19
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-019.png
+  marks: 1
+  text: A19 · 2025 MJ · P21 · Q4 · 1 mark
+- id: Q-A20
+  type: mcq
+  source_loc: A20
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-020.png
+  marks: 1
+  text: A20 · 2025 ON · P23 · Q6 · 1 mark
+- id: H-B
+  type: heading
+  source_loc: 第B部分
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 第 B 部分 — 简答题（22 分）
+- id: H-B1
+  type: heading
+  source_loc: B1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B1 · 2021 October/November Paper 42 Question 3 (8 marks)
+- id: Q-B1a
+  type: structured
+  source_loc: B1(a)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-021.png
+  marks: 3
+  text: B1(a) · 2021 ON · P42 · Q3a · 3 marks
+- id: Q-B1b
+  type: structured
+  source_loc: B1(b)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-022.png
+  marks: 5
+  text: B1(b) · 2021 ON · P42 · Q3b · 5 marks
+- id: H-B2
+  type: heading
+  source_loc: B2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B2 · 2024 October/November Paper 41 Question 2 (14 marks)
+- id: Q-B2a
+  type: structured
+  source_loc: B2(a)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-023.png
+  marks: 1
+  text: B2(a) · 2024 ON · P41 · Q2a · 1 mark
+- id: Q-B2b
+  type: structured
+  source_loc: B2(b)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-024.png
+  marks: 1
+  text: B2(b) · 2024 ON · P41 · Q2b · 1 mark
+- id: Q-B2c
+  type: structured
+  source_loc: B2(c)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-025.png
+  marks: 2
+  text: B2(c) · 2024 ON · P41 · Q2c · 2 marks
+- id: Q-B2d
+  type: structured
+  source_loc: B2(d)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-026.png
+  marks: 5
+  text: B2(d) · 2024 ON · P41 · Q2d · 5 marks
+- id: Q-B2ei
+  type: structured
+  source_loc: B2(e)(i)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-027.png
+  marks: 2
+  text: B2(e)(i) · 2024 ON · P41 · Q2e-i · 2 marks
+- id: Q-B2eii
+  type: structured
+  source_loc: B2(e)(ii)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-028.png
+  marks: 2
+  text: B2(e)(ii) · 2024 ON · P41 · Q2e-ii · 2 marks
+- id: Q-B2eiii
+  type: structured
+  source_loc: B2(e)(iii)
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first occurrence; CIE paper-clip (do not OCR)
+  image: images/img-029.png
+  marks: 1
+  text: B2(e)(iii) · 2024 ON · P41 · Q2e-iii · 1 mark

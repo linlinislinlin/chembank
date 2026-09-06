@@ -1,0 +1,24 @@
+# AS 9701 stoichiometry homework 1 · foundations (topics 1–4)
+# ~40 minutes · 14 MCQ · Paper 1 only
+title: "AS stoichiometry homework 1 · mole foundations"
+syllabus_codes: ["2.1", "2.2", "2.4"]
+preserve_order: true
+include_ids:
+  # 1 Masses of atoms and molecules
+  - cie-9701-2021-on-p11-q1       # neon mass spectrum → Ar
+  - cie-9701-2022-mj-p13-q39      # sulfur isotope mix → Ar
+  - cie-9701-2024-mj-p13-q7       # Mr of a volatile liquid from syringe data
+  # 2 The mole and the Avogadro constant
+  - cie-9701-2021-mj-p12-q1       # which statement about NA is correct
+  - cie-9701-2021-mj-p11-q1       # largest number of H atoms (v04)
+  - cie-9701-2022-mj-p12-q3       # which sample contains the most iodine
+  - cie-9701-2025-on-p11-q3       # 9.03×10^23 oxygen atoms
+  # 3 Reacting masses
+  - cie-9701-2022-on-p12-q2       # Na2O2 to remove 2.4 dm3 CO2 (v04)
+  - cie-9701-2022-mj-p11-q19      # 0.100 mol Na / Mg / P + excess O2
+  - cie-9701-2023-mj-p12-q5       # 1.0 g samples + acid, most CO2
+  - cie-9701-2021-on-p11-q2       # NH4NO3 decomposition: identity of the gas
+  # 4 Complete combustion
+  - cie-9701-2021-mj-p11-q6       # 12 dm3 propane → mass of O2 (v04)
+  - cie-9701-2022-on-p11-q2       # C3H6 + C4H6 mixture: moles of O2
+  - cie-9701-2023-mj-p12-q4       # 1 mol hexane: moles of products

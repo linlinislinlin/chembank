@@ -1,0 +1,54 @@
+# CIE 9701 AS exam Paper B: Topic 1 Atomic Structure + element mass spectrometry
+# AB twin of pick/1-atomic-structure-exam.yaml (Paper A)
+# 13 MCQ + 3 Paper 2 structured items = 33 marks · ~40–45 min
+#
+#   chembank select pick/1-atomic-structure-exam-B.yaml -o build/1-atomic-structure-exam-B.json
+#   chembank assemble build/1-atomic-structure-exam-B.json -o vault/handouts/1-atomic-structure-exam-B.md --vault vault
+#
+# 9701 Paper 1 / Paper 2 only. Curated include_ids (author order = exam order).
+#
+# Shared with Paper A (4 MCQ IDs — same stem): field, Mg Ar, O vs N IE, successive IE.
+# Remaining items are isomorphic substitutes (same skill, different stem).
+# Excluded vs HW Atomic Structure.pdf (hard) and End-Topic Test IDs (optional).
+title: "AS Chemistry — Topic 1 Atomic Structure (Exam · Paper B)"
+syllabus_codes: ["1.1", "1.2", "1.3", "1.4", "22.2"]
+preserve_order: true
+include_ids:
+  # A  MCQ · 1.1 particles / isotopes / radii
+  - cie-9701-2024-mj-p11-q4       # I-131 negative ion p/n/e  (NEW)
+  - cie-9701-2021-on-p12-q3       # Tc + 56 n → nucleon number  (NEW)
+  - cie-9701-2025-mj-p13-q23      # particles increase in size  (NEW)
+  - cie-9701-2025-mj-p12-q14      # He+ vs proton in electric field  (SHARED A)
+  # A  MCQ · 1.2 / Ar from isotope abundances
+  - cie-9701-2025-on-p11-q40      # 24/25/26 Mg → % of 24Mg  (SHARED A)
+  # A  MCQ · 1.3 configuration / orbitals / unpaired
+  - cie-9701-2025-on-p11-q1       # Al+ electronic configuration  (NEW)
+  - cie-9701-2025-mj-p11-q14      # 3p orbital statements  (NEW)
+  - cie-9701-2021-mj-p11-q2       # both species one unpaired p  (NEW)
+  # A  MCQ · 1.4 IE
+  - cie-9701-2021-mj-p11-q7       # O vs N spin-pair  (SHARED A)
+  - cie-9701-2023-on-p12-q2       # second IE O vs F  (NEW)
+  - cie-9701-2025-mj-p11-q4       # successive IE → outer config  (SHARED A)
+  - cie-9701-2021-on-p11-q3       # highest fifth IE  (NEW)
+  - cie-9701-2022-fm-p12-q1       # Sr vs K first IE  (NEW)
+  # B1  structured · 2025 MJ P22 Q2 (10) iron isotopes / Ar / config / particles
+  - cie-9701-2025-mj-p22-q2a-i
+  - cie-9701-2025-mj-p22-q2a-ii
+  - cie-9701-2025-mj-p22-q2b
+  - cie-9701-2025-mj-p22-q2c
+  - cie-9701-2025-mj-p22-q2d
+  - cie-9701-2025-mj-p22-q2e
+  # B2  structured · 2023 MJ P21 Q1(b)–(d) (6) 1s / first IE / successive IE
+  # DELETE 1(a) Table 1.1 Te particles [3] — do not replace in place
+  # (omit 1(e) VSEPR TeF4 and 1(f) hydrolysis — not Topic 1)
+  # Replaces classroom item 2023 ON P23 Q1 (P/S/Cl 3p, unpaired, S IE dip)
+  # Paper letters: old (b)(c)(d) → new (a)(b)(c)
+  - cie-9701-2023-mj-p21-q1b
+  - cie-9701-2023-mj-p21-q1c
+  - cie-9701-2023-mj-p21-q1d-i
+  - cie-9701-2023-mj-p21-q1d-ii
+  # B3  structured · 2025 MJ P24 Q6(c) (4) n(C) from M/M+1 + molecular formula + fragment
+  # Paper 2 variant 24; appended at end (not a replacement for deleted B2(a))
+  - cie-9701-2025-mj-p24-q6c-i
+  - cie-9701-2025-mj-p24-q6c-ii
+  - cie-9701-2025-mj-p24-q6c-iii

@@ -1,0 +1,95 @@
+title: "3.6 Intermolecular forces homework"
+source_md: vault/handouts/3.6-Intermolecular-forces-homework.md
+total_marks: 18
+items:
+  - id: A1
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-001.png
+    source: "2021 FM Paper 12 Question 5"
+    keep: true
+  - id: A2
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-002.png
+    source: "2021 MJ Paper 13 Question 5"
+    keep: true
+  - id: A3
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-003.png
+    source: "2024 MJ Paper 11 Question 8"
+    keep: true
+  - id: A4
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-004.png
+    source: "2024 MJ Paper 12 Question 8"
+    keep: true
+  - id: A5
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-005.png
+    source: "2021 ON Paper 12 Question 6"
+    keep: true
+  - id: A6
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-006.png
+    source: "2021 ON Paper 11 Question 33"
+    keep: true
+  - id: A7
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-007.png
+    source: "2021 MJ Paper 12 Question 3"
+    keep: true
+  - id: A8
+    kind: mcq
+    marks: 1
+    output: clip
+    image: img-008.png
+    source: "2025 MJ Paper 12 Question 10"
+    keep: true
+  - id: B1
+    kind: structured
+    marks: 1
+    output: clip
+    image: img-009.png
+    source: "2023 MJ Paper 22 Question 1(b)(iii)"
+    keep: true
+  - id: B2
+    kind: structured
+    marks: 2
+    output: clip
+    image: img-010.png
+    source: "2023 MJ Paper 22 Question 1(b)(iv)"
+    keep: true
+  - id: B3
+    kind: structured
+    marks: 2
+    output: clip
+    image: img-011.png
+    source: "2021 MJ Paper 22 Question 2(c)(iii)"
+    keep: true
+  - id: B4
+    kind: structured
+    marks: 3
+    output: clip
+    image: img-012.png
+    source: "2025 MJ Paper 22 Question 1(d)(i)"
+    keep: true
+  - id: B5
+    kind: structured
+    marks: 2
+    output: clip
+    image: img-013.png
+    source: "2021 ON Paper 22 Question 1(a)(ii)"
+    keep: true

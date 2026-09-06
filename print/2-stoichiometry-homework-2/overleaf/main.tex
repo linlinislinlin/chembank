@@ -1,0 +1,284 @@
+% Chemistry Homework Formatter — student paper preamble
+% Default wrapper is English (CIE papers). Load ctex only if the teacher asks for Chinese.
+% Compiler: XeLaTeX. Overleaf: upload this file as main.tex plus the images/ folder.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.25em,topsep=0.25em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.12em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.3em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[1.05em]}%
+}
+
+% Fallback if pgffor is missing: comment \answerlines and use \vspace instead.
+\usepackage{pgffor}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+% Measure the image, then break only if the whole labelled clip will not fit.
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.35em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+  \noindent\usebox0\par
+  \vspace{0.28em}%
+}
+
+\newcommand{\qfigure}[1]{%
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\qfigurebig}[1]{%
+  \sbox0{\includegraphics[width=\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.12em}
+
+\setlist[enumerate]{leftmargin=1.55em,itemsep=0.06em,topsep=0.12em}
+\newcommand{\qhead}[1]{%
+  \par\vspace{0.38em}%
+  {\normalsize\bfseries #1}\par\vspace{0.12em}%
+}
+\newcommand{\mcq}[1]{%
+  \par\noindent\textbf{#1.}\enspace\ignorespaces
+}
+\newcommand{\mcqend}{\hfill{[1]}\par}
+\newcommand{\optrow}[4]{%
+\par\noindent{\small
+\begin{tabular}{@{}p{0.48\linewidth}@{}p{0.48\linewidth}@{}}
+\textbf{A}\; #1 & \textbf{B}\; #2 \\[0.12em]
+\textbf{C}\; #3 & \textbf{D}\; #4
+\end{tabular}}\par
+}
+\newcommand{\optlist}[4]{%
+\par
+\begin{enumerate}[label=\textbf{\Alph*.}, leftmargin=1.55em, itemsep=0.05em, topsep=0.08em]
+\item #1
+\item #2
+\item #3
+\item #4
+\end{enumerate}
+}
+\newcommand{\qfig}[2][0.58]{%
+\par
+\begin{center}\vspace{-0.1em}%
+\includegraphics[width=#1\linewidth,keepaspectratio]{#2}%
+\end{center}\vspace{-0.1em}%
+}
+
+\begin{document}
+\sethomework{AS stoichiometry homework 2 · limiting reagent and yield}{15 marks}
+
+\begin{center}
+{\large\bfseries AS stoichiometry homework 2 · limiting reagent and yield}\\[0.2em]
+{\small CIE 9701 AS Chemistry · 15 MCQ · 15 marks}
+\end{center}
+
+\noindent Name: \underline{\hspace{5.8cm}} \quad Class: \underline{\hspace{2.6cm}} \quad Date: \underline{\hspace{2.8cm}}
+
+\vspace{0.25em}
+{\small Topics: 5 excess / limiting reagent · 6 precise $A_\mathrm{r}$ · 7 percentage yield and purity. Later questions also use earlier skills (mole, reacting masses, combustion).
+
+Circle \textbf{one} letter (A--D) for each question. Show working. Calculators and a Periodic Table may be used.}
+\vspace{0.15em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{5 · Excess and limiting reagent}
+\mcq{1}%
+Calcium oxide and magnesium sulfide each react with acid.
+\begin{align*}
+\ce{CaO(s) + 2H+(aq) &-> Ca^{2+}(aq) + H2O(l)}\\
+\ce{MgS(s) + 2H+(aq) &-> Mg^{2+}(aq) + H2S(g)}
+\end{align*}
+A mixture of these two compounds, X, reacts with exactly 0.125\,mol of dilute hydrochloric acid.
+
+The amount of hydrogen sulfide formed is 0.0250\,mol.
+
+What was the mass of calcium oxide in mixture X?
+\optrow{1.4\,g}{2.1\,g}{2.8\,g}{4.2\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{2}%
+A 3.7\,g sample of copper(II) carbonate is added to 25\,cm$^3$ of 2.0\,mol\,dm$^{-3}$ hydrochloric acid.
+
+Which volume of gas is produced at room conditions?
+\optrow{0.60\,dm$^3$}{0.72\,dm$^3$}{1.20\,dm$^3$}{2.40\,dm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{3}%
+Methane and steam react to produce hydrogen.
+\[\ce{CH4(g) + 2H2O(g) -> CO2(g) + 4H2(g)}\]
+0.80\,g of methane and 1.35\,g of steam react. One of the reactants is used up.
+
+Which volume of hydrogen, measured at room conditions, will be produced?
+\optrow{1.80\,dm$^3$}{3.60\,dm$^3$}{4.80\,dm$^3$}{7.20\,dm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{4}%
+In separate experiments, 5.0\,g samples of each of four s-block metals are added to an excess of water. The gas evolved is collected and its volume measured under the same conditions of temperature and pressure for each sample.
+
+Which metal produces the largest volume of gas?
+\optlist{calcium}{potassium}{rubidium}{strontium}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{5}%
+Crystals of copper(II) nitrate are prepared by adding an excess of malachite to nitric acid.
+
+The formula of malachite is \ce{Cu(OH)2.CuCO3}. ($M_\mathrm{r}=221.0$)
+
+12.0\,g of malachite is added to 30.0\,cm$^3$ of 1.50\,mol\,dm$^{-3}$ nitric acid.
+
+Which mass of malachite is left unreacted when the reaction is complete?
+\optrow{2.05\,g}{2.49\,g}{7.03\,g}{9.51\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{6}%
+X is an impure sample of a Group 2 metal carbonate, \ce{MCO3}. X contains 57\% by mass of \ce{MCO3}. The impurities in X do \textbf{not} react with hydrochloric acid.
+
+7.4\,g of X is reacted with an excess of dilute hydrochloric acid.
+
+0.050\,mol of the Group 2 metal chloride is produced.
+
+What is the identity of the Group 2 metal?
+\optrow{\ce{Mg}}{\ce{Ca}}{\ce{Sr}}{\ce{Ba}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{7}%
+In an experiment, 0.600\,mol of chlorine gas, \ce{Cl2}, is reacted with an excess of hot aqueous sodium hydroxide. One of the products is \ce{NaClO3}.
+
+Which mass of \ce{NaClO3} is formed?
+\optrow{21.3\,g}{44.7\,g}{63.9\,g}{128\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{6 · Significant figures / precise $A_\mathrm{r}$}
+\mcq{8}%
+The relative atomic mass of antimony is 121.76.
+
+Antimony has \textbf{two} isotopes. The mass numbers of the two isotopes differ by two. The isotope with the lower mass number is the more abundant.
+
+What is the percentage abundance of the isotope with the \textbf{higher} mass number?
+\optrow{12\%}{38\%}{62\%}{88\%}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{9}%
+A sample of magnesium contains the isotopes \ce{^{24}Mg}, \ce{^{25}Mg} and \ce{^{26}Mg} only.
+
+The percentage abundance of \ce{^{25}Mg} and \ce{^{26}Mg} is the same.
+
+The relative atomic mass of magnesium in the sample is 24.3.
+
+What is the percentage abundance of \ce{^{24}Mg}?
+\optrow{10\%}{20\%}{60\%}{80\%}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{7 · Percentage yield and purity}
+\mcq{10}%
+0.200\,mol ethanenitrile reacts with an excess of dilute sodium hydroxide. The reaction produces organic compound S and ammonia gas only.
+
+The reaction has an 80.0\% yield.
+
+Which mass of S is produced?
+\optrow{9.60\,g}{13.1\,g}{15.4\,g}{16.4\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{11}%
+A piece of rock has a mass of 2.00\,g. It contains calcium carbonate, but no other basic substances. It neutralises exactly 36.0\,cm$^3$ of 0.500\,mol\,dm$^{-3}$ hydrochloric acid.
+
+What is the percentage by mass of calcium carbonate in the 2.00\,g piece of rock?
+\optrow{22.5\%}{45.0\%}{72.0\%}{90.1\%}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{12}%
+A sample of 2.30\,g of ethanol is mixed with an excess of aqueous acidified potassium dichromate(VI). The reaction mixture is boiled under reflux for one hour. The required organic product is then collected by distillation. The yield of product is 60.0\%.
+
+Which mass of product is collected?
+\optrow{1.32\,g}{1.38\,g}{1.80\,g}{3.00\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{Earlier skills · mole, reacting masses, combustion}
+\mcq{13}%
+Which sample contains the same number of the named species as the number of molecules in 35.5\,g of chlorine?
+\optlist{atoms in 16\,g of sulfur}{atoms in 23\,g of sodium}{ions in 74.5\,g of potassium chloride}{molecules in 88\,g of carbon dioxide}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{14}%
+A 5.00\,g sample of an anhydrous Group 2 metal nitrate loses 3.29\,g in mass when heated strongly.
+
+Which metal is present?
+\optrow{magnesium}{calcium}{strontium}{barium}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{15}%
+An organic molecule W contains 3 carbon atoms. It requires 4.5 molecules of oxygen for complete combustion.
+
+What could W be?
+\optrow{propane}{propanoic acid}{propanone}{propan-1-ol}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\end{document}

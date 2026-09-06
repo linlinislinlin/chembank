@@ -1,0 +1,33 @@
+# CIE 9701 AS homework: 3.1 Electronegativity and bonding
+# ~35–40 minutes · 11 MCQ + 3 structured parts (16 marks on the paper).
+#
+#   chembank select pick/3.1-en-bonding-hw.yaml -o build/3.1-en-bonding-hw.json
+#   chembank assemble build/3.1-en-bonding-hw.json -o vault/handouts/3.1-Electronegativity-homework-answers.md --vault vault
+#
+# Curated include_ids. Pedagogical order:
+#   MCQ easy→medium (trends / factors / graphs, then Pauling ΔEN → bond type),
+#   then structured: define + explain down a group + explain across a period.
+#
+# Several of these assess 3.1 but are tagged 9.1 / 9.2 / 2.2 / 1.4 in the corpus.
+# include_ids skips those filters so the handout can still follow the assessed skill.
+title: "3.1 Electronegativity homework"
+syllabus_codes: ["3.1"]
+preserve_order: true
+include_ids:
+  # A  MCQ · trends and factors
+  - cie-9701-2022-mj-p12-q19      # EN vs atomic radius, Na–Si (graphs)
+  - cie-9701-2023-fm-p12-q22      # NEW: V/Z atomic vs ionic radius → EN
+  - cie-9701-2022-fm-p12-q18      # EN increases across Period 3 (also oxide acid/base)
+  - cie-9701-2023-mj-p13-q17      # At vs I: EN down Group 17
+  - cie-9701-2025-mj-p11-q20      # EN vs first IE, Na–Si (graphs)
+  - cie-9701-2025-on-p14-q17      # NEW: MP vs EN, Mg–P (graphs)
+  # A  MCQ · Pauling difference → ionic vs covalent
+  - cie-9701-2022-mj-p13-q5       # smallest ΔEN (LiBr vs KF/KBr/LiF)
+  - cie-9701-2023-mj-p13-q4       # highest/lowest Period 3 EN; ionic compound
+  - cie-9701-2022-fm-p12-q7       # Pauling EN → melting-point order XZ / YZ / Z2
+  - cie-9701-2021-mj-p13-q6       # NEW: ionic bonding never found in elements
+  - cie-9701-2023-mj-p12-q19      # NEW: two most EN elements → covalent chlorides
+  # B  structured · 2023 FM P22 Q1(a) + 2023 MJ P22 Q1(b)(ii)
+  - cie-9701-2023-fm-p22-q1a-i    # define electronegativity
+  - cie-9701-2023-fm-p22-q1a-ii   # O vs S (down group; paper [2], JSON marks field is 1)
+  - cie-9701-2023-mj-p22-q1b-ii   # why EN increases across a period

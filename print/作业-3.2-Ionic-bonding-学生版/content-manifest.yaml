@@ -1,0 +1,342 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/题库/vault/handouts/3.2-Ionic-bonding-homework.md
+  title: AS Chemistry homework · 3.2 Ionic bonding
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS Chemistry homework · 3.2 Ionic bonding
+- id: H-META
+  type: instruction
+  source_loc: subtitle
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: CIE 9701 AS Chemistry · 17 marks · about 40 minutes
+- id: H-TOPIC
+  type: instruction
+  source_loc: topic-line
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: one-line topic replacing 考纲 LO dump
+  text: 'Topic: 3.2 Ionic bonding — electrostatic attraction between oppositely charged ions, and describing ionic bonding in NaCl, MgO and related giant ionic compounds.'
+- id: LO-DUMP
+  type: heading
+  source_loc: 考纲范围
+  keep: false
+  render: latex
+  duplicate_of: H-TOPIC
+  reason: long 考纲 LO dump replaced by one-line topic H-TOPIC
+  text: 3.2-1 and 3.2-2 learning-outcome list from source Markdown (not printed).
+- id: INST
+  type: instruction
+  source_loc: homework-instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 'Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use CIE language (electrostatic attraction, cations/anions, giant ionic lattice, mobile ions when molten).'
+- id: TBL-MARKS
+  type: table
+  source_loc: marks-table
+  keep: true
+  render: table
+  duplicate_of: null
+  reason: first occurrence
+  text: A MCQ 7; B1 2022 ON P22 Q1(a) 2; B2 2021 MJ P22 Q2(a) 3; B3 2025 MJ P21 Q1(a)(i)+(iii) 2; B4 2022 ON P23 Q3(a)(i) 1; B5 2025 MJ P23 Q2(c)(ii) 2; total 17
+- id: H-A
+  type: heading
+  source_loc: A-MCQ
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Section A — Multiple-choice questions (7 marks)
+- id: Q-A1
+  type: mcq
+  source_loc: A1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset stem and four short options
+  marks: 1
+  text: A1 · 2021 MJ · P13 · Q6 · bonding never found in elements
+- id: CLIP-A1
+  type: mcq
+  source_loc: A1-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A1
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-001.png
+- id: Q-A2
+  type: mcq
+  source_loc: A2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset stem, radius table, and A–D
+  marks: 1
+  text: A2 · 2025 ON · P11 · Q16 · radii → ionic compound
+- id: CLIP-A2
+  type: mcq
+  source_loc: A2-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A2
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-002.png
+- id: Q-A3
+  type: mcq
+  source_loc: A3
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: four NaCl lattice diagrams; keep CIE clip (do not redraw); Overleaf copy cropped to drop CIE Q8 stem
+  image: images/img-003.png
+  marks: 1
+  text: A3 · 2025 MJ · P11 · Q8 · NaCl lattice diagram
+- id: Q-A4
+  type: mcq
+  source_loc: A4
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset NaCl coordination-number table
+  marks: 1
+  text: A4 · 2023 MJ · P11 · Q6 · NaCl coordination 6:6
+- id: CLIP-A4
+  type: mcq
+  source_loc: A4-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A4
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-004.png
+- id: Q-A5
+  type: mcq
+  source_loc: A5
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset stem and four oxide formulae
+  marks: 1
+  text: A5 · 2025 ON · P13 · Q18 · which oxide is simple not giant
+- id: CLIP-A5
+  type: mcq
+  source_loc: A5-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A5
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-005.png
+- id: Q-A6
+  type: mcq
+  source_loc: A6
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset stem and four formulae
+  marks: 1
+  text: A6 · 2025 MJ · P14 · Q12 · ionic + covalent not coordinate
+- id: CLIP-A6
+  type: mcq
+  source_loc: A6-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A6
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-006.png
+- id: Q-A7
+  type: mcq
+  source_loc: A7
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset three statements and A–D combination key
+  marks: 1
+  text: A7 · 2021 ON · P12 · Q35 · NaCl vs SiCl4 melting / water
+- id: CLIP-A7
+  type: mcq
+  source_loc: A7-clip
+  keep: false
+  render: image
+  duplicate_of: Q-A7
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-007.png
+- id: H-B
+  type: heading
+  source_loc: B-structured
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Section B — Structured questions (10 marks)
+- id: H-B1
+  type: heading
+  source_loc: B1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B1 · 2022 October/November Paper 22 Question 1(a) (2 marks)
+- id: Q-B1a
+  type: structured
+  source_loc: B1(a)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset electrostatic species in ionic vs covalent bond
+  marks: 2
+  text: B1(a) · 2022 ON · P22 · Q1(a) · 2 marks
+- id: CLIP-B1a
+  type: structured
+  source_loc: B1(a)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B1a
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-008.png
+- id: H-B2
+  type: heading
+  source_loc: B2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B2 · 2021 May/June Paper 22 Question 2(a) (3 marks)
+- id: Q-B2ai
+  type: structured
+  source_loc: B2(a)(i)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset Li2S stem once + particles in solid lithium sulfide
+  marks: 1
+  text: B2(a)(i) · 2021 MJ · P22 · Q2(a)(i) · 1 mark
+- id: CLIP-B2ai
+  type: structured
+  source_loc: B2(a)(i)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B2ai
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-009.png
+- id: Q-B2aii
+  type: structured
+  source_loc: B2(a)(ii)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset high melting point of Li2S; shared stem already on B2(a)(i)
+  marks: 2
+  text: B2(a)(ii) · 2021 MJ · P22 · Q2(a)(ii) · 2 marks
+- id: CLIP-B2aii
+  type: structured
+  source_loc: B2(a)(ii)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B2aii
+  reason: typeset from paper.png; repeated stem not printed
+  image: images/img-010.png
+- id: H-B3
+  type: heading
+  source_loc: B3
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B3 · 2025 May/June Paper 21 Question 1(a)(i) and (iii) (2 marks)
+- id: Q-B3ai
+  type: structured
+  source_loc: B3(a)(i)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset Na / Na2O bonding names; skip metallic-conductivity (ii)
+  marks: 1
+  text: B3(a)(i) · 2025 MJ · P21 · Q1(a)(i) · 1 mark
+- id: CLIP-B3ai
+  type: structured
+  source_loc: B3(a)(i)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B3ai
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-011.png
+- id: Q-B3aiii
+  type: structured
+  source_loc: B3(a)(iii)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset why molten sodium oxide conducts; shared stem already on B3(a)(i)
+  marks: 1
+  text: B3(a)(iii) · 2025 MJ · P21 · Q1(a)(iii) · 1 mark
+- id: CLIP-B3aiii
+  type: structured
+  source_loc: B3(a)(iii)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B3aiii
+  reason: typeset from paper.png; repeated stem not printed
+  image: images/img-012.png
+- id: H-B4
+  type: heading
+  source_loc: B4
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B4 · 2022 October/November Paper 23 Question 3(a)(i) (1 mark)
+- id: Q-B4ai
+  type: structured
+  source_loc: B4(a)(i)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset giant ionic chlorides from the Period 3 list
+  marks: 1
+  text: B4(a)(i) · 2022 ON · P23 · Q3(a)(i) · 1 mark
+- id: CLIP-B4ai
+  type: structured
+  source_loc: B4(a)(i)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B4ai
+  reason: typeset from paper.png; original clip not printed
+  image: images/img-013.png
+- id: H-B5
+  type: heading
+  source_loc: B5
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: B5 · 2025 May/June Paper 23 Question 2(c)(ii) (2 marks)
+- id: Q-B5cii
+  type: structured
+  source_loc: B5(c)(ii)
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: typeset oxide melting-point table and cation-charge hypothesis; paper [2]
+  marks: 2
+  text: B5(c)(ii) · 2025 MJ · P23 · Q2(c)(ii) · 2 marks
+- id: CLIP-B5cii
+  type: structured
+  source_loc: B5(c)(ii)-clip
+  keep: false
+  render: image
+  duplicate_of: Q-B5cii
+  reason: typeset from paper.png; full-page clip not printed
+  image: images/img-014.png

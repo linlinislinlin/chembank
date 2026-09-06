@@ -1,0 +1,295 @@
+% Chemistry Homework Formatter — student paper preamble
+% Default wrapper is English (CIE papers). Load ctex only if the teacher asks for Chinese.
+% Compiler: XeLaTeX. Overleaf: upload this file as main.tex plus the images/ folder.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.25em,topsep=0.25em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.12em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.3em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[1.05em]}%
+}
+
+% Fallback if pgffor is missing: comment \answerlines and use \vspace instead.
+\usepackage{pgffor}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+% Measure the image, then break only if the whole labelled clip will not fit.
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.35em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+  \noindent\usebox0\par
+  \vspace{0.28em}%
+}
+
+\newcommand{\qfigure}[1]{%
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\qfigurebig}[1]{%
+  \sbox0{\includegraphics[width=\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.12em}
+
+\setlist[enumerate]{leftmargin=1.55em,itemsep=0.06em,topsep=0.12em}
+\newcommand{\qhead}[1]{%
+  \par\vspace{0.38em}%
+  {\normalsize\bfseries #1}\par\vspace{0.12em}%
+}
+\newcommand{\mcq}[1]{%
+  \par\noindent\textbf{#1.}\enspace\ignorespaces
+}
+\newcommand{\mcqend}{\hfill{[1]}\par}
+\newcommand{\optrow}[4]{%
+\par\noindent{\small
+\begin{tabular}{@{}p{0.48\linewidth}@{}p{0.48\linewidth}@{}}
+\textbf{A}\; #1 & \textbf{B}\; #2 \\[0.12em]
+\textbf{C}\; #3 & \textbf{D}\; #4
+\end{tabular}}\par
+}
+\newcommand{\optlist}[4]{%
+\par
+\begin{enumerate}[label=\textbf{\Alph*.}, leftmargin=1.55em, itemsep=0.05em, topsep=0.08em]
+\item #1
+\item #2
+\item #3
+\item #4
+\end{enumerate}
+}
+\newcommand{\qfig}[2][0.58]{%
+\par
+\begin{center}\vspace{-0.1em}%
+\includegraphics[width=#1\linewidth,keepaspectratio]{#2}%
+\end{center}\vspace{-0.1em}%
+}
+
+\begin{document}
+\sethomework{AS stoichiometry homework 4 · solutions and gas volumes}{16 marks}
+
+\begin{center}
+{\large\bfseries AS stoichiometry homework 4 · solutions and gas volumes}\\[0.2em]
+{\small CIE 9701 AS Chemistry · 16 MCQ · 16 marks}
+\end{center}
+
+\noindent Name: \underline{\hspace{5.8cm}} \quad Class: \underline{\hspace{2.6cm}} \quad Date: \underline{\hspace{2.8cm}}
+
+\vspace{0.25em}
+{\small Topics: 13 solutions and concentration · 14 gas volumes at room conditions. Later questions also use earlier skills (mole, empirical formula, hydrates, limiting reagent).
+
+Circle \textbf{one} letter (A--D) for each question. Show working. Calculators and a Periodic Table may be used. For gas volumes, use $24\,\mathrm{dm^3\,mol^{-1}}$ at room conditions (not $pV=nRT$), unless a question gives other conditions.}
+\vspace{0.15em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{13 · Solutions and concentration}
+\mcq{1}%
+Sample X is added to water and made up to a total volume of 200\,cm$^3$. This gives a solution of 0.100\,mol\,dm$^{-3}$ \ce{HCl}.
+
+What is X?
+\optlist{10\,cm$^3$ of 1.00\,mol\,dm$^{-3}$ \ce{HCl}}{30\,cm$^3$ of 0.90\,mol\,dm$^{-3}$ \ce{HCl}}{50\,cm$^3$ of 0.40\,mol\,dm$^{-3}$ \ce{HCl}}{100\,cm$^3$ of 0.30\,mol\,dm$^{-3}$ \ce{HCl}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{2}%
+Which mixture will react to form exactly one mole of water?
+
+{\centering
+{\small
+\begin{tabular}{c cc}
+\toprule
+ & volume 2.00\,mol\,dm$^{-3}$ \ce{H2SO4}\,/\,cm$^3$ & volume 1.00\,mol\,dm$^{-3}$ \ce{NaOH}\,/\,cm$^3$ \\
+\midrule
+\textbf{A} & 250 & 500 \\
+\textbf{B} & 250 & 1000 \\
+\textbf{C} & 500 & 500 \\
+\textbf{D} & 500 & 1000 \\
+\bottomrule
+\end{tabular}}\par}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{3}%
+Citric acid is found in lemon juice.
+\begin{center}citric acid\\[0.15em]\ce{HO2CCH2C(OH)(CO2H)CH2CO2H}\end{center}
+Which volume of 0.40\,mol\,dm$^{-3}$ sodium hydroxide solution is required to neutralise a solution containing 0.0050\,mol of citric acid?
+\optrow{12.5\,cm$^3$}{25.0\,cm$^3$}{37.5\,cm$^3$}{50.0\,cm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{4}%
+Hydrogen peroxide, \ce{H2O2}, decomposes into water and oxygen when a suitable catalyst is added.
+
+20.0\,cm$^3$ of aqueous hydrogen peroxide decomposes to produce 600\,cm$^3$ of oxygen at room conditions.
+
+What is the concentration of the aqueous hydrogen peroxide?
+\optlist{5.00\,mol\,dm$^{-3}$}{2.50\,mol\,dm$^{-3}$}{1.25\,mol\,dm$^{-3}$}{0.625\,mol\,dm$^{-3}$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{5}%
+A washing powder contains sodium hydrogencarbonate, \ce{NaHCO3}, as one of the ingredients.
+
+In a titration, a solution containing 1.00\,g of this washing powder requires 7.15\,cm$^3$ of 0.100\,mol\,dm$^{-3}$ sulfuric acid for complete reaction. The sodium hydrogencarbonate is the only ingredient that reacts with the acid.
+
+What is the percentage by mass of sodium hydrogencarbonate in the washing powder?
+\optrow{3.0\%}{6.0\%}{12.0\%}{24.0\%}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{6}%
+The juice of one lemon reacts completely with 120\,cm$^3$ of 0.50\,mol\,dm$^{-3}$ sodium carbonate solution.
+
+The formula of citric acid is \ce{HOOCCH2C(OH)(COOH)CH2COOH}.
+
+No sodium carbonate is left unreacted.
+
+What is the amount of citric acid in one lemon assuming that it is the only acid in the sample?
+\optrow{0.02\,mol}{0.04\,mol}{0.06\,mol}{0.09\,mol}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{14 · Gas volumes at room conditions}
+\mcq{7}%
+A sample of propane, \ce{C3H8}, with a mass of 9.61\,g is completely combusted in an excess of oxygen under room conditions.
+
+Which volume of carbon dioxide gas is produced?
+\optrow{4.89\,dm$^3$}{5.24\,dm$^3$}{14.7\,dm$^3$}{15.7\,dm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{8}%
+A mixture of 10\,cm$^3$ of methane and 10\,cm$^3$ of ethane was sparked with an excess of oxygen. After cooling, the residual gas was passed through aqueous potassium hydroxide.
+
+All gas volumes were measured at the same temperature and pressure.
+
+Which volume of gas was absorbed by the alkali?
+\optrow{15\,cm$^3$}{20\,cm$^3$}{30\,cm$^3$}{40\,cm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{9}%
+In an experiment, 0.100\,mol of propan-1-ol is burnt completely in 12.0\,dm$^3$ of oxygen, measured at room conditions.
+
+What is the final volume of gas, measured at room conditions?
+\optrow{7.20\,dm$^3$}{8.40\,dm$^3$}{16.80\,dm$^3$}{18.00\,dm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{10}%
+What is the total volume of gas produced, measured at room conditions, when 0.010\,mol of anhydrous magnesium nitrate is completely decomposed by heating?
+\optrow{240\,cm$^3$}{480\,cm$^3$}{600\,cm$^3$}{720\,cm$^3$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{11}%
+The carbonate of an s-block element is reacted with an excess of hydrochloric acid.
+
+0.833\,g of the carbonate releases 200\,cm$^3$ of gas, measured under room conditions.
+
+What is the identity of the metal carbonate?
+\optrow{\ce{Na2CO3}}{\ce{K2CO3}}{\ce{MgCO3}}{\ce{CaCO3}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{12}%
+When 0.010\,mol of a hydrocarbon X reacts with 720\,cm$^3$ of hydrogen at room conditions, an alkane is formed.
+
+What is hydrocarbon X?
+\qfig[0.72]{fig-q12-structures.png}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{Earlier skills · mole, empirical, hydrate, limiting}
+\mcq{13}%
+How many molecules are present in 62\,g of solid white phosphorus, \ce{P4}?
+\optrow{$L$}{$2L$}{$\dfrac{L}{2}$}{$\dfrac{L}{4}$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{14}%
+Hexamine is a crystalline solid used as a fuel in portable stoves.
+
+The diagram shows its skeletal structure.
+\qfig[0.28]{fig-q14-hexamine.png}
+What is the empirical formula of hexamine?
+\optrow{\ce{CH2N}}{\ce{C3H6N2}}{\ce{C4H8N4}}{\ce{C6H12N4}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{15}%
+Barium dithionate, \ce{BaS2O6.2H2O}, is soluble in water.
+
+\ce{S2O6^2-} ions slowly decompose in acidic solution.
+\[\ce{S2O6^{2-}(aq) -> SO2(g) + SO4^{2-}(aq)}\]
+3.513\,g of \ce{BaS2O6.2H2O} is dissolved in water in a 100\,cm$^3$ volumetric flask and the solution made up to the mark with \ce{HCl(aq)}.
+
+At time $x$\,min, a white precipitate of mass 0.661\,g is present in the flask.
+
+What is the concentration of \ce{BaS2O6} in the volumetric flask at time $x$\,min?
+\optrow{0.0077\,mol\,dm$^{-3}$}{0.0090\,mol\,dm$^{-3}$}{0.077\,mol\,dm$^{-3}$}{0.090\,mol\,dm$^{-3}$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{16}%
+An excess of chlorine was bubbled into 100\,cm$^3$ of hot 6.0\,mol\,dm$^{-3}$ sodium hydroxide.
+
+How many moles of sodium chloride would be produced in the reaction?
+\optrow{0.30}{0.50}{0.60}{0.72}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\end{document}

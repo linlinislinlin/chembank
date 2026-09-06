@@ -1,0 +1,25 @@
+# AS 9701 stoichiometry homework 2 · limiting / yield + earlier skills (topics 1–7)
+# ~40 minutes · 15 MCQ
+title: "AS stoichiometry homework 2 · limiting reagent and yield"
+syllabus_codes: ["2.4", "2.2"]
+preserve_order: true
+include_ids:
+  # 5 Excess / limiting reagent
+  - cie-9701-2022-on-p12-q4       # CaO + MgS mixture vs HCl (v04)
+  - cie-9701-2023-on-p12-q4       # 3.7 g CuCO3 vs 25 cm3 2.0 M HCl
+  - cie-9701-2025-on-p11-q4       # 0.80 g CH4 vs 1.35 g steam
+  - cie-9701-2022-mj-p11-q3       # 5.0 g s-block metals + excess water
+  - cie-9701-2025-fm-p12-q2       # excess malachite + HNO3
+  - cie-9701-2024-mj-p13-q1       # impure Group 2 carbonate + HCl
+  - cie-9701-2025-on-p12-q21      # 0.600 mol Cl2 + excess hot NaOH → mass NaClO3
+  # 6 Significant figures / precise Ar from isotope data
+  - cie-9701-2024-mj-p11-q40      # Sb Ar = 121.76 → % of heavier isotope
+  - cie-9701-2025-on-p11-q40      # Mg Ar = 24.3 → % of 25Mg / 26Mg
+  # 7 Percentage yield / percentage purity
+  - cie-9701-2025-mj-p13-q26      # 80.0% yield: mass of product S
+  - cie-9701-2023-mj-p13-q3       # % by mass of CaCO3 in a rock
+  - cie-9701-2022-fm-p12-q31      # mass of organic product from 2.30 g ethanol
+  # Earlier skills (topics 1–4)
+  - cie-9701-2022-on-p11-q1       # same number of species as 35.5 g Cl2
+  - cie-9701-2023-on-p11-q21      # 5.00 g Group 2 nitrate: mass loss
+  - cie-9701-2023-mj-p11-q26      # 3-carbon molecule, 4.5 mol O2 for combustion

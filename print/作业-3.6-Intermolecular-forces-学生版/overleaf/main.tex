@@ -1,0 +1,202 @@
+% Student paper — English; IMF/diagram clips from vault assets. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.5em,itemsep=0.12em,topsep=0.15em,parsep=0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.08em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.62em]}%
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.10em}
+\setlength{\abovedisplayskip}{0.25em}
+\setlength{\belowdisplayskip}{0.25em}
+
+\newcommand{\qhead}[2]{%
+  \par\vspace{0.28em}%
+  \Needspace{4.2em}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+}
+
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.88\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.25em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.06em}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\sourcefoot}[1]{%
+  {\footnotesize\color{gray}#1}\par
+}
+
+\begin{document}
+\sethomework{AS Chemistry homework · 3.6 Intermolecular forces}{18 marks}
+
+\begin{center}
+{\large\bfseries AS Chemistry homework · 3.6 Intermolecular forces}\\[0.12em]
+{\small CIE 9701 AS Chemistry · 18 marks · about 40 minutes}
+\end{center}
+
+{\small Topic: 3.6 Intermolecular forces, electronegativity and bond properties --- hydrogen bonding (\ce{N-H}, \ce{O-H}), van der Waals' forces (id-id, pd-pd), dipole moments, and relative strength of bonding vs intermolecular forces.
+Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use syllabus terminology throughout.}
+
+\vspace{0.15em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 8 \\
+B1 & 2023 MJ Paper 22 Question 1(b)(iii) & 1 \\
+B2 & 2023 MJ Paper 22 Question 1(b)(iv) & 2 \\
+B3 & 2021 MJ Paper 22 Question 2(c)(iii) & 2 \\
+B4 & 2025 MJ Paper 22 Question 1(d)(i) & 3 \\
+B5 & 2021 ON Paper 22 Question 1(a)(ii) & 2 \\
+\midrule
+ & \textbf{Total} & \textbf{18} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.25em}
+{\large\bfseries Section A --- Multiple-choice questions (8 marks)}\par
+
+\clipq{A1.}{1}{img-001.png}
+\sourcefoot{2021 FM Paper 12 Question 5}
+
+\clipq{A2.}{1}{img-002.png}
+\sourcefoot{2021 MJ Paper 13 Question 5}
+
+\clipq{A3.}{1}{img-003.png}
+\sourcefoot{2024 MJ Paper 11 Question 8}
+
+\clipq{A4.}{1}{img-004.png}
+\sourcefoot{2024 MJ Paper 12 Question 8}
+
+\clipq{A5.}{1}{img-005.png}
+\sourcefoot{2021 ON Paper 12 Question 6}
+
+\clipq{A6.}{1}{img-006.png}
+\sourcefoot{2021 ON Paper 11 Question 33}
+
+\clipq{A7.}{1}{img-007.png}
+\sourcefoot{2021 MJ Paper 12 Question 3}
+
+\clipq{A8.}{1}{img-008.png}
+\sourcefoot{2025 MJ Paper 12 Question 10}
+
+\vspace{0.35em}
+{\large\bfseries Section B --- Structured questions (10 marks)}\par\vspace{0.1em}
+
+% B1/B2 paper clips wrongly included the Paper 2 cover page + an unrelated melting-point table.
+\qhead{B1.}{1}
+Name the strongest intermolecular force that exists between \ce{NH3(l)} molecules.
+\answerlines{1}
+\sourcefoot{2023 MJ Paper 22 Question 1(b)(iii)}
+
+\qhead{B2.}{2}
+Draw a diagram to show the formation of the strongest intermolecular force between \textbf{two} molecules of \ce{NH3(l)}.
+
+Include any relevant lone pairs of electrons and dipoles.
+
+\vspace{0.2em}
+\noindent\fbox{\parbox[c][4.4cm][c]{0.92\linewidth}{\centering\vspace{3.6cm}}}
+\par\vspace{0.15em}
+\sourcefoot{2023 MJ Paper 22 Question 1(b)(iv)}
+
+% B3 clip started with leftover words from the previous part.
+\qhead{B3.}{2}
+Nitrogen, \ce{N2}, is a gas at room temperature and pressure. Neither \ce{CO} nor \ce{N2} is an ideal gas.
+
+Complete the table by naming \textbf{all} the types of intermolecular forces (van der Waals') in separate samples of \ce{N2(g)} and \ce{CO(g)}.
+
+\vspace{0.15em}
+{\small
+\noindent\begin{tabular}{|p{0.42\linewidth}|c|c|}
+\hline
+ & \ce{N2(g)} & \ce{CO(g)} \\
+\hline
+number of electrons per molecule & 14 & 14 \\
+\hline
+presence of a dipole moment & $\times$ & $\checkmark$ \\
+\hline
+boiling point / $^\circ$C & $-195.8$ & $-191.5$ \\
+\hline
+intermolecular forces (van der Waals') & \rule{0pt}{2.6em} &  \\
+\hline
+\end{tabular}}
+\par\vspace{0.1em}
+\sourcefoot{2021 MJ Paper 22 Question 2(c)(iii)}
+
+\qhead{B4.}{3}
+Table 1.1 shows melting points of some oxides.
+
+Complete Table 1.1 by identifying the strongest force of attraction in each oxide that is broken during melting. Use the abbreviations below.
+
+{\small
+\begin{itemize}[nosep]
+\item i.d.\ = instantaneous dipole--induced dipole
+\item p.d.\ = permanent dipole--permanent dipole
+\item H = hydrogen bond
+\item C = covalent bond
+\item I = ionic bond
+\end{itemize}}
+
+\vspace{0.1em}
+{\small
+\noindent\begin{tabular}{|c|c|p{0.42\linewidth}|}
+\hline
+oxide & melting point / $^\circ$C & force of attraction broken during melting \\
+\hline
+\ce{SO2} & $-73$ & \rule{0pt}{1.35em} \\
+\hline
+\ce{H2O} & 0 &  \\
+\hline
+\ce{SiO2} & 1610 &  \\
+\hline
+\ce{Na2O} & 1132 &  \\
+\hline
+\ce{MgO} & 2852 &  \\
+\hline
+\end{tabular}}
+\par\vspace{0.1em}
+\sourcefoot{2025 MJ Paper 22 Question 1(d)(i)}
+
+\clipq{B5.}{2}{img-013.png}
+\sourcefoot{2021 ON Paper 22 Question 1(a)(ii)}
+
+\end{document}

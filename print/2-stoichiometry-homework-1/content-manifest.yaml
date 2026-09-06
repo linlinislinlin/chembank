@@ -1,0 +1,390 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/QLS/AS/Homework/Stoichiometry/2-stoichiometry-homework-1.md
+  title: AS stoichiometry homework 1 · mole foundations
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS stoichiometry homework 1 · mole foundations
+- id: I01
+  type: instruction
+  source_loc: instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Circle one letter A-D. Show working.
+- id: S01
+  type: heading
+  source_loc: section-1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 1 · Masses of atoms and molecules
+- id: S04
+  type: heading
+  source_loc: section-4
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 2 · The mole and the Avogadro constant
+- id: S08
+  type: heading
+  source_loc: section-8
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 3 · Reacting masses
+- id: S12
+  type: heading
+  source_loc: section-12
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 4 · Complete combustion
+- id: Q01
+  type: mcq
+  source_loc: Q01
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'The mass spectrum of a sample of neon is shown. The relative abundance of
+    each peak is written in brackets above it.
+
+    \qfig[0.48]{fig-q01-spectrum.png}
+
+    What is the relative atomic mass, $A_\mathrm{r}$, of this sample of neon?
+
+    \optrow{20.15}{20.20}{21.00}{21.82}'
+- id: Fig-Q01
+  type: figure
+  source_loc: Q01-diagram
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: graph / diagram / visual options — do not redraw
+  image: overleaf/images/fig-q01-spectrum.png
+- id: CLIP-Q01
+  type: mcq
+  source_loc: Q01-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q01
+  reason: full paper-clip of typeset question
+  image: images/img-001.png
+- id: Q02
+  type: mcq
+  source_loc: Q02
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A sample of sulfur consists mostly of \ce{^{32}S}. It also contains 4.2\%
+    \ce{^{34}S} and 2.8\% \ce{^{36}S}. No other isotopes of sulfur are present.
+
+
+    What is the relative atomic mass, $A_\mathrm{r}$, of \textbf{this} sample of sulfur?
+
+    \optrow{32.1}{32.2}{34.0}{34.3}'
+- id: CLIP-Q02
+  type: mcq
+  source_loc: Q02-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q02
+  reason: full paper-clip of typeset question
+  image: images/img-002.png
+- id: Q03
+  type: mcq
+  source_loc: Q03
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'The diagram shows the apparatus used to find the relative molecular mass
+    of a volatile liquid.
+
+
+    When 0.10\,g of a volatile liquid is injected into the syringe, all of the volatile
+    liquid evaporates and the volume increases by 85\,cm$^3$.
+
+
+    The heater maintains a temperature of 400\,K and the experiment is carried out
+    at a pressure of 101\,300\,Pa.
+
+    \qfig[0.78]{fig-q03-apparatus.png}
+
+    If the vapour of the volatile liquid behaves as an ideal gas, which expression
+    can be used to calculate the relative molecular mass of the liquid?
+
+    \optlist{$M_\mathrm{r}=(85\times 101\,300)\div(0.10\times 8.31\times 400)$}{$M_\mathrm{r}=(85\times
+    101.3)\div(0.10\times 8.31\times 400)$}{$M_\mathrm{r}=(0.10\times 8.31\times 400)\div(85\times
+    10^{-6}\times 101\,300)$}{$M_\mathrm{r}=(0.10\times 8.31\times 400)\div(85\times
+    10^{-6}\times 101.3)$}'
+- id: Fig-Q03
+  type: figure
+  source_loc: Q03-diagram
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: graph / diagram / visual options — do not redraw
+  image: overleaf/images/fig-q03-apparatus.png
+- id: CLIP-Q03
+  type: mcq
+  source_loc: Q03-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q03
+  reason: full paper-clip of typeset question
+  image: images/img-003.png
+- id: Q04
+  type: mcq
+  source_loc: Q04
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Which statement about the Avogadro constant is correct?
+
+    \optlist{It is the mass of one mole of any element.}{It is the mass of $6.02\times
+    10^{23}$ atoms of any element.}{It is the number of atoms in one mole of neon.}{It
+    is the number of atoms in 12\,g of any element.}'
+- id: CLIP-Q04
+  type: mcq
+  source_loc: Q04-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q04
+  reason: full paper-clip of typeset question
+  image: images/img-004.png
+- id: Q05
+  type: mcq
+  source_loc: Q05
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Which contains the largest number of hydrogen atoms?
+
+    \optlist{0.10\,mol of pentane}{0.20\,mol of but-2-ene}{1.00\,mol of hydrogen molecules}{$6.02\times
+    10^{23}$ hydrogen atoms}'
+- id: CLIP-Q05
+  type: mcq
+  source_loc: Q05-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q05
+  reason: full paper-clip of typeset question
+  image: images/img-005.png
+- id: Q06
+  type: mcq
+  source_loc: Q06
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Which sample contains the most iodine?
+
+    \optrow{1\,g of \ce{CaI2}}{1\,g of \ce{KI}}{1\,g of \ce{NaI}}{1\,g of \ce{NH4I}}'
+- id: CLIP-Q06
+  type: mcq
+  source_loc: Q06-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q06
+  reason: full paper-clip of typeset question
+  image: images/img-006.png
+- id: Q07
+  type: mcq
+  source_loc: Q07
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'What contains $9.03\times 10^{23}$ oxygen atoms?
+
+    \optlist{0.25\,mol aluminium oxide}{0.75\,mol sulfur dioxide}{1.5\,mol sulfur
+    trioxide}{3.0\,mol water}'
+- id: CLIP-Q07
+  type: mcq
+  source_loc: Q07-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q07
+  reason: full paper-clip of typeset question
+  image: images/img-007.png
+- id: Q08
+  type: mcq
+  source_loc: Q08
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Sodium peroxide, \ce{Na2O2}, is used to absorb carbon dioxide from the atmosphere
+    and release oxygen in closed environments such as space capsules and submarines.
+
+    \[\ce{2Na2O2 + 2CO2 -> 2Na2CO3 + O2}\]
+
+    Which mass of sodium peroxide would be required to remove 2.4\,dm$^3$ of carbon
+    dioxide from the atmosphere at room temperature and pressure?
+
+    \optrow{2.4\,g}{3.9\,g}{7.8\,g}{15.6\,g}'
+- id: CLIP-Q08
+  type: mcq
+  source_loc: Q08-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q08
+  reason: full paper-clip of typeset question
+  image: images/img-008.png
+- id: Q09
+  type: mcq
+  source_loc: Q09
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: "A student reacts 0.100\\,mol of each of sodium, magnesium and phosphorus\
+    \ atoms separately with an excess of oxygen.\n\nWhich rows are correct?\n\n{\\\
+    centering\n{\\small\n\\begin{tabular}{c l c}\n\\toprule\n & oxide & mass of oxide\
+    \ formed\\,/\\,g \\\\\n\\midrule\n1 & sodium & 3.10 \\\\\n2 & magnesium & 4.03\
+    \ \\\\\n3 & phosphorus & 7.10 \\\\\n\\bottomrule\n\\end{tabular}}\\par}\n\n\\\
+    optrow{1, 2 and 3}{1 and 2 only}{1 and 3 only}{2 and 3 only}"
+- id: CLIP-Q09
+  type: mcq
+  source_loc: Q09-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q09
+  reason: full paper-clip of typeset question
+  image: images/img-009.png
+- id: Q10
+  type: mcq
+  source_loc: Q10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Separate samples, each of mass 1.0\,g, of the compounds listed are treated
+    with an excess of dilute acid.
+
+
+    Which compound releases the largest amount of \ce{CO2}?
+
+    \optrow{1.0\,g \ce{CaCO3}}{1.0\,g \ce{Li2CO3}}{1.0\,g \ce{MgCO3}}{1.0\,g \ce{Na2CO3}}'
+- id: CLIP-Q10
+  type: mcq
+  source_loc: Q10-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q10
+  reason: full paper-clip of typeset question
+  image: images/img-010.png
+- id: Q11
+  type: mcq
+  source_loc: Q11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: '2.0\,g of ammonium nitrate, \ce{NH4NO3}, decomposes to give 0.90\,g of water
+    and a single gas.
+
+
+    What is the identity of the gas?
+
+    \optrow{\ce{NO}}{\ce{NO2}}{\ce{N2O}}{\ce{N2}}'
+- id: CLIP-Q11
+  type: mcq
+  source_loc: Q11-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q11
+  reason: full paper-clip of typeset question
+  image: images/img-011.png
+- id: Q12
+  type: mcq
+  source_loc: Q12
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'What is the minimum mass of oxygen required to ensure the complete combustion
+    of 12\,dm$^3$ of propane measured under room conditions?
+
+    \optrow{60\,g}{80\,g}{120\,g}{160\,g}'
+- id: CLIP-Q12
+  type: mcq
+  source_loc: Q12-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q12
+  reason: full paper-clip of typeset question
+  image: images/img-012.png
+- id: Q13
+  type: mcq
+  source_loc: Q13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Mixture R consists of one mole of \ce{C3H6} and one mole of \ce{C4H6}.
+
+
+    What is the minimum number of moles of oxygen molecules needed for complete combustion
+    of mixture R?
+
+    \optrow{6.5}{7}{10}{20}'
+- id: CLIP-Q13
+  type: mcq
+  source_loc: Q13-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q13
+  reason: full paper-clip of typeset question
+  image: images/img-013.png
+- id: Q14
+  type: mcq
+  source_loc: Q14
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'If 1 mole of hexane combusts in an excess of oxygen, how many moles of products
+    are formed?
+
+    \optrow{11}{12}{13}{14}'
+- id: CLIP-Q14
+  type: mcq
+  source_loc: Q14-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q14
+  reason: full paper-clip of typeset question
+  image: images/img-014.png

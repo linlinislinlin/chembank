@@ -42,6 +42,40 @@ def test_parse_refs():
     assert c.id == "9701_s21_qp_11"
 
 
+def test_0620_paper_kind_and_paths():
+    from chembank.registry import (
+        paper_kind,
+        default_vault_for_paper,
+        default_questions_dir_for_paper,
+        parse_paper_ref,
+    )
+
+    ref = parse_paper_ref("0620_s25_qp_21")
+    assert ref.syllabus_code == "0620"
+    assert ref.year == 2025
+    assert ref.session == "MJ"
+    assert ref.paper == 21
+    assert paper_kind(21, "0620") == "mcq"
+    assert paper_kind(41, "0620") == "structured"
+    assert paper_kind(61, "0620") == "practical"
+    # 9701 mapping must stay inverted relative to 0620
+    assert paper_kind(21, "9701") == "structured"
+    assert paper_kind(11, "9701") == "mcq"
+    assert default_vault_for_paper(21, "0620").name == "vault-igcse"
+    assert default_vault_for_paper(41, "0620").name == "vault-igcse-structured"
+    assert default_vault_for_paper(61, "0620").name == "vault-igcse-practical"
+    assert default_questions_dir_for_paper(21, "0620").name == "questions-igcse"
+
+
+def test_0620_lo_parent():
+    from chembank.syllabus import parent_code_for_lo, syllabus_path_for
+
+    assert parent_code_for_lo("1.1-C1") == "1.1"
+    assert parent_code_for_lo("3.3-S4") == "3.3"
+    assert parent_code_for_lo("3.1-1") == "3.1"
+    assert syllabus_path_for("0620").name == "cie-0620-igcse-chemistry.yaml"
+
+
 def test_default_paths_w22():
     ref = default_paths(season="w22", paper=13)
     assert ref.session == "ON"

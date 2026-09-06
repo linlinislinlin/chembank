@@ -122,11 +122,26 @@ def load_rules(path: str | Path) -> dict[str, Any]:
         if not isinstance(rules["shuffle"], bool):
             raise RuleError(f"Rules file {path}: `shuffle` must be a boolean")
 
+    include_ids = rules.get("include_ids")
+    if include_ids is not None:
+        if not isinstance(include_ids, list) or not include_ids:
+            raise RuleError(f"Rules file {path}: `include_ids` must be a non-empty list")
+        rules["include_ids"] = [str(x).strip() for x in include_ids if str(x).strip()]
+        if not rules["include_ids"]:
+            raise RuleError(f"Rules file {path}: `include_ids` must be a non-empty list")
+        # Curated id lists keep author order; grouping/shuffle would scramble a paper.
+        rules["preserve_order"] = True
+        rules["no_sort"] = True
+
+    if "preserve_order" in rules and not isinstance(rules["preserve_order"], bool):
+        raise RuleError(f"Rules file {path}: `preserve_order` must be a boolean")
+
     rules.setdefault("sort", ["year", "question"])
     rules.setdefault("shuffle", False)
     rules.setdefault("topic_title", None)
     rules.setdefault("question_type", None)
     rules.setdefault("count", None)
+    rules.setdefault("preserve_order", False)
     return rules
 
 
@@ -235,17 +250,31 @@ def select_questions(
     """
     from chembank.registry import default_vault_for_paper, paper_kind
 
-    docs = [d for d in load_all_questions(docs_dir) if _matches_rules(d, rules)]
+    include_ids = rules.get("include_ids")
+    if include_ids:
+        by_id: dict[str, dict[str, Any]] = {}
+        for d in load_all_questions(docs_dir):
+            by_id.setdefault(str(d["id"]), d)
+        missing = [qid for qid in include_ids if qid not in by_id]
+        if missing:
+            preview = ", ".join(missing[:8])
+            extra = f" (+{len(missing) - 8} more)" if len(missing) > 8 else ""
+            raise RuleError(f"include_ids not found in corpus: {preview}{extra}")
+        unique = [by_id[qid] for qid in include_ids]
+        # Author order is the paper order; do not re-sort or shuffle.
+        rules = {**rules, "no_sort": True, "shuffle": False, "preserve_order": True}
+    else:
+        docs = [d for d in load_all_questions(docs_dir) if _matches_rules(d, rules)]
 
-    # Dedupe by stable question id, keeping the first occurrence.
-    seen: set[str] = set()
-    unique: list[dict[str, Any]] = []
-    for d in docs:
-        qid = str(d["id"])
-        if qid in seen:
-            continue
-        seen.add(qid)
-        unique.append(d)
+        # Dedupe by stable question id, keeping the first occurrence.
+        seen: set[str] = set()
+        unique = []
+        for d in docs:
+            qid = str(d["id"])
+            if qid in seen:
+                continue
+            seen.add(qid)
+            unique.append(d)
 
     sort_spec: list[str] = [s for s in rules.get("sort", ["year", "question"])]
 
@@ -277,7 +306,8 @@ def select_questions(
     for d in result:
         paper = d.get("paper")
         try:
-            vault = default_vault_for_paper(paper).name if paper is not None else None
+            syl = str(d.get("syllabus_code") or "9701")
+            vault = default_vault_for_paper(paper, syl).name if paper is not None else None
         except (TypeError, ValueError):
             vault = None
         d["_vault"] = vault

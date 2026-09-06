@@ -11,13 +11,14 @@
   .top { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:10; }
   .top h1 { font-size:16px; margin:0; }
   .top .meta { font-size:12px; color:var(--muted); }
-  .wrap { max-width:760px; margin:0 auto; padding:24px 20px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.3); padding:22px; }
+  .wrap { max-width:760px; margin:0 auto; padding:24px 20px 80px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.3); padding:22px; margin-bottom:16px; }
   .center { text-align:center; }
   .big { font-size:40px; margin:10px 0; }
   label { display:block; font-size:13px; color:var(--muted); margin:14px 0 4px; }
-  .input { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; width:100%; font-size:16px; }
-  .input:focus { outline:none; border-color:var(--accent); }
+  .input, textarea { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; width:100%; font-size:16px; font-family:inherit; }
+  .input:focus, textarea:focus { outline:none; border-color:var(--accent); }
+  textarea { min-height:88px; resize:vertical; }
   .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:13px 20px; font-size:16px; font-weight:600; cursor:pointer; width:100%; margin-top:18px; }
   .btn:disabled { opacity:.5; cursor:not-allowed; }
   .qhead { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--line); margin-bottom:16px; }
@@ -28,36 +29,23 @@
   .topics span { background:var(--panel-2); padding:2px 8px; border-radius:6px; }
   .ans { display:flex; gap:10px; margin-top:16px; }
   .abtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:19px; font-weight:700; color:var(--text); cursor:pointer; }
+  .abtn.on { border-color:var(--accent); background:rgba(124,108,240,.18); }
   .abtn.correct { border-color:var(--green); background:rgba(78,206,157,.15); color:var(--green); }
   .abtn.wrong { border-color:var(--red); background:rgba(240,124,124,.15); color:var(--red); }
-  /* Structured question */
   .typebadge { display:inline-block; font-size:11px; padding:2px 9px; border-radius:20px; background:rgba(124,108,240,.18); color:var(--accent); margin-left:8px; }
-  .msbtn { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:8px 14px; font-size:13px; cursor:pointer; }
-  .msbtn:hover { border-color:var(--accent); }
-  .msfig { margin-top:12px; text-align:center; display:none; }
+  .msfig { margin-top:12px; text-align:center; }
   .msfig img { max-width:100%; max-height:70vh; border:1px solid var(--line); border-radius:9px; background:#fff; }
-  .selfgrade { display:flex; gap:10px; margin-top:16px; }
-  .sbtn { flex:1; padding:16px 0; border-radius:11px; background:var(--panel-2); border:2px solid var(--line); font-size:16px; font-weight:700; color:var(--text); cursor:pointer; }
-  .sbtn.good { border-color:var(--green); }
-  .sbtn.good:disabled { background:rgba(78,206,157,.15); color:var(--green); }
-  .sbtn.bad { border-color:var(--red); }
-  .sbtn.bad:disabled { background:rgba(240,124,124,.15); color:var(--red); }
   .hint { font-size:12px; color:var(--muted); margin-top:10px; }
-  .fb { border-radius:11px; padding:14px; margin-top:16px; font-size:14px; display:none; }
-  .fb.show { display:block; }
-  .fb.ok { background:rgba(78,206,157,.12); border:1px solid var(--green); }
-  .fb.no { background:rgba(240,124,124,.12); border:1px solid var(--red); }
-  .fb b { color:var(--amber); }
-  .next { margin-top:14px; }
-  .pbar { height:6px; background:var(--panel-2); border-radius:4px; overflow:hidden; margin-top:14px; }
-  .pbar i { display:block; height:100%; background:var(--accent); width:0; transition:width .2s; }
+  .instr { color:var(--text); font-size:14px; line-height:1.55; white-space:pre-wrap; }
   .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin:20px 0; }
   .stat { background:var(--panel-2); border-radius:11px; padding:14px; text-align:center; }
   .stat .v { font-size:24px; font-weight:800; color:var(--green); }
   .stat .k { font-size:12px; color:var(--muted); margin-top:3px; }
-  .done-link { margin-top:16px; font-size:13px; color:var(--muted); word-break:break-all; }
-  .state-pill { font-size:12px; padding:3px 10px; border-radius:20px; background:var(--panel-2); color:var(--muted); }
   .err { color:var(--red); font-size:13px; margin-top:8px; }
+  .review { font-size:14px; margin-top:12px; }
+  .review .ok { color:var(--green); }
+  .review .no { color:var(--red); }
+  .review .pend { color:var(--amber); }
 </style>
 </head>
 <body>
@@ -68,36 +56,38 @@
 </div>
 
 <div class="wrap">
-  <!-- identity -->
-  <div class="card center" id="idCard">
+  <div class="card center" id="idCard" style="display:none">
     <div class="big">🧑‍🎓</div>
-    <h2>First, tell us who you are</h2>
+    <h2 id="idTitle">First, tell us who you are</h2>
+    <p class="hint" id="idInstr"></p>
     <label>Name</label>
     <input class="input" id="iname" placeholder="Your name" />
     <label>Student / Exam number</label>
     <input class="input" id="ino" placeholder="Student / exam number" />
+    <label>Class (optional)</label>
+    <input class="input" id="iclass" placeholder="Class / group" />
     <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
 
-  <!-- quiz -->
-  <div class="card" id="quizCard" style="display:none">
-    <div class="qhead"><span id="prog"></span><span class="state-pill" id="pill"></span></div>
-    <div class="qfig" id="fig"></div>
-    <div class="topics" id="topics"></div>
-    <div class="ans" id="ans"></div>
-    <div class="fb" id="fb"></div>
-    <div class="next" id="nextWrap"></div>
-    <div class="pbar"><i id="pbarFill"></i></div>
+  <div id="quizWrap" style="display:none">
+    <div class="card" id="instrCard" style="display:none">
+      <h2 style="margin-top:0;font-size:16px">Instructions</h2>
+      <div class="instr" id="instrText"></div>
+    </div>
+    <div id="qCards"></div>
+    <div class="card">
+      <div class="hint">Answer every question, then submit. You will not see the mark scheme until you submit.</div>
+      <button class="btn" id="submitBtn">Submit assignment</button>
+      <div class="err" id="subErr"></div>
+    </div>
   </div>
 
-  <!-- done -->
   <div class="card center" id="doneCard" style="display:none">
     <div class="big">🎉</div>
-    <h2 id="doneTitle">Homework complete!</h2>
+    <h2 id="doneTitle">Submitted</h2>
     <div class="stat-grid" id="doneStats"></div>
-    <div class="done-link" id="doneLink"></div>
-    <button class="btn green" style="background:var(--green);color:#06241a" onclick="location.reload()">View again</button>
+    <div id="doneReview"></div>
   </div>
 
   <div class="card" id="errCard" style="display:none">
@@ -106,268 +96,204 @@
   </div>
 </div>
 
-<script src="data.js"></script>
-<script src="structured-data.js"></script>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script>
 "use strict";
-const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
-const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) || [];
-// Merge both data sources: MCQs in data.js, structured in structured-data.js (ids never collide)
-const BYID = new Map(ALL.map(q => [q.id, q]));
-STRUCTURED.forEach(q => BYID.set(q.id, q));
 const DB = window.HomeworkDB;
+const chosen = {};
+let assignment = null;
+let identity = null;
 
 init();
 
-function init() {
-  const id = new URLSearchParams(location.search).get("id");
+async function init() {
+  const id = Number(new URLSearchParams(location.search).get("id"));
   if (!id) {
-    const el = document.getElementById("errMsg");
-    el.textContent = "This is a homework page — open it from a teacher-provided assignment link.";
-    const lnk = document.createElement("a");
-    lnk.href = "home.html";
-    lnk.textContent = "Go to the ChemBank home page ↵";
-    lnk.style.marginLeft = "8px";
-    el.appendChild(lnk);
-    showErr("");
+    document.getElementById("errMsg").textContent = "Open this page from a teacher-provided assignment link.";
+    document.getElementById("errCard").style.display = "block";
     return;
   }
-  DB.getAssignment(Number(id)).then(ass => {
-    if (!ass) throw new Error("Assignment not found or has been deleted");
-    window.__ASSIGN = ass;
-    const qs = (ass.question_ids||[]).map(qid => BYID.get(qid)).filter(Boolean);
-    if (!qs.length) throw new Error("No available questions in this assignment");
-    window.__QS = qs;
-    const cn = ass.title || "Homework";
-    document.title = cn + " · ChemBank";
-    document.querySelector("#topMeta").textContent = cn;
-    // restore answered progress (localStorage remembers where this student got to)
-    restoreState(id);
-    // if already finished, go straight to the done screen
-    if (window.__local && window.__local.done) { showDone(); return; }
+  try {
+    assignment = await DB.takeAssignment(id);
+    if (!assignment || !(assignment.questions || []).length) {
+      throw new Error("No available questions in this assignment");
+    }
+    document.title = (assignment.title || "Homework") + " · ChemBank";
+    document.getElementById("topMeta").textContent = assignment.title || "Homework";
+    document.getElementById("idTitle").textContent = assignment.title || "Homework";
+    document.getElementById("idInstr").textContent = assignment.instructions
+      ? assignment.instructions.slice(0, 240)
+      : "Enter your name and student number to start. Answers stay hidden until you submit.";
     document.getElementById("idCard").style.display = "block";
-  }).catch(e => showErr(e.message));
+  } catch (e) {
+    showErr(e.message);
+  }
 }
 
-function restoreState(assId) {
-  const key = "hw-" + assId;
-  let s = null;
-  try { s = JSON.parse(localStorage.getItem(key)); } catch(e){}
-  window.__local = s || { answers: {} };
-}
-
-function saveLocal() {
-  const assId = window.__ASSIGN.id;
-  localStorage.setItem("hw-" + assId, JSON.stringify(window.__local));
-}
-
-async function ensureIdentity() {
+document.getElementById("startBtn").onclick = async () => {
   const name = document.getElementById("iname").value.trim();
   const no = document.getElementById("ino").value.trim();
+  const className = document.getElementById("iclass").value.trim();
   const err = document.getElementById("idErr");
   if (!name || !no) { err.textContent = "Please fill in your name and student number"; return; }
+  identity = { name, studentNo: no, className };
   try {
-    const stu = await DB.ensureStudent(name, no, "");
-    window.__STU = stu;
-    document.getElementById("idCard").style.display = "none";
-    document.getElementById("quizCard").style.display = "block";
-    window.__idx = 0;
-    renderQ();
-  } catch (e) { err.textContent = "Could not save identity: " + e.message; }
-}
-document.getElementById("startBtn").onclick = ensureIdentity;
-
-function renderQ() {
-  const q = window.__QS[window.__idx];
-  const total = window.__QS.length;
-  document.getElementById("prog").innerHTML = `Q <b>${window.__idx+1}</b> / ${total}`;
-  document.getElementById("pbarFill").style.width = (window.__idx / total * 100) + "%";
-
-  const pre = window.__local.answers[q.id]; // previously answered?
-  document.getElementById("pill").textContent = pre ? "Answered" : "Pending";
-
-  const fig = document.getElementById("fig");
-  fig.innerHTML = "";
-  const img = document.createElement("img");
-  const imgSrc = (q.type === "structured") ? (q.paper_img || "") : (q.figures && q.figures[0] || "");
-  img.src = imgSrc;
-  img.onerror = () => img.style.display = "none";
-  fig.appendChild(img);
-
-  const tp = document.getElementById("topics");
-  tp.innerHTML = "";
-  (q.topics||[]).slice(0,3).forEach(t => { const s=document.createElement("span"); s.textContent=t; tp.appendChild(s); });
-
-  const ans = document.getElementById("ans");
-  ans.innerHTML = "";
-  const fb = document.getElementById("fb");
-  fb.classList.remove("show", "ok", "no");
-
-  const isStruct = q.type === "structured";
-  if (isStruct) {
-    renderStructure(q, ans, pre);
-  } else {
-    ["A","B","C","D"].forEach(letter => {
-      const b = document.createElement("button");
-      b.className = "abtn"; b.textContent = letter;
-      if (pre) {
-        b.disabled = true;
-        if (letter === q.ms_answer) b.classList.add("correct");
-        else if (pre.chosen === letter) b.classList.add("wrong");
-      } else {
-        b.onclick = () => choose(letter, q);
-      }
-      ans.appendChild(b);
+    const prev = await DB.getSubmissionResult({
+      assignmentId: assignment.id, name, studentNo: no, className,
     });
-  }
+    if (prev && prev.already_submitted) { showResult(prev); return; }
+  } catch (e) { /* first attempt */ }
+  document.getElementById("idCard").style.display = "none";
+  renderQuiz();
+};
 
-  const nw = document.getElementById("nextWrap");
-  nw.innerHTML = "";
-  if (pre) {
-    showFeedback(pre);
-    // already answered: show next / finish button
-    const next = document.createElement("button");
-    next.className = "btn";
-    next.style.background = "var(--panel-2)";
-    if (window.__idx + 1 < window.__QS.length) { next.textContent = "Next →"; next.onclick = () => { window.__idx++; renderQ(); }; }
-    else { next.textContent = "Finish & Submit ✔"; next.onclick = () => { window.__local.done = true; saveLocal(); showDone(); }; }
-    nw.appendChild(next);
-  }
+function qImg(q) {
+  if (q.type === "structured") return q.paper_img || "";
+  return (q.figures && q.figures[0]) || "";
 }
 
-// Structured render: show the paper image, MS answer hidden by default, then self-assess
-function renderStructure(q, ans, pre) {
-  const badge = document.getElementById("pill");
-  if (badge) badge.textContent = (pre ? "Self-assessed" : "Not done") + (q.marks ? ` · ${q.marks} marks` : "");
+function qLabel(q, i) {
+  const ref = [q.year, q.session, q.paper != null ? "P" + q.paper : "", q.question != null ? "Q" + q.question : ""]
+    .filter(Boolean).join(" ");
+  return "Q" + (i + 1) + (ref ? " · " + ref : "");
+}
 
-  if (pre) {
-    // already assessed: show static right/wrong buttons
-    const sg = document.createElement("div");
-    sg.className = "selfgrade";
-    const good = document.createElement("button");
-    good.className = "sbtn good"; good.textContent = "✅ I got it right"; good.disabled = true;
-    const bad = document.createElement("button");
-    bad.className = "sbtn bad"; bad.textContent = "❌ I got it wrong"; bad.disabled = true;
-    // highlight the option the student chose
-    if (pre.chosen === "self-ok") good.style.borderColor = "var(--green)";
-    if (pre.chosen === "self-no") { bad.style.borderColor = "var(--red)"; good.style.opacity = ".5"; }
-    sg.appendChild(good); sg.appendChild(bad);
-    ans.appendChild(sg);
-    // when already assessed, always show the MS image for comparison
-    const msfig = makeMsFig(q);
-    if (msfig) ans.appendChild(msfig);
+function renderQuiz() {
+  document.getElementById("quizWrap").style.display = "block";
+  if (assignment.instructions) {
+    document.getElementById("instrCard").style.display = "block";
+    document.getElementById("instrText").textContent = assignment.instructions;
+  }
+  const box = document.getElementById("qCards");
+  box.innerHTML = "";
+  (assignment.questions || []).forEach((q, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    const badge = q.type === "structured"
+      ? '<span class="typebadge">structured · self-review after submit</span>'
+      : '<span class="typebadge">MCQ</span>';
+    card.innerHTML = `<div class="qhead"><span>${qLabel(q, i)} ${badge}</span><span>${q.marks || 1} mark</span></div>
+      <div class="qfig"></div>
+      <div class="topics"></div>
+      <div class="ans"></div>`;
+    const fig = card.querySelector(".qfig");
+    const src = qImg(q);
+    if (src) {
+      const img = document.createElement("img");
+      img.src = src;
+      img.onerror = () => { img.style.display = "none"; };
+      fig.appendChild(img);
+    }
+    const tp = card.querySelector(".topics");
+    (q.topics || []).slice(0, 3).forEach((t) => {
+      const s = document.createElement("span"); s.textContent = t; tp.appendChild(s);
+    });
+    const ans = card.querySelector(".ans");
+    if (q.type === "structured") {
+      ans.style.display = "block";
+      const ta = document.createElement("textarea");
+      ta.className = "input";
+      ta.placeholder = "Write your answer (or type done if you answered on paper)";
+      ta.oninput = () => { chosen[q.id] = ta.value.trim(); };
+      ans.appendChild(ta);
+    } else {
+      ["A", "B", "C", "D"].forEach((letter) => {
+        const b = document.createElement("button");
+        b.className = "abtn";
+        b.textContent = letter;
+        b.onclick = () => {
+          chosen[q.id] = letter;
+          ans.querySelectorAll(".abtn").forEach((x) => x.classList.toggle("on", x.textContent === letter));
+        };
+        ans.appendChild(b);
+      });
+    }
+    box.appendChild(card);
+  });
+}
+
+document.getElementById("submitBtn").onclick = async () => {
+  const btn = document.getElementById("submitBtn");
+  const err = document.getElementById("subErr");
+  const missing = (assignment.questions || []).filter((q) => !chosen[q.id]);
+  if (missing.length) {
+    err.textContent = "Please answer every question before submitting. (" + missing.length + " left)";
     return;
   }
-
-  // not done: hint + view-answer button + self-assess buttons
-  const hint = document.createElement("div");
-  hint.className = "hint";
-  hint.textContent = "Answer first, then check the Mark Scheme to mark your own answer right or wrong.";
-  ans.appendChild(hint);
-
-  const msWrap = document.createElement("div");
-  msWrap.style.marginTop = "12px";
-  const msBtns = document.createElement("div");
-  msBtns.style.cssText = "display:flex;gap:8px";
-  const showBtn = document.createElement("button");
-  showBtn.className = "msbtn";
-  showBtn.textContent = "📖 View answer (MS)";
-  showBtn.onclick = () => { msfig.style.display = "block"; showBtn.style.display = "none"; };
-  msBtns.appendChild(showBtn);
-  msWrap.appendChild(msBtns);
-  const msfig = makeMsFig(q);
-  if (msfig) msWrap.appendChild(msfig);
-  ans.appendChild(msWrap);
-
-  const sg = document.createElement("div");
-  sg.className = "selfgrade";
-  const good = document.createElement("button");
-  good.className = "sbtn good"; good.textContent = "✅ I got it right";
-  good.onclick = () => selfGrade(q, true);
-  const bad = document.createElement("button");
-  bad.className = "sbtn bad"; bad.textContent = "❌ I got it wrong";
-  bad.onclick = () => selfGrade(q, false);
-  sg.appendChild(good); sg.appendChild(bad);
-  ans.appendChild(sg);
-}
-
-function makeMsFig(q) {
-  if (!q.ms_img) return null;
-  const div = document.createElement("div");
-  div.className = "msfig";
-  const img = document.createElement("img");
-  img.src = q.ms_img;
-  img.onerror = () => div.style.display = "none";
-  div.appendChild(img);
-  return div;
-}
-
-function selfGrade(q, correct) {
-  const chosen = correct ? "self-ok" : "self-no";
-  window.__local.answers[q.id] = { chosen, correct };
-  saveLocal();
-  submitAnswer(q, chosen, correct);
-  renderQ();
-}
-
-function choose(letter, q) {
-  const correct = letter === q.ms_answer;
-  // record
-  window.__local.answers[q.id] = { chosen: letter, correct };
-  saveLocal();
-  // submit to backend asynchronously (don't block local if it fails)
-  submitAnswer(q, letter, correct);
-  renderQ();
-}
-
-async function submitAnswer(q, letter, correct) {
-  const stu = window.__STU, ass = window.__ASSIGN;
-  try { await DB.recordAnswer(ass.id, stu.id, q.id, letter, correct); }
-  catch (e) { console.warn("submit fail", e.message); }
-}
-
-function showFeedback(pre) {
-  const q = window.__QS[window.__idx];
-  const fb = document.getElementById("fb");
-  fb.classList.remove("show","ok","no");
-  fb.classList.add("show", pre.correct ? "ok" : "no");
-  if (q.type === "structured") {
-    fb.innerHTML = pre.correct
-      ? "✅ You marked this as correct. Check the answer carefully and ask your teacher if unsure."
-      : "❌ You marked this as incorrect. Review the Mark Scheme to understand your mistake.";
-  } else {
-    fb.innerHTML = pre.correct
-      ? "✅ Correct!"
-      : `❌ Incorrect.<br>Correct answer: <b>${q.ms_answer}</b>`;
+  btn.disabled = true;
+  err.textContent = "";
+  try {
+    const result = await DB.submitAssignment({
+      assignmentId: assignment.id,
+      name: identity.name,
+      studentNo: identity.studentNo,
+      className: identity.className,
+      answers: (assignment.questions || []).map((q) => ({ question_id: q.id, chosen: chosen[q.id] })),
+    });
+    showResult(result);
+  } catch (e) {
+    err.textContent = e.message;
+    btn.disabled = false;
   }
-}
+};
 
-function showDone() {
-  document.getElementById("quizCard").style.display = "none";
+function showResult(result) {
+  document.getElementById("idCard").style.display = "none";
+  document.getElementById("quizWrap").style.display = "none";
   document.getElementById("doneCard").style.display = "block";
-  const qs = window.__QS;
-  const ansMap = window.__local.answers || {};
-  let done = 0, okc = 0;
-  qs.forEach(q => { if (ansMap[q.id]) { done++; if (ansMap[q.id].correct) okc++; } });
-  const acc = done ? Math.round(okc / done * 100) : 0;
-  document.getElementById("doneTitle").textContent = window.__ASSIGN.title + " · Complete!";
+  document.getElementById("doneTitle").textContent = (result.assignment && result.assignment.title || "Homework") + " · Submitted";
   const st = document.getElementById("doneStats");
   st.innerHTML = "";
-  const mk = (v,k)=>{const d=document.createElement("div");d.className="stat";d.innerHTML=`<div class="v">${v}</div><div class="k">${k}</div>`;return d;};
-  st.appendChild(mk(qs.length, "Questions"));
-  st.appendChild(mk(done, "Answered"));
-  st.appendChild(mk(acc+"%", "Accuracy"));
-  document.getElementById("doneLink").textContent = "Submitted to your teacher. You may close this page.";
+  const mk = (v, k) => {
+    const d = document.createElement("div");
+    d.className = "stat";
+    d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`;
+    return d;
+  };
+  st.appendChild(mk(result.score + " / " + result.total_score, "Score"));
+  st.appendChild(mk((result.accuracy ?? 0) + "%", "Accuracy"));
+  st.appendChild(mk((result.items || []).length, "Questions"));
+
+  const byId = new Map((result.items || []).map((it) => [it.question_id, it]));
+  const qs = (result.assignment && result.assignment.questions) || assignment.questions || [];
+  const review = document.createElement("div");
+  qs.forEach((q, i) => {
+    const it = byId.get(q.id) || {};
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.textAlign = "left";
+    let verdict = '<span class="pend">Awaiting teacher mark</span>';
+    if (it.is_correct === true) verdict = '<span class="ok">Correct</span>';
+    if (it.is_correct === false) verdict = '<span class="no">Incorrect</span>';
+    const img = qImg(q);
+    card.innerHTML = `<div class="qhead"><span>${qLabel(q, i)}</span><span class="review">${verdict}</span></div>
+      ${img ? `<div class="qfig"><img src="${img}"></div>` : ""}
+      <div class="review">Your answer: <b>${esc(it.chosen || "–")}</b></div>
+      ${it.ms_answer ? `<div class="review">Correct answer: <b class="ok">${esc(it.ms_answer)}</b></div>` : ""}`;
+    if (it.ms_img) {
+      const ms = document.createElement("div");
+      ms.className = "msfig";
+      ms.innerHTML = `<img src="${esc(it.ms_img)}" alt="Mark scheme">`;
+      card.appendChild(ms);
+    }
+    review.appendChild(card);
+  });
+  const box = document.getElementById("doneReview");
+  box.innerHTML = "";
+  box.appendChild(review);
 }
 
 function showErr(msg) {
   document.getElementById("errCard").style.display = "block";
   document.getElementById("errMsg").textContent = msg;
 }
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s == null ? "" : String(s);
+  return d.innerHTML;
+}
 </script>
-
 </body>
 </html>

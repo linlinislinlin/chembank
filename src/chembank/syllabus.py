@@ -10,9 +10,19 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SYLLABUS = ROOT / "syllabus" / "cie-9701-as-a-level-chemistry.yaml"
+DEFAULT_SYLLABUS_0620 = ROOT / "syllabus" / "cie-0620-igcse-chemistry.yaml"
 
-# Subtopic code, then -N or -Na (lettered LO parts)
+# 9701: {subtopic}-{n} or {subtopic}-{n}{letter}
 LO_ID_RE = re.compile(r"^(\d{1,2}\.\d{1,2})-(\d{1,2})([a-z])?$")
+# 0620: {subtopic}-C{n} / {subtopic}-S{n} (Core / Supplement printed number)
+LO_ID_RE_0620 = re.compile(r"^(\d{1,2}\.\d{1,2})-([CS])(\d{1,2})$")
+
+
+def syllabus_path_for(syllabus_code: str | None) -> Path:
+    """Resolve the controlled vocabulary YAML for a CIE syllabus code."""
+    if str(syllabus_code or "") == "0620":
+        return DEFAULT_SYLLABUS_0620
+    return DEFAULT_SYLLABUS
 
 
 def load_syllabus(path: Path | None = None) -> dict[str, Any]:
@@ -51,8 +61,9 @@ def flatten_learning_outcomes(syllabus: dict[str, Any]) -> dict[str, str]:
 
 
 def parent_code_for_lo(lo_id: str) -> str:
-    """Return parent subtopic code for an LO id (e.g. 3.1-1 → 3.1)."""
-    m = LO_ID_RE.match(lo_id.strip())
+    """Return parent subtopic code for an LO id (e.g. 3.1-1 → 3.1, 1.1-C1 → 1.1)."""
+    raw = lo_id.strip()
+    m = LO_ID_RE.match(raw) or LO_ID_RE_0620.match(raw)
     if not m:
         raise ValueError(f"Invalid learning outcome id: {lo_id}")
     return m.group(1)
@@ -163,9 +174,14 @@ def _code_sort_key(code: str) -> tuple[int, ...]:
 
 def _lo_sort_key(lo_id: str) -> tuple[Any, ...]:
     m = LO_ID_RE.match(lo_id)
-    if not m:
-        return (999, 0, 0, "")
-    major, minor = m.group(1).split(".")
-    num = int(m.group(2))
-    letter = m.group(3) or ""
-    return (int(major), int(minor), num, letter)
+    if m:
+        major, minor = m.group(1).split(".")
+        num = int(m.group(2))
+        letter = m.group(3) or ""
+        return (int(major), int(minor), num, letter)
+    m = LO_ID_RE_0620.match(lo_id)
+    if m:
+        major, minor = m.group(1).split(".")
+        col = 0 if m.group(2) == "C" else 1
+        return (int(major), int(minor), col, int(m.group(3)))
+    return (999, 0, 0, "")

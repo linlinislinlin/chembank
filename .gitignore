@@ -82,3 +82,41 @@ build/
 # (which stays local / gitignored). Rebuild via quiz-app/build.py, then deploy.sh.
 # Do NOT re-ignore quiz-app/site/ — the deploy workflow uploads that folder.
 
+# IGCSE 0620 vaults / dual-write (isolated from 9701) — copyrighted QP/MS content
+vault-igcse/.obsidian/
+vault-igcse/assets/**
+vault-igcse/questions/**
+!vault-igcse/questions/.gitkeep
+vault-igcse/papers/**
+vault-igcse/handouts/**
+vault-igcse/queries/**
+vault-igcse/Home.md
+vault-igcse/题库首页.md
+vault-igcse/*.canvas
+
+vault-igcse-structured/.obsidian/
+vault-igcse-structured/questions/**
+!vault-igcse-structured/questions/.gitkeep
+vault-igcse-structured/assets/**
+!vault-igcse-structured/assets/.gitkeep
+vault-igcse-structured/papers/**
+!vault-igcse-structured/papers/.gitkeep
+vault-igcse-structured/queries/**
+vault-igcse-structured/题库首页.md
+
+vault-igcse-practical/.obsidian/
+vault-igcse-practical/assets/**
+vault-igcse-practical/questions/**
+vault-igcse-practical/papers/**
+vault-igcse-practical/queries/**
+vault-igcse-practical/Home.md
+vault-igcse-practical/题库首页.md
+vault-igcse-practical/*.canvas
+
+questions-igcse/**
+!questions-igcse/.gitkeep
+questions-igcse-structured/**
+!questions-igcse-structured/.gitkeep
+questions-igcse-practical/**
+!questions-igcse-practical/.gitkeep
+

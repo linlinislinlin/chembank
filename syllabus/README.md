@@ -14,6 +14,20 @@
 
 代码来自官方 syllabus PDF 的 Subject content 编号，**禁止 AI 发明新 code**。
 
+## IGCSE: CIE 0620
+
+| 文件 | 说明 |
+|------|------|
+| `cie-0620-igcse-chemistry.yaml` | Cambridge IGCSE Chemistry 0620（2026–2028） |
+
+- 12 个大题，叶节点是 Core / Supplement 印刷编号
+- 编码：`{subtopic}-C{n}`（Core）或 `{subtopic}-S{n}`（Supplement），例如 `1.1-C1`、`3.3-S4`
+- 父级 `syllabus_codes` 用 `1.1`（子主题）或 `1`（大题）
+- Extended 卷（P2/P4/P6）可标 Core + Supplement；**禁止**复用 9701 codes
+- 导出到 `vault-igcse/` / `vault-igcse-structured/` / `vault-igcse-practical/`，不要混进 9701 `vault/`
+
+Re-extract: `python scripts/extract_0620_syllabus.py`
+
 ### Learning outcomes
 
 Each subtopic may list official LOs with stable ids:

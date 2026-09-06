@@ -197,6 +197,26 @@ def test_write_and_load_pick_roundtrip(tmp_path: Path):
         assert key in q
 
 
+def test_include_ids_preserves_author_order():
+    """A curated include_ids list is returned in that order, ignoring sort."""
+    ids = [
+        "cie-9701-2021-mj-p21-q9a",
+        "cie-9701-2018-mj-p11-q5",
+        "cie-9701-2020-mj-p11-q8",
+    ]
+    picked = select_questions(_rules(include_ids=ids, sort=["year", "question"]), docs_dir=DOCS)
+    assert [d["id"] for d in picked] == ids
+
+
+def test_include_ids_missing_raises():
+    try:
+        select_questions(_rules(include_ids=["does-not-exist"]), docs_dir=DOCS)
+    except RuleError as e:
+        assert "does-not-exist" in str(e)
+    else:
+        raise AssertionError("expected RuleError")
+
+
 def test_to_pick_entry_keeps_learning_outcomes():
     """The pick entry must carry learning_outcomes + learning_outcome_texts so
     the assembler can group questions by primary learning outcome."""

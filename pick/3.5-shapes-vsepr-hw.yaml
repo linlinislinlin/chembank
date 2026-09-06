@@ -1,0 +1,35 @@
+# CIE 9701 AS homework: 3.5 Shapes of molecules (VSEPR)
+# ~40 minutes · 8 MCQ + 6 structured parts (18 marks on the paper; B4 is [2] on the QP).
+#
+#   chembank select pick/3.5-shapes-vsepr-hw.yaml -o build/3.5-shapes-vsepr-hw.json
+#   chembank assemble build/3.5-shapes-vsepr-hw.json -o vault/handouts/3.5-Shapes-of-molecules-homework-answers.md --vault vault
+#
+# Curated include_ids. Pedagogical order:
+#   MCQ easy→medium (bond-angle ordering NH3/H2O/CH4, then NH4+ and PF5 syllabus examples,
+#   then angle comparisons and analogues),
+#   then structured: CS2 linear (CO2 analogue) → SCl2 dot-cross + bent shape/angle →
+#   TeF6 octahedral explain → PCl5 trigonal bipyramidal → SO2 from electron diagram.
+#
+# Gaps: no clean tagged P1/P2 item asks only for BF3 trigonal planar or CH4 tetrahedral
+# by name; NH3 pyramidal and H2O 104.5° are covered via ordering/comparison MCQ.
+# No tagged item names SF6 directly (TeF6 used as octahedral analogue).
+title: "3.5 Shapes of molecules homework"
+syllabus_codes: ["3.5"]
+preserve_order: true
+include_ids:
+  # A  MCQ · recall syllabus shapes/angles and compare lone-pair effects
+  - cie-9701-2025-mj-p12-q7       # smallest→largest bond angle (H2O, NH3, CH4 ordering)
+  - cie-9701-2023-mj-p13-q5       # NH3 / NH4+ shape and bond angle
+  - cie-9701-2024-mj-p11-q24      # bond angle in ammonium ion (109.5°)
+  - cie-9701-2025-mj-p14-q11      # statement about PF5 (trigonal bipyramidal)
+  - cie-9701-2021-mj-p11-q34      # which molecules have at least one 120° angle (PF5)
+  - cie-9701-2025-mj-p14-q3       # compare bond angles between species (H2O vs others)
+  - cie-9701-2022-mj-p13-q6       # hydrazine VSEPR bond angle
+  - cie-9701-2024-mj-p13-q6       # borazole shape analogue (3.5-2)
+  # B  structured
+  - cie-9701-2021-on-p21-q1a-iii  # CS2 bond angle 180° (CO2 analogue) [1]
+  - cie-9701-2024-mj-p21-q2b-i    # SCl2 dot-and-cross diagram [2]
+  - cie-9701-2024-mj-p21-q2b-ii   # SCl2 shape and bond angle (H2O analogue) [2]
+  - cie-9701-2023-mj-p21-q1e      # explain TeF6 octahedral 90° (SF6 analogue) [2]
+  - cie-9701-2025-fm-p22-q1b-ii   # predict shape of PCl5 [1]
+  - cie-9701-2025-mj-p23-q4b-i    # SO2 shape and bond angle from Fig. 4.2 [2]

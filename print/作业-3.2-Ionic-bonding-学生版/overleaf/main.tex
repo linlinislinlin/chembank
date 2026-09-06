@@ -1,0 +1,318 @@
+% Student paper — English, typeset text, NaCl lattice as CIE clip. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.5em,itemsep=0.12em,topsep=0.15em,parsep=0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.08em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.62em]}%
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.10em}
+\setlength{\abovedisplayskip}{0.25em}
+\setlength{\belowdisplayskip}{0.25em}
+
+\newcommand{\qhead}[2]{%
+  \par\vspace{0.28em}%
+  \Needspace{4.2em}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+}
+
+% Diagram clip: stem is on the scan. Measure so label + image stay together.
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.88\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.25em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.06em}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\optline}[1]{%
+  \par\vspace{0.06em}{\small #1}\par
+}
+
+\newcommand{\sourcefoot}[1]{%
+  {\footnotesize\color{gray}#1}\par
+}
+
+\begin{document}
+\sethomework{AS Chemistry homework · 3.2 Ionic bonding}{17 marks}
+
+\begin{center}
+{\large\bfseries AS Chemistry homework · 3.2 Ionic bonding}\\[0.12em]
+{\small CIE 9701 AS Chemistry · 17 marks · about 40 minutes}
+\end{center}
+
+{\small Topic: 3.2 Ionic bonding --- electrostatic attraction between oppositely charged ions, and describing ionic bonding in \ce{NaCl}, \ce{MgO} and related giant ionic compounds.
+Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use CIE language (electrostatic attraction, cations/anions, giant ionic lattice, mobile ions when molten).}
+
+\vspace{0.15em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 7 \\
+B1 & 2022 ON Paper 22 Question 1(a) & 2 \\
+B2 & 2021 MJ Paper 22 Question 2(a) & 3 \\
+B3 & 2025 MJ Paper 21 Question 1(a)(i) and (iii) & 2 \\
+B4 & 2022 ON Paper 23 Question 3(a)(i) & 1 \\
+B5 & 2025 MJ Paper 23 Question 2(c)(ii) & 2 \\
+\midrule
+ & \textbf{Total} & \textbf{17} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.25em}
+{\large\bfseries Section A --- Multiple-choice questions (7 marks)}\par
+
+% A1 compact
+\qhead{A1.}{1}
+{\small Which type of bonding is \textbf{never} found in elements?}
+\par\vspace{0.08em}
+{\small
+\begin{tabular}{@{}p{0.46\linewidth}p{0.46\linewidth}@{}}
+\textbf{A} covalent & \textbf{B} ionic \\[0.15em]
+\textbf{C} metallic & \textbf{D} van der Waals' forces
+\end{tabular}}
+\par
+\sourcefoot{2021 MJ Paper 13 Question 6}
+
+% A2 typeset table
+\Needspace{16em}
+\qhead{A2.}{1}
+{\small The atomic radii and ionic radii for three elements in Period 3 are shown.}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{lcc}
+\toprule
+ & atomic radius / nm & ionic radius / nm \\
+\midrule
+element X & 0.118 & 0.053 \\
+element Y & 0.099 & 0.180 \\
+element Z & 0.160 & 0.072 \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+
+\vspace{0.10em}
+{\small Using this data, which statement is correct?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.08em]
+\item Element X has lower electrical conductivity than element Y.
+\item Element Y has a higher melting point than element X.
+\item Element Y and element Z react to form an ionic compound.
+\item Element Z forms ionic compounds by gaining electrons.
+\end{enumerate}
+\sourcefoot{2025 ON Paper 11 Question 16}
+
+% A3 lattice diagrams --- keep CIE clip (stem typeset; Q8 number cropped)
+\Needspace{18em}
+\qhead{A3.}{1}
+{\small Which diagram represents the lattice structure of sodium chloride?}
+\par\vspace{0.06em}
+\noindent\includegraphics[width=0.88\linewidth,keepaspectratio]{img-003.png}\par
+\sourcefoot{2025 MJ Paper 11 Question 8}
+
+% A4 coordination table
+\Needspace{12em}
+\qhead{A4.}{1}
+{\small In the sodium chloride lattice the number of chloride ions that surround each sodium ion is called the coordination number of the sodium ions.}
+
+{\small What are the coordination numbers of the sodium ions and the chloride ions in the sodium chloride lattice?}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{ccc}
+\toprule
+ & coordination number of sodium ions & coordination number of chloride ions \\
+\midrule
+\textbf{A} & 4 & 6 \\
+\textbf{B} & 6 & 4 \\
+\textbf{C} & 6 & 6 \\
+\textbf{D} & 8 & 6 \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+\sourcefoot{2023 MJ Paper 11 Question 6}
+
+% A5 compact formulae
+\qhead{A5.}{1}
+{\small Which oxide has a simple structure rather than a giant structure?}
+\optline{\textbf{A} \ce{MgO}\qquad \textbf{B} \ce{Al2O3}\qquad \textbf{C} \ce{SiO2}\qquad \textbf{D} \ce{P4O10}}
+\sourcefoot{2025 ON Paper 13 Question 18}
+
+% A6 compact formulae
+\qhead{A6.}{1}
+{\small Which solid compound has both ionic and covalent bonding but \textbf{not} coordinate bonding?}
+\optline{\textbf{A} \ce{Al2Cl6}\qquad \textbf{B} \ce{CH3COONa}\qquad \textbf{C} \ce{MgCl2}\qquad \textbf{D} \ce{NH4Cl}}
+\sourcefoot{2025 MJ Paper 14 Question 12}
+
+% A7 statements + combo key
+\Needspace{16em}
+\qhead{A7.}{1}
+{\small The following statements compare some properties of the oxides and chlorides of sodium and silicon.}
+
+{\small Which statements are correct?}
+\begin{enumerate}[label=\arabic*., leftmargin=1.6em, itemsep=0.06em]
+\item The melting point of \ce{SiCl4} is higher than the melting point of \ce{SiO2}.
+\item \ce{SiCl4} reacts with water, \ce{NaCl} does not.
+\item The melting point of \ce{SiCl4} is lower than the melting point of \ce{NaCl}.
+\end{enumerate}
+
+{\small The responses \textbf{A} to \textbf{D} should be selected on the basis of}
+
+\vspace{0.10em}
+\centering
+{\small
+\begin{tabular}{>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.22\linewidth}}
+\toprule
+\textbf{A} & \textbf{B} & \textbf{C} & \textbf{D} \\
+\midrule
+1, 2 and 3 are correct & 1 and 2 only are correct & 2 and 3 only are correct & 1 only is correct \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+{\footnotesize No other combination of statements is used as a correct response.}\par
+\sourcefoot{2021 ON Paper 12 Question 35}
+
+\vspace{0.35em}
+{\large\bfseries Section B --- Structured questions (10 marks)}\par\vspace{0.1em}
+
+{\normalsize\bfseries B1 · 2022 October/November Paper 22 Question 1(a) (2 marks)}\par
+
+{\small Species such as \ce{NH4+}, \ce{CO3^2-} and \ce{PO4^3-} are examples of molecular ions.}
+
+\qhead{B1(a)}{2}
+{\small Ionic and covalent bonds both involve an electrostatic attraction between different species.}
+
+{\small Identify the species that are electrostatically attracted to one another in:}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.35em]
+\item an ionic bond\\[-0.15em]
+\rule{\linewidth}{0.2pt}
+\item a covalent bond.\\[-0.15em]
+\rule{\linewidth}{0.2pt}
+\end{itemize}
+
+\vspace{0.25em}
+{\normalsize\bfseries B2 · 2021 May/June Paper 22 Question 2(a) (3 marks)}\par
+
+{\small The strength of interaction between particles determines whether the substance is a solid, liquid or gas at room temperature.}
+
+{\small Lithium sulfide, \ce{Li2S}, is a crystalline solid with a melting point of $938\,^{\circ}$C. It conducts electricity when it is molten.}
+
+\qhead{B2(a)(i)}{1}
+{\small Give the formulae of the particles present in solid lithium sulfide.}
+\answerlines{1}
+
+\qhead{B2(a)(ii)}{2}
+{\small Explain, in terms of the structure of the crystalline solid, why lithium sulfide has a high melting point.}
+\answerlines{2}
+
+\vspace{0.25em}
+\Needspace{14em}
+{\normalsize\bfseries B3 · 2025 May/June Paper 21 Question 1(a)(i) and (iii) (2 marks)}\par
+
+{\small Solid sodium conducts electricity. Sodium oxide conducts electricity when molten but not when solid.}
+
+\qhead{B3(a)(i)}{1}
+{\small Name the type of bonding present in sodium and in sodium oxide.}
+
+\vspace{0.08em}
+{\small bonding in sodium \dotfill}
+
+\vspace{0.20em}
+{\small bonding in sodium oxide \dotfill}
+
+\qhead{B3(a)(iii)}{1}
+{\small Explain why sodium oxide conducts electricity when molten.}
+\answerlines{2}
+
+\vspace{0.25em}
+{\normalsize\bfseries B4 · 2022 October/November Paper 23 Question 3(a)(i) (1 mark)}\par
+
+{\small Some of the common chlorides of Period 3 elements are shown in the list.}
+
+\vspace{0.08em}
+\centering
+{\small \ce{NaCl}\qquad \ce{MgCl2}\qquad \ce{AlCl3}\qquad \ce{SiCl4}\qquad \ce{PCl5}}
+\par\raggedright
+
+\qhead{B4(a)(i)}{1}
+{\small From this list, identify all the chlorides that have giant ionic structures in the solid state.}
+\answerlines{1}
+
+\vspace{0.25em}
+{\normalsize\bfseries B5 · 2025 May/June Paper 23 Question 2(c)(ii) (2 marks)}\par
+
+{\small The chemical properties of oxides are related to the chemical bonding present in these compounds.}
+
+{\small Table 2.1 shows the melting points of some oxides.}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{lc}
+\toprule
+oxide & melting point / $^\circ$C \\
+\midrule
+\ce{SO2} & $-73$ \\
+\ce{H2O} & 0 \\
+\ce{SO3} & 17 \\
+\ce{SiO2} & 1610 \\
+\ce{Na2O} & 1132 \\
+\ce{MgO} & 2852 \\
+\ce{Al2O3} & 2072 \\
+\bottomrule
+\end{tabular}}
+\par\vspace{0.04em}
+{\small Table 2.1}\par
+\raggedright
+
+\qhead{B5(c)(ii)}{2}
+{\small A student suggests the following hypothesis.}
+
+\vspace{0.08em}
+{\small\textit{The melting point of an ionically bonded oxide is only determined by the charge on the cation.}}
+
+\vspace{0.10em}
+{\small Use Table 2.1 to deduce if this hypothesis is true or false or if there is \textbf{not} enough information to make a conclusion. Explain your answer.}
+\answerlines{3}
+
+\end{document}

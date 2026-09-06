@@ -194,6 +194,9 @@ def _strip_duplicate_mcq_options(body: str, *, has_paper_clip: bool) -> str:
         if i in drop:
             continue
         kept.append(ln)
+    # OCR often splits option formulae onto extra lines (e.g. "20" / "1000"
+    # under A). After dropping A–D those shards look like page numbers.
+    kept = [ln for ln in kept if not re.fullmatch(r"\d{1,4}", ln.strip())]
     text = "\n".join(kept)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
@@ -236,6 +239,9 @@ def _strip_diagram_label_noise(body: str, *, has_figure: bool) -> str:
         r"|0|y|x|0\s*x|x\s*0|%"
         r"|transmittance(?:\s*/\s*%)?"
         r"|wavenumber(?:\s*/\s*cm[–\−-]¹?)?"
+        r"|proton number"
+        r"|first ionisation(?:\s+\S+)?"
+        r"|energy/kJmol[–\−-]¹"
         r"|enthalpy|products?|reactants?"
         r"|progress of reaction"
         r"|heat exchanger|catalytic|converter|condenser"
@@ -307,11 +313,19 @@ def export_paper_to_vault(
     questions_dir = Path(questions_dir) if questions_dir else None
     assets_dir = vault_dir / "assets"
 
-    from chembank.registry import paper_kind
+    from chembank.registry import paper_kind, parse_paper_ref
+    from chembank.syllabus import load_syllabus, syllabus_path_for
 
-    m_paper = re.search(r"qp_(\d+)$", draft_dir.name)
-    paper_num = int(m_paper.group(1)) if m_paper else None
-    kind = paper_kind(paper_num) if paper_num is not None else "unknown"
+    try:
+        pref = parse_paper_ref(draft_dir.name)
+        paper_num = pref.paper
+        kind = paper_kind(pref.paper, pref.syllabus_code)
+        syl_path = syllabus_path_for(pref.syllabus_code)
+    except ValueError:
+        m_paper = re.search(r"qp_(\d+)$", draft_dir.name)
+        paper_num = int(m_paper.group(1)) if m_paper else None
+        kind = paper_kind(paper_num) if paper_num is not None else "unknown"
+        syl_path = syllabus_path_for("9701")
 
     if refresh_extract:
         text_path = draft_dir.parent / f"{draft_dir.name}.txt"
@@ -383,7 +397,7 @@ def export_paper_to_vault(
             ms_pdf=ms_pdf if kind == "practical" else None,
         )
 
-    syllabus = load_syllabus()
+    syllabus = load_syllabus(syl_path)
     lookup = flatten_codes(syllabus)
     lo_lookup = flatten_learning_outcomes(syllabus)
     records: list[dict[str, Any]] = []
@@ -391,6 +405,8 @@ def export_paper_to_vault(
         n = str(data["question"])
         pid = parse_part_id(n)
         figs = fig_map.get(n, [])
+        if pid and not figs:
+            figs = fig_map.get(pid.label, []) or fig_map.get(pid.slug, [])
         if not any(p.endswith("-paper.png") or "-paper." in p for p in figs):
             raise RuntimeError(
                 f"q{n}: export missing required paper clip "
@@ -529,6 +545,10 @@ def export_paper_to_vault(
             if pq:
                 by_parent[pq].append(data)
         for pq, children in by_parent.items():
+            # Whole-question leaves (table with no (a)/(b)) share id …-qN.
+            # Do not overwrite that note with an empty parent index.
+            if not any(parse_part_id(str(ch.get("question") or "")) for ch in children):
+                continue
             children = sorted(
                 children,
                 key=lambda d: draft_stem_sort_key(

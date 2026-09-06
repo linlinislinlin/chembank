@@ -294,6 +294,21 @@ def test_render_groups_sequential_numbering_is_global(tmp_path: Path):
         assert f"**第{i}题**" in answers
 
 
+def test_preserve_order_skips_lo_regrouping(tmp_path: Path):
+    """Curated papers keep pick-list order and do not emit LO group headers."""
+    qa = _lo_question("q-a", ["5.1-3b"], ["x"], year=2020, question_txt="1")
+    qb = _lo_question("q-b", ["5.1-1"], ["x"], year=2019, question_txt="2")
+    pick = _lo_pick(qa, qb)
+    pick["rules"]["preserve_order"] = True
+    out = tmp_path / "note.md"
+    render_tiles(pick, vault_root=VAULT, out_path=out)
+    note = _read_note(out)
+    assert "### 5.1-1" not in note
+    assert "### 5.1-3b" not in note
+    grid, _answers = note.split("## 答案区", 1)
+    assert grid.index("body of q-a") < grid.index("body of q-b")
+
+
 def test_primary_lo_numeric_smallest(tmp_path: Path):
     """The primary LO is the numerically smallest, ignoring suffix letters."""
     from chembank.assemble import _primary_lo

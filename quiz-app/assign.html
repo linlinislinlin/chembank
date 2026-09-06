@@ -66,10 +66,21 @@
     <a href="assign.html" class="on">布置作业</a>
     <a href="stats.html">查看统计</a>
     <a href="index.html">刷题库</a>
+    <a href="home.html">学生首页</a>
   </div>
 </header>
 
-<div class="wrap">
+<div class="wrap" id="loginGate" style="max-width:420px;margin:80px auto">
+  <div class="card">
+    <h2>🔒 教师口令</h2>
+    <p style="color:var(--muted);font-size:12px">布置作业需要教师口令（与统计页相同）。</p>
+    <input class="input" id="tokenInput" type="password" placeholder="教师口令" />
+    <div class="msg err" id="gateErr"></div>
+    <button class="btn" id="gateBtn" style="width:100%;margin-top:10px">进入布置</button>
+  </div>
+</div>
+
+<div class="wrap" id="mainWrap" style="display:none">
   <div class="grid">
     <!-- 左栏：作业设置 -->
     <div>
@@ -77,8 +88,12 @@
         <h2>1 · 新建作业</h2>
         <label>作业标题</label>
         <input class="input" id="title" placeholder="例如：5.1 键能 & 焓变 · 第3周作业" />
+        <label>说明（可选）</label>
+        <textarea class="input" id="instructions" rows="3" placeholder="发给学生的简短说明"></textarea>
         <label>截止时间（可选）</label>
         <input class="input" type="datetime-local" id="due" />
+        <label style="margin-top:14px"><input type="checkbox" id="showAns" checked /> 提交后显示正确答案</label>
+        <label><input type="checkbox" id="showExp" checked /> 提交后显示解析 / Mark Scheme</label>
         <label>已选题目</label>
         <div id="selbar"><span class="count" id="selCount">已选 0 题</span></div>
         <button class="btn green" id="createBtn" style="width:100%">创建作业并生成链接 →</button>
@@ -105,6 +120,8 @@
         <button data-f="cur" class="on">当前考点</button>
         <button data-f="all">全库</button>
         <button data-f="my">仅已选</button>
+        <button data-f="mcq">仅选择</button>
+        <button data-f="st">仅结构</button>
       </div>
       <div id="qlist"></div>
       <div class="empty" id="qempty" style="display:none">没有匹配的题</div>
@@ -113,12 +130,17 @@
 </div>
 
 <script src="data.js"></script>
+<script src="structured-data.js"></script>
 <script>
 "use strict";
 const DATA = window.CHEMBANK_DATA || {};
-const ALL = DATA.questions || [];
+const MCQ = DATA.questions || [];
+const STRUCT = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) || [];
+const ALL = MCQ.concat(STRUCT);
 const SYL = DATA.syllabus || [];
 const selected = new Set();
+const BYID = new Map(ALL.map(q => [q.id, q]));
+let __token = null;
 
 const $ = (id) => document.getElementById(id);
 
@@ -182,10 +204,12 @@ function collectTopics(chap) {
 // ---- 题目列表 ----
 function currentList() {
   const mode = document.querySelector("#filters button.on").dataset.f;
-  if (mode === "all") return ALL;
-  if (mode === "cur") return curCode ? (BYCODE.get(curCode)||[]) : ALL;
-  if (mode === "my") return ALL.filter(q => selected.has(q.id));
-  return ALL;
+  let list = ALL;
+  if (mode === "cur") list = curCode ? (BYCODE.get(curCode)||[]) : ALL;
+  else if (mode === "my") list = ALL.filter(q => selected.has(q.id));
+  else if (mode === "mcq") list = ALL.filter(q => q.type !== "structured");
+  else if (mode === "st") list = ALL.filter(q => q.type === "structured");
+  return list;
 }
 function renderList() {
   const q = $("qsearch").value.trim().toLowerCase();
@@ -223,12 +247,14 @@ function renderOne(q) {
     renderList(); refreshTreeSide();
   };
   const img = document.createElement("img");
-  img.className = "thumb"; img.src = q.figures && q.figures[0] ? q.figures[0] : "";
+  img.className = "thumb";
+  img.src = (q.type === "structured" ? (q.paper_img || "") : (q.figures && q.figures[0] || ""));
   img.loading = "lazy";
   const info = document.createElement("div");
   info.className = "info";
   const b = document.createElement("b");
-  b.textContent = `${q.year||"?"} ${q.session||""} P${q.paper} · Q${q.question} ${q.marks?"(" + q.marks + "分)":""} · 答案 ${q.ms_answer||"–"}`;
+  const kind = q.type === "structured" ? "结构题" : ("答案 " + (q.ms_answer || "–"));
+  b.textContent = `${q.year||"?"} ${q.session||""} P${q.paper} · Q${q.question} ${q.marks?"(" + q.marks + "分)":""} · ${kind}`;
   info.appendChild(b);
   const sub = document.createElement("div");
   sub.className = "sub";
@@ -263,13 +289,21 @@ $("createBtn").onclick = async () => {
   const msg = $("createMsg");
   if (!title) { msg.className="msg err"; msg.textContent="请输入作业标题"; return; }
   if (!idArr.length) { msg.className="msg err"; msg.textContent="请选择题目（在考纲树点一个考点，再勾选题目）"; return; }
-  if (!window.HomeworkDB || !window.HomeworkDB.ready()) {
-    msg.className="msg err"; msg.textContent="Supabase 未配置：请先填 config.js 再刷新。";
+  if (!window.HomeworkDB) {
+    msg.className="msg err"; msg.textContent="作业接口未加载。";
     return;
   }
   try {
     const dueAt = $("due").value ? new Date($("due").value).toISOString() : null;
-    const ass = await window.HomeworkDB.createAssignment(title, idArr, dueAt);
+    const questions = idArr.map(id => BYID.get(id)).filter(Boolean);
+    const ass = await window.HomeworkDB.createAssignment({
+      title,
+      instructions: $("instructions").value.trim(),
+      dueAt,
+      showAnswers: $("showAns").checked,
+      showExplanations: $("showExp").checked,
+      questions,
+    }, __token);
     const link = location.origin + location.pathname.replace("assign.html","") + "homework.html?id=" + ass.id;
     $("linkBox").textContent = link;
     $("linkCard").style.display = "block";
@@ -289,6 +323,26 @@ function escapeHtml(s) {
   const d = document.createElement("div"); d.textContent = s==null?"":String(s); return d.innerHTML;
 }
 
+function setupGate() {
+  const cfg = window.SUPABASE_CONFIG || {};
+  const unlock = () => {
+    const expected = (cfg.statsToken || "").trim();
+    const v = $("tokenInput").value.trim();
+    if (!expected) { $("gateErr").textContent = "config.js 未设置 statsToken"; return; }
+    if (v !== expected) { $("gateErr").textContent = "口令错误"; return; }
+    __token = v;
+    try { sessionStorage.setItem("stats-token", __token); } catch (e) {}
+    $("loginGate").style.display = "none";
+    $("mainWrap").style.display = "block";
+  };
+  $("gateBtn").onclick = unlock;
+  $("tokenInput").addEventListener("keydown", (e) => { if (e.key === "Enter") unlock(); });
+  try {
+    const cached = sessionStorage.getItem("stats-token");
+    if (cached) { __token = cached; $("loginGate").style.display = "none"; $("mainWrap").style.display = "block"; }
+  } catch (e) {}
+}
+
 renderSyl();
 renderList();
 refreshTreeSide();
@@ -296,5 +350,6 @@ refreshTreeSide();
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
+<script>setupGate();</script>
 </body>
 </html>

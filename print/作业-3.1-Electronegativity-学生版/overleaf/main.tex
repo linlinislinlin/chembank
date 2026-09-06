@@ -1,0 +1,327 @@
+% Student paper — English, typeset text, graphs as CIE clips. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.5em,itemsep=0.12em,topsep=0.15em,parsep=0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.08em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.62em]}%
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.10em}
+\setlength{\abovedisplayskip}{0.25em}
+\setlength{\belowdisplayskip}{0.25em}
+
+\newcommand{\qhead}[2]{%
+  \par\vspace{0.28em}%
+  \Needspace{4.2em}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+}
+
+% Graph clip: stem is on the scan. Measure so label + image stay together.
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.84\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.25em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.06em}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\optline}[1]{%
+  \par\vspace{0.06em}{\small #1}\par
+}
+
+\newcommand{\sourcefoot}[1]{%
+  {\footnotesize\color{gray}#1}\par
+}
+
+\begin{document}
+\sethomework{AS Chemistry homework · 3.1 Electronegativity}{16 marks}
+
+\begin{center}
+{\large\bfseries AS Chemistry homework · 3.1 Electronegativity}\\[0.12em]
+{\small CIE 9701 AS Chemistry · 16 marks · about 35--40 minutes}
+\end{center}
+
+{\small Topic: 3.1 Electronegativity and bonding --- definition, factors, Periodic Table trends, and using Pauling differences to predict ionic or covalent bonding.
+Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; give the usual CIE reasons (nuclear charge, atomic radius, shielding). Pauling values are given on the paper where needed.}
+
+\vspace{0.15em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 11 \\
+B1 & 2023 FM Paper 22 Question 1(a) & 3 \\
+B2 & 2023 MJ Paper 22 Question 1(b)(ii) & 2 \\
+\midrule
+ & \textbf{Total} & \textbf{16} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.25em}
+{\large\bfseries Section A --- Multiple-choice questions (11 marks)}\par
+
+% A1 graphs --- keep CIE clip
+\clipq{A1.}{1}{img-001.png}
+\sourcefoot{2022 MJ Paper 12 Question 19}
+
+% A2 NEW --- typeset
+\qhead{A2.}{1}
+{\small V and Z are both elements in Period 3 of the Periodic Table. Each element forms one stable ion that does not contain another element.}
+
+{\small The atomic radius of each element and the ionic radius of the ion described above is shown.}
+
+\vspace{0.15em}
+\centering
+{\small
+\begin{tabular}{ccc}
+\toprule
+element & atomic radius / nm & ionic radius / nm \\
+\midrule
+V & 0.186 & 0.095 \\
+Z & 0.099 & 0.181 \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+
+\vspace{0.12em}
+{\small Which statement is correct?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.08em]
+\item Ions of V and Z have the same number of full electron shells.
+\item Ions of Z are positively charged.
+\item Z has a greater electronegativity than V.
+\item V has more outer electrons than Z.
+\end{enumerate}
+\sourcefoot{2023 FM Paper 12 Question 22}
+
+% A3 typeset table — keep stem + table together
+\Needspace{11em}
+\qhead{A3.}{1}
+{\small The elements in Period 3 and their compounds show trends across the period from sodium to chlorine.}
+
+{\small Which row is correct?}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{ccc}
+\toprule
+ & electronegativity of the elements & acid/base behaviour of the oxides of the elements \\
+\midrule
+\textbf{A} & decreases & basic $\rightarrow$ amphoteric $\rightarrow$ acidic \\
+\textbf{B} & decreases & acidic $\rightarrow$ amphoteric $\rightarrow$ basic \\
+\textbf{C} & increases & basic $\rightarrow$ amphoteric $\rightarrow$ acidic \\
+\textbf{D} & increases & acidic $\rightarrow$ amphoteric $\rightarrow$ basic \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+\sourcefoot{2022 FM Paper 12 Question 18}
+
+% A4 typeset table
+\qhead{A4.}{1}
+{\small Which row shows the expected properties of the element astatine when compared to the properties of the element iodine?}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{ccc}
+\toprule
+ & electronegativity of astatine compared to iodine & volatility of astatine compared to iodine \\
+\midrule
+\textbf{A} & less electronegative & higher \\
+\textbf{B} & more electronegative & higher \\
+\textbf{C} & less electronegative & lower \\
+\textbf{D} & more electronegative & lower \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+\sourcefoot{2023 MJ Paper 13 Question 17}
+
+% A5 graphs
+\clipq{A5.}{1}{img-005.png}
+\sourcefoot{2025 MJ Paper 11 Question 20}
+
+% A6 graphs NEW
+\clipq{A6.}{1}{img-006.png}
+\sourcefoot{2025 ON Paper 14 Question 17}
+
+% A7 compact formulae
+\qhead{A7.}{1}
+{\small Which compound has the smallest difference in electronegativity between its two elements?}
+\optline{\textbf{A} \ce{KF}\qquad \textbf{B} \ce{KBr}\qquad \textbf{C} \ce{LiF}\qquad \textbf{D} \ce{LiBr}}
+\sourcefoot{2022 MJ Paper 13 Question 5}
+
+% A8 typeset
+\qhead{A8.}{1}
+{\small L and M are elements in Period 3 of the Periodic Table. Neither element is argon.}
+
+{\small Information about the Pauling electronegativity values of L and M is given.}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{cc}
+\toprule
+element & Pauling electronegativity value \\
+\midrule
+L & the highest of the seven elements \ce{Na} to \ce{Cl} \\
+M & the lowest of the seven elements \ce{Na} to \ce{Cl} \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+
+\vspace{0.1em}
+{\small Three statements about elements L and M are given.}
+\begin{enumerate}[label=\arabic*., leftmargin=1.6em, itemsep=0.06em]
+\item Element L contains covalent bonds.
+\item Element L has a higher atomic number than element M.
+\item A compound of L and M contains ionic bonds.
+\end{enumerate}
+{\small Which statements are correct?}
+\optline{\textbf{A} 1, 2 and 3\qquad \textbf{B} 1 and 2 only\qquad \textbf{C} 1 and 3 only\qquad \textbf{D} 2 and 3 only}
+\sourcefoot{2023 MJ Paper 13 Question 4}
+
+% A9 typeset — keep stem + both tables on one page
+\Needspace{22em}
+\qhead{A9.}{1}
+{\small Elements X, Y and Z are all in the first two periods of the Periodic Table.}
+
+{\small Their Pauling electronegativity values, $E_\mathrm{N}$, are shown.}
+
+\vspace{0.1em}
+\centering
+{\small
+\begin{tabular}{cc}
+\toprule
+element & $E_\mathrm{N}$ \\
+\midrule
+X & 1.0 \\
+Y & 2.1 \\
+Z & 4.0 \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+
+\vspace{0.08em}
+{\small Substances exist with formulae \ce{XZ}, \ce{YZ} and \ce{Z2}.}
+
+{\small Which row puts these substances in order of increasing melting point?}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{cccc}
+\toprule
+ & lowest melting point & $\longrightarrow$ & highest melting point \\
+\midrule
+\textbf{A} & \ce{XZ} & \ce{YZ} & \ce{Z2} \\
+\textbf{B} & \ce{XZ} & \ce{Z2} & \ce{YZ} \\
+\textbf{C} & \ce{Z2} & \ce{YZ} & \ce{XZ} \\
+\textbf{D} & \ce{Z2} & \ce{XZ} & \ce{YZ} \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+\sourcefoot{2022 FM Paper 12 Question 7}
+
+% A10 NEW compact
+\qhead{A10.}{1}
+{\small Which type of bonding is \textbf{never} found in elements?}
+\vspace{0.08em}
+{\small
+\begin{tabular}{@{}p{0.46\linewidth}p{0.46\linewidth}@{}}
+\textbf{A} covalent & \textbf{B} ionic \\[0.15em]
+\textbf{C} metallic & \textbf{D} van der Waals' forces
+\end{tabular}}
+\par
+\sourcefoot{2021 MJ Paper 13 Question 6}
+
+% A11 NEW
+\qhead{A11.}{1}
+{\small Sodium, magnesium, aluminium, silicon and phosphorus are all elements in Period 3 of the Periodic Table.}
+
+{\small Three statements about the oxides and chlorides of these elements are given.}
+\begin{enumerate}[label=\arabic*., leftmargin=1.6em, itemsep=0.06em]
+\item The ionically bonded oxides all react with dilute hydrochloric acid.
+\item All metal chlorides produce neutral solutions when added to water.
+\item The two most electronegative elements both form covalently bonded chlorides.
+\end{enumerate}
+{\small Which statements are correct?}
+\optline{\textbf{A} 1, 2 and 3\qquad \textbf{B} 1 and 2 only\qquad \textbf{C} 1 and 3 only\qquad \textbf{D} 2 and 3 only}
+\sourcefoot{2023 MJ Paper 12 Question 19}
+
+\vspace{0.35em}
+{\large\bfseries Section B --- Structured questions (5 marks)}\par\vspace{0.1em}
+{\normalsize\bfseries B1 · 2023 February/March Paper 22 Question 1(a) (3 marks)}\par
+
+{\small The Pauling electronegativity values of elements can be used to predict the chemical properties of compounds.}
+
+{\small Use the information in Table 1.1 to answer the following questions.}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{lccccc}
+\toprule
+element & \ce{H} & \ce{Li} & \ce{C} & \ce{O} & \ce{S} \\
+\midrule
+Pauling electronegativity value & 2.1 & 1.0 & 2.5 & 3.5 & 2.6 \\
+\bottomrule
+\end{tabular}}
+\par\vspace{0.06em}
+{\small Table 1.1}\par
+\raggedright
+
+\qhead{B1(a)(i)}{1}
+{\small Define electronegativity.}
+\answerlines{2}
+
+\qhead{B1(a)(ii)}{2}
+{\small \ce{O} and \ce{S} are in Group 16.}
+
+{\small Explain the difference in the Pauling electronegativity values of \ce{O} and \ce{S}.}
+\answerlines{2}
+
+\vspace{0.25em}
+{\normalsize\bfseries B2 · 2023 May/June Paper 22 Question 1(b)(ii) (2 marks)}\par
+
+\qhead{B2(b)(ii)}{2}
+{\small Explain why electronegativity increases across a period.}
+\answerlines{2}
+
+\end{document}

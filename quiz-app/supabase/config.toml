@@ -10,3 +10,7 @@ verify_jwt = false
 [functions.practice-log]
 enabled = true
 verify_jwt = false
+
+[functions.assignment]
+enabled = true
+verify_jwt = false

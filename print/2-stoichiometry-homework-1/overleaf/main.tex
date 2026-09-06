@@ -1,0 +1,257 @@
+% Chemistry Homework Formatter — student paper preamble
+% Default wrapper is English (CIE papers). Load ctex only if the teacher asks for Chinese.
+% Compiler: XeLaTeX. Overleaf: upload this file as main.tex plus the images/ folder.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.25em,topsep=0.25em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.12em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.3em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[1.05em]}%
+}
+
+% Fallback if pgffor is missing: comment \answerlines and use \vspace instead.
+\usepackage{pgffor}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+% Measure the image, then break only if the whole labelled clip will not fit.
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.35em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+  \noindent\usebox0\par
+  \vspace{0.28em}%
+}
+
+\newcommand{\qfigure}[1]{%
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\qfigurebig}[1]{%
+  \sbox0{\includegraphics[width=\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.12em}
+
+\setlist[enumerate]{leftmargin=1.55em,itemsep=0.06em,topsep=0.12em}
+\newcommand{\qhead}[1]{%
+  \par\vspace{0.38em}%
+  {\normalsize\bfseries #1}\par\vspace{0.12em}%
+}
+\newcommand{\mcq}[1]{%
+  \par\noindent\textbf{#1.}\enspace\ignorespaces
+}
+\newcommand{\mcqend}{\hfill{[1]}\par}
+\newcommand{\optrow}[4]{%
+\par\noindent{\small
+\begin{tabular}{@{}p{0.48\linewidth}@{}p{0.48\linewidth}@{}}
+\textbf{A}\; #1 & \textbf{B}\; #2 \\[0.12em]
+\textbf{C}\; #3 & \textbf{D}\; #4
+\end{tabular}}\par
+}
+\newcommand{\optlist}[4]{%
+\par
+\begin{enumerate}[label=\textbf{\Alph*.}, leftmargin=1.55em, itemsep=0.05em, topsep=0.08em]
+\item #1
+\item #2
+\item #3
+\item #4
+\end{enumerate}
+}
+\newcommand{\qfig}[2][0.58]{%
+\par
+\begin{center}\vspace{-0.1em}%
+\includegraphics[width=#1\linewidth,keepaspectratio]{#2}%
+\end{center}\vspace{-0.1em}%
+}
+
+\begin{document}
+\sethomework{AS stoichiometry homework 1 · mole foundations}{14 marks}
+
+\begin{center}
+{\large\bfseries AS stoichiometry homework 1 · mole foundations}\\[0.2em]
+{\small CIE 9701 AS Chemistry · 14 MCQ · 14 marks}
+\end{center}
+
+\noindent Name: \underline{\hspace{5.8cm}} \quad Class: \underline{\hspace{2.6cm}} \quad Date: \underline{\hspace{2.8cm}}
+
+\vspace{0.25em}
+{\small Topics: 1 masses of atoms and molecules · 2 the mole and Avogadro · 3 reacting masses · 4 complete combustion.
+
+Circle \textbf{one} letter (A--D) for each question. Show working. Calculators and a Periodic Table may be used.}
+\vspace{0.15em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{1 · Masses of atoms and molecules}
+\mcq{1}%
+The mass spectrum of a sample of neon is shown. The relative abundance of each peak is written in brackets above it.
+\qfig[0.48]{fig-q01-spectrum.png}
+What is the relative atomic mass, $A_\mathrm{r}$, of this sample of neon?
+\optrow{20.15}{20.20}{21.00}{21.82}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{2}%
+A sample of sulfur consists mostly of \ce{^{32}S}. It also contains 4.2\% \ce{^{34}S} and 2.8\% \ce{^{36}S}. No other isotopes of sulfur are present.
+
+What is the relative atomic mass, $A_\mathrm{r}$, of \textbf{this} sample of sulfur?
+\optrow{32.1}{32.2}{34.0}{34.3}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{3}%
+The diagram shows the apparatus used to find the relative molecular mass of a volatile liquid.
+
+When 0.10\,g of a volatile liquid is injected into the syringe, all of the volatile liquid evaporates and the volume increases by 85\,cm$^3$.
+
+The heater maintains a temperature of 400\,K and the experiment is carried out at a pressure of 101\,300\,Pa.
+\qfig[0.78]{fig-q03-apparatus.png}
+If the vapour of the volatile liquid behaves as an ideal gas, which expression can be used to calculate the relative molecular mass of the liquid?
+\optlist{$M_\mathrm{r}=(85\times 101\,300)\div(0.10\times 8.31\times 400)$}{$M_\mathrm{r}=(85\times 101.3)\div(0.10\times 8.31\times 400)$}{$M_\mathrm{r}=(0.10\times 8.31\times 400)\div(85\times 10^{-6}\times 101\,300)$}{$M_\mathrm{r}=(0.10\times 8.31\times 400)\div(85\times 10^{-6}\times 101.3)$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{2 · The mole and the Avogadro constant}
+\mcq{4}%
+Which statement about the Avogadro constant is correct?
+\optlist{It is the mass of one mole of any element.}{It is the mass of $6.02\times 10^{23}$ atoms of any element.}{It is the number of atoms in one mole of neon.}{It is the number of atoms in 12\,g of any element.}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{5}%
+Which contains the largest number of hydrogen atoms?
+\optlist{0.10\,mol of pentane}{0.20\,mol of but-2-ene}{1.00\,mol of hydrogen molecules}{$6.02\times 10^{23}$ hydrogen atoms}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{6}%
+Which sample contains the most iodine?
+\optrow{1\,g of \ce{CaI2}}{1\,g of \ce{KI}}{1\,g of \ce{NaI}}{1\,g of \ce{NH4I}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{7}%
+What contains $9.03\times 10^{23}$ oxygen atoms?
+\optlist{0.25\,mol aluminium oxide}{0.75\,mol sulfur dioxide}{1.5\,mol sulfur trioxide}{3.0\,mol water}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{3 · Reacting masses}
+\mcq{8}%
+Sodium peroxide, \ce{Na2O2}, is used to absorb carbon dioxide from the atmosphere and release oxygen in closed environments such as space capsules and submarines.
+\[\ce{2Na2O2 + 2CO2 -> 2Na2CO3 + O2}\]
+Which mass of sodium peroxide would be required to remove 2.4\,dm$^3$ of carbon dioxide from the atmosphere at room temperature and pressure?
+\optrow{2.4\,g}{3.9\,g}{7.8\,g}{15.6\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{9}%
+A student reacts 0.100\,mol of each of sodium, magnesium and phosphorus atoms separately with an excess of oxygen.
+
+Which rows are correct?
+
+{\centering
+{\small
+\begin{tabular}{c l c}
+\toprule
+ & oxide & mass of oxide formed\,/\,g \\
+\midrule
+1 & sodium & 3.10 \\
+2 & magnesium & 4.03 \\
+3 & phosphorus & 7.10 \\
+\bottomrule
+\end{tabular}}\par}
+
+\optrow{1, 2 and 3}{1 and 2 only}{1 and 3 only}{2 and 3 only}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{10}%
+Separate samples, each of mass 1.0\,g, of the compounds listed are treated with an excess of dilute acid.
+
+Which compound releases the largest amount of \ce{CO2}?
+\optrow{1.0\,g \ce{CaCO3}}{1.0\,g \ce{Li2CO3}}{1.0\,g \ce{MgCO3}}{1.0\,g \ce{Na2CO3}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{11}%
+2.0\,g of ammonium nitrate, \ce{NH4NO3}, decomposes to give 0.90\,g of water and a single gas.
+
+What is the identity of the gas?
+\optrow{\ce{NO}}{\ce{NO2}}{\ce{N2O}}{\ce{N2}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{4 · Complete combustion}
+\mcq{12}%
+What is the minimum mass of oxygen required to ensure the complete combustion of 12\,dm$^3$ of propane measured under room conditions?
+\optrow{60\,g}{80\,g}{120\,g}{160\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{13}%
+Mixture R consists of one mole of \ce{C3H6} and one mole of \ce{C4H6}.
+
+What is the minimum number of moles of oxygen molecules needed for complete combustion of mixture R?
+\optrow{6.5}{7}{10}{20}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{14}%
+If 1 mole of hexane combusts in an excess of oxygen, how many moles of products are formed?
+\optrow{11}{12}{13}{14}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\end{document}

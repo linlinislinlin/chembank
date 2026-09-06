@@ -39,7 +39,10 @@ def test_symbol_pua_degree_delta_pi_sigma():
     assert r"\Delta H" in format_chemistry_text("\uf044H = +180")
     assert "π-bond" in format_chemistry_text("\uf070-bond")
     assert "σ-bond" in format_chemistry_text("\uf073-bond")
+    assert "γ-ionone" in format_chemistry_text("\uf067-ionone")
+    assert "δ+" in format_chemistry_text("\uf064+")
     assert "\uf0b0" not in format_chemistry_text("120\uf0b0")
+    assert "\uf067" not in format_chemistry_text("\uf067-ionone")
 
 
 def test_ion_charge_superscript_and_showboth():

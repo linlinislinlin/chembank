@@ -1,0 +1,56 @@
+{
+  "markdown": "/Users/tsinglan-school/Desktop/题库/vault/handouts/1-atomic-structure-exam.md",
+  "images_dir": "/Users/tsinglan-school/Desktop/题库/print/考试-1-Atomic-structure-学生版/images",
+  "count": 4,
+  "missing": [],
+  "images": [
+    {
+      "id": "img-001",
+      "src": "file:///Users/tsinglan-school/Desktop/题库/vault/assets/cie-9701-2025-mj-p12-q14.png",
+      "source_file": "/Users/tsinglan-school/Desktop/题库/vault/assets/cie-9701-2025-mj-p12-q14.png",
+      "path": "images/img-001.png",
+      "filename": "img-001.png",
+      "sha256": "84a10161e519c26c602d721491aa62bce6b9490fe68440a0f854fa09071f7747",
+      "width": 840,
+      "height": 651,
+      "bytes": 24419,
+      "kind": "other"
+    },
+    {
+      "id": "img-002",
+      "src": "file:///Users/tsinglan-school/Desktop/题库/vault/assets/cie-9701-2025-on-p12-q1.png",
+      "source_file": "/Users/tsinglan-school/Desktop/题库/vault/assets/cie-9701-2025-on-p12-q1.png",
+      "path": "images/img-002.png",
+      "filename": "img-002.png",
+      "sha256": "6ce3be4776282bdbe94d165f90dee53a7156669500c8ecb517352ff72755b822",
+      "width": 847,
+      "height": 439,
+      "bytes": 14687,
+      "kind": "other"
+    },
+    {
+      "id": "img-003",
+      "src": "file:///Users/tsinglan-school/Desktop/题库/vault/assets/cie-9701-2023-on-p11-q2.png",
+      "source_file": "/Users/tsinglan-school/Desktop/题库/vault/assets/cie-9701-2023-on-p11-q2.png",
+      "path": "images/img-003.png",
+      "filename": "img-003.png",
+      "sha256": "87fdafa726e14db0f15c3a0063f03859c8154dcc6948d3318f4c02c4381f2cbd",
+      "width": 762,
+      "height": 583,
+      "bytes": 35406,
+      "kind": "other"
+    },
+    {
+      "id": "img-004",
+      "src": "file:///Users/tsinglan-school/Desktop/题库/vault-structured/assets/cie-9701-2025-mj-p21-q2b-i-paper.png",
+      "source_file": "/Users/tsinglan-school/Desktop/题库/vault-structured/assets/cie-9701-2025-mj-p21-q2b-i-paper.png",
+      "path": "images/img-004.png",
+      "filename": "img-004.png",
+      "sha256": "6194da3fa70e0efed8def51b4145e18a6ef181d9f4fc045c9e5a90a48d0f8ffb",
+      "width": 1309,
+      "height": 1658,
+      "bytes": 88862,
+      "kind": "paper-clip"
+    }
+  ]
+}

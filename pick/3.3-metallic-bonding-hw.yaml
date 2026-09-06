@@ -1,0 +1,36 @@
+# CIE 9701 AS homework: 3.3 metallic bonding (+ covalent / dative / dot-and-cross)
+# ~40 minutes · 8 MCQ + 7 structured parts (19 marks on the paper).
+#
+#   chembank select pick/3.3-metallic-bonding-hw.yaml -o build/3.3-metallic-bonding-hw.json
+#   chembank assemble build/3.3-metallic-bonding-hw.json -o vault/handouts/3.3-metallic-bonding-homework-answers.md --vault vault
+#
+# Curated include_ids. Pedagogical order:
+#   MCQ easy→medium (metallic lattice strength, then octet / dative, then Al2Cl6),
+#   then structured: define metallic + Na lattice → define covalent / dative →
+#   NH4Cl and Al2Cl6 drawings → CO dot-and-cross.
+#
+# 2025-fm-p22-q2a is tagged 3.4-1a but the paper asks for the metallic-bonding definition (3.3-1).
+# 2023-mj-p11-q2 is tagged 13.1; it is a clean metallic-bonding melting-point item.
+# cie-9701-2025-mj-p14-q12 (ionic+covalent, not coordinate) is on the 3.2 homework; omitted here.
+title: "3.3 Metallic bonding homework"
+syllabus_codes: ["3.3", "3.4", "3.7"]
+preserve_order: true
+include_ids:
+  # A  MCQ · metallic
+  - cie-9701-2023-mj-p11-q2       # Ca vs Ba MP; cation size vs delocalised electrons
+  - cie-9701-2021-mj-p13-q36      # Na→Al MP: charge, delocalised e−, ionic radius
+  # A  MCQ · covalent / dative / Al2Cl6 / 3.7
+  - cie-9701-2024-mj-p12-q6       # incomplete outer shell (BF3); tagged 3.4-1b
+  - cie-9701-2021-fm-p12-q34      # which species accept a lone pair (BF3, H+, CH3+)
+  - cie-9701-2024-mj-p11-q5       # bonding types in Al2Cl6
+  - cie-9701-2023-on-p11-q5       # Al2Cl6 vapour structure (keep as image)
+  - cie-9701-2022-fm-p12-q5       # Al2Cl6 dot-and-cross (keep as image)
+  - cie-9701-2021-on-p11-q35      # Al / Si / Mg chlorides: covalent + dative
+  # B  structured
+  - cie-9701-2025-fm-p22-q2a      # define metallic bonding [2]
+  - cie-9701-2024-mj-p22-q1c      # labelled diagram: structure and bonding in Na [1]
+  - cie-9701-2024-mj-p21-q5a      # define covalent bond [1]
+  - cie-9701-2021-mj-p22-q2b-i    # explain coordinate bond [1]
+  - cie-9701-2021-mj-p22-q2b-ii   # CO dot-and-cross (dative) [2]
+  - cie-9701-2024-mj-p23-q4a      # NH3 + HCl → NH4Cl bonding diagram [2]
+  - cie-9701-2021-fm-p22-q2e-i    # draw all bond types in Al2Cl6 [2]

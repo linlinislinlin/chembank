@@ -304,7 +304,7 @@ def question_y_ranges_on_page(page: Any) -> dict[str, tuple[float, float]]:
 
 
 _FOOTER_WORD_RE = re.compile(
-    r"UCLES|Turn\s*over|9701/\d+|Permission|copyright|Acknowledgements|"
+    r"UCLES|Turn\s*over|(?:9701|0620)/\d+|Permission|copyright|Acknowledgements|"
     r"BLANK|www\.cambridge",
     re.I,
 )
@@ -648,10 +648,14 @@ def _content_bottom_y(
         if r.y0 > page.rect.y1 - 50:
             continue
         # Ignore full-page rules / underlines spanning the margin.
-        # Only treat a near-bottom separator as a copyright trailer cut
-        # (table gridlines mid-question must not truncate the clip).
+        # Only treat a thin rule sitting just above the copyright trailer as
+        # a cut (table gridlines mid-question, e.g. last-page A–D boxes,
+        # must not truncate the clip).
         if r.height < 1.5 and r.width > 200:
-            if trailer_y is not None and r.y0 <= trailer_y and r.y0 > y0 + 40:
+            if (
+                trailer_y is not None
+                and trailer_y - 80 <= r.y0 <= trailer_y
+            ):
                 hard_cap = min(hard_cap, r.y0 - 2.0)
             continue
         bottom = max(bottom, r.y1)
@@ -826,12 +830,32 @@ def _clip_contains_next_question(text: str, qnum: str) -> bool:
         return False
     nxt_re = rf"(?:^|\n)\s*{nxt}(?:\s|[\x00-\x1f\ufeff])+([A-Z][A-Za-z]{{2,}})\b"
     _nxt_searcher = re.compile(nxt_re)
+    # ATP / P6 "Experiment 3 / Repeat Experiment 2…" is a method step, not Q3.
+    _not_stem = {
+        "fig",
+        "figure",
+        "repeat",
+        "empty",
+        "refill",
+        "fill",
+        "rinse",
+        "record",
+        "stand",
+        "slowly",
+        "experiment",
+    }
 
     def _is_real_next_question(s: str) -> bool:
-        m = _nxt_searcher.search(s)
-        if not m:
-            return False
-        return m.group(1).lower() not in {"fig", "figure"}
+        for m in _nxt_searcher.finditer(s):
+            if m.group(1).lower() in _not_stem:
+                continue
+            # Nuclide OCR stacks mass/proton numbers on their own lines
+            # (``T\n12\n6\nWhich``). That proton number is not Q6.
+            prefix = s[max(0, m.start() - 40) : m.start()]
+            if re.search(r"(?:^|\n)\s*\d{1,3}\s*$", prefix):
+                continue
+            return True
+        return False
     if not _is_real_next_question(text):
         return False
     # Statement/step-combo questions (numbered statements 1/2/3, mechanism
@@ -988,13 +1012,11 @@ def _clip_has_option_letters_abcd(text: str) -> bool:
 
 
 def _pdf_requires_mcq_options(pdf_path: Path) -> bool:
-    """True for Paper 1x MCQ; False for Paper 2/3/4/5x (structured/practical)."""
-    m = re.search(r"qp_(\d+)", Path(pdf_path).name, re.I)
-    if m:
-        from chembank.registry import paper_kind
-
-        return paper_kind(int(m.group(1))) == "mcq"
-    return True
+    """True for MCQ papers (9701 P1x, 0620 P2x)."""
+    kind = _pdf_paper_kind(pdf_path)
+    if kind is None:
+        return True
+    return kind == "mcq"
 
 
 # Right inset (pt) from page edge for paper-clip x1.
@@ -1006,12 +1028,16 @@ _PAPER_CLIP_LEFT_X0 = 40.0
 
 
 def _pdf_paper_kind(pdf_path: Path) -> str | None:
-    m = re.search(r"qp_(\d+)", Path(pdf_path).name, re.I)
-    if not m:
-        return None
-    from chembank.registry import paper_kind
+    from chembank.registry import paper_kind, parse_paper_ref
 
-    return paper_kind(int(m.group(1)))
+    try:
+        ref = parse_paper_ref(Path(pdf_path).stem)
+        return paper_kind(ref.paper, ref.syllabus_code)
+    except ValueError:
+        m = re.search(r"qp_(\d+)", Path(pdf_path).name, re.I)
+        if not m:
+            return None
+        return paper_kind(int(m.group(1)))
 
 
 def _paper_clip_x_bounds(page: Any, pdf_path: Path) -> tuple[float, float]:
@@ -1339,8 +1365,73 @@ def render_paper_clip(
     return out_path
 
 
+_MS_LONE_Q_RE = re.compile(r"^[1-9]\d?$")
+
+
+def _mark_scheme_lone_question_clips(
+    ms_pdf: Path, *, min_page: int = 1
+) -> dict[str, PaperClip]:
+    """Main-question MS bands for labels like ``4`` (no ``4(a)``), e.g. IGCSE ATP planning.
+
+    ``min_page`` is 1-based; skip Generic Marking Principles (early pages).
+    """
+    import fitz
+
+    ms_pdf = Path(ms_pdf)
+    doc = fitz.open(ms_pdf)
+    hits: list[tuple[str, int, float, float]] = []  # qnum, page_idx, y0, page_height
+    try:
+        for i, page in enumerate(doc):
+            if i + 1 < min_page:
+                continue
+            page_h = float(page.rect.height)
+            page_w = float(page.rect.width)
+            for text, x0, y0, x1, y1 in _page_space_words(page):
+                t = text.strip()
+                if not _MS_LONE_Q_RE.match(t):
+                    continue
+                num = int(t)
+                if num < 1 or num > 20:
+                    continue
+                # Question column only — skip marks column and page numbers
+                if x0 > min(100.0, page_w * 0.22):
+                    continue
+                if y0 < 40.0 or y0 > page_h - 36.0:
+                    continue
+                hits.append((str(num), i, y0, page_h))
+        by_q: dict[str, tuple[int, float, float]] = {}
+        for qnum, page_i, y0, page_h in hits:
+            prev = by_q.get(qnum)
+            if prev is None or (page_i, y0) < (prev[0], prev[1]):
+                by_q[qnum] = (page_i, y0, page_h)
+        ordered = sorted(by_q.items(), key=lambda kv: (kv[1][0], kv[1][1]))
+        out: dict[str, PaperClip] = {}
+        for j, (qnum, (page_i, y0, page_h)) in enumerate(ordered):
+            if j + 1 < len(ordered):
+                nq, (np, ny, _) = ordered[j + 1]
+                end_page, end_y = np, ny
+            else:
+                end_page, end_y = page_i, page_h - 28.0
+            bands = _structured_band_span(
+                doc,
+                start_page=page_i,
+                start_y=max(0.0, y0),
+                end_page=end_page,
+                end_y=end_y,
+            )
+            if bands:
+                out[qnum] = PaperClip(bands=bands)
+        return out
+    finally:
+        doc.close()
+
+
 def mark_scheme_main_clips(ms_pdf: Path) -> dict[str, PaperClip]:
-    """Roll part-level MS clips up to main-question PaperClips (Paper 3 grain)."""
+    """Roll part-level MS clips up to main-question PaperClips (Paper 3 grain).
+
+    IGCSE ATP planning items are often a lone ``4`` (no ``4(a)``). Those are
+    picked up as a fallback so every main question still gets an MS clip.
+    """
     from chembank.structured_parts import parse_part_id
 
     part_clips = mark_scheme_part_clips(ms_pdf)
@@ -1355,6 +1446,14 @@ def mark_scheme_main_clips(ms_pdf: Path) -> dict[str, PaperClip]:
         bands = sorted(bands, key=lambda b: (b.page, b.y0, b.x0))
         if bands:
             out[parent] = PaperClip(bands=bands)
+
+    # Mid-paper table questions (e.g. 0620 P4 Q2) are a lone ``2`` between
+    # part-labelled Q1 and Q3. Scan from page 1 and only fill missing parents
+    # so GMP / marks-column digits cannot overwrite a real part roll-up.
+    lone = _mark_scheme_lone_question_clips(ms_pdf, min_page=1)
+    for parent, clip in lone.items():
+        if parent not in out:
+            out[parent] = clip
     return out
 
 
@@ -1659,7 +1758,13 @@ def structured_part_paper_clips(qp_pdf: Path) -> dict[str, PaperClip]:
             if qranges:
                 # leftmost / topmost new question on page
                 ordered = sorted(qranges.items(), key=lambda kv: kv[1][0])
-                current_q = ordered[0][0]
+                new_q = ordered[0][0]
+                # Graph-axis / table digits can impersonate Q1 on later pages.
+                # CIE main question numbers only increase within a paper.
+                if current_q is None or int(new_q) >= int(current_q):
+                    if current_q is not None and new_q != current_q:
+                        current_letter = None
+                    current_q = new_q
             if current_q is None:
                 continue
             # Part tokens in this question's y window (or whole page if continuation)
@@ -1711,6 +1816,30 @@ def structured_part_paper_clips(qp_pdf: Path) -> dict[str, PaperClip]:
 
         if not events:
             return {}
+
+        # Promote lone "(i)" after "(h)" to letter i (CIE 7(h)/(i) lists).
+        # Mirrors structured_parts.split_main_question_into_parts.
+        promoted: list[tuple[PartId, int, float]] = []
+        for idx, (pid, page_i, y0) in enumerate(events):
+            if pid.roman == "i" and pid.letter == "h":
+                later = events[idx + 1 : idx + 6]
+                has_ii = any(
+                    p.roman == "ii"
+                    and p.parent == pid.parent
+                    and p.letter == "h"
+                    for p, _, _ in later
+                )
+                if not has_ii:
+                    promoted.append(
+                        (
+                            PartId(parent=pid.parent, letter="i", roman=None),
+                            page_i,
+                            y0,
+                        )
+                    )
+                    continue
+            promoted.append((pid, page_i, y0))
+        events = promoted
 
         letters_with_romans: set[tuple[str, str]] = set()
         for pid, _, _ in events:
@@ -1861,11 +1990,33 @@ def export_structured_part_figures(
     part_clips = structured_part_paper_clips(qp_pdf)
     main_clips = question_paper_clips(qp_pdf)
     ms_clips = mark_scheme_part_clips(ms_pdf) if ms_pdf and Path(ms_pdf).exists() else {}
+    main_ms_clips = (
+        mark_scheme_main_clips(ms_pdf) if ms_pdf and Path(ms_pdf).exists() else {}
+    )
 
     out: dict[str, list[str]] = {}
     for label in part_labels:
         pid = parse_part_id(label)
         if not pid:
+            # Whole-question leaf: table / list with no (a)/(b) parts.
+            qnum = str(label).strip()
+            if not re.fullmatch(r"\d{1,2}", qnum):
+                continue
+            clip = main_clips.get(qnum)
+            if clip is None:
+                raise RuntimeError(
+                    f"Missing QP paper clip for structured question {qnum}"
+                )
+            paper_name = f"{question_id_prefix}-q{qnum}-paper.png"
+            render_figure(qp_pdf, clip, assets_dir / paper_name)
+            paths = [f"assets/{paper_name}"]
+            ms_clip = ms_clips.get(qnum) or main_ms_clips.get(qnum)
+            if ms_clip is not None and ms_pdf is not None:
+                ms_name = f"{question_id_prefix}-q{qnum}-ms.png"
+                render_figure(Path(ms_pdf), ms_clip, assets_dir / ms_name)
+                paths.append(f"assets/{ms_name}")
+            out[qnum] = paths
+            out[label] = paths
             continue
         paths: list[str] = []
         clip = part_clips.get(pid.label) or main_clips.get(pid.parent)
@@ -1890,6 +2041,9 @@ def export_structured_part_figures(
             ms_name = f"{question_id_prefix}-q{pid.slug}-ms.png"
             render_figure(Path(ms_pdf), ms_clip, assets_dir / ms_name)
             paths.append(f"assets/{ms_name}")
+        # Tagged JSON may store "1a" / "1h-i" while clips are keyed "1(a)" / "1(h)(i)"
         out[pid.label] = paths
+        out[pid.slug] = paths
+        out[label] = paths
     return out
 

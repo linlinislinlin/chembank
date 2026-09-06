@@ -1,0 +1,262 @@
+% Student paper — English, typeset text; Al2Cl6 structures as CIE clips. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.5em,itemsep=0.12em,topsep=0.15em,parsep=0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.08em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.62em]}%
+}
+
+\newcommand{\drawbox}[1][3.8cm]{%
+  \par\vspace{0.10em}%
+  \noindent\fbox{\parbox[c][#1][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\strut}}%
+  \par
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.10em}
+\setlength{\abovedisplayskip}{0.25em}
+\setlength{\belowdisplayskip}{0.25em}
+
+\newcommand{\qhead}[2]{%
+  \par\vspace{0.28em}%
+  \Needspace{4.2em}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+}
+
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.90\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.25em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.06em}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\optline}[1]{%
+  \par\vspace{0.06em}{\small #1}\par
+}
+
+\newcommand{\sourcefoot}[1]{%
+  {\footnotesize\color{gray}#1}\par
+}
+
+\newcommand{\combokey}{%
+{\small The responses \textbf{A} to \textbf{D} should be selected on the basis of}
+\vspace{0.10em}
+\centering
+{\small
+\begin{tabular}{>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.22\linewidth}}
+\toprule
+\textbf{A} & \textbf{B} & \textbf{C} & \textbf{D} \\
+\midrule
+1, 2 and 3 are correct & 1 and 2 only are correct & 2 and 3 only are correct & 1 only is correct \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+{\footnotesize No other combination of statements is used as a correct response.}\par
+}
+
+\begin{document}
+\sethomework{AS Chemistry homework · 3.3 Metallic bonding}{19 marks}
+
+\begin{center}
+{\large\bfseries AS Chemistry homework · 3.3 Metallic bonding}\\[0.06em]
+{\small (and covalent / dative / dot-and-cross)}\\[0.12em]
+{\small CIE 9701 AS Chemistry · 19 marks · about 40 minutes}
+\end{center}
+
+{\small Topic: 3.3 metallic bonding; 3.4 LO1 covalent and coordinate (dative) bonding, including \ce{Al2Cl6} and \ce{NH4+}; 3.7 dot-and-cross.
+Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use CIE language (electrostatic attraction, delocalised electrons, shared pair, coordinate/dative).}
+
+\vspace{0.15em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 8 \\
+B1 & 2025 FM Paper 22 Question 2(a) & 2 \\
+B2 & 2024 MJ Paper 22 Question 1(c) & 1 \\
+B3 & 2024 MJ Paper 21 Question 5(a) & 1 \\
+B4 & 2021 MJ Paper 22 Question 2(b) & 3 \\
+B5 & 2024 MJ Paper 23 Question 4(a) & 2 \\
+B6 & 2021 FM Paper 22 Question 2(e)(i) & 2 \\
+\midrule
+ & \textbf{Total} & \textbf{19} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.25em}
+{\large\bfseries Section A --- Multiple-choice questions (8 marks)}\par
+
+\qhead{A1.}{1}
+{\small Which statement explains why calcium has a higher melting point than barium?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.08em]
+\item Calcium cations are smaller than barium cations and have a stronger attraction to the delocalised electrons.
+\item The structure of calcium is partly giant molecular.
+\item There are more delocalised electrons in calcium than in barium as it has a lower ionisation energy.
+\item There is greater repulsion between barium atoms as they have more complete electron shells than calcium atoms.
+\end{enumerate}
+\sourcefoot{2023 MJ Paper 11 Question 2}
+
+\Needspace{16em}
+\qhead{A2.}{1}
+{\small Which statements help to explain the increase in melting point from sodium to aluminium?}
+\begin{enumerate}[label=\arabic*., leftmargin=1.6em, itemsep=0.06em]
+\item The charge on the metal ion increases.
+\item There are more delocalised electrons per metal ion.
+\item The radius of the metal ion decreases.
+\end{enumerate}
+\combokey
+\sourcefoot{2021 MJ Paper 13 Question 36}
+
+\qhead{A3.}{1}
+{\small In which species does the underlined atom have an incomplete outer shell?}
+\optline{\textbf{A} $\underline{\mathrm{B}}$F$_3$\qquad \textbf{B} $\underline{\mathrm{C}}$H$_3{}^{-}$\qquad \textbf{C} F$_2\underline{\mathrm{O}}$\qquad \textbf{D} H$_3\underline{\mathrm{O}}{}^{+}$}
+\sourcefoot{2024 MJ Paper 12 Question 6}
+
+\Needspace{16em}
+\qhead{A4.}{1}
+{\small Which species can accept a lone pair of electrons to form a coordinate (dative covalent) bond?}
+\begin{enumerate}[label=\arabic*., leftmargin=1.6em, itemsep=0.06em]
+\item \ce{BF3}
+\item \ce{H+}
+\item \ce{CH3+}
+\end{enumerate}
+\combokey
+\sourcefoot{2021 FM Paper 12 Question 34}
+
+\qhead{A5.}{1}
+{\small When solid aluminium chloride is heated, \ce{Al2Cl6} is formed.}
+
+{\small Which bonding is present in \ce{Al2Cl6}?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.08em]
+\item covalent and coordinate (dative covalent)
+\item covalent only
+\item ionic and coordinate (dative covalent)
+\item ionic only
+\end{enumerate}
+\sourcefoot{2024 MJ Paper 11 Question 5}
+
+\clipq{A6.}{1}{img-006.png}
+\sourcefoot{2023 ON Paper 11 Question 5}
+
+\vspace{0.12em}
+\clipq{A7.}{1}{img-007.png}
+\sourcefoot{2022 FM Paper 12 Question 5}
+
+\Needspace{16em}
+\qhead{A8.}{1}
+{\small Which elements form a chloride in which both covalent bonding and coordinate (dative covalent) bonding are present?}
+\begin{enumerate}[label=\arabic*., leftmargin=1.6em, itemsep=0.06em]
+\item Al
+\item Si
+\item Mg
+\end{enumerate}
+\combokey
+\sourcefoot{2021 ON Paper 11 Question 35}
+
+\vspace{0.35em}
+{\large\bfseries Section B --- Structured questions (11 marks)}\par\vspace{0.1em}
+
+{\normalsize\bfseries B1 · 2025 February/March Paper 22 Question 2(a) (2 marks)}\par
+
+{\small The Group 2 elements show metallic bonding.}
+
+\qhead{B1(a)}{2}
+{\small Define metallic bonding.}
+\answerlines{2}
+
+\vspace{0.25em}
+{\normalsize\bfseries B2 · 2024 May/June Paper 22 Question 1(c) (1 mark)}\par
+
+\qhead{B2(c)}{1}
+{\small Draw a labelled diagram to show the structure and bonding in sodium.}
+\drawbox[4.4cm]
+
+\vspace{0.25em}
+{\normalsize\bfseries B3 · 2024 May/June Paper 21 Question 5(a) (1 mark)}\par
+
+{\small Hydrocarbon molecules contain covalent bonds.}
+
+\qhead{B3(a)}{1}
+{\small Define covalent bond.}
+\answerlines{2}
+
+\vspace{0.25em}
+{\normalsize\bfseries B4 · 2021 May/June Paper 22 Question 2(b) (3 marks)}\par
+
+{\small Carbon monoxide, \ce{CO}, is a gas at room temperature and pressure. It contains a coordinate bond.}
+
+\qhead{B4(b)(i)}{1}
+{\small Explain what is meant by \textit{coordinate bond}.}
+\answerlines{2}
+
+\qhead{B4(b)(ii)}{2}
+{\small Draw a `dot-and-cross' diagram to show the arrangement of outer electrons in \ce{CO}.}
+
+{\small Show the electrons belonging to the C atom as $\times$.}
+
+{\small Show the electrons belonging to the O atom as $\bullet$.}
+\drawbox[4.6cm]
+
+\vspace{0.25em}
+{\normalsize\bfseries B5 · 2024 May/June Paper 23 Question 4(a) (2 marks)}\par
+
+{\small \ce{NH3(g)} reacts with \ce{HCl(g)} to produce \ce{NH4Cl(s)}, as shown.}
+
+\vspace{0.08em}
+\centering
+{\small \ce{NH3(g) + HCl(g) -> NH4Cl(s)}}
+\par\raggedright
+
+\qhead{B5(a)}{2}
+{\small Draw a diagram to show the ionic, covalent and coordinate bonding present in a formula unit of \ce{NH4Cl}.}
+\drawbox[4.8cm]
+
+\vspace{0.25em}
+{\normalsize\bfseries B6 · 2021 February/March Paper 22 Question 2(e)(i) (2 marks)}\par
+
+{\small Aluminium reacts with chlorine to form aluminium chloride.}
+
+{\small Aluminium chloride can exist as the gaseous molecule \ce{Al2Cl6(g)}. This molecule contains coordinate bonds.}
+
+\qhead{B6(e)(i)}{2}
+{\small Draw a diagram that clearly shows all the types of bond present in \ce{Al2Cl6(g)}.}
+\drawbox[4.8cm]
+
+\end{document}

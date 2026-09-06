@@ -1,0 +1,57 @@
+% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=18mm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\setmainfont{Helvetica Neue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 3.1 Electronegativity --- answers}
+\fancyhead[R]{\small CIE 9701}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\newcommand{\msblock}[2]{%
+  \par\vspace{0.8em}%
+  {\normalsize\bfseries #1}\par\vspace{0.25em}%
+  \noindent\includegraphics[width=\textwidth,keepaspectratio]{#2}\par
+}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries 3.1 Electronegativity homework --- answers}
+\end{center}
+
+{\normalsize\bfseries Section A --- Multiple choice}
+
+\vspace{0.4em}
+A1 = A\\
+A2 = C\\
+A3 = C\\
+A4 = C\\
+A5 = B\\
+A6 = B\\
+A7 = D\\
+A8 = A\\
+A9 = C\\
+A10 = B\\
+A11 = C
+
+\newpage
+
+{\normalsize\bfseries Section B --- Mark scheme clips}
+
+\msblock{B1(a)(i)  [1]}{cie-9701-2023-fm-p22-q1a-i-ms.png}
+
+\msblock{B1(a)(ii)  [2]}{cie-9701-2023-fm-p22-q1a-ii-ms.png}
+
+\msblock{B2(b)(ii)  [2]}{cie-9701-2023-mj-p22-q1b-ii-ms.png}
+
+\end{document}

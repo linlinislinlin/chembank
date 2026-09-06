@@ -1,0 +1,36 @@
+# CIE 9701 AS homework Paper 2: 3.4 LO2 (σ/π, hybridisation) + 3.4 LO3 (bond energy / reactivity)
+# ~40 minutes · 8 MCQ + 6 structured parts (20 marks on the paper; B6 is [2] on the QP).
+#
+#   chembank select pick/3.4-sigma-pi-bondenergy-hw.yaml -o build/3.4-sigma-pi-bondenergy-hw.json
+#   chembank assemble build/3.4-sigma-pi-bondenergy-hw.json -o vault/handouts/3.4-sigma-pi-bondenergy-homework-answers.md --vault vault
+#
+# Curated include_ids. Pedagogical order:
+#   MCQ easy→medium (σ/π counts and N2 hybridisation, then NH4CN / NH4+ hybridisation,
+#   then average bond energy),
+#   then structured: N2 σ/π table → C=C hybridisation + orbital-overlap drawings →
+#   2s/2p sketches → CO vs N2 reactivity → HCl vs HI thermal stability.
+#
+# 2024-mj-p21-q5a (define covalent bond) is on Paper 1; Paper 2 continues 5(b)–(c) of that question.
+# 2022-mj-p13-q9 is tagged 5.1/5.2; it is the cleanest AS item that matches 3.4-3a (define bond energy).
+# No tagged 9701 P1/P2 item asks students to define or compare bond length.
+title: "3.4 Paper 2 sigma pi bond energy homework"
+syllabus_codes: ["3.4"]
+preserve_order: true
+include_ids:
+  # A  MCQ · σ/π and hybridisation
+  - cie-9701-2025-on-p12-q5       # N2: σ from sp–sp; lone pair in sp
+  - cie-9701-2025-fm-p12-q16      # which of C3H6 / HCN / CO2 have two π bonds
+  - cie-9701-2022-on-p11-q5       # count σ bonds in H–C≡C–C(CH3)=CH(CH3)
+  - cie-9701-2024-mj-p11-q26      # σ count + hybridisation in acrylonitrile-like X (keep structure)
+  - cie-9701-2025-fm-p12-q39      # number of sp3 hybridised orbitals in but-2-ene
+  - cie-9701-2025-on-p11-q6       # NH4CN: coordinate bonds and π bonds
+  - cie-9701-2023-on-p12-q5       # NH3 + HCl: hybridisation of N does not change
+  # A  MCQ · bond energy definition
+  - cie-9701-2022-mj-p13-q9       # equation for average C–H bond energy in methane
+  # B  structured
+  - cie-9701-2024-mj-p23-q1a-ii   # N2: number of σ/π and how orbitals overlap [4]
+  - cie-9701-2024-mj-p21-q5b-i    # hybridisation of C in C=C [1]
+  - cie-9701-2024-mj-p21-q5b-ii   # draw σ and π orbital overlap in C=C [2]
+  - cie-9701-2022-on-p22-q1c-iii  # sketch 2s and 2px (sp3 mixing) [2]
+  - cie-9701-2021-mj-p21-q2b      # why CO more reactive than N2 despite BE [1]
+  - cie-9701-2025-mj-p24-q3d-ii   # relative thermal stabilities of HCl and HI [2]

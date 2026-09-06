@@ -75,18 +75,27 @@ def question_to_markdown(
 
     titles = list(data.get("topic_titles") or [])
     if codes and not titles:
-        titles = resolve_titles(codes)
+        from chembank.syllabus import load_syllabus, syllabus_path_for
+
+        syl_data = load_syllabus(syllabus_path_for(str(data.get("syllabus_code") or "9701")))
+        titles = resolve_titles(codes, syl_data)
     lo_ids = [str(x) for x in (data.get("learning_outcomes") or []) if str(x).strip()]
     lo_texts = list(data.get("learning_outcome_texts") or [])
     if lo_ids and not lo_texts:
         try:
-            lo_texts = resolve_learning_outcomes(lo_ids)
+            from chembank.syllabus import load_syllabus, syllabus_path_for
+
+            syl_data = load_syllabus(
+                syllabus_path_for(str(data.get("syllabus_code") or "9701"))
+            )
+            lo_texts = resolve_learning_outcomes(lo_ids, syl_data)
         except KeyError:
             lo_texts = []
     # Obsidian tags (show in graph when Tags is enabled).
     # Avoid bare numeric tags like "9701" — easy to mis-click exclude in Graph,
     # and some Obsidian builds treat them awkwardly.
-    tags = ["chembank", "cie/9701", f"paper/{data.get('paper', 'x')}"]
+    syl = str(data.get("syllabus_code") or "9701")
+    tags = ["chembank", f"cie/{syl}", f"paper/{data.get('paper', 'x')}"]
     if is_practical:
         tags.append("practical")
     practical_topic = str(data.get("practical_topic") or "").strip() or None

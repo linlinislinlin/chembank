@@ -1,0 +1,144 @@
+% Student paper — English; shape/diagram clips from vault assets. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.5em,itemsep=0.12em,topsep=0.15em,parsep=0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.08em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.62em]}%
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.10em}
+\setlength{\abovedisplayskip}{0.25em}
+\setlength{\belowdisplayskip}{0.25em}
+
+\newcommand{\qhead}[2]{%
+  \par\vspace{0.28em}%
+  \Needspace{4.2em}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+}
+
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.88\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.25em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.06em}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\sourcefoot}[1]{%
+  {\footnotesize\color{gray}#1}\par
+}
+
+\begin{document}
+\sethomework{AS Chemistry homework · 3.5 Shapes of molecules}{18 marks}
+
+\begin{center}
+{\large\bfseries AS Chemistry homework · 3.5 Shapes of molecules}\\[0.12em]
+{\small CIE 9701 AS Chemistry · 18 marks · about 40 minutes}
+\end{center}
+
+{\small Topic: 3.5 Shapes of molecules --- VSEPR theory, bond pairs, lone pairs, electron-pair geometry and molecular shape (including \ce{BF3}, \ce{CO2}, \ce{CH4}, \ce{NH3}, \ce{H2O}, \ce{SF6}, \ce{PF5} and analogues).
+Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use VSEPR language throughout.}
+
+\vspace{0.15em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 8 \\
+B1 & 2021 ON Paper 21 Question 1(a)(iii) & 1 \\
+B2 & 2024 MJ Paper 21 Question 2(b)(i) & 2 \\
+B3 & 2024 MJ Paper 21 Question 2(b)(ii) & 2 \\
+B4 & 2023 MJ Paper 21 Question 1(e) & 2 \\
+B5 & 2025 FM Paper 22 Question 1(b)(ii) & 1 \\
+B6 & 2025 MJ Paper 23 Question 4(b)(i) & 2 \\
+\midrule
+ & \textbf{Total} & \textbf{18} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.25em}
+{\large\bfseries Section A --- Multiple-choice questions (8 marks)}\par
+
+\clipq{A1.}{1}{img-001.png}
+\sourcefoot{2025 MJ Paper 12 Question 7}
+
+\clipq{A2.}{1}{img-002.png}
+\sourcefoot{2023 MJ Paper 13 Question 5}
+
+\clipq{A3.}{1}{img-003.png}
+\sourcefoot{2024 MJ Paper 11 Question 24}
+
+\clipq{A4.}{1}{img-004.png}
+\sourcefoot{2025 MJ Paper 14 Question 11}
+
+\clipq{A5.}{1}{img-005.png}
+\sourcefoot{2021 MJ Paper 11 Question 34}
+
+\clipq{A6.}{1}{img-006.png}
+\sourcefoot{2025 MJ Paper 14 Question 3}
+
+\clipq{A7.}{1}{img-007.png}
+\sourcefoot{2022 MJ Paper 13 Question 6}
+
+\clipq{A8.}{1}{img-008.png}
+\sourcefoot{2024 MJ Paper 13 Question 6}
+
+\vspace{0.35em}
+{\large\bfseries Section B --- Structured questions (10 marks)}\par\vspace{0.1em}
+
+\clipq{B1(a)(iii).}{1}{img-009.png}
+\sourcefoot{2021 ON Paper 21 Question 1(a)(iii)}
+
+\clipq{B2(b)(i).}{2}{img-010.png}
+\sourcefoot{2024 MJ Paper 21 Question 2(b)(i)}
+
+\clipq{B2(b)(ii).}{2}{img-011.png}
+\sourcefoot{2024 MJ Paper 21 Question 2(b)(ii)}
+
+\clipq{B4(e).}{2}{img-012.png}
+\sourcefoot{2023 MJ Paper 21 Question 1(e)}
+
+\clipq{B5(b)(ii).}{1}{img-013.png}
+\sourcefoot{2025 FM Paper 22 Question 1(b)(ii)}
+
+\clipq{B6(b)(i).}{2}{img-014.png}
+\sourcefoot{2025 MJ Paper 23 Question 4(b)(i)}
+
+\end{document}

@@ -1,0 +1,272 @@
+% Student paper — English, typeset text; structure of X and 2s/2px axes as CIE clips. Compiler: XeLaTeX.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{pgffor}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.5em,itemsep=0.12em,topsep=0.15em,parsep=0pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.08em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[0.62em]}%
+}
+
+\newcommand{\drawbox}[1][3.8cm]{%
+  \par\vspace{0.10em}%
+  \noindent\fbox{\parbox[c][#1][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\strut}}%
+  \par
+}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.10em}
+\setlength{\abovedisplayskip}{0.25em}
+\setlength{\belowdisplayskip}{0.25em}
+
+\newcommand{\qhead}[2]{%
+  \par\vspace{0.28em}%
+  \Needspace{4.2em}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+}
+
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.88\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.25em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.06em}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\optline}[1]{%
+  \par\vspace{0.06em}{\small #1}\par
+}
+
+\newcommand{\sourcefoot}[1]{%
+  {\footnotesize\color{gray}#1}\par
+}
+
+\begin{document}
+\sethomework{AS Chemistry homework · Paper 2 · $\sigma$/$\pi$ bonds, hybridisation and bond energy}{20 marks}
+
+\begin{center}
+{\large\bfseries AS Chemistry homework · Paper 2}\\[0.06em]
+{\large\bfseries $\sigma$/$\pi$ bonds, hybridisation and bond energy}\\[0.12em]
+{\small CIE 9701 AS Chemistry · Paper 2 of 2 · 20 marks · about 40 minutes}
+\end{center}
+
+{\small Topic: 3.4 LO2 $\sigma$ and $\pi$ bonds and hybridisation (sp, $sp^{2}$, $sp^{3}$); 3.4 LO3 bond energy and comparing reactivity of covalent molecules.
+Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; use CIE language (orbital overlap, $\sigma$/$\pi$, hybridisation, bond energy).}
+
+\vspace{0.15em}
+{\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Section} & \textbf{Content} & \textbf{Marks} \\
+\midrule
+A & Multiple choice & 8 \\
+B1 & 2024 MJ Paper 23 Question 1(a)(ii) & 4 \\
+B2 & 2024 MJ Paper 21 Question 5(b)(i) & 1 \\
+B3 & 2024 MJ Paper 21 Question 5(b)(ii) & 2 \\
+B4 & 2022 ON Paper 22 Question 1(c)(iii) & 2 \\
+B5 & 2021 MJ Paper 21 Question 2(b) & 1 \\
+B6 & 2025 MJ Paper 24 Question 3(d)(ii) & 2 \\
+\midrule
+ & \textbf{Total} & \textbf{20} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.25em}
+{\large\bfseries Section A --- Multiple-choice questions (8 marks)}\par
+
+\Needspace{18em}
+\qhead{A1.}{1}
+{\small The bonding between two atoms of nitrogen in an \ce{N2} molecule involves the hybridisation of atomic orbitals to form $sp$ orbitals.}
+
+{\small Which row is correct?}
+
+\vspace{0.10em}
+\centering
+{\small
+\begin{tabular}{>{\centering\arraybackslash}p{0.12\linewidth}p{0.46\linewidth}>{\centering\arraybackslash}p{0.32\linewidth}}
+\toprule
+ & formation of the $\sigma$ bond between the nitrogen atoms in \ce{N2} & type of orbital which contains the lone pair of electrons on each nitrogen atom in \ce{N2} \\
+\midrule
+\textbf{A} & an $sp$ orbital from one atom overlaps with an $sp$ orbital of the other atom & $p$ \\[0.35em]
+\textbf{B} & an $sp$ orbital from one atom overlaps with an $sp$ orbital of the other atom & $sp$ \\[0.35em]
+\textbf{C} & an $s$ orbital from one atom overlaps with a $p$ orbital of the other atom & $p$ \\[0.35em]
+\textbf{D} & an $s$ orbital from one atom overlaps with a $p$ orbital of the other atom & $sp$ \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+\sourcefoot{2025 ON Paper 12 Question 5}
+
+\qhead{A2.}{1}
+{\small Propene, hydrogen cyanide and carbon dioxide each contain $\pi$ bonds.}
+
+{\small Which molecules contain two $\pi$ bonds?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.08em]
+\item carbon dioxide and hydrogen cyanide
+\item carbon dioxide and propene
+\item hydrogen cyanide and propene
+\item hydrogen cyanide only
+\end{enumerate}
+\sourcefoot{2025 FM Paper 12 Question 16}
+
+\qhead{A3.}{1}
+{\small How many $\sigma$ bonds are present in one \ce{H-C#C-C(CH3)=CH(CH3)} molecule?}
+\optline{\textbf{A} 5\qquad \textbf{B} 11\qquad \textbf{C} 13\qquad \textbf{D} 16}
+\sourcefoot{2022 ON Paper 11 Question 5}
+
+\clipq{A4.}{1}{img-004.png}
+\sourcefoot{2024 MJ Paper 11 Question 26}
+
+\qhead{A5.}{1}
+{\small What is the total number of $sp^{3}$ hybridised atomic orbitals used in the bonding of but-2-ene?}
+\optline{\textbf{A} 2\qquad \textbf{B} 4\qquad \textbf{C} 6\qquad \textbf{D} 8}
+\sourcefoot{2025 FM Paper 12 Question 39}
+
+\Needspace{14em}
+\qhead{A6.}{1}
+{\small \ce{NH3} and \ce{HCN} react together to form \ce{NH4CN}, an ionic compound.}
+
+{\small Which row states the number of coordinate bonds and the number of $\pi$ bonds in one formula unit of \ce{NH4CN}?}
+
+\vspace{0.10em}
+\centering
+{\small
+\begin{tabular}{ccc}
+\toprule
+ & number of coordinate bonds & number of $\pi$ bonds \\
+\midrule
+\textbf{A} & 0 & 2 \\
+\textbf{B} & 1 & 2 \\
+\textbf{C} & 0 & 3 \\
+\textbf{D} & 1 & 3 \\
+\bottomrule
+\end{tabular}}
+\par\raggedright
+\sourcefoot{2025 ON Paper 11 Question 6}
+
+\qhead{A7.}{1}
+{\small Ammonium ions, \ce{NH4+}, are formed when ammonia gas reacts with hydrogen chloride gas.}
+
+{\small Which statement about the changes that occur in this reaction is correct?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.08em]
+\item The dipole moment of an ammonium ion is greater than the dipole moment of an ammonia molecule.
+\item The H--N--H bond angle decreases when an ammonium ion is formed.
+\item The hybridisation of nitrogen does \textbf{not} change.
+\item There is electron transfer from nitrogen to chlorine.
+\end{enumerate}
+\sourcefoot{2023 ON Paper 12 Question 5}
+
+\Needspace{14em}
+\qhead{A8.}{1}
+{\small Which equation represents an enthalpy change that is the average bond energy of the C--H bond in methane?}
+\begin{enumerate}[label=\textbf{\Alph*}, leftmargin=1.7em, itemsep=0.10em]
+\item $\tfrac{1}{4}\ce{C}(g) + \ce{H}(g) \rightarrow \tfrac{1}{4}\ce{CH4}(g)$
+\item $\tfrac{1}{4}\ce{CH4}(g) \rightarrow \tfrac{1}{4}\ce{C}(g) + \ce{H}(g)$
+\item $\ce{CH4}(g) \rightarrow \ce{C}(g) + 4\ce{H}(g)$
+\item $\ce{CH4}(g) \rightarrow \ce{CH3}(g) + \ce{H}(g)$
+\end{enumerate}
+\sourcefoot{2022 MJ Paper 13 Question 9}
+
+\vspace{0.35em}
+{\large\bfseries Section B --- Structured questions (12 marks)}\par\vspace{0.1em}
+
+{\normalsize\bfseries B1 · 2024 May/June Paper 23 Question 1(a)(ii) (4 marks)}\par
+
+{\small Covalent bonds can be $\sigma$ bonds or $\pi$ bonds.}
+
+\qhead{B1(a)(ii)}{4}
+{\small Complete Table 1.1 to show the number of $\sigma$ and $\pi$ bonds in a molecule of \ce{N2} and to describe how the orbitals overlap to form $\sigma$ and $\pi$ bonds.}
+
+\vspace{0.12em}
+\centering
+{\small
+\begin{tabular}{|p{3.6cm}|p{5.1cm}|p{5.1cm}|}
+\hline
+ & $\sigma$ bond & $\pi$ bond \\
+\hline
+\vspace{0.15em}number of bonds in \ce{N2}\vspace{1.35em} & & \\
+\hline
+\vspace{0.15em}how the orbitals overlap\vspace{2.15em} & & \\
+\hline
+\end{tabular}}
+\par\vspace{0.04em}
+{\small Table 1.1}\par
+\raggedright
+
+\vspace{0.25em}
+{\normalsize\bfseries B2 and B3 · 2024 May/June Paper 21 Question 5(b) (3 marks)}\par
+
+{\small Hydrocarbon molecules contain covalent bonds.}
+
+{\small A \ce{C=C} bond in an alkene is made from a $\sigma$ bond and a $\pi$ bond.}
+
+\qhead{B2(b)(i)}{1}
+{\small Identify the hybridisation of the carbon atoms in a \ce{C=C} bond in an alkene.}
+\answerlines{1}
+
+\qhead{B3(b)(ii)}{2}
+{\small Draw labelled diagrams to show, in terms of orbital overlap, how the $\sigma$ and $\pi$ bonds are made in a \ce{C=C} bond.}
+
+\vspace{0.08em}
+{\small $\sigma$ bond}
+\drawbox[3.2cm]
+
+{\small $\pi$ bond}
+\drawbox[3.2cm]
+
+\vspace{0.25em}
+{\normalsize\bfseries B4 · 2022 October/November Paper 22 Question 1(c)(iii) (2 marks)}\par
+
+\clipq{B4(c)(iii)}{2}{img-012.png}
+\sourcefoot{2022 ON Paper 22 Question 1(c)(iii)}
+
+\vspace{0.25em}
+{\normalsize\bfseries B5 · 2021 May/June Paper 21 Question 2(b) (1 mark)}\par
+
+{\small Carbon monoxide gas, \ce{CO(g)}, and nitrogen gas, \ce{N2(g)}, are both diatomic molecules.}
+
+\qhead{B5(b)}{1}
+{\small \ce{N2(g)} is less reactive than \ce{CO(g)} even though \ce{N2(g)} has a lower bond energy than \ce{CO(g)}.
+Suggest why \ce{CO(g)} is more reactive than \ce{N2(g)}.}
+\answerlines{2}
+
+\vspace{0.25em}
+{\normalsize\bfseries B6 · 2025 May/June Paper 24 Question 3(d)(ii) (2 marks)}\par
+
+\qhead{B6(d)(ii)}{2}
+{\small Describe and explain the relative thermal stabilities of the hydrogen halides \ce{HCl} and \ce{HI}.}
+\answerlines{3}
+
+\end{document}

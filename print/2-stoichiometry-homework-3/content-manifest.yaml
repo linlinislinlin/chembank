@@ -1,0 +1,548 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/QLS/AS/Homework/Stoichiometry/2-stoichiometry-homework-3.md
+  title: AS stoichiometry homework 3 · empirical and molecular formulae
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS stoichiometry homework 3 · empirical and molecular formulae
+- id: I01
+  type: instruction
+  source_loc: instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Circle one letter A-D. Show working.
+- id: S01
+  type: heading
+  source_loc: section-1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 8 · Empirical formulae
+- id: S05
+  type: heading
+  source_loc: section-5
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 9 · Molecular formulae
+- id: S08
+  type: heading
+  source_loc: section-8
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 10 · Hydrated and anhydrous compounds
+- id: S11
+  type: heading
+  source_loc: section-11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 11 · Combustion analysis
+- id: S14
+  type: heading
+  source_loc: section-14
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 12 · Chemical formulae and equations
+- id: S16
+  type: heading
+  source_loc: section-16
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Earlier skills · combining masses, reacting masses, equations
+- id: Q01
+  type: mcq
+  source_loc: Q01
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'What is the empirical formula of butanoic acid?
+
+    \optrow{\ce{C2H4O}}{\ce{C3H6O}}{\ce{C4H8O}}{\ce{C5H10O}}'
+- id: CLIP-Q01
+  type: mcq
+  source_loc: Q01-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q01
+  reason: full paper-clip of typeset question
+  image: images/img-001.png
+- id: Q02
+  type: mcq
+  source_loc: Q02
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Compound X consists of 40.0\% carbon, 6.7\% hydrogen and 53.3\% oxygen by
+    mass.
+
+
+    What is the empirical formula of compound X?
+
+    \optrow{\ce{CH2O}}{\ce{C2H2O}}{\ce{C2H4O}}{\ce{CHO}}'
+- id: CLIP-Q02
+  type: mcq
+  source_loc: Q02-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q02
+  reason: full paper-clip of typeset question
+  image: images/img-002.png
+- id: Q03
+  type: mcq
+  source_loc: Q03
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Compound X is an organic compound that contains 30.6\% carbon, 3.8\% hydrogen,
+    20.4\% oxygen and 45.2\% chlorine by mass.
+
+
+    What is the empirical formula of X?
+
+    \optrow{\ce{C2H3OCl}}{\ce{C2H4OCl}}{\ce{C3H4OCl}}{\ce{C4H3O2Cl2}}'
+- id: CLIP-Q03
+  type: mcq
+  source_loc: Q03-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q03
+  reason: full paper-clip of typeset question
+  image: images/img-003.png
+- id: Q04
+  type: mcq
+  source_loc: Q04
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'R is an oxide of Period 3 element T. 5.00\,g of R contains 2.50\,g of T.
+
+
+    What is T?
+
+    \optlist{magnesium}{aluminium}{silicon}{sulfur}'
+- id: CLIP-Q04
+  type: mcq
+  source_loc: Q04-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q04
+  reason: full paper-clip of typeset question
+  image: images/img-004.png
+- id: Q05
+  type: mcq
+  source_loc: Q05
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Compound X is a straight chain hydrocarbon with an $M_\mathrm{r}$ of 84.
+
+
+    What can be determined about X?
+
+    \begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=1.6em]
+
+    \item empirical formula
+
+    \item molecular formula
+
+    \item whether X contains a \ce{C=C} bond or not
+
+    \end{enumerate}
+
+    The responses \textbf{A} to \textbf{D} should be selected on the basis of
+
+
+    {\centering
+
+    {\small
+
+    \begin{tabular}{cccc}
+
+    \toprule
+
+    \textbf{A} & \textbf{B} & \textbf{C} & \textbf{D} \\
+
+    \midrule
+
+    1, 2 and 3 are correct & 1 and 2 only are correct & 2 and 3 only are correct &
+    1 only is correct \\
+
+    \bottomrule
+
+    \end{tabular}}\par}
+
+
+    {\small No other combination of statements is used as a correct response.}'
+- id: CLIP-Q05
+  type: mcq
+  source_loc: Q05-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q05
+  reason: full paper-clip of typeset question
+  image: images/img-005.png
+- id: Q06
+  type: mcq
+  source_loc: Q06
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'An aqueous solution contains 4.00\,g of a carboxylic acid, Q. When this solution
+    reacts with an excess of magnesium, 380\,cm$^3$ of gas is produced, measured at
+    s.t.p.
+
+
+    What is the relative formula mass of Q?
+
+    \optrow{59}{118}{126}{236}'
+- id: CLIP-Q06
+  type: mcq
+  source_loc: Q06-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q06
+  reason: full paper-clip of typeset question
+  image: images/img-006.png
+- id: Q07
+  type: mcq
+  source_loc: Q07
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'P is a compound that burns in an excess of oxygen to give carbon dioxide
+    and water only.
+
+
+    2.20\,g of P contains 1.20\,g of carbon and 0.20\,g of hydrogen.
+
+
+    When P is added to a solution of sodium carbonate, bubbles of gas are seen.
+
+
+    What is P?
+
+    \optlist{\ce{CH3CHO}}{\ce{CH3CO2H}}{\ce{CH3COCH2CH2OH}}{\ce{CH3CH2CH2CO2H}}'
+- id: CLIP-Q07
+  type: mcq
+  source_loc: Q07-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q07
+  reason: full paper-clip of typeset question
+  image: images/img-007.png
+- id: Q08
+  type: mcq
+  source_loc: Q08
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A sample of 35.6\,g of hydrated sodium carbonate contains 25.84\% sodium
+    ions by mass.
+
+
+    When this sample is heated, anhydrous sodium carbonate and water are formed.
+
+
+    Which mass of water is given off?
+
+    \optrow{7.2\,g}{10.6\,g}{14.4\,g}{21.2\,g}'
+- id: CLIP-Q08
+  type: mcq
+  source_loc: Q08-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q08
+  reason: full paper-clip of typeset question
+  image: images/img-008.png
+- id: Q09
+  type: mcq
+  source_loc: Q09
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Hydrated cobalt(II) sulfate loses water when heated to give anhydrous cobalt(II)
+    sulfate. All the water of crystallisation is lost to the atmosphere as steam.
+
+
+    When 3.10\,g of hydrated cobalt(II) sulfate, \ce{CoSO4.xH2O}, is heated to constant
+    mass the \textbf{loss} in mass is 1.39\,g.
+
+
+    What is the value of $x$, to the nearest whole number?
+
+    \optrow{4}{6}{7}{11}'
+- id: CLIP-Q09
+  type: mcq
+  source_loc: Q09-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q09
+  reason: full paper-clip of typeset question
+  image: images/img-009.png
+- id: Q10
+  type: mcq
+  source_loc: Q10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'An experiment is carried out to determine the value of $x$ in hydrated lithium
+    hydroxide, \ce{LiOH.xH2O}. A sample of the solid is heated in a crucible over
+    a Bunsen flame.
+
+
+    Complete dehydration takes place; decomposition does \textbf{not} occur.
+
+    \begin{align*}
+
+    \text{mass of empty crucible\,/\,g} &= Q\\
+
+    \text{mass of crucible with \ce{LiOH.xH2O}\,/\,g} &= R\\
+
+    \text{mass of crucible and residue after heating\,/\,g} &= S
+
+    \end{align*}
+
+    Which equation gives the correct value of $x$?
+
+    \optlist{$\dfrac{S-R}{18}$}{$\dfrac{R-S}{18}$}{$\dfrac{23.9(R-S)}{18(S-Q)}$}{$\dfrac{23.9(S-R)}{18(S-Q)}$}'
+- id: CLIP-Q10
+  type: mcq
+  source_loc: Q10-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q10
+  reason: full paper-clip of typeset question
+  image: images/img-010.png
+- id: Q11
+  type: mcq
+  source_loc: Q11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Compound X contains the elements C, H and O only.
+
+
+    2.00\,g of X produces 4.00\,g of carbon dioxide and 1.63\,g of water when completely
+    combusted.
+
+
+    What is the empirical formula of X?
+
+    \optrow{\ce{CHO2}}{\ce{C2H2O}}{\ce{C2H4O}}{\ce{CH2O2}}'
+- id: CLIP-Q11
+  type: mcq
+  source_loc: Q11-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q11
+  reason: full paper-clip of typeset question
+  image: images/img-011.png
+- id: Q12
+  type: mcq
+  source_loc: Q12
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Substance Q is a hydrocarbon. When 1.00\,g of Q is completely burned, 3.22\,g
+    of carbon dioxide is produced.
+
+
+    What could be the identity of Q?
+
+    \optlist{cyclohexene}{cyclopentane}{ethene}{pentane}'
+- id: CLIP-Q12
+  type: mcq
+  source_loc: Q12-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q12
+  reason: full paper-clip of typeset question
+  image: images/img-012.png
+- id: Q13
+  type: mcq
+  source_loc: Q13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'When a small sample of hydrocarbon Q is completely combusted, it produces
+    3.52\,g of carbon dioxide and 1.44\,g of water.
+
+
+    What could be the structure of hydrocarbon Q?
+
+    \qfig[0.78]{fig-q13-structures.png}'
+- id: Fig-Q13
+  type: figure
+  source_loc: Q13-diagram
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: graph / diagram / visual options — do not redraw
+  image: overleaf/images/fig-q13-structures.png
+- id: CLIP-Q13
+  type: mcq
+  source_loc: Q13-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q13
+  reason: full paper-clip of typeset question
+  image: images/img-013.png
+- id: Q14
+  type: mcq
+  source_loc: Q14
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Which pair of formulae is correct?
+
+    \optlist{\ce{Ag2CO3} and \ce{(NH4)3NO3}}{\ce{K2HCO3} and \ce{Zn3(PO4)2}}{\ce{AgHCO3}
+    and \ce{K3PO4}}{\ce{ZnCO3} and \ce{(NH4)2PO4}}'
+- id: CLIP-Q14
+  type: mcq
+  source_loc: Q14-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q14
+  reason: full paper-clip of typeset question
+  image: images/img-014.png
+- id: Q15
+  type: mcq
+  source_loc: Q15
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Chlorine dioxide, \ce{ClO2}, reacts with aqueous sodium hydroxide to produce
+    water and a mixture of two sodium salts, \ce{NaClO2} and \ce{NaClO3}.
+
+
+    What is the mole ratio of \ce{NaClO2} to \ce{NaClO3} in the product mixture?
+
+    \optrow{1:2}{3:5}{1:1}{5:3}'
+- id: CLIP-Q15
+  type: mcq
+  source_loc: Q15-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q15
+  reason: full paper-clip of typeset question
+  image: images/img-015.png
+- id: Q16
+  type: mcq
+  source_loc: Q16
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Originally, chemists thought indium oxide had the formula \ce{InO}. By experiment
+    they showed that 4.8\,g of indium combined with 1.0\,g of oxygen to produce 5.8\,g
+    of indium oxide. The $A_\mathrm{r}$ of oxygen was known to be 16.
+
+
+    Which value for the $A_\mathrm{r}$ of indium is calculated using these data?
+
+    \optrow{38}{77}{115}{154}'
+- id: CLIP-Q16
+  type: mcq
+  source_loc: Q16-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q16
+  reason: full paper-clip of typeset question
+  image: images/img-016.png
+- id: Q17
+  type: mcq
+  source_loc: Q17
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A 4.00\,g sample of an anhydrous Group 2 metal nitrate, Z, is heated strongly
+    until there is no further change of mass. A solid residue of mass 1.37\,g is formed.
+
+
+    Which metal is present in Z?
+
+    \optlist{barium}{calcium}{magnesium}{strontium}'
+- id: CLIP-Q17
+  type: mcq
+  source_loc: Q17-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q17
+  reason: full paper-clip of typeset question
+  image: images/img-017.png
+- id: Q18
+  type: mcq
+  source_loc: Q18
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Copper dissolves in dilute nitric acid producing a blue solution of \ce{Cu(NO3)2},
+    water and nitrogen(II) oxide as the only products.
+
+
+    How many moles of acid react with three moles of copper in the balanced equation?
+
+    \optrow{2}{4}{6}{8}'
+- id: CLIP-Q18
+  type: mcq
+  source_loc: Q18-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q18
+  reason: full paper-clip of typeset question
+  image: images/img-018.png

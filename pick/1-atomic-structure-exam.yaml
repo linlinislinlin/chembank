@@ -1,0 +1,46 @@
+# CIE 9701 AS exam: Topic 1 Atomic Structure + element mass spectrometry
+# 13 MCQ + 2 Paper 2 structured items = 34 marks · ~40–45 min
+#
+#   chembank select pick/1-atomic-structure-exam.yaml -o build/1-atomic-structure-exam.json
+#   chembank assemble build/1-atomic-structure-exam.json -o vault/handouts/1-atomic-structure-exam-answers.md --vault vault
+#
+# 9701 Paper 1 / Paper 2 only. Curated include_ids (author order = exam order).
+#
+# Excluded (same stem / paper-id / obvious variant) vs:
+#   HW Atomic Structure.pdf  and  Topic 1 Atomic Structure End-Topic Test.pdf
+# See print/考试-1-Atomic-structure-学生版/TEACHER-KEY.md for the full exclusion list.
+title: "AS Chemistry — Topic 1 Atomic Structure (Exam)"
+syllabus_codes: ["1.1", "1.2", "1.3", "1.4"]
+preserve_order: true
+include_ids:
+  # A  MCQ · 1.1 particles / isotopes / electric field
+  - cie-9701-2021-fm-p12-q1       # p/n/e table → isotopes
+  - cie-9701-2025-fm-p12-q4       # 2– ion: nucleon number
+  - cie-9701-2024-mj-p13-q3       # NH4+ Mr=21 particle counts
+  - cie-9701-2025-mj-p12-q14      # He+ vs proton in electric field
+  # A  MCQ · 1.2 / Ar from isotope abundances (element MS-style)
+  - cie-9701-2025-on-p11-q40      # 24/25/26 Mg → % of 24Mg
+  # A  MCQ · 1.3 configuration / boxes / unpaired / s-orbital electrons
+  - cie-9701-2025-mj-p13-q1       # five electrons in spherical orbitals
+  - cie-9701-2025-on-p12-q1       # electrons-in-boxes Fe3+
+  - cie-9701-2021-on-p12-q4       # more unpaired than paired in n=2
+  # A  MCQ · 1.4 IE: anomaly, equation, successive, graph, trends
+  - cie-9701-2021-mj-p11-q7       # O vs N spin-pair
+  - cie-9701-2022-mj-p12-q1       # second IE of Na from ΔH
+  - cie-9701-2025-mj-p11-q4       # successive IE → outer config
+  - cie-9701-2023-on-p11-q2       # first-IE vs Z graph
+  - cie-9701-2021-mj-p13-q31      # IE statements (endothermic / down group)
+  # B1  structured · 2025 MJ P21 Q2 (11) iron MS + particles + IE
+  - cie-9701-2025-mj-p21-q2a
+  - cie-9701-2025-mj-p21-q2b-i
+  - cie-9701-2025-mj-p21-q2b-ii
+  - cie-9701-2025-mj-p21-q2c
+  - cie-9701-2025-mj-p21-q2d
+  - cie-9701-2025-mj-p21-q2e
+  # B2  structured · 2025 MJ P23 Q1 (10) config / orbital / IE / radii
+  - cie-9701-2025-mj-p23-q1a-i
+  - cie-9701-2025-mj-p23-q1a-ii
+  - cie-9701-2025-mj-p23-q1a-iii
+  - cie-9701-2025-mj-p23-q1b-i
+  - cie-9701-2025-mj-p23-q1b-ii
+  - cie-9701-2025-mj-p23-q1b-iii

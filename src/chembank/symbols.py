@@ -23,14 +23,22 @@ CHAR_FIXES = str.maketrans(
         "\uf02b": "+",  # Symbol font plus
         "\uf0b0": "°",  # Symbol font degree
         "\uf044": "Δ",  # Symbol font Delta (ΔH)
+        "\uf061": "α",  # Symbol font alpha
+        "\uf062": "β",  # Symbol font beta
+        "\uf064": "δ",  # Symbol font delta (δ+)
+        "\uf067": "γ",  # Symbol font gamma (γ-ionone)
         "\uf070": "π",  # Symbol font pi
         "\uf073": "σ",  # Symbol font sigma
+        "\uf033": "✓",  # ZapfDingbats tick (0620 table “ticks and crosses”)
+        "\uf037": "✗",  # ZapfDingbats ballot x
         "\u00a0": " ",
         "\u2212": "−",
         "\u2261": "→",  # ≡ mis-extracted reaction arrow
         # CIE Identity-H custom fonts (2023+ Paper 1): space encoded as C0 controls
         "\x01": " ",
+        "\x02": " ",
         "\x03": " ",
+        "\x04": " ",
     }
 )
 

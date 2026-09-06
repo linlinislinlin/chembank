@@ -1,0 +1,25 @@
+# AS 9701 stoichiometry homework 4 · solutions / gases + earlier skills (topics 1–14)
+# ~45 minutes · 16 MCQ
+title: "AS stoichiometry homework 4 · solutions and gas volumes"
+syllabus_codes: ["2.4", "2.2", "2.3"]
+preserve_order: true
+include_ids:
+  # 13 Solutions and concentration
+  - cie-9701-2024-mj-p11-q1       # which sample X gives 0.100 mol dm-3 HCl
+  - cie-9701-2023-mj-p13-q11      # which H2SO4 + NaOH mixture makes 1 mol water
+  - cie-9701-2021-on-p11-q28      # citric acid: volume of 0.40 mol dm-3 NaOH
+  - cie-9701-2025-mj-p13-q13      # 20.0 cm3 H2O2 decomposes → O2
+  - cie-9701-2025-mj-p13-q15      # washing powder titration, % NaHCO3
+  - cie-9701-2025-mj-p14-q37      # lemon juice vs 120 cm3 0.50 mol dm-3 Na2CO3
+  # 14 Gas volumes at room conditions (24 dm3 mol-1)
+  - cie-9701-2021-mj-p13-q2       # 9.61 g propane → volume CO2
+  - cie-9701-2024-mj-p11-q2       # 10 cm3 CH4 + 10 cm3 C2H6, spark, then KOH
+  - cie-9701-2023-on-p12-q8       # 0.100 mol propan-1-ol in 12.0 dm3 O2, final volume
+  - cie-9701-2024-mj-p11-q20      # 0.010 mol Mg(NO3)2 → total gas volume
+  - cie-9701-2022-on-p11-q8       # 0.833 g s-block carbonate → 200 cm3 gas
+  - cie-9701-2025-mj-p14-q29      # 0.010 mol hydrocarbon + 720 cm3 H2
+  # Earlier skills mixed with 13–14 (mole, empirical, hydrate, limiting)
+  - cie-9701-2024-mj-p12-q2       # 62 g P4: number of molecules
+  - cie-9701-2023-on-p11-q25      # empirical formula of hexamine
+  - cie-9701-2025-mj-p11-q12      # BaS2O6·2H2O: hydrate + solution
+  - cie-9701-2022-fm-p12-q23      # excess Cl2 + 100 cm3 6.0 M NaOH → moles NaCl

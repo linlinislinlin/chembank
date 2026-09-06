@@ -1,0 +1,462 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/QLS/AS/Homework/Stoichiometry/2-stoichiometry-homework-4.md
+  title: AS stoichiometry homework 4 · solutions and gas volumes
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS stoichiometry homework 4 · solutions and gas volumes
+- id: I01
+  type: instruction
+  source_loc: instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Circle one letter A-D. Show working.
+- id: S01
+  type: heading
+  source_loc: section-1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 13 · Solutions and concentration
+- id: S07
+  type: heading
+  source_loc: section-7
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 14 · Gas volumes at room conditions
+- id: S13
+  type: heading
+  source_loc: section-13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Earlier skills · mole, empirical, hydrate, limiting
+- id: Q01
+  type: mcq
+  source_loc: Q01
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Sample X is added to water and made up to a total volume of 200\,cm$^3$.
+    This gives a solution of 0.100\,mol\,dm$^{-3}$ \ce{HCl}.
+
+
+    What is X?
+
+    \optlist{10\,cm$^3$ of 1.00\,mol\,dm$^{-3}$ \ce{HCl}}{30\,cm$^3$ of 0.90\,mol\,dm$^{-3}$
+    \ce{HCl}}{50\,cm$^3$ of 0.40\,mol\,dm$^{-3}$ \ce{HCl}}{100\,cm$^3$ of 0.30\,mol\,dm$^{-3}$
+    \ce{HCl}}'
+- id: CLIP-Q01
+  type: mcq
+  source_loc: Q01-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q01
+  reason: full paper-clip of typeset question
+  image: images/img-001.png
+- id: Q02
+  type: mcq
+  source_loc: Q02
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: "Which mixture will react to form exactly one mole of water?\n\n{\\centering\n\
+    {\\small\n\\begin{tabular}{c cc}\n\\toprule\n & volume 2.00\\,mol\\,dm$^{-3}$\
+    \ \\ce{H2SO4}\\,/\\,cm$^3$ & volume 1.00\\,mol\\,dm$^{-3}$ \\ce{NaOH}\\,/\\,cm$^3$\
+    \ \\\\\n\\midrule\n\\textbf{A} & 250 & 500 \\\\\n\\textbf{B} & 250 & 1000 \\\\\
+    \n\\textbf{C} & 500 & 500 \\\\\n\\textbf{D} & 500 & 1000 \\\\\n\\bottomrule\n\\\
+    end{tabular}}\\par}"
+- id: CLIP-Q02
+  type: mcq
+  source_loc: Q02-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q02
+  reason: full paper-clip of typeset question
+  image: images/img-002.png
+- id: Q03
+  type: mcq
+  source_loc: Q03
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Citric acid is found in lemon juice.
+
+    \begin{center}citric acid\\[0.15em]\ce{HO2CCH2C(OH)(CO2H)CH2CO2H}\end{center}
+
+    Which volume of 0.40\,mol\,dm$^{-3}$ sodium hydroxide solution is required to
+    neutralise a solution containing 0.0050\,mol of citric acid?
+
+    \optrow{12.5\,cm$^3$}{25.0\,cm$^3$}{37.5\,cm$^3$}{50.0\,cm$^3$}'
+- id: CLIP-Q03
+  type: mcq
+  source_loc: Q03-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q03
+  reason: full paper-clip of typeset question
+  image: images/img-003.png
+- id: Q04
+  type: mcq
+  source_loc: Q04
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Hydrogen peroxide, \ce{H2O2}, decomposes into water and oxygen when a suitable
+    catalyst is added.
+
+
+    20.0\,cm$^3$ of aqueous hydrogen peroxide decomposes to produce 600\,cm$^3$ of
+    oxygen at room conditions.
+
+
+    What is the concentration of the aqueous hydrogen peroxide?
+
+    \optlist{5.00\,mol\,dm$^{-3}$}{2.50\,mol\,dm$^{-3}$}{1.25\,mol\,dm$^{-3}$}{0.625\,mol\,dm$^{-3}$}'
+- id: CLIP-Q04
+  type: mcq
+  source_loc: Q04-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q04
+  reason: full paper-clip of typeset question
+  image: images/img-004.png
+- id: Q05
+  type: mcq
+  source_loc: Q05
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A washing powder contains sodium hydrogencarbonate, \ce{NaHCO3}, as one of
+    the ingredients.
+
+
+    In a titration, a solution containing 1.00\,g of this washing powder requires
+    7.15\,cm$^3$ of 0.100\,mol\,dm$^{-3}$ sulfuric acid for complete reaction. The
+    sodium hydrogencarbonate is the only ingredient that reacts with the acid.
+
+
+    What is the percentage by mass of sodium hydrogencarbonate in the washing powder?
+
+    \optrow{3.0\%}{6.0\%}{12.0\%}{24.0\%}'
+- id: CLIP-Q05
+  type: mcq
+  source_loc: Q05-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q05
+  reason: full paper-clip of typeset question
+  image: images/img-005.png
+- id: Q06
+  type: mcq
+  source_loc: Q06
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'The juice of one lemon reacts completely with 120\,cm$^3$ of 0.50\,mol\,dm$^{-3}$
+    sodium carbonate solution.
+
+
+    The formula of citric acid is \ce{HOOCCH2C(OH)(COOH)CH2COOH}.
+
+
+    No sodium carbonate is left unreacted.
+
+
+    What is the amount of citric acid in one lemon assuming that it is the only acid
+    in the sample?
+
+    \optrow{0.02\,mol}{0.04\,mol}{0.06\,mol}{0.09\,mol}'
+- id: CLIP-Q06
+  type: mcq
+  source_loc: Q06-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q06
+  reason: full paper-clip of typeset question
+  image: images/img-006.png
+- id: Q07
+  type: mcq
+  source_loc: Q07
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A sample of propane, \ce{C3H8}, with a mass of 9.61\,g is completely combusted
+    in an excess of oxygen under room conditions.
+
+
+    Which volume of carbon dioxide gas is produced?
+
+    \optrow{4.89\,dm$^3$}{5.24\,dm$^3$}{14.7\,dm$^3$}{15.7\,dm$^3$}'
+- id: CLIP-Q07
+  type: mcq
+  source_loc: Q07-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q07
+  reason: full paper-clip of typeset question
+  image: images/img-007.png
+- id: Q08
+  type: mcq
+  source_loc: Q08
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'A mixture of 10\,cm$^3$ of methane and 10\,cm$^3$ of ethane was sparked with
+    an excess of oxygen. After cooling, the residual gas was passed through aqueous
+    potassium hydroxide.
+
+
+    All gas volumes were measured at the same temperature and pressure.
+
+
+    Which volume of gas was absorbed by the alkali?
+
+    \optrow{15\,cm$^3$}{20\,cm$^3$}{30\,cm$^3$}{40\,cm$^3$}'
+- id: CLIP-Q08
+  type: mcq
+  source_loc: Q08-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q08
+  reason: full paper-clip of typeset question
+  image: images/img-008.png
+- id: Q09
+  type: mcq
+  source_loc: Q09
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'In an experiment, 0.100\,mol of propan-1-ol is burnt completely in 12.0\,dm$^3$
+    of oxygen, measured at room conditions.
+
+
+    What is the final volume of gas, measured at room conditions?
+
+    \optrow{7.20\,dm$^3$}{8.40\,dm$^3$}{16.80\,dm$^3$}{18.00\,dm$^3$}'
+- id: CLIP-Q09
+  type: mcq
+  source_loc: Q09-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q09
+  reason: full paper-clip of typeset question
+  image: images/img-009.png
+- id: Q10
+  type: mcq
+  source_loc: Q10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'What is the total volume of gas produced, measured at room conditions, when
+    0.010\,mol of anhydrous magnesium nitrate is completely decomposed by heating?
+
+    \optrow{240\,cm$^3$}{480\,cm$^3$}{600\,cm$^3$}{720\,cm$^3$}'
+- id: CLIP-Q10
+  type: mcq
+  source_loc: Q10-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q10
+  reason: full paper-clip of typeset question
+  image: images/img-010.png
+- id: Q11
+  type: mcq
+  source_loc: Q11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'The carbonate of an s-block element is reacted with an excess of hydrochloric
+    acid.
+
+
+    0.833\,g of the carbonate releases 200\,cm$^3$ of gas, measured under room conditions.
+
+
+    What is the identity of the metal carbonate?
+
+    \optrow{\ce{Na2CO3}}{\ce{K2CO3}}{\ce{MgCO3}}{\ce{CaCO3}}'
+- id: CLIP-Q11
+  type: mcq
+  source_loc: Q11-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q11
+  reason: full paper-clip of typeset question
+  image: images/img-011.png
+- id: Q12
+  type: mcq
+  source_loc: Q12
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'When 0.010\,mol of a hydrocarbon X reacts with 720\,cm$^3$ of hydrogen at
+    room conditions, an alkane is formed.
+
+
+    What is hydrocarbon X?
+
+    \qfig[0.72]{fig-q12-structures.png}'
+- id: Fig-Q12
+  type: figure
+  source_loc: Q12-diagram
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: graph / diagram / visual options — do not redraw
+  image: overleaf/images/fig-q12-structures.png
+- id: CLIP-Q12
+  type: mcq
+  source_loc: Q12-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q12
+  reason: full paper-clip of typeset question
+  image: images/img-012.png
+- id: Q13
+  type: mcq
+  source_loc: Q13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'How many molecules are present in 62\,g of solid white phosphorus, \ce{P4}?
+
+    \optrow{$L$}{$2L$}{$\dfrac{L}{2}$}{$\dfrac{L}{4}$}'
+- id: CLIP-Q13
+  type: mcq
+  source_loc: Q13-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q13
+  reason: full paper-clip of typeset question
+  image: images/img-013.png
+- id: Q14
+  type: mcq
+  source_loc: Q14
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Hexamine is a crystalline solid used as a fuel in portable stoves.
+
+
+    The diagram shows its skeletal structure.
+
+    \qfig[0.28]{fig-q14-hexamine.png}
+
+    What is the empirical formula of hexamine?
+
+    \optrow{\ce{CH2N}}{\ce{C3H6N2}}{\ce{C4H8N4}}{\ce{C6H12N4}}'
+- id: Fig-Q14
+  type: figure
+  source_loc: Q14-diagram
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: graph / diagram / visual options — do not redraw
+  image: overleaf/images/fig-q14-hexamine.png
+- id: CLIP-Q14
+  type: mcq
+  source_loc: Q14-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q14
+  reason: full paper-clip of typeset question
+  image: images/img-014.png
+- id: Q15
+  type: mcq
+  source_loc: Q15
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'Barium dithionate, \ce{BaS2O6.2H2O}, is soluble in water.
+
+
+    \ce{S2O6^2-} ions slowly decompose in acidic solution.
+
+    \[\ce{S2O6^{2-}(aq) -> SO2(g) + SO4^{2-}(aq)}\]
+
+    3.513\,g of \ce{BaS2O6.2H2O} is dissolved in water in a 100\,cm$^3$ volumetric
+    flask and the solution made up to the mark with \ce{HCl(aq)}.
+
+
+    At time $x$\,min, a white precipitate of mass 0.661\,g is present in the flask.
+
+
+    What is the concentration of \ce{BaS2O6} in the volumetric flask at time $x$\,min?
+
+    \optrow{0.0077\,mol\,dm$^{-3}$}{0.0090\,mol\,dm$^{-3}$}{0.077\,mol\,dm$^{-3}$}{0.090\,mol\,dm$^{-3}$}'
+- id: CLIP-Q15
+  type: mcq
+  source_loc: Q15-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q15
+  reason: full paper-clip of typeset question
+  image: images/img-015.png
+- id: Q16
+  type: mcq
+  source_loc: Q16
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: 'An excess of chlorine was bubbled into 100\,cm$^3$ of hot 6.0\,mol\,dm$^{-3}$
+    sodium hydroxide.
+
+
+    How many moles of sodium chloride would be produced in the reaction?
+
+    \optrow{0.30}{0.50}{0.60}{0.72}'
+- id: CLIP-Q16
+  type: mcq
+  source_loc: Q16-paper-clip
+  keep: false
+  render: image
+  duplicate_of: Q16
+  reason: full paper-clip of typeset question
+  image: images/img-016.png

@@ -10,8 +10,8 @@
       "description": "Stable question id, e.g. cie-9701-2021-mj-p11-q1"
     },
     "exam_board": { "type": "string", "const": "CIE" },
-    "syllabus_code": { "type": "string", "const": "9701" },
-    "level": { "type": "string", "enum": ["AS", "A", "AS/A"] },
+    "syllabus_code": { "type": "string", "enum": ["9701", "0620"] },
+    "level": { "type": "string", "enum": ["AS", "A", "AS/A", "IGCSE", "Extended", "Core"] },
     "year": { "type": "integer" },
     "session": { "type": "string", "examples": ["MJ", "ON", "FM"] },
     "paper": {
@@ -53,14 +53,19 @@
     },
     "practical_topic": {
       "type": "string",
-      "enum": [
-        "Titrations",
-        "Thermometric experiments",
-        "Gravimetric experiments",
-        "Gas volume experiments",
-        "Rate experiments",
-        "Qualitative analysis"
-      ],
+        "enum": [
+          "Titrations",
+          "Thermometric experiments",
+          "Gravimetric experiments",
+          "Gas volume experiments",
+          "Rate experiments",
+          "Qualitative analysis",
+          "Chromatography",
+          "Salt preparation",
+          "Planning",
+          "Measurement and apparatus",
+          "Separation and purification"
+        ],
       "description": "Controlled Paper 3 experiment taxonomy (topic grain, not part-level)"
     },
     "difficulty": {
@@ -136,9 +141,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^\\d{1,2}\\.\\d{1,2}-\\d{1,2}[a-z]?$"
+        "pattern": "^\\d{1,2}\\.\\d{1,2}-([CS]\\d{1,2}|\\d{1,2}[a-z]?)$"
       },
-      "description": "Controlled CIE 9701 learning-outcome ids from syllabus YAML (e.g. 3.1-1, 2.4-1a). Always also set parent syllabus_codes."
+      "description": "Controlled LO ids: 9701 `{subtopic}-{n}` / `{subtopic}-{n}{letter}`; 0620 `{subtopic}-C{n}` / `{subtopic}-S{n}`."
     },
     "learning_outcome_texts": {
       "type": "array",

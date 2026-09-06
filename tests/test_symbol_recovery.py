@@ -28,6 +28,15 @@ def test_q4_delta_h_symbols_recovered():
     assert "        is the standard enthalpy" not in q4
 
 
+def test_zapfdingbat_ticks_and_crosses_normalized():
+    from chembank.chem_format import format_chemistry_text
+
+    raw = "Complete the table, using ticks (\uf033) and crosses (\uf037)."
+    out = format_chemistry_text(raw)
+    assert "✓" in out and "✗" in out
+    assert "\uf033" not in out and "\uf037" not in out
+
+
 @pytest.mark.skipif(not QP.exists(), reason="local QP PDF not present")
 def test_multiply_sign_normalized():
     from chembank.extract import extract_pdf_text

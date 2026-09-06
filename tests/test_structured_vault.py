@@ -141,6 +141,34 @@ def test_split_parts_no_next_letter_bleed_and_shared_stem():
     assert "Identify the reaction type" not in b_i
 
 
+def test_split_parts_list_h_i_j_are_letters_not_roman():
+    """Period-3 list (h)/(i)/(j) must not collapse into 1(h)(i)."""
+    from chembank.structured_parts import split_main_question_into_parts
+
+    text = (
+        "1 The symbols of Period 3 are shown.\n"
+        "(h) forms an amphoteric oxide\n"
+        "[1]\n"
+        "(i) exists as diatomic molecules\n"
+        "[1]\n"
+        "(j) forms a binary compound with hydrogen that is a strong acid.\n"
+        "[1]\n"
+    )
+    labels = [pid.label for pid, _ in split_main_question_into_parts("1", text)]
+    assert labels == ["1(h)", "1(i)", "1(j)"]
+
+    roman_h = (
+        "1 Carbon chemistry.\n"
+        "(h) Name the process.\n"
+        "(i) Give the displayed formula.\n"
+        "[1]\n"
+        "(ii) State the reagents.\n"
+        "[1]\n"
+    )
+    roman_labels = [pid.label for pid, _ in split_main_question_into_parts("1", roman_h)]
+    assert "1(h)(i)" in roman_labels and "1(h)(ii)" in roman_labels
+
+
 def test_structured_band_span_honours_hard_end_on_next_page():
     """Next-page continuation must not pad past end_y (letter/Q bleed)."""
     from types import SimpleNamespace
@@ -175,3 +203,42 @@ def test_clip_contains_next_question_tolerates_pdf_controls():
 
     assert _clip_contains_next_question("…\n[Total: 10]\n\n2\t\x07Carbon monoxide", "1")
     assert not _clip_contains_next_question("option 2 B only", "1")
+
+
+QP_S21_P41 = Path(__file__).resolve().parents[1] / "raw" / "papers" / "0620_s21_qp_41.pdf"
+MS_S21_P41 = Path(__file__).resolve().parents[1] / "raw" / "papers" / "0620_s21_ms_41.pdf"
+
+
+def test_whole_question_leaf_is_not_parent_index_candidate():
+    from chembank.structured_parts import parse_part_id
+
+    whole = {"question": "2", "parent_question": "2"}
+    parts = {"question": "1(a)", "parent_question": "1"}
+    assert parse_part_id(str(whole["question"])) is None
+    assert parse_part_id(str(parts["question"])) is not None
+
+
+def test_igcse_p4_whole_table_question_gets_main_and_ms_clips(tmp_path: Path):
+    """Q2 table with no (a)/(b) must still export *-paper.png and *-ms.png."""
+    import pytest
+
+    from chembank.figures import export_structured_part_figures, mark_scheme_main_clips
+
+    if not QP_S21_P41.exists() or not MS_S21_P41.exists():
+        pytest.skip("local 0620 s21 P41 PDFs not present")
+
+    main_ms = mark_scheme_main_clips(MS_S21_P41)
+    assert "2" in main_ms
+    assert "1" in main_ms  # part roll-up still present
+
+    fig_map = export_structured_part_figures(
+        QP_S21_P41,
+        ms_pdf=MS_S21_P41,
+        question_id_prefix="cie-0620-2021-mj-p41",
+        assets_dir=tmp_path,
+        part_labels=["2", "1(a)"],
+    )
+    assert any(p.endswith("-q2-paper.png") for p in fig_map["2"])
+    assert any(p.endswith("-q2-ms.png") for p in fig_map["2"])
+    assert (tmp_path / "cie-0620-2021-mj-p41-q2-paper.png").is_file()
+    assert (tmp_path / "cie-0620-2021-mj-p41-q2-ms.png").is_file()

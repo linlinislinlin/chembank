@@ -353,7 +353,10 @@ def infer_paper_meta_from_name(name: str) -> PaperMeta:
         meta.session = {"s": "MJ", "w": "ON", "m": "FM"}.get(sess, sess.upper())
         meta.paper = int(m.group("paper"))
         paper_num = int(str(meta.paper)[0]) if meta.paper else 0
-        meta.level = "AS" if paper_num in (1, 2) else "A"
+        if meta.syllabus_code == "0620":
+            meta.level = "Extended"
+        else:
+            meta.level = "AS" if paper_num in (1, 2) else "A"
         stem = f"{meta.syllabus_code}_{sess}{m.group('yy')}"
         meta.source_qp = f"raw/papers/{stem}_qp_{meta.paper}.pdf"
         meta.source_ms = f"raw/papers/{stem}_ms_{meta.paper}.pdf"
@@ -671,7 +674,16 @@ def tag_question_text(
     all_titles = flatten_codes(syllabus)
 
     if mock or os.environ.get("CHEMBANK_TAG_MOCK", "").lower() in {"1", "true", "yes"}:
-        raw_tags = mock_tag_question(body, question_type=question_type_hint)
+        if str(paper_meta.syllabus_code) == "0620":
+            from chembank.tag_igcse import mock_tag_igcse
+
+            raw_tags = mock_tag_igcse(
+                body,
+                question_type=question_type_hint,
+                syllabus=syllabus,
+            )
+        else:
+            raw_tags = mock_tag_question(body, question_type=question_type_hint)
     else:
         system, user = build_tag_prompt(
             body=body,
@@ -704,6 +716,16 @@ def tag_question_text(
         "body": body,
         "mark_scheme": f"Answer: **{answer}**" if answer else "",
     }
+    if str(paper_meta.syllabus_code) == "0620":
+        from chembank.registry import paper_kind
+        from chembank.tag_igcse import infer_practical_topic
+
+        kind = paper_kind(paper_meta.paper or 0, "0620")
+        if kind in ALLOWED_QUESTION_TYPES:
+            record["question_type"] = kind
+        if kind == "practical":
+            record["practical_topic"] = infer_practical_topic(body)
+        record["_provisional"] = bool(mock or record.get("_provisional"))
     return record
 
 
@@ -720,7 +742,16 @@ def _load_index(draft_dir: Path) -> dict[str, dict[str, Any]]:
     if not path.exists():
         return {}
     rows = json.loads(path.read_text(encoding="utf-8"))
-    return {str(r["question"]): r for r in rows}
+    by_key: dict[str, dict[str, Any]] = {}
+    for r in rows:
+        by_key[str(r["question"])] = r
+        slug = r.get("part_slug")
+        if slug:
+            by_key[str(slug)] = r
+        fname = r.get("file")
+        if fname:
+            by_key[str(fname)] = r
+    return by_key
 
 
 def iter_draft_questions(
@@ -777,6 +808,13 @@ def tag_draft_dir(
             if hasattr(meta, key) and value is not None:
                 setattr(meta, key, value)
 
+    if syllabus_path is None:
+        from chembank.syllabus import syllabus_path_for
+
+        syllabus_path = syllabus_path_for(meta.syllabus_code)
+    if str(meta.syllabus_code) == "0620":
+        as_only = False
+
     ms_key = _load_ms_key(draft_dir)
     index = _load_index(draft_dir)
     results: list[dict[str, Any]] = []
@@ -787,8 +825,13 @@ def tag_draft_dir(
 
     for question, path in iter_draft_questions(draft_dir, only=only, limit=limit):
         text = path.read_text(encoding="utf-8")
-        idx = index.get(question, {})
+        idx = index.get(question) or index.get(path.name) or {}
         qtype = idx.get("paper_style") or "mcq"
+        from chembank.registry import paper_kind as _paper_kind
+
+        kind = _paper_kind(meta.paper or 0, str(meta.syllabus_code))
+        if kind in ALLOWED_QUESTION_TYPES:
+            qtype = kind
         if qtype not in ALLOWED_QUESTION_TYPES:
             qtype = "mcq"
         record = tag_question_text(

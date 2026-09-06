@@ -1,0 +1,319 @@
+% Chemistry Homework Formatter — student paper preamble
+% Default wrapper is English (CIE papers). Load ctex only if the teacher asks for Chinese.
+% Compiler: XeLaTeX. Overleaf: upload this file as main.tex plus the images/ folder.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=16mm,headheight=13pt,headsep=5pt,footskip=9mm]{geometry}
+\usepackage{fontspec}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+
+\raggedbottom
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.25em,topsep=0.25em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.12em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \homeworktitle}
+\fancyhead[R]{\small \homeworkmarks}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\homeworktitle}{Chemistry homework}
+\newcommand{\homeworkmarks}{}
+\newcommand{\sethomework}[2]{%
+  \renewcommand{\homeworktitle}{#1}%
+  \renewcommand{\homeworkmarks}{#2}%
+}
+
+\newcommand{\answerlines}[1]{%
+  \par\vspace{0.3em}%
+  \foreach \n in {1,...,#1}{\noindent\rule{\linewidth}{0.2pt}\\[1.05em]}%
+}
+
+% Fallback if pgffor is missing: comment \answerlines and use \vspace instead.
+\usepackage{pgffor}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+
+% Measure the image, then break only if the whole labelled clip will not fit.
+\newcommand{\clipq}[3]{%
+  \par
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#3}}%
+  \Needspace{\dimexpr\ht0+1.35em+2pt\relax}%
+  \noindent{\small\textbf{#1}}\hfill{\small[#2]}\par\vspace{0.08em}%
+  \noindent\usebox0\par
+  \vspace{0.28em}%
+}
+
+\newcommand{\qfigure}[1]{%
+  \sbox0{\includegraphics[width=0.94\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\newcommand{\qfigurebig}[1]{%
+  \sbox0{\includegraphics[width=\linewidth,keepaspectratio]{#1}}%
+  \Needspace{\dimexpr\ht0+0.6em\relax}%
+  \noindent\usebox0\par
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.12em}
+
+\setlist[enumerate]{leftmargin=1.55em,itemsep=0.06em,topsep=0.12em}
+\newcommand{\qhead}[1]{%
+  \par\vspace{0.38em}%
+  {\normalsize\bfseries #1}\par\vspace{0.12em}%
+}
+\newcommand{\mcq}[1]{%
+  \par\noindent\textbf{#1.}\enspace\ignorespaces
+}
+\newcommand{\mcqend}{\hfill{[1]}\par}
+\newcommand{\optrow}[4]{%
+\par\noindent{\small
+\begin{tabular}{@{}p{0.48\linewidth}@{}p{0.48\linewidth}@{}}
+\textbf{A}\; #1 & \textbf{B}\; #2 \\[0.12em]
+\textbf{C}\; #3 & \textbf{D}\; #4
+\end{tabular}}\par
+}
+\newcommand{\optlist}[4]{%
+\par
+\begin{enumerate}[label=\textbf{\Alph*.}, leftmargin=1.55em, itemsep=0.05em, topsep=0.08em]
+\item #1
+\item #2
+\item #3
+\item #4
+\end{enumerate}
+}
+\newcommand{\qfig}[2][0.58]{%
+\par
+\begin{center}\vspace{-0.1em}%
+\includegraphics[width=#1\linewidth,keepaspectratio]{#2}%
+\end{center}\vspace{-0.1em}%
+}
+
+\begin{document}
+\sethomework{AS stoichiometry homework 3 · empirical and molecular formulae}{18 marks}
+
+\begin{center}
+{\large\bfseries AS stoichiometry homework 3 · empirical and molecular formulae}\\[0.2em]
+{\small CIE 9701 AS Chemistry · 18 MCQ · 18 marks}
+\end{center}
+
+\noindent Name: \underline{\hspace{5.8cm}} \quad Class: \underline{\hspace{2.6cm}} \quad Date: \underline{\hspace{2.8cm}}
+
+\vspace{0.25em}
+{\small Topics: 8 empirical formulae · 9 molecular formulae · 10 hydrates · 11 combustion analysis · 12 formulae and equations. Later questions also use earlier skills.
+
+Circle \textbf{one} letter (A--D) for each question. Show working. Calculators and a Periodic Table may be used.}
+\vspace{0.15em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{8 · Empirical formulae}
+\mcq{1}%
+What is the empirical formula of butanoic acid?
+\optrow{\ce{C2H4O}}{\ce{C3H6O}}{\ce{C4H8O}}{\ce{C5H10O}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{2}%
+Compound X consists of 40.0\% carbon, 6.7\% hydrogen and 53.3\% oxygen by mass.
+
+What is the empirical formula of compound X?
+\optrow{\ce{CH2O}}{\ce{C2H2O}}{\ce{C2H4O}}{\ce{CHO}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{3}%
+Compound X is an organic compound that contains 30.6\% carbon, 3.8\% hydrogen, 20.4\% oxygen and 45.2\% chlorine by mass.
+
+What is the empirical formula of X?
+\optrow{\ce{C2H3OCl}}{\ce{C2H4OCl}}{\ce{C3H4OCl}}{\ce{C4H3O2Cl2}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{4}%
+R is an oxide of Period 3 element T. 5.00\,g of R contains 2.50\,g of T.
+
+What is T?
+\optlist{magnesium}{aluminium}{silicon}{sulfur}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{9 · Molecular formulae}
+\mcq{5}%
+Compound X is a straight chain hydrocarbon with an $M_\mathrm{r}$ of 84.
+
+What can be determined about X?
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=1.6em]
+\item empirical formula
+\item molecular formula
+\item whether X contains a \ce{C=C} bond or not
+\end{enumerate}
+The responses \textbf{A} to \textbf{D} should be selected on the basis of
+
+{\centering
+{\small
+\begin{tabular}{cccc}
+\toprule
+\textbf{A} & \textbf{B} & \textbf{C} & \textbf{D} \\
+\midrule
+1, 2 and 3 are correct & 1 and 2 only are correct & 2 and 3 only are correct & 1 only is correct \\
+\bottomrule
+\end{tabular}}\par}
+
+{\small No other combination of statements is used as a correct response.}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{6}%
+An aqueous solution contains 4.00\,g of a carboxylic acid, Q. When this solution reacts with an excess of magnesium, 380\,cm$^3$ of gas is produced, measured at s.t.p.
+
+What is the relative formula mass of Q?
+\optrow{59}{118}{126}{236}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{7}%
+P is a compound that burns in an excess of oxygen to give carbon dioxide and water only.
+
+2.20\,g of P contains 1.20\,g of carbon and 0.20\,g of hydrogen.
+
+When P is added to a solution of sodium carbonate, bubbles of gas are seen.
+
+What is P?
+\optlist{\ce{CH3CHO}}{\ce{CH3CO2H}}{\ce{CH3COCH2CH2OH}}{\ce{CH3CH2CH2CO2H}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{10 · Hydrated and anhydrous compounds}
+\mcq{8}%
+A sample of 35.6\,g of hydrated sodium carbonate contains 25.84\% sodium ions by mass.
+
+When this sample is heated, anhydrous sodium carbonate and water are formed.
+
+Which mass of water is given off?
+\optrow{7.2\,g}{10.6\,g}{14.4\,g}{21.2\,g}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{9}%
+Hydrated cobalt(II) sulfate loses water when heated to give anhydrous cobalt(II) sulfate. All the water of crystallisation is lost to the atmosphere as steam.
+
+When 3.10\,g of hydrated cobalt(II) sulfate, \ce{CoSO4.xH2O}, is heated to constant mass the \textbf{loss} in mass is 1.39\,g.
+
+What is the value of $x$, to the nearest whole number?
+\optrow{4}{6}{7}{11}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{10}%
+An experiment is carried out to determine the value of $x$ in hydrated lithium hydroxide, \ce{LiOH.xH2O}. A sample of the solid is heated in a crucible over a Bunsen flame.
+
+Complete dehydration takes place; decomposition does \textbf{not} occur.
+\begin{align*}
+\text{mass of empty crucible\,/\,g} &= Q\\
+\text{mass of crucible with \ce{LiOH.xH2O}\,/\,g} &= R\\
+\text{mass of crucible and residue after heating\,/\,g} &= S
+\end{align*}
+Which equation gives the correct value of $x$?
+\optlist{$\dfrac{S-R}{18}$}{$\dfrac{R-S}{18}$}{$\dfrac{23.9(R-S)}{18(S-Q)}$}{$\dfrac{23.9(S-R)}{18(S-Q)}$}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{11 · Combustion analysis}
+\mcq{11}%
+Compound X contains the elements C, H and O only.
+
+2.00\,g of X produces 4.00\,g of carbon dioxide and 1.63\,g of water when completely combusted.
+
+What is the empirical formula of X?
+\optrow{\ce{CHO2}}{\ce{C2H2O}}{\ce{C2H4O}}{\ce{CH2O2}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{12}%
+Substance Q is a hydrocarbon. When 1.00\,g of Q is completely burned, 3.22\,g of carbon dioxide is produced.
+
+What could be the identity of Q?
+\optlist{cyclohexene}{cyclopentane}{ethene}{pentane}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{13}%
+When a small sample of hydrocarbon Q is completely combusted, it produces 3.52\,g of carbon dioxide and 1.44\,g of water.
+
+What could be the structure of hydrocarbon Q?
+\qfig[0.78]{fig-q13-structures.png}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{12 · Chemical formulae and equations}
+\mcq{14}%
+Which pair of formulae is correct?
+\optlist{\ce{Ag2CO3} and \ce{(NH4)3NO3}}{\ce{K2HCO3} and \ce{Zn3(PO4)2}}{\ce{AgHCO3} and \ce{K3PO4}}{\ce{ZnCO3} and \ce{(NH4)2PO4}}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{15}%
+Chlorine dioxide, \ce{ClO2}, reacts with aqueous sodium hydroxide to produce water and a mixture of two sodium salts, \ce{NaClO2} and \ce{NaClO3}.
+
+What is the mole ratio of \ce{NaClO2} to \ce{NaClO3} in the product mixture?
+\optrow{1:2}{3:5}{1:1}{5:3}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\qhead{Earlier skills · combining masses, reacting masses, equations}
+\mcq{16}%
+Originally, chemists thought indium oxide had the formula \ce{InO}. By experiment they showed that 4.8\,g of indium combined with 1.0\,g of oxygen to produce 5.8\,g of indium oxide. The $A_\mathrm{r}$ of oxygen was known to be 16.
+
+Which value for the $A_\mathrm{r}$ of indium is calculated using these data?
+\optrow{38}{77}{115}{154}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{17}%
+A 4.00\,g sample of an anhydrous Group 2 metal nitrate, Z, is heated strongly until there is no further change of mass. A solid residue of mass 1.37\,g is formed.
+
+Which metal is present in Z?
+\optlist{barium}{calcium}{magnesium}{strontium}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\noindent\begin{minipage}{\linewidth}
+\mcq{18}%
+Copper dissolves in dilute nitric acid producing a blue solution of \ce{Cu(NO3)2}, water and nitrogen(II) oxide as the only products.
+
+How many moles of acid react with three moles of copper in the balanced equation?
+\optrow{2}{4}{6}{8}
+\mcqend
+\end{minipage}\vspace{0.16em}
+
+\end{document}

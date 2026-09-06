@@ -1,0 +1,41 @@
+# CIE 9701 AS homework: 3.2 Ionic bonding
+# ~40 minutes · 7 MCQ + 7 structured parts (17 marks on the paper; B5 is [2]).
+#
+#   chembank select pick/3.2-ionic-bonding-hw.yaml -o build/3.2-ionic-bonding-hw.json
+#   chembank assemble build/3.2-ionic-bonding-hw.json -o vault/handouts/3.2-Ionic-bonding-homework-answers.md --vault vault
+#
+# Curated include_ids. Pedagogical order:
+#   MCQ easy→medium (what ionic bonding is / ion formation, then NaCl lattice,
+#   then giant vs simple and mixed bonding),
+#   then structured: electrostatic species → ions in a lattice + high MP →
+#   sodium oxide → giant ionic chlorides → MgO melting vs cation charge.
+#
+# The 3.2 tagged pool is small. A few genuine ionic-bonding items tagged 2.2 /
+# 4.2 / 1.1 / 9.2 are included because they match LO 3.2-1 / 3.2-2.
+# cie-9701-2021-mj-p13-q6 also appeared on the 3.1 homework; it is the only
+# clean Paper 1 item that ionic bonding is never found in elements, so it is
+# kept here as the LO 1 starter.
+#
+# No CaF2 item exists in the tagged 9701 corpus.
+title: "3.2 Ionic bonding homework"
+syllabus_codes: ["3.2"]
+preserve_order: true
+include_ids:
+  # A  MCQ · definition / ion formation
+  - cie-9701-2021-mj-p13-q6       # ionic bonding never found in elements
+  - cie-9701-2025-on-p11-q16      # radii → which pair forms an ionic compound
+  # A  MCQ · NaCl lattice (LO 2)
+  - cie-9701-2025-mj-p11-q8       # NaCl lattice diagram (keep as image)
+  - cie-9701-2023-mj-p11-q6       # NaCl coordination numbers 6 and 6
+  # A  MCQ · giant ionic / identifying ionic compounds
+  - cie-9701-2025-on-p13-q18      # which oxide is simple, not giant (MgO is giant)
+  - cie-9701-2025-mj-p14-q12      # ionic + covalent, not coordinate
+  - cie-9701-2021-on-p12-q35      # NaCl vs SiCl4 MP / water (tagged 3.2)
+  # B  structured
+  - cie-9701-2022-on-p22-q1a      # electrostatic species in ionic vs covalent [2]
+  - cie-9701-2021-mj-p22-q2a-i    # particles in Li2S [1]
+  - cie-9701-2021-mj-p22-q2a-ii   # why Li2S has a high melting point [2]
+  - cie-9701-2025-mj-p21-q1a-i    # bonding in Na and Na2O [1]
+  - cie-9701-2025-mj-p21-q1a-iii  # why molten Na2O conducts [1]
+  - cie-9701-2022-on-p23-q3a-i    # giant ionic chlorides NaCl and MgCl2 [1]
+  - cie-9701-2025-mj-p23-q2c-ii   # ionic-oxide MP vs cation charge; includes MgO [2]

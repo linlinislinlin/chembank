@@ -1,0 +1,302 @@
+meta:
+  source: /Users/tsinglan-school/Desktop/题库/vault/handouts/1-atomic-structure-exam.md
+  title: AS Chemistry — Topic 1 Atomic Structure (Exam)
+  syllabus: '9701'
+  student_answers: false
+  language: en
+items:
+- id: H01
+  type: heading
+  source_loc: title
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: AS Chemistry — Topic 1 Atomic Structure (Exam)
+- id: H-META
+  type: instruction
+  source_loc: subtitle
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: CIE 9701 AS Chemistry · 34 marks · about 40–45 minutes
+- id: H-TOPIC
+  type: instruction
+  source_loc: topic-line
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: one-line topic replacing 考纲 LO dump
+  text: 'Topic 1: particles and isotopes, mass spectrometry, electronic configuration / orbitals, ionisation energy.'
+- id: INST
+  type: instruction
+  source_loc: exam-instructions
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: 'Answer in English. Section A is Paper 1 style (1 mark each). Section B is written; show working and give the usual CIE reasons (nuclear charge, radius, shielding, spin-pair repulsion) where asked. A Periodic Table may be used.'
+- id: TBL-MARKS
+  type: table
+  source_loc: marks-table
+  keep: true
+  render: table
+  duplicate_of: null
+  reason: first occurrence
+  text: A MCQ 13; B1 2025 MJ P21 Q2 11; B2 2025 MJ P23 Q1 10; total 34
+- id: H-A
+  type: heading
+  source_loc: A-MCQ
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Section A — Multiple-choice questions (13 marks)
+- id: Q-A1
+  type: mcq
+  source_loc: A1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: |
+    The table shows the numbers of protons, neutrons and electrons in four different particles, W, X, Y and Z.
+    Which pair represents the atoms of two isotopes of the same element?
+    W 32 40 32; X 32 40 34; Y 32 42 32; Z 34 40 34
+    A W and Y  B W and Z  C X and Y  D X and Z
+- id: Q-A2
+  type: mcq
+  source_loc: A2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: An ion with a charge of 2– contains 10 electrons and 14 neutrons. What is its nucleon number? A 14 B 22 C 24 D 26
+- id: Q-A3
+  type: mcq
+  source_loc: A3
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: What is the total number of protons, neutrons and electrons present in an ammonium ion with a relative formula mass of 21? A 11 10 10; B 10 11 11; C 10 11 10; D 11 10 11
+- id: Q-A4
+  type: mcq
+  source_loc: A4
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence; diagram kept as original CIE clip
+  marks: 1
+  text: A helium ion contains two protons, two neutrons and one electron. This helium ion and a proton are passed separately through a uniform electric field. The particles are travelling at the same velocity. Which arrow describes the path of each particle?
+- id: Fig-A4
+  type: figure
+  source_loc: A4-diagram
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: electric-field paths and option table are visual
+  image: overleaf/images/fig-a4-field.png
+- id: Q-A5
+  type: mcq
+  source_loc: A5
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: A sample of magnesium contains the isotopes 24Mg, 25Mg and 26Mg only. The percentage abundance of 25Mg and 26Mg is the same. The relative atomic mass of magnesium in the sample is 24.3. What is the percentage abundance of 24Mg? A 10% B 20% C 60% D 80%
+- id: Q-A6
+  type: mcq
+  source_loc: A6
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: Which isolated gaseous atom has a total of five electrons occupying spherically shaped orbitals? A sodium B fluorine C boron D potassium
+- id: Q-A7
+  type: mcq
+  source_loc: A7
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence; options are electrons-in-boxes diagrams
+  marks: 1
+  text: What is the electrons in boxes notation for the Fe3+ ion?
+- id: Fig-A7
+  type: figure
+  source_loc: A7-boxes
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: options-as-pictures — do not redraw boxes
+  image: overleaf/images/fig-a7-boxes.png
+- id: Q-A8
+  type: mcq
+  source_loc: A8
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: Which atom has more unpaired electrons than paired electrons in orbitals of principal quantum number 2? A carbon B nitrogen C oxygen D fluorine
+- id: Q-A9
+  type: mcq
+  source_loc: A9
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: |
+    Why is the first ionisation energy of oxygen less than that of nitrogen?
+    A The nitrogen atom has its outer electron in a different subshell.
+    B The nuclear charge on the oxygen atom is greater than that on the nitrogen atom.
+    C The oxygen atom has a pair of electrons in one p orbital that repel one another.
+    D There is more shielding in an oxygen atom.
+- id: Q-A10
+  type: mcq
+  source_loc: A10
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: |
+    Equations involving four enthalpy changes are shown.
+    Which equation represents the second ionisation energy of sodium?
+    A X  B X + Y − W  C X − W  D Z − W
+- id: Q-A11
+  type: mcq
+  source_loc: A11
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: |
+    The first seven ionisation energies of an element between lithium and neon are 1310, 3390, 5320, 7450, 11000, 13300, 71000 kJ mol−1.
+    What is the outer electronic configuration of the element?
+    A 2s2  B 2s2 2p1  C 2s2 2p4  D 2s2 2p6
+- id: Q-A12
+  type: mcq
+  source_loc: A12
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence; graph kept as original CIE clip
+  marks: 1
+  text: |
+    The graph shows the variation of the first ionisation energy with proton number for some elements. The letters used are not the actual symbols for the elements.
+    Which statement about the elements is correct?
+    A P and X are in the same period in the Periodic Table.
+    B The general increase from Q to X is due to increasing atomic radius.
+    C The small decrease from R to S is due to decreased shielding.
+    D The small decrease from U to V is due to repulsion between paired electrons.
+- id: Fig-A12
+  type: figure
+  source_loc: A12-graph
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: first-IE vs proton-number graph — do not redraw
+  image: overleaf/images/fig-a12-ie.png
+- id: Q-A13
+  type: mcq
+  source_loc: A13
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 1
+  text: |
+    Which statements about first ionisation energies are correct?
+    1 They are always endothermic.
+    2 They decrease down Group 2.
+    3 They decrease across Period 3.
+    A 1, 2 and 3  B 1 and 2 only  C 2 and 3 only  D 1 only
+- id: H-B
+  type: heading
+  source_loc: B-structured
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  text: Section B — Structured questions (21 marks)
+- id: Q-B1
+  type: structured
+  source_loc: B1
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 11
+  text: |
+    A sample of iron is analysed using a mass spectrometer. The mass spectrum shows three isotopes of iron are present in the sample.
+    (a) Define isotopes. [1]
+    (b)(i) Use Fig. 2.1 to calculate Ar of iron to 1 d.p. [2]
+    (b)(ii) Complete Table 2.1 protons and nucleons in 56Fe. [2]
+    (c) Number of pairs of electrons in n=3 of an Fe atom. [1]
+    (d) Equation for first ionisation energy of iron. [1]
+    (e) Compare first IE of 54Fe and 56Fe. [4]
+- id: Fig-B1
+  type: figure
+  source_loc: B1-ms
+  keep: true
+  render: image
+  duplicate_of: null
+  reason: iron mass spectrum — do not redraw
+  image: overleaf/images/fig-b1-spectrum.png
+- id: Q-B2
+  type: structured
+  source_loc: B2
+  keep: true
+  render: latex
+  duplicate_of: null
+  reason: first occurrence
+  marks: 10
+  text: |
+    The chemical properties of an element are related to the electronic configuration of its atoms.
+    (a)(i) Full electronic configuration of a fluorine atom. [1]
+    (a)(ii) Pairs of electrons in n=2 of an oxygen atom. [1]
+    (a)(iii) Draw the shape of the highest energy orbital that contains electrons in an atom of calcium. [1]
+    (b)(i) Equation for first ionisation energy of sulfur. [1]
+    (b)(ii) Why first IE of sulfur is less than first IE of phosphorus. [2]
+    (b)(iii) Arrange F–, Ne and Na+ in order of increasing radius. Explain. [4]
+- id: CLIP-A4
+  type: figure
+  source_loc: A4-full-clip
+  keep: false
+  render: image
+  duplicate_of: Fig-A4
+  reason: full paper-clip replaced by typeset stem + cropped field diagram
+  image: images/img-001.png
+- id: CLIP-A7
+  type: figure
+  source_loc: A7-full-clip
+  keep: false
+  render: image
+  duplicate_of: Fig-A7
+  reason: full paper-clip replaced by typeset stem + cropped box options
+  image: images/img-002.png
+- id: CLIP-A12
+  type: figure
+  source_loc: A12-full-clip
+  keep: false
+  render: image
+  duplicate_of: Fig-A12
+  reason: full paper-clip replaced by typeset stem/options + cropped graph
+  image: images/img-003.png
+- id: CLIP-B1
+  type: figure
+  source_loc: B1-full-clip
+  keep: false
+  render: image
+  duplicate_of: Fig-B1
+  reason: full paper-clip replaced by typeset parts + cropped spectrum
+  image: images/img-004.png

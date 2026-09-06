@@ -49,6 +49,11 @@ def test_clip_contains_next_question():
         "2 Where…\nGroup\nPeriod\nA\n13\n3\nB\n13\n4\nC\n15\n3\nD\n15\n4\n",
         "2",
     )
+    # Nuclide OCR (T-12-6) must not look like Q6 bleed inside Q5
+    assert not _clip_contains_next_question(
+        "5 Element T has two isotopes,\nT\n12\n6\n and \nT.\n14\n6\n\nWhich statement about these isotopes is correct?\nA They have different",
+        "5",
+    )
 
 
 @pytest.mark.skipif(not M21_QP12.exists(), reason="local QP PDF not present")

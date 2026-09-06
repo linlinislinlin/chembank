@@ -13,6 +13,8 @@
 #                      [year, paper, question] spreads MCQ/structured/practical
 #                      and keeps Paper 1/2/3 thumbnails grouped nicely.
 #   shuffle          : bool; randomise order before truncation (seeded).
+#   include_ids      : exact question ids in paper order (skips other filters / sort).
+#   preserve_order   : keep pick-list order; do not regroup the handout by LO.
 #   exclude_after    : optional cutoff code (e.g. "5.2"); drop any question
 #                      whose syllabus_codes contains a code >= this cutoff.
 title: "Enthalpy 5.1 复习单"

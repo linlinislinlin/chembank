@@ -32,14 +32,15 @@ DIFFICULTY_FROM_BAND: dict[str, int] = {
 
 HEADER_NOISE = re.compile(
     r"(?:Cambridge International Advanced Subsidiary and Advanced Level|"
-    r"9701 Chemistry (?:June|November|March) \d{4}|"
+    r"Cambridge International General Certificate of Secondary Education|"
+    r"(?:9701|0620) Chemistry (?:June|November|March) \d{4}|"
     r"Principal Examiner Report for Teachers|"
     r"©\s*\d{4})\s*",
     re.IGNORECASE,
 )
 
 PAPER_START = re.compile(
-    r"Paper\s+9701/(?P<paper>\d+)\s*\n\s*(?P<title>[^\n]+)?",
+    r"Paper\s+(?P<code>\d{4})/(?P<paper>\d+)\s*\n\s*(?P<title>[^\n]+)?",
     re.IGNORECASE,
 )
 
@@ -60,7 +61,7 @@ COMMON_WRONG = re.compile(
     re.IGNORECASE,
 )
 SESSION_RE = re.compile(
-    r"9701\s+Chemistry\s+(June|November|March)\s+(\d{4})",
+    r"(?:9701|0620)\s+Chemistry\s+(June|November|March)\s+(\d{4})",
     re.IGNORECASE,
 )
 
@@ -177,7 +178,7 @@ def _extract_question_comments(section: str) -> dict[str, dict[str, Any]]:
         text = _clean_block(text)
         # Drop trailing next-paper / page bleed if any
         text = re.split(r"\nCHEMISTRY\s*\n", text, maxsplit=1)[0].strip()
-        text = re.split(r"\nPaper\s+9701/\d+", text, maxsplit=1)[0].strip()
+        text = re.split(r"\nPaper\s+(?:9701|0620)/\d+", text, maxsplit=1)[0].strip()
         text = re.split(r"\n----- PAGE \d+ -----", text, maxsplit=1)[0].strip()
         if not qnum.isdigit() or not text:
             i += 2
@@ -224,6 +225,8 @@ def parse_examiner_report_text(text: str, *, source_name: str = "") -> dict[str,
             "Could not detect session/year header "
             "(expected e.g. '9701 Chemistry June 2021')"
         )
+    code_m = re.search(r"\b(9701|0620)\s+Chemistry", text, re.I)
+    syllabus_code = code_m.group(1) if code_m else "9701"
     session = _session_code(sm.group(1))
     year = int(sm.group(2))
     season = _cie_season_token(session, year)
@@ -313,11 +316,11 @@ def parse_examiner_report_text(text: str, *, source_name: str = "") -> dict[str,
 
     return {
         "exam_board": "CIE",
-        "syllabus_code": "9701",
+        "syllabus_code": syllabus_code,
         "year": year,
         "session": session,
         "season_token": season,
-        "report_title": f"9701 Chemistry {year} Principal Examiner Report",
+        "report_title": f"{syllabus_code} Chemistry {year} Principal Examiner Report",
         "source": source_name,
         "has_numeric_facility": False,  # CIE ER PDFs usually qualitative only
         "difficulty_mapping": {
@@ -356,16 +359,20 @@ def extract_examiner_report(
     return data
 
 
-def er_json_path(year: int, session: str, paper: str | int) -> Path:
+def er_json_path(
+    year: int, session: str, paper: str | int, syllabus_code: str = "9701"
+) -> Path:
     """Year-scoped draft path, e.g. draft/er/9701_s21_er_11.json."""
     season = _cie_season_token(session, year)
-    return Path("draft") / "er" / f"9701_{season}_er_{paper}.json"
+    return Path("draft") / "er" / f"{syllabus_code}_{season}_er_{paper}.json"
 
 
-def suggested_pdf_name(year: int, session: str) -> str:
+def suggested_pdf_name(
+    year: int, session: str, syllabus_code: str = "9701"
+) -> str:
     """Clean gitignored name under raw/reports/, e.g. 9701_2021_s21_er.pdf."""
     season = _cie_season_token(session, year)
-    return f"9701_{year}_{season}_er.pdf"
+    return f"{syllabus_code}_{year}_{season}_er.pdf"
 
 
 def write_examiner_report_json(
@@ -384,14 +391,17 @@ def write_examiner_report_json(
         else:
             # Multi-paper dump
             season = data.get("season_token") or _cie_season_token(session, year)
-            out_path = Path(out_path) if out_path else Path("draft") / "er" / f"9701_{season}_er.json"
+            code = str(data.get("syllabus_code") or "9701")
+            out_path = Path(out_path) if out_path else Path("draft") / "er" / f"{code}_{season}_er.json"
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_text(
                 json.dumps(data, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
             )
             return out_path
-    out_path = Path(out_path) if out_path else er_json_path(year, session, paper)
+    out_path = Path(out_path) if out_path else er_json_path(
+        year, session, paper, str(data.get("syllabus_code") or "9701")
+    )
     # If multi-paper data but writing one paper file, slice
     payload = data
     p = str(paper)

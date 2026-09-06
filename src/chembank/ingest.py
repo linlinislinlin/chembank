@@ -23,6 +23,7 @@ from chembank.registry import (
     resolve_existing,
     upsert_paper,
     write_manifest,
+    registry_path_for,
 )
 from chembank.split import write_split_output
 
@@ -41,7 +42,7 @@ def run_pipeline(ref: PaperRef, *, draft_root: Path | None = None) -> Path:
         ms = Path(ref.ms)
         # Structured MS tables are scrambled by symbol recovery — prefer plain text
         # so part headers like ``2(a)(i)`` stay on their own lines.
-        recover = paper_kind(ref.paper) == "mcq"
+        recover = paper_kind(ref.paper, ref.syllabus_code) == "mcq"
         ms_text = extract_pdf_text(ms, recover_symbols=recover)
         (draft_root / f"{ms.stem}.txt").write_text(ms_text, encoding="utf-8")
 
@@ -51,7 +52,7 @@ def run_pipeline(ref: PaperRef, *, draft_root: Path | None = None) -> Path:
         source_name=stem,
         mark_scheme_text=ms_text,
         # Paper 3 practical: topic / main-question grain (not fine parts)
-        part_level=False if paper_kind(ref.paper) == "practical" else None,
+        part_level=False if paper_kind(ref.paper, ref.syllabus_code) == "practical" else None,
     )
     if not chunks:
         raise RuntimeError(f"Split produced 0 questions for {stem}")
@@ -99,11 +100,13 @@ def maybe_export(
     tagged = Path(ref.draft) / "tagged"
     if not tagged.is_dir() or not any(tagged.glob("q*.json")):
         return None
-    vault_dir = Path(vault) if vault is not None else default_vault_for_paper(ref.paper)
+    vault_dir = Path(vault) if vault is not None else default_vault_for_paper(
+        ref.paper, ref.syllabus_code
+    )
     questions = (
         Path(export_md)
         if export_md is not None
-        else default_questions_dir_for_paper(ref.paper)
+        else default_questions_dir_for_paper(ref.paper, ref.syllabus_code)
     )
     return export_paper_to_vault(
         qp_pdf=Path(ref.qp),
@@ -136,12 +139,14 @@ def ingest_paper(
     """
     ref = resolve_existing(ref, require_qp=True)
     result = IngestResult(paper_id=ref.id, draft_dir=ref.draft)
-    kind = paper_kind(ref.paper)
-    vault_dir = Path(vault) if vault is not None else default_vault_for_paper(ref.paper)
+    kind = paper_kind(ref.paper, ref.syllabus_code)
+    vault_dir = Path(vault) if vault is not None else default_vault_for_paper(
+        ref.paper, ref.syllabus_code
+    )
     questions_dir = (
         Path(export_md)
         if export_md is not None
-        else default_questions_dir_for_paper(ref.paper)
+        else default_questions_dir_for_paper(ref.paper, ref.syllabus_code)
     )
     result.messages.append(
         f"kind={kind} vault={vault_dir} export_md={questions_dir}"
@@ -201,8 +206,11 @@ def ingest_paper(
     result.status = status
 
     if update_registry:
-        upsert_paper(ref, registry_path)
-        write_manifest(registry_path=registry_path)
+        reg = Path(registry_path) if registry_path is not None else registry_path_for(
+            ref.syllabus_code
+        )
+        upsert_paper(ref, reg)
+        write_manifest(registry_path=reg)
         result.steps.append("registry")
 
     return result

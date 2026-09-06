@@ -27,9 +27,11 @@ SKIP_BODY = re.compile(
     re.IGNORECASE,
 )
 
-# Paper 3 Qualitative Analysis Notes (end matter) — not exam questions
+# Paper 3 / IGCSE P6 Qualitative Analysis Notes (end matter) — not exam questions
 QA_NOTES_START = re.compile(
-    r"^(?:Reactions of (?:aqueous )?cations|Reactions of anions|Tests for gases|"
+    r"^(?:Reactions of (?:aqueous )?cations|Reactions of anions|"
+    r"Tests for (?:anions|cations|gases)|"
+    r"Notes for use in qualitative analysis|"
     r"Qualitative\s+Analysis(?:\s+Notes)?)\b",
     re.IGNORECASE,
 )
@@ -48,6 +50,7 @@ FOOTER_NOISE = re.compile(
     r"^\s*(?:"
     r"©\s*UCLES.*"
     r"|9701/\d+/[A-Z]/J/\d+.*"
+    r"|(?:9701|0620)/\d{1,2}/[A-Z]/[A-Z]/\d{2}.*"
     r"|\[Turn over\]"
     r"|Page \d+ of \d+"
     r"|Permission to reproduce\b.*"
@@ -56,8 +59,31 @@ FOOTER_NOISE = re.compile(
     r"|Cambridge Assessment International Education is part of\b.*"
     r"|Cambridge Assessment is the brand name\b.*"
     r"|BLANK PAGE"
+    r"|\d+_9701_\d+_\d+_[\d.]+©.*"  # house-style: 11_9701_13_2023_1.10© UCLES
     r")\s*$",
     re.IGNORECASE | re.MULTILINE,
+)
+
+# Glued mid-line footers (2023 ON P13 OCR: [Turn over¹¹_⁹⁷⁰¹_…© UCLES)
+_INLINE_FOOTER = re.compile(
+    r"(?:"
+    r"\[Turn over|"
+    r"\d+_9701_\d+_\d+_[\d.]+|"
+    r"¹¹_?⁹⁷⁰¹|"
+    r"©\s*(?:UCLES|\$\\mathrm\{UCLES\}\$)"
+    r")",
+    re.IGNORECASE,
+)
+
+_END_MATTER = re.compile(
+    r"^\s*(?:"
+    r"Permission to reproduce\b|"
+    r"BLANK PAGE|"
+    r"Important values, constants and standards|"
+    r"The Periodic Table of Elements|"
+    r"International Education Copyright Acknowledgements"
+    r")",
+    re.IGNORECASE,
 )
 
 # CIE Paper 1 PDFs leak the printed page number as a trailing lone integer.
@@ -69,6 +95,8 @@ def strip_footer_noise(text: str) -> str:
     lines = text.splitlines()
     kept: list[str] = []
     for line in lines:
+        if _END_MATTER.match(line):
+            break
         if FOOTER_NOISE.match(line):
             continue
         # Truncate once the long copyright trailer begins mid-body (last Q).
@@ -76,6 +104,11 @@ def strip_footer_noise(text: str) -> str:
             break
         if re.match(r"^\s*BLANK PAGE\s*$", line, re.I):
             break
+        cut = _INLINE_FOOTER.search(line)
+        if cut:
+            line = line[: cut.start()].rstrip()
+            if not line.strip():
+                continue
         kept.append(line)
     # Drop trailing blank lines + lone page digits (keep mid-body axis "0"/"50")
     while kept:
@@ -184,6 +217,9 @@ def _is_plausible_main(
         return False
     if QA_NOTES_START.match(body):
         return False
+    # ATP / method volumes: "1 cm³ of aqueous sodium hydroxide" is not Q1
+    if re.match(r"^(?:cm\s*3|cm³|cm3|g|mg|cm)\b", body, re.I):
+        return False
     if not re.search(r"[A-Za-z]{3,}", body):
         return False
     # "1 hour" / "2 marks" style front-matter — reject unless stem-like.
@@ -193,7 +229,11 @@ def _is_plausible_main(
     return True
 
 def detect_paper_style(text: str) -> str:
-    if re.search(r"Paper\s*1\s*Multiple Choice|forty questions|multiple choice", text, re.I):
+    if re.search(
+        r"Paper\s*[12]\s*Multiple Choice|forty questions|\b40 questions\b|multiple choice",
+        text,
+        re.I,
+    ):
         return "mcq"
     # CIE 2023+ Paper 1 covers often use Identity-H fonts where
     # "Paper 1 Multiple Choice" extracts as shifted C0/ASCII (e.g. 3DSHU / 0XOWLSOH).
@@ -231,9 +271,8 @@ def _select_question_matches(
             if num == last_num + 1:
                 selected.append(m)
                 last_num = num
-            elif num == 1 and last_num >= 3:
-                selected.append(m)
-                last_num = num
+            # Do not restart at 1 after Q3: IGCSE P6 "1 cm³ of …" is a volume,
+            # not a new question. 9701 structured papers number continuously.
         return selected
 
     # MCQ: for each N in 1..40 take the first plausible match after the previous
@@ -241,6 +280,36 @@ def _select_question_matches(
     by_num: dict[int, list[re.Match[str]]] = {}
     for m in matches:
         by_num.setdefault(_match_num(m), []).append(m)
+
+    # Plural "statements" only. Singular "Which statement is correct?" is a
+    # normal MCQ stem and must not mark the next numbered question as a
+    # statement label (m25 P2 Q2→Q3).
+    combo_open_re = re.compile(
+        r"Which statements\b",
+        re.I,
+    )
+    # IGCSE P2 often prints mixed pairs on one line: "A 1 and 3 B 1 and 4 …"
+    # (not only the classic "A 1 and 2" / "1, 2 and 3" / "1 and 2 only" keys).
+    # If the key is missed, Q3/Q4 stems score as statement labels and a later
+    # lone page number is selected — last_pos jumps and the rest of the paper
+    # is swallowed.
+    combo_key_re = re.compile(
+        r"(?:"
+        r"A\s+\d(?:\s*,\s*\d)*\s+and\s+\d"
+        r"|1,\s*2\s+and\s+3"
+        r"|1 and 2 only"
+        r"|2 and 3 only"
+        r"|1 and 3 only"
+        r"|[ABCD]\s+\d only"
+        r")",
+        re.I,
+    )
+    # "Four statements … are listed. / 1 … / 2 … / 3 …" — numbered statements
+    # can appear *before* "Which statements are correct?" (cross-page).
+    stmt_list_re = re.compile(
+        r"(?:two|three|four|five)\s+statements?\b.{0,160}(?:are\s+listed|is\s+listed|\blisted\b)",
+        re.I | re.S,
+    )
 
     selected = []
     last_pos = -1
@@ -261,6 +330,24 @@ def _select_question_matches(
                 return (2, m.start())  # page number false start
             if re.match(r"^BLANK\s+PAGE\b", body, re.I):
                 return (3, m.start())
+            # IGCSE/CIE "Which statements are correct?" uses 1/2/3 as statement
+            # labels. Those must not steal the next question numbers.
+            # The combination key must close the *latest* opener in lookback;
+            # a previous item's "A 1 and 3" must not unlock this item's
+            # still-open statement list (four-statement 0620 P2 items).
+            if num <= 4:
+                lookback = text[max(0, m.start() - 900) : m.start()]
+                last_open = max(
+                    (mm.end() for mm in combo_open_re.finditer(lookback)),
+                    default=-1,
+                )
+                last_listed = max(
+                    (mm.end() for mm in stmt_list_re.finditer(lookback)),
+                    default=-1,
+                )
+                open_at = max(last_open, last_listed)
+                if open_at >= 0 and not combo_key_re.search(lookback[open_at:]):
+                    return (4, m.start())
             if STEM_START.match(body) or len(body.split()) >= 4:
                 return (0, m.start())
             return (1, m.start())
@@ -298,7 +385,8 @@ def split_questions(text: str, *, max_q: int | None = None) -> list[QuestionChun
 
     # Paper 3 end matter (Qualitative Analysis Notes + Periodic Table)
     qa_notes = re.search(
-        r"(?im)^\s*Qualitative\s+analysis\s+notes\s*$",
+        r"(?im)^\s*(?:Qualitative\s+analysis\s+notes|"
+        r"Notes for use in qualitative analysis)\s*$",
         text,
     )
     paper_end = qa_notes.start() if qa_notes else len(text)

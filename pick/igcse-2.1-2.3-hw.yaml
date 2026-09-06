@@ -1,0 +1,42 @@
+# IGCSE 0620 homework: 2.1 / 2.2 / 2.3
+# 选择题 20 + 简答题 2（22 分）。Curated include_ids keep exam order.
+#
+#   chembank select pick/igcse-2.1-2.3-hw.yaml -o build/igcse-2.1-2.3-hw.json
+title: "IGCSE 化学作业 · 2.1–2.3 原子与同位素"
+syllabus_codes: ["2.1", "2.2", "2.3"]
+preserve_order: true
+include_ids:
+  # A 选择题 · 2.1 Elements, compounds and mixtures
+  - cie-0620-2023-mj-p23-q2
+  - cie-0620-2023-mj-p21-q2
+  - cie-0620-2025-on-p22-q4
+  # A 选择题 · 2.2 Atomic structure / Periodic Table
+  - cie-0620-2024-mj-p21-q4
+  - cie-0620-2024-on-p21-q3
+  - cie-0620-2023-on-p23-q3
+  - cie-0620-2025-on-p21-q3
+  - cie-0620-2021-on-p22-q4
+  - cie-0620-2025-mj-p22-q4
+  - cie-0620-2023-mj-p21-q5
+  - cie-0620-2024-mj-p21-q5
+  - cie-0620-2023-mj-p22-q2
+  # A 选择题 · 2.3 Isotopes (Core + Supplement RAM)
+  - cie-0620-2021-mj-p22-q8
+  - cie-0620-2023-mj-p21-q3
+  - cie-0620-2024-mj-p22-q3
+  - cie-0620-2025-on-p21-q5
+  - cie-0620-2025-on-p23-q4
+  - cie-0620-2023-on-p22-q4
+  - cie-0620-2025-mj-p21-q4
+  - cie-0620-2025-on-p23-q6
+  # B1 简答 2021 ON Paper 42 Q3（8 分）
+  - cie-0620-2021-on-p42-q3a
+  - cie-0620-2021-on-p42-q3b
+  # B2 简答 2024 ON Paper 41 Q2（14 分）
+  - cie-0620-2024-on-p41-q2a
+  - cie-0620-2024-on-p41-q2b
+  - cie-0620-2024-on-p41-q2c
+  - cie-0620-2024-on-p41-q2d
+  - cie-0620-2024-on-p41-q2e-i
+  - cie-0620-2024-on-p41-q2e-ii
+  - cie-0620-2024-on-p41-q2e-iii

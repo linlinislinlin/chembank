@@ -60,12 +60,16 @@
     <div class="big">🧑‍🎓</div>
     <h2 id="idTitle">First, tell us who you are</h2>
     <p class="hint" id="idInstr"></p>
-    <label>Name</label>
-    <input class="input" id="iname" placeholder="Your name" />
-    <label>Student / Exam number</label>
-    <input class="input" id="ino" placeholder="Student / exam number" />
-    <label>Class (optional)</label>
-    <input class="input" id="iclass" placeholder="Class / group" />
+    <label>Class</label>
+    <select class="input" id="iclass">
+      <option value="">All AS students</option>
+      <option value="C">Class C</option>
+      <option value="F">Class F</option>
+    </select>
+    <label>Your name</label>
+    <select class="input" id="iname">
+      <option value="">Select your name…</option>
+    </select>
     <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
@@ -96,6 +100,7 @@
   </div>
 </div>
 
+<script src="roster.js"></script>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
@@ -125,19 +130,49 @@ async function init() {
     document.getElementById("idTitle").textContent = assignment.title || "Homework";
     document.getElementById("idInstr").textContent = assignment.instructions
       ? assignment.instructions.slice(0, 240)
-      : "Enter your name and student number to start. Answers stay hidden until you submit.";
+      : "Select your name from the class list. Answers stay hidden until you submit.";
     document.getElementById("idCard").style.display = "block";
+    fillRoster();
   } catch (e) {
     showErr(e.message);
   }
 }
 
+function rosterList() {
+  const all = window.AS_ROSTER || [];
+  const klass = document.getElementById("iclass").value;
+  return all.filter((s) => !klass || s.class === klass)
+    .slice()
+    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+}
+
+function fillRoster() {
+  const sel = document.getElementById("iname");
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">Select your name…</option>';
+  rosterList().forEach((s) => {
+    const opt = document.createElement("option");
+    opt.value = s.student_no;
+    opt.textContent = s.name + "  " + s.name_zh + "  (" + s.class_name + ")";
+    sel.appendChild(opt);
+  });
+  if ([...sel.options].some((o) => o.value === prev)) sel.value = prev;
+}
+
+function selectedStudent() {
+  const no = document.getElementById("iname").value;
+  return (window.AS_ROSTER || []).find((s) => s.student_no === no) || null;
+}
+
+document.getElementById("iclass").onchange = fillRoster;
+
 document.getElementById("startBtn").onclick = async () => {
-  const name = document.getElementById("iname").value.trim();
-  const no = document.getElementById("ino").value.trim();
-  const className = document.getElementById("iclass").value.trim();
+  const stu = selectedStudent();
   const err = document.getElementById("idErr");
-  if (!name || !no) { err.textContent = "Please fill in your name and student number"; return; }
+  if (!stu) { err.textContent = "Please select your name from the list"; return; }
+  const name = stu.name;
+  const no = stu.student_no;
+  const className = stu.class_name;
   identity = { name, studentNo: no, className };
   try {
     const prev = await DB.getSubmissionResult({

@@ -333,7 +333,8 @@ def main() -> int:
     FRONTEND_SOURCES = [INDEX_SRC, INDEX_SRC.parent / "assign.html",
                         INDEX_SRC.parent / "homework.html", INDEX_SRC.parent / "stats.html",
                         INDEX_SRC.parent / "home.html", INDEX_SRC.parent / "practice.html",
-                        INDEX_SRC.parent / "config.js", INDEX_SRC.parent / "supabase-client.js"]
+                        INDEX_SRC.parent / "config.js", INDEX_SRC.parent / "supabase-client.js",
+                        INDEX_SRC.parent / "roster.js"]
     for src in FRONTEND_SOURCES:
         if src.exists():
             shutil.copy2(src, SITE_DIR / src.name)

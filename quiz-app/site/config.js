@@ -27,7 +27,7 @@ window.SUPABASE_CONFIG = {
   //  - statsEdgeUrl：部署 stats-edge 函数后自动获得，形如
   //    https://<project-ref>.functions.supabase.co/stats-edge
   //    留空表示尚未部署，stats.html 会提示“接口未配置”。
-  statsToken: "123456",
+  statsToken: "0818",
   testerCode: "0818",
   statsEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/stats-edge",
   assignmentEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/assignment",

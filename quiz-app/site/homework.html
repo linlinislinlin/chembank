@@ -18,18 +18,15 @@
   label { display:block; font-size:13px; color:var(--muted); margin:14px 0 4px; }
   .input, textarea { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; width:100%; font-size:16px; font-family:inherit; }
   .input:focus, textarea:focus { outline:none; border-color:var(--accent); }
-  select.input {
-    appearance:none;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    background-color:var(--panel-2);
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%239b95b8' d='M1 1.5l5 5 5-5'/></svg>");
-    background-repeat:no-repeat;
-    background-position:right 14px center;
-    background-size:12px 8px;
-    padding-right:36px;
-    text-align:left;
-  }
+  .pick { position:relative; text-align:left; }
+  .pick-btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; background:#262241; border:1px solid var(--line); border-radius:12px; padding:14px 16px; color:var(--text); font-family:inherit; font-size:16px; cursor:pointer; }
+  .pick-btn .lab { flex:1; }
+  .pick-btn .chev { color:var(--muted); font-size:13px; }
+  .pick-btn:hover, .pick.open .pick-btn { border-color:var(--accent); }
+  .pick-menu { display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20; background:#262241; border:1px solid var(--line); border-radius:12px; max-height:260px; overflow:auto; }
+  .pick.open .pick-menu { display:block; }
+  .pick-opt { display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); font-family:inherit; font-size:15px; padding:12px 16px; cursor:pointer; }
+  .pick-opt:hover, .pick-opt.on { background:#1e1b2e; }
   textarea { min-height:88px; resize:vertical; }
   .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:13px 20px; font-size:16px; font-weight:600; cursor:pointer; width:100%; margin-top:18px; }
   .btn:disabled { opacity:.5; cursor:not-allowed; }
@@ -74,11 +71,15 @@
     <p class="hint" id="idInstr"></p>
     <button type="button" class="btn" id="testerBtn" style="background:var(--amber);color:#3a2a00;margin-top:8px">Teacher check — use Tester</button>
     <label>Class</label>
-    <select class="input" id="iclass"></select>
+    <div class="pick" id="iclassPick">
+      <button type="button" class="pick-btn" id="iclassBtn"><span class="lab">All students</span><span class="chev">▼</span></button>
+      <div class="pick-menu" id="iclassMenu"></div>
+    </div>
     <label>Your name</label>
-    <select class="input" id="iname">
-      <option value="">Select your name…</option>
-    </select>
+    <div class="pick" id="inamePick">
+      <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
+      <div class="pick-menu" id="inameMenu"></div>
+    </div>
     <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
@@ -109,10 +110,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906x"></script>
-<script src="config.js?v=20260906x"></script>
+<script src="roster.js?v=20260906y"></script>
+<script src="config.js?v=20260906y"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906x"></script>
+<script src="supabase-client.js?v=20260906y"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -121,6 +122,8 @@ const chosen = {};
 let assignment = null;
 let identity = null;
 let track = "as";
+let classValue = "";
+let nameValue = "";
 
 function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");
@@ -128,14 +131,37 @@ function currentTrack() {
   return Portal.trackOf(assignment || {});
 }
 
+function closePicks() {
+  document.querySelectorAll(".pick").forEach((p) => p.classList.remove("open"));
+}
+
+function fillPick(menuId, btnId, items, current, onPick) {
+  const menu = document.getElementById(menuId);
+  const btn = document.getElementById(btnId);
+  menu.innerHTML = "";
+  items.forEach((item) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "pick-opt" + (item.value === current ? " on" : "");
+    b.textContent = item.label;
+    b.onclick = () => {
+      onPick(item.value, item.label);
+      closePicks();
+    };
+    menu.appendChild(b);
+  });
+  const chosen = items.find((x) => x.value === current);
+  btn.querySelector(".lab").textContent = chosen ? chosen.label : items[0].label;
+}
+
 function fillClassOptions() {
-  const sel = document.getElementById("iclass");
-  sel.innerHTML = "";
-  Portal.classOptions(track).forEach((o) => {
-    const opt = document.createElement("option");
-    opt.value = o.value;
-    opt.textContent = o.label;
-    sel.appendChild(opt);
+  const items = Portal.classOptions(track);
+  if (!items.some((o) => o.value === classValue)) classValue = items[0] ? items[0].value : "";
+  fillPick("iclassMenu", "iclassBtn", items, classValue, (value) => {
+    classValue = value;
+    nameValue = "";
+    fillClassOptions();
+    fillRoster();
   });
 }
 
@@ -171,7 +197,7 @@ async function init() {
 
 function rosterList() {
   const all = Portal.roster(track);
-  const klass = document.getElementById("iclass").value;
+  const klass = classValue;
   const testers = all.filter((s) => s.class === "T" || s.student_no === "TESTER");
   const rest = all
     .filter((s) => s.class !== "T" && s.student_no !== "TESTER")
@@ -183,32 +209,47 @@ function rosterList() {
 }
 
 function fillRoster() {
-  const sel = document.getElementById("iname");
-  const prev = sel.value;
-  sel.innerHTML = '<option value="">Select your name…</option>';
-  rosterList().forEach((s) => {
-    const opt = document.createElement("option");
-    opt.value = s.student_no;
-    opt.textContent = s.name + "  " + s.name_zh + "  (" + s.class_name + ")";
-    sel.appendChild(opt);
+  const items = [{ value: "", label: "Select your name…" }].concat(
+    rosterList().map((s) => ({
+      value: s.student_no,
+      label: s.name + "  " + s.name_zh + "  (" + s.class_name + ")",
+    }))
+  );
+  if (!items.some((o) => o.value === nameValue)) nameValue = "";
+  fillPick("inameMenu", "inameBtn", items, nameValue, (value) => {
+    nameValue = value;
+    fillRoster();
   });
-  if ([...sel.options].some((o) => o.value === prev)) sel.value = prev;
 }
 
 function pickTester() {
-  document.getElementById("iclass").value = "T";
+  classValue = "T";
+  nameValue = "TESTER";
+  fillClassOptions();
   fillRoster();
-  document.getElementById("iname").value = "TESTER";
 }
 
 document.getElementById("testerBtn").onclick = pickTester;
 
 function selectedStudent() {
-  const no = document.getElementById("iname").value;
-  return Portal.roster(track).find((s) => s.student_no === no) || null;
+  return Portal.roster(track).find((s) => s.student_no === nameValue) || null;
 }
 
-document.getElementById("iclass").onchange = fillRoster;
+document.getElementById("iclassBtn").onclick = (e) => {
+  e.stopPropagation();
+  const pick = document.getElementById("iclassPick");
+  const open = !pick.classList.contains("open");
+  closePicks();
+  if (open) pick.classList.add("open");
+};
+document.getElementById("inameBtn").onclick = (e) => {
+  e.stopPropagation();
+  const pick = document.getElementById("inamePick");
+  const open = !pick.classList.contains("open");
+  closePicks();
+  if (open) pick.classList.add("open");
+};
+document.addEventListener("click", closePicks);
 
 document.getElementById("startBtn").onclick = async () => {
   const stu = selectedStudent();

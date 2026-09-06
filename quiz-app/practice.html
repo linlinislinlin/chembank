@@ -193,7 +193,7 @@
       </div>
       <label id="idNoLabel">Last 4 digits of student number</label>
       <div class="idline">
-        <input class="input" id="idNo" placeholder="e.g. 0178" autocomplete="off" maxlength="8" />
+        <input class="input" id="idNo" placeholder="e.g. 1111" autocomplete="off" maxlength="8" />
         <button class="btn ghost" id="idSave">Save identity</button>
       </div>
       <div class="idbadge" id="idBadge"></div>
@@ -1059,7 +1059,7 @@ function syncIdField() {
   const tester = isTesterPick();
   const lab = document.getElementById("idNoLabel");
   idNoEl.type = tester ? "password" : "text";
-  idNoEl.placeholder = tester ? "Tester code" : "e.g. 0178";
+  idNoEl.placeholder = tester ? "Tester code" : "e.g. 1111";
   idNoEl.maxLength = tester ? 16 : 8;
   idNoEl.value = "";
   lab.textContent = tester ? "Tester code" : "Last 4 digits of student number";

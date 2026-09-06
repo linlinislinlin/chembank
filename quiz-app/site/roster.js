@@ -1,6 +1,14 @@
 // AS Chemistry 2026-27 roster. Edit here if a student is added/removed.
 window.AS_ROSTER = [
   {
+    "id": "TESTER",
+    "name": "Tester",
+    "name_zh": "测试账号",
+    "student_no": "TESTER",
+    "class_name": "AS-Test",
+    "class": "T"
+  },
+  {
     "id": "T20280178",
     "name": "Monica Liu",
     "name_zh": "刘新月",

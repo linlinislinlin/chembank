@@ -65,6 +65,7 @@
       <option value="">All AS students</option>
       <option value="C">Class C</option>
       <option value="F">Class F</option>
+      <option value="T">Tester</option>
     </select>
     <label>Your name</label>
     <select class="input" id="iname">
@@ -141,9 +142,14 @@ async function init() {
 function rosterList() {
   const all = window.AS_ROSTER || [];
   const klass = document.getElementById("iclass").value;
-  return all.filter((s) => !klass || s.class === klass)
+  const testers = all.filter((s) => s.class === "T" || s.student_no === "TESTER");
+  const rest = all
+    .filter((s) => s.class !== "T" && s.student_no !== "TESTER")
+    .filter((s) => !klass || klass === "T" || s.class === klass)
     .slice()
     .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  if (klass === "T") return testers;
+  return testers.concat(rest);
 }
 
 function fillRoster() {

@@ -112,10 +112,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906aa"></script>
-<script src="config.js?v=20260906aa"></script>
+<script src="roster.js?v=20260906ab"></script>
+<script src="config.js?v=20260906ab"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906aa"></script>
+<script src="supabase-client.js?v=20260906ab"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -268,7 +268,11 @@ document.getElementById("startBtn").onclick = async () => {
     const prev = await DB.getSubmissionResult({
       assignmentId: assignment.id, name, studentNo: no, className,
     });
-    if (prev && prev.already_submitted) { showLocked(); return; }
+    if (prev && prev.already_submitted) {
+      if (prev.review === false) showLocked();
+      else showResult(prev);
+      return;
+    }
   } catch (e) { /* first attempt */ }
   document.getElementById("idCard").style.display = "none";
   renderQuiz();

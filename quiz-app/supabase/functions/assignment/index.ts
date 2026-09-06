@@ -298,7 +298,7 @@ Deno.serve(async (req: Request) => {
       const showKeys = ass.show_answers_after_submit !== false || ass.show_explanations_after_submit !== false;
 
       if (action === "result") {
-        const existing = await buildResult(ass, stu.id, false);
+        const existing = await buildResult(ass, stu.id, showKeys);
         return json(200, existing || { already_submitted: false, assignment: publicAssignment(ass) });
       }
 

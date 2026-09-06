@@ -154,23 +154,14 @@ window.PracticeDB = (() => {
     return d.rows || [];
   }
 
-  // 直接写入一条练习记录（anon insert/upsert 到 practice_logs）：
-  // 每答一题同步一条；同一学生同一题重刷 = 更新（unique(student_id, question_id)）。
-  async function recordPractice(studentId, log) {
-    const c = ready();
-    if (!c) throw new Error("Supabase 未配置");
-    const { error } = await c.from("practice_logs").upsert({
-      student_id: studentId,
-      question_id: log.question_id,
-      qtype: log.qtype,
-      paper: log.paper || null,
-      year: log.year || null,
-      session: log.session || null,
-      qno: log.qno || null,
-      correct: log.correct,
-      answered_at: new Date().toISOString(),
-    }, { onConflict: "student_id,question_id" });
-    if (error) throw error;
+  async function recordPractice(input, log) {
+    return callEdge({
+      action: "record",
+      name: input.name,
+      student_no: input.studentNo,
+      class_name: input.className || "",
+      log: log || {},
+    });
   }
 
   return { resolveStudent, readHistory, recordPractice };

@@ -105,5 +105,46 @@ Deno.serve(async (req: Request) => {
     return json(200, { rows: rows ?? [] });
   }
 
+  if (action === "record") {
+    if (!name || !studentNo) return json(400, { error: "missing name or student_no" });
+    const log = (body.log && typeof body.log === "object") ? body.log as Record<string, unknown> : {};
+    const questionId = clean(log.question_id);
+    const qtype = clean(log.qtype) === "structured" ? "structured" : "mcq";
+    if (!questionId) return json(400, { error: "missing question_id" });
+
+    let stu = (await supabase
+      .from("students").select("id")
+      .eq("name", name).eq("student_no", studentNo).maybeSingle()).data;
+    if (!stu) {
+      const ins = await supabase
+        .from("students")
+        .insert({ name, student_no: studentNo, class_name: clean(body.class_name) || null })
+        .select("id").single();
+      if (ins.error || !ins.data) {
+        const again = await supabase
+          .from("students").select("id")
+          .eq("name", name).eq("student_no", studentNo).maybeSingle();
+        if (!again.data) return json(500, { error: ins.error?.message || "could not save student" });
+        stu = again.data;
+      } else {
+        stu = ins.data;
+      }
+    }
+
+    const { error } = await supabase.from("practice_logs").upsert({
+      student_id: stu.id,
+      question_id: questionId,
+      qtype,
+      paper: clean(log.paper) || null,
+      year: log.year == null || log.year === "" ? null : Number(log.year),
+      session: clean(log.session) || null,
+      qno: clean(log.qno) || null,
+      correct: log.correct === true,
+      answered_at: new Date().toISOString(),
+    }, { onConflict: "student_id,question_id" });
+    if (error) return json(500, { error: error.message });
+    return json(200, { ok: true, student_id: stu.id });
+  }
+
   return json(400, { error: "unknown action" });
 });

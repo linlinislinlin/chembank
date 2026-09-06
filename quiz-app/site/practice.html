@@ -284,6 +284,7 @@
     <h2>Practice session complete!</h2>
     <div class="stat-grid" id="doneStats"></div>
     <div class="big-actions">
+      <button class="btn" id="doneRecordsBtn">📈 My progress</button>
       <button class="btn green" id="againBtn">Practice again</button>
       <button class="btn ghost" id="homeBtn">Back to Home</button>
     </div>
@@ -310,12 +311,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906am"></script>
-<script src="structured-data.js?v=20260906am"></script>
-<script src="roster.js?v=20260906am"></script>
-<script src="config.js?v=20260906am"></script>
+<script src="data.js?v=20260906an"></script>
+<script src="structured-data.js?v=20260906an"></script>
+<script src="roster.js?v=20260906an"></script>
+<script src="config.js?v=20260906an"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906am"></script>
+<script src="supabase-client.js?v=20260906an"></script>
 <script>
 "use strict";
 
@@ -808,12 +809,19 @@ function recordAnswered(q, r) {
 }
 
 async function pushCloud(qid, rec) {
-  const stu = currentCloudStudent();
-  if (!stu || !PDB) return;               // guest / not configured -> local only
+  if (!__identity || !PDB) return;
   try {
-    await PDB.recordPractice(stu.id, Object.assign({ question_id: qid }, rec));
+    const saved = await PDB.recordPractice(
+      { name: __identity.name, studentNo: __identity.no },
+      Object.assign({ question_id: qid }, rec)
+    );
+    if (saved && saved.student_id) __cloudId = String(saved.student_id);
+    persistSession();
   } catch (e) {
-    if (!__cloudWarned) { __cloudWarned = true; }
+    if (!__cloudWarned) {
+      __cloudWarned = true;
+      idBadgeEl.textContent = "Could not save online: " + (e && e.message ? e.message : e);
+    }
   }
 }
 
@@ -828,6 +836,31 @@ function storeKeyFor(identity) {
 }
 function currentStudentKey() {
   return storeKeyFor(__identity) || "guest";
+}
+
+const SS_SESSION = "pr-tab-session";
+function persistSession() {
+  if (__identity) {
+    sessionStorage.setItem(SS_SESSION, JSON.stringify({
+      name: __identity.name,
+      no: __identity.no,
+      cloudId: __cloudId || "",
+    }));
+  } else {
+    sessionStorage.removeItem(SS_SESSION);
+  }
+}
+function restoreSession() {
+  try {
+    const s = JSON.parse(sessionStorage.getItem(SS_SESSION) || "null");
+    if (!s || !s.name || !s.no) return;
+    const stu = allRoster().find((x) => x.student_no === s.no && x.name === s.name);
+    if (!stu) return;
+    __identity = { name: s.name, no: s.no };
+    __cloudId = s.cloudId || null;
+    classValue = stu.class || "";
+    nameValue = stu.student_no;
+  } catch (e) {}
 }
 
 function showFeedback(res, q) {
@@ -857,7 +890,11 @@ function renderControls(res) {
   const pb = document.getElementById("prevBtn");
   pb.disabled = window.__idx === 0;
   pb.onclick = () => { window.__idx--; renderQ(); };
-  document.getElementById("restartBtn").onclick = () => location.reload();
+  document.getElementById("restartBtn").onclick = () => {
+    document.getElementById("quizCard").style.display = "none";
+    document.getElementById("doneCard").style.display = "none";
+    document.getElementById("setupCard").style.display = "block";
+  };
   if (res) showFeedback(res, window.__qs[window.__idx]);
   else { const fb = document.getElementById("fb"); fb.classList.remove("show","ok","no"); }
 }
@@ -887,8 +924,12 @@ function showDone() {
   g.appendChild(mk(total, "Questions in run"));
   g.appendChild(mk(done, "Answered"));
   g.appendChild(mk(acc + "%", "Accuracy"));
-  document.getElementById("againBtn").onclick = () => location.reload();
+  document.getElementById("againBtn").onclick = () => {
+    document.getElementById("doneCard").style.display = "none";
+    document.getElementById("setupCard").style.display = "block";
+  };
   document.getElementById("homeBtn").onclick = () => (location.href = "home.html");
+  document.getElementById("doneRecordsBtn").onclick = () => openRecords();
 }
 
 // ---------- onClick wiring ----------
@@ -1013,6 +1054,7 @@ function signOutIdentity() {
   __cloudId = null;
   localStorage.removeItem(LS_IDENTITY);
   localStorage.removeItem(LS_STUDENT_ID);
+  persistSession();
   renderIdentityBadge();
 }
 
@@ -1070,6 +1112,7 @@ async function saveIdentity() {
       return;
     }
   }
+  persistSession();
   renderIdentityBadge();
 }
 
@@ -1092,6 +1135,7 @@ document.addEventListener("click", closePicks);
 
 localStorage.removeItem(LS_IDENTITY);
 localStorage.removeItem(LS_STUDENT_ID);
+restoreSession();
 fillClassOptions();
 fillRoster();
 syncIdField();
@@ -1202,7 +1246,10 @@ document.getElementById("recResync").onclick = async () => {
     const recs = __sessionRecs;
     for (const qid of Object.keys(recs)) {
       const rec = recs[qid];
-      await PDB.recordPractice(__cloudId, Object.assign({ question_id: qid }, rec));
+      await PDB.recordPractice(
+        { name: __identity.name, studentNo: __identity.no },
+        Object.assign({ question_id: qid }, rec)
+      );
     }
     btn.textContent = "✓ Synced";
   } catch (e) {

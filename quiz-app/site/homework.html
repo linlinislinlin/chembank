@@ -80,6 +80,8 @@
       <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
       <div class="pick-menu" id="inameMenu"></div>
     </div>
+    <label>Student number</label>
+    <input class="input" id="istudentNo" placeholder="Type your student number" autocomplete="off" />
     <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
@@ -110,10 +112,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906y"></script>
-<script src="config.js?v=20260906y"></script>
+<script src="roster.js?v=20260906aa"></script>
+<script src="config.js?v=20260906aa"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906y"></script>
+<script src="supabase-client.js?v=20260906aa"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -255,6 +257,9 @@ document.getElementById("startBtn").onclick = async () => {
   const stu = selectedStudent();
   const err = document.getElementById("idErr");
   if (!stu) { err.textContent = "Please select your name from the list"; return; }
+  const typedNo = document.getElementById("istudentNo").value.trim();
+  if (!typedNo) { err.textContent = "Type your student number to confirm it is you"; return; }
+  if (typedNo !== stu.student_no) { err.textContent = "Student number does not match this name"; return; }
   const name = stu.name;
   const no = stu.student_no;
   const className = stu.class_name;
@@ -263,7 +268,7 @@ document.getElementById("startBtn").onclick = async () => {
     const prev = await DB.getSubmissionResult({
       assignmentId: assignment.id, name, studentNo: no, className,
     });
-    if (prev && prev.already_submitted) { showResult(prev); return; }
+    if (prev && prev.already_submitted) { showLocked(); return; }
   } catch (e) { /* first attempt */ }
   document.getElementById("idCard").style.display = "none";
   renderQuiz();
@@ -352,12 +357,23 @@ document.getElementById("submitBtn").onclick = async () => {
       className: identity.className,
       answers: (assignment.questions || []).map((q) => ({ question_id: q.id, chosen: chosen[q.id] })),
     });
-    showResult(result);
+    if (result.review === false) showLocked();
+    else showResult(result);
   } catch (e) {
     err.textContent = e.message;
     btn.disabled = false;
   }
 };
+
+function showLocked() {
+  document.getElementById("idCard").style.display = "none";
+  document.getElementById("quizWrap").style.display = "none";
+  document.getElementById("doneCard").style.display = "block";
+  document.getElementById("doneTitle").textContent = "Already submitted";
+  document.getElementById("doneStats").innerHTML = "";
+  document.getElementById("doneReview").innerHTML =
+    '<p class="hint">This name has already handed in. Answers and the mark scheme appear only once, immediately after you submit your own work. They are not shown if someone later picks this name. Teachers can see scores on the stats page.</p>';
+}
 
 function showResult(result) {
   document.getElementById("idCard").style.display = "none";

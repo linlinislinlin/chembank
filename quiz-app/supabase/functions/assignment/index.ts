@@ -176,6 +176,15 @@ async function buildResult(
   }
 
   const snap = Array.isArray(ass.question_snapshot) ? ass.question_snapshot : [];
+  if (!includeKeys) {
+    return {
+      already_submitted: true,
+      review: false,
+      assignment: { id: ass.id, title: ass.title },
+      submitted_at: sub.submitted_at,
+      items: [],
+    };
+  }
   const items = (answers || []).map((a) => {
     const q = snap.find((x: { id?: string }) => x.id === a.question_id) || { id: a.question_id };
     const k = keys[a.question_id];
@@ -196,6 +205,7 @@ async function buildResult(
 
   return {
     already_submitted: true,
+    review: true,
     assignment: publicAssignment(ass),
     score: Number(sub.score),
     total_score: Number(sub.total_score),
@@ -288,11 +298,11 @@ Deno.serve(async (req: Request) => {
       const showKeys = ass.show_answers_after_submit !== false || ass.show_explanations_after_submit !== false;
 
       if (action === "result") {
-        const existing = await buildResult(ass, stu.id, showKeys);
+        const existing = await buildResult(ass, stu.id, false);
         return json(200, existing || { already_submitted: false, assignment: publicAssignment(ass) });
       }
 
-      const existing = await buildResult(ass, stu.id, showKeys);
+      const existing = await buildResult(ass, stu.id, false);
       if (existing) return json(200, existing);
 
       const snap = Array.isArray(ass.question_snapshot) ? ass.question_snapshot : [];

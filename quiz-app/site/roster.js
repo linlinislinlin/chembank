@@ -268,6 +268,11 @@ window.ChemBankPortal = {
   roster: function (track) {
     return track === "ig" ? (window.IG_ROSTER || []) : (window.AS_ROSTER || []);
   },
+  studentLabel: function (s) {
+    const name = (s && s.name) || "Student";
+    const klass = (s && s.class_name) || "";
+    return klass ? name + " (" + klass + ")" : name;
+  },
   classOptions: function (track) {
     if (track === "ig") {
       return [

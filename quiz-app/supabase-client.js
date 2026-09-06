@@ -16,7 +16,7 @@ window.HomeworkDB = (() => {
 
   function assignmentUrl() {
     const url = (cfg.assignmentEdgeUrl || "").replace(/\/+$/, "");
-    if (!url) throw new Error("作业接口未配置（config.js 的 assignmentEdgeUrl）");
+    if (!url) throw new Error("Homework service is not configured");
     return url;
   }
 
@@ -28,9 +28,9 @@ window.HomeworkDB = (() => {
     });
     const data = await resp.json().catch(() => ({}));
     if (resp.status === 401 || resp.status === 403) {
-      throw new Error(data.error || "教师口令错误或无权访问");
+      throw new Error(data.error || "Wrong teacher token or no access");
     }
-    if (!resp.ok) throw new Error(data.error || ("作业接口错误（HTTP " + resp.status + "）"));
+    if (!resp.ok) throw new Error(data.error || ("Homework service error (HTTP " + resp.status + ")"));
     return data;
   }
 
@@ -78,7 +78,7 @@ window.HomeworkDB = (() => {
   }
 
   async function listAssignments() {
-    const c = ready(); if (!c) throw new Error("Supabase 未配置");
+    const c = ready(); if (!c) throw new Error("Cloud service is not configured");
     let { data, error } = await c.from("assignments")
       .select("id, title, question_ids, question_snapshot, created_at, due_at, instructions, status, programme")
       .order("created_at", { ascending: false });
@@ -130,15 +130,15 @@ window.PracticeDB = (() => {
   // 调 Edge Function（text/plain + body，避免 CORS 预检，与 stats-edge 一致）
   async function callEdge(payload) {
     const url = (cfg.practiceEdgeUrl || "").replace(/\/+$/, "");
-    if (!url) throw new Error("练习同步接口未配置（config.js 的 practiceEdgeUrl）");
+    if (!url) throw new Error("Practice sync is not configured");
     const resp = await fetch(url, {
       method: "POST",
       headers: { "content-type": "text/plain" },
       body: JSON.stringify(payload),
     });
     const data = await resp.json().catch(() => ({}));
-    if (resp.status === 401 || resp.status === 403) throw new Error("身份校验失败，请核对姓名+学号");
-    if (!resp.ok) throw new Error(data.error || ("练习接口错误（HTTP " + resp.status + "）"));
+    if (resp.status === 401 || resp.status === 403) throw new Error("Could not confirm this name and student number");
+    if (!resp.ok) throw new Error(data.error || ("Practice service error (HTTP " + resp.status + ")"));
     return data;
   }
 

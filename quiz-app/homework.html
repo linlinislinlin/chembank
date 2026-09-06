@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -111,10 +111,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906ag"></script>
-<script src="config.js?v=20260906ag"></script>
+<script src="roster.js?v=20260906aq"></script>
+<script src="config.js?v=20260906aq"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ag"></script>
+<script src="supabase-client.js?v=20260906aq"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -222,7 +222,7 @@ function fillRoster() {
   const items = [{ value: "", label: "Select your name…" }].concat(
     rosterList().map((s) => ({
       value: s.student_no,
-      label: s.name + "  " + s.name_zh + "  (" + s.class_name + ")",
+      label: Portal.studentLabel(s),
     }))
   );
   if (!items.some((o) => o.value === nameValue)) nameValue = "";

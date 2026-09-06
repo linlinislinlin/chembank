@@ -198,11 +198,11 @@
       </div>
       <div class="idbadge" id="idBadge"></div>
       <div id="recPanel" style="display:none;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
-        <div class="flabel">我的刷题记录</div>
+        <div class="flabel">My progress</div>
         <div class="stat-grid" id="recSum" style="margin:10px 0 12px"></div>
         <div class="rec-list" id="recMini" style="max-height:260px"></div>
       </div>
-      <button class="records-btn" id="recordsBtn" style="display:none">查看全部记录</button>
+      <button class="records-btn" id="recordsBtn" style="display:none">View all records</button>
 
     <div class="stat-grid" id="statGrid"></div>
 
@@ -299,12 +299,12 @@
 <!-- My progress / review -->
 <div class="overlay" id="recordsOverlay">
   <div class="modal">
-    <h3 id="recTitle">我的刷题记录</h3>
+    <h3 id="recTitle">My progress</h3>
     <div class="sub" id="recSub"></div>
     <div class="rec-tabs">
-      <button class="tab on" data-tab="records">全部</button>
-      <button class="tab" data-tab="correct">做对的</button>
-      <button class="tab" data-tab="wrong">做错的</button>
+      <button class="tab on" data-tab="records">All</button>
+      <button class="tab" data-tab="correct">Correct</button>
+      <button class="tab" data-tab="wrong">Incorrect</button>
     </div>
     <div class="rec-list" id="recList"></div>
     <div class="rec-preview" id="recPreview"></div>
@@ -316,12 +316,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906ao"></script>
-<script src="structured-data.js?v=20260906ao"></script>
-<script src="roster.js?v=20260906ao"></script>
-<script src="config.js?v=20260906ao"></script>
+<script src="data.js?v=20260906aq"></script>
+<script src="structured-data.js?v=20260906aq"></script>
+<script src="roster.js?v=20260906aq"></script>
+<script src="config.js?v=20260906aq"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ao"></script>
+<script src="supabase-client.js?v=20260906aq"></script>
 <script>
 "use strict";
 
@@ -792,7 +792,7 @@ function selfGrade(q, correct) {
 }
 
 // ---- Progress recording (local always + cloud when registered) ----
-// Local (localStorage) is the source of truth for the on-device 对/错 book and
+// Local (localStorage) is the source of truth for the on-device right/wrong book and
 // never fails. Cloud is a best-effort sync so history follows the student.
 function recordAnswered(q, r) {
   const rec = {
@@ -926,9 +926,9 @@ function showDone() {
   const g = document.getElementById("doneStats");
   g.innerHTML = "";
   const mk = (v, k) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`; return d; };
-  g.appendChild(mk(total, "本题组"));
-  g.appendChild(mk(ok + " / " + done, "做对"));
-  g.appendChild(mk(acc + "%", "正确率"));
+  g.appendChild(mk(total, "This set"));
+  g.appendChild(mk(ok + " / " + done, "Correct"));
+  g.appendChild(mk(acc + "%", "Accuracy"));
   const review = document.getElementById("doneReview");
   review.innerHTML = "";
   (window.__qs || []).forEach((q, i) => {
@@ -936,11 +936,11 @@ function showDone() {
     if (!res) return;
     const item = document.createElement("div");
     item.className = "rec-item";
-    const you = res.chosen && res.chosen !== "self-ok" && res.chosen !== "self-no" ? "你选 " + res.chosen : (res.correct ? "自评：对" : "自评：错");
-    const ans = q.type === "structured" ? "" : ("答案 " + (q.ms_answer || ""));
+    const you = res.chosen && res.chosen !== "self-ok" && res.chosen !== "self-no" ? "You chose " + res.chosen : (res.correct ? "Self-marked: correct" : "Self-marked: incorrect");
+    const ans = q.type === "structured" ? "" : ("Answer " + (q.ms_answer || ""));
     item.innerHTML =
       `<span class="okdot">${res.correct ? "✅" : "❌"}</span>` +
-      `<span class="src">第${i + 1}题 · ${escHtml(sourceLabel(q))}<br><span class="tag">${escHtml(you)}${ans ? " · " + escHtml(ans) : ""}</span></span>`;
+      `<span class="src">Q${i + 1} · ${escHtml(sourceLabel(q))}<br><span class="tag">${escHtml(you)}${ans ? " · " + escHtml(ans) : ""}</span></span>`;
     review.appendChild(item);
   });
   refreshRecordPanel();
@@ -1043,7 +1043,7 @@ function fillRoster() {
   const items = [{ value: "", label: "Select your name…" }].concat(
     rosterStudents().map((s) => ({
       value: s.student_no,
-      label: s.name + "  " + s.name_zh + "  (" + s.class_name + ")",
+      label: Portal.studentLabel(s),
     }))
   );
   if (!items.some((o) => o.value === nameValue)) nameValue = "";
@@ -1085,15 +1085,15 @@ function renderIdentityBadge() {
   document.getElementById("recPanel").style.display = __identity ? "block" : "none";
   if (__identity && __cloudId) {
     idBadgeEl.innerHTML =
-      `已登录 <b>${escHtml(__identity.name)}</b> · 记录已存到网上，换设备也能看。` +
-      `<button class="ghost2" id="idClear">换人</button>`;
+      `Signed in as <b>${escHtml(__identity.name)}</b> · Saved online. You can open this on any device. ` +
+      `<button class="ghost2" id="idClear">Switch person</button>`;
   } else if (__identity) {
     idBadgeEl.innerHTML =
-      `已登录 <b>${escHtml(__identity.name)}</b> · 这次先记在本页，还没存上网上。` +
-      `<button class="ghost2" id="idClear">换人</button>`;
+      `Signed in as <b>${escHtml(__identity.name)}</b> · Saved on this page only for now. ` +
+      `<button class="ghost2" id="idClear">Switch person</button>`;
   } else {
     idBadgeEl.innerHTML =
-      `先选名字并确认学号，才能保存和查看自己的刷题记录。`;
+      `Select your name and confirm your student number to save and view your own practice record.`;
   }
   const c = document.getElementById("idClear");
   if (c) c.onclick = () => {
@@ -1174,10 +1174,10 @@ function recSource(x) {
 function recDetail(x) {
   const q = BYID.get(x.qid);
   const bits = [];
-  if (x.rec.chosen && x.rec.chosen !== "self-ok" && x.rec.chosen !== "self-no") bits.push("你选 " + x.rec.chosen);
-  else if (x.rec.chosen === "self-ok") bits.push("自评：对");
-  else if (x.rec.chosen === "self-no") bits.push("自评：错");
-  if (q && q.type !== "structured" && q.ms_answer) bits.push("正确答案 " + q.ms_answer);
+  if (x.rec.chosen && x.rec.chosen !== "self-ok" && x.rec.chosen !== "self-no") bits.push("You chose " + x.rec.chosen);
+  else if (x.rec.chosen === "self-ok") bits.push("Self-marked: correct");
+  else if (x.rec.chosen === "self-no") bits.push("Self-marked: incorrect");
+  if (q && q.type !== "structured" && q.ms_answer) bits.push("Correct answer " + q.ms_answer);
   if (q && q.topics && q.topics[0]) bits.push(q.topics[0]);
   return bits.join(" · ");
 }
@@ -1186,7 +1186,7 @@ function paintRecItems(box, rows) {
   if (!rows.length) {
     const e = document.createElement("div");
     e.className = "rec-empty";
-    e.textContent = "还没有记录。先做几道题，这里就会出现对错。";
+    e.textContent = "No records yet. Answer a few questions and they will show up here.";
     box.appendChild(e);
     return;
   }
@@ -1194,8 +1194,8 @@ function paintRecItems(box, rows) {
     const item = document.createElement("div");
     item.className = "rec-item";
     item.innerHTML =
-      `<span class="okdot">${x.rec.correct ? "✅ 对" : "❌ 错"}</span>` +
-      `<span class="src">${escHtml(recSource(x))}<br><span class="tag">${escHtml(recDetail(x) || "点击可看原题")}</span></span>`;
+      `<span class="okdot">${x.rec.correct ? "✅ Correct" : "❌ Incorrect"}</span>` +
+      `<span class="src">${escHtml(recSource(x))}<br><span class="tag">${escHtml(recDetail(x) || "Tap to see the question")}</span></span>`;
     item.onclick = () => {
       if (BYID.has(x.qid)) showRecPreview(x.qid);
     };
@@ -1234,15 +1234,15 @@ function refreshRecordPanel() {
     const sum = document.getElementById("recSum");
     sum.innerHTML = "";
     const mk = (v, k) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`; return d; };
-    sum.appendChild(mk(rows.length, "已做"));
-    sum.appendChild(mk(ok, "做对"));
-    sum.appendChild(mk(rows.length - ok, "做错"));
+    sum.appendChild(mk(rows.length, "Done"));
+    sum.appendChild(mk(ok, "Correct"));
+    sum.appendChild(mk(rows.length - ok, "Incorrect"));
     paintRecItems(document.getElementById("recMini"), rows.slice(0, 8));
   });
 }
 function openRecords() {
   if (!__identity) {
-    idBadgeEl.textContent = "请先选自己的名字并确认学号。";
+    idBadgeEl.textContent = "Select your name and confirm your student number first.";
     return;
   }
   (async () => {
@@ -1253,11 +1253,11 @@ function openRecords() {
 }
 function renderRecList() {
   const title = document.getElementById("recTitle");
-  title.textContent = `我的刷题记录${__identity ? " · " + __identity.name : ""}`;
+  title.textContent = `My progress${__identity ? " · " + __identity.name : ""}`;
   const ok = __recData.filter((x) => x.rec.correct).length;
   document.getElementById("recSub").textContent =
-    (__cloudId ? "已存到网上，换手机或电脑用同一个名字登录就能看。" : "这次还没存上网上。") +
-    ` 共 ${__recData.length} 题，对 ${ok}，错 ${__recData.length - ok}。`;
+    (__cloudId ? "Saved online. Sign in with the same name on any phone or computer to see it." : "Not saved online yet.") +
+    ` ${__recData.length} questions · ${ok} correct · ${__recData.length - ok} incorrect.`;
   document.getElementById("recResync").style.display =
     (PDB && __identity && __cloudId) ? "" : "none";
   const filtered = __recData.filter((x) => {

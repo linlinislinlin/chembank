@@ -69,6 +69,15 @@
     </div>
   </div>
 
+  <div class="assign-panel" id="assignPanel" style="margin-top:0;margin-bottom:36px">
+    <div class="assign-card">
+      <h4>Homework — tap to start</h4>
+      <p class="sub">Choose 3.1 / 3.2 / … then pick your name. No codes to type.</p>
+      <div class="hw-list" id="hwList"><span class="sub">Loading…</span></div>
+      <div class="err" id="assignErr"></div>
+    </div>
+  </div>
+
   <div class="cards">
     <a class="card" href="practice.html">
       <div class="icon">🎲</div>
@@ -76,21 +85,6 @@
       <p class="desc">No login needed. Instantly draw any number of questions from the whole bank, with instant marking and Mark Schemes.</p>
       <span class="cta practice">Start practicing →</span>
     </a>
-    <button class="card assign-cta" id="assignCard" type="button">
-      <div class="icon">📝</div>
-      <h3>Assignment</h3>
-      <p class="desc">Open a homework set from your teacher. Pick the assignment, then select your name.</p>
-      <span class="cta assignment">Open homework list →</span>
-    </button>
-  </div>
-
-  <div class="assign-panel" id="assignPanel">
-    <div class="assign-card">
-      <h4>This week’s homework</h4>
-      <p class="sub">Tap an assignment. Next page: choose your name, then start.</p>
-      <div class="hw-list" id="hwList"><span class="sub">Loading…</span></div>
-      <div class="err" id="assignErr"></div>
-    </div>
   </div>
 
   <div class="foot">ChemBank · CIE 9701 Chemistry · Past-paper revision tool</div>
@@ -110,12 +104,6 @@ try {
   document.getElementById("mcqCount").textContent = mcq.length;
   document.getElementById("structCount").textContent = st.length;
 } catch (e) {}
-
-document.getElementById("assignCard").addEventListener("click", (e) => {
-  e.preventDefault();
-  const panel = document.getElementById("assignPanel");
-  if (panel) panel.scrollIntoView({ behavior: "smooth", block: "center" });
-});
 
 (async function loadHomework() {
   const box = document.getElementById("hwList");

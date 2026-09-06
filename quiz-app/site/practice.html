@@ -51,6 +51,16 @@
   .idline { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:4px; }
   .idline .input { flex:1 1 140px; padding:9px 12px; font-size:14px; }
   .idline .btn { padding:9px 16px; font-size:14px; width:auto; }
+  .idbox label { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; }
+  .pick { position:relative; text-align:left; }
+  .pick-btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; background:#262241; border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit; font-size:15px; cursor:pointer; }
+  .pick-btn .lab { flex:1; }
+  .pick-btn .chev { color:var(--muted); font-size:13px; }
+  .pick-btn:hover, .pick.open .pick-btn { border-color:var(--accent); }
+  .pick-menu { display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20; background:#262241; border:1px solid var(--line); border-radius:12px; max-height:220px; overflow:auto; }
+  .pick.open .pick-menu { display:block; }
+  .pick-opt { display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); font-family:inherit; font-size:14px; padding:10px 14px; cursor:pointer; }
+  .pick-opt:hover, .pick-opt.on { background:#1e1b2e; }
   .idbadge { font-size:12px; color:var(--muted); margin-top:8px; }
   .idbadge button.ghost2 { background:none; border:none; color:var(--accent); cursor:pointer; font-size:12px; padding:0; margin-left:6px; text-decoration:underline; }
   .records-btn { font-size:13px; color:var(--accent); background:var(--panel-2); border:1px solid var(--line); border-radius:9px; padding:8px 14px; cursor:pointer; margin-top:12px; }
@@ -166,11 +176,23 @@
     <h2 class="setup-title">Practice anywhere, instantly.</h2>
     <div class="setup-sub">Choose how many questions, pick a type, or just dive in.</div>
 
-    <!-- Student identity (optional) -->
-    <div style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
+    <!-- Student identity (optional, roster + last 4) -->
+    <div class="idbox" style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
+      <div class="flabel">Save progress under your class name</div>
+      <p class="hint" style="margin-top:0">Pick yourself from the list, then type the last 4 digits of your student number. You can still practice as a guest without this.</p>
+      <label>Class</label>
+      <div class="pick" id="iclassPick">
+        <button type="button" class="pick-btn" id="iclassBtn"><span class="lab">All AS students</span><span class="chev">▼</span></button>
+        <div class="pick-menu" id="iclassMenu"></div>
+      </div>
+      <label>Your name</label>
+      <div class="pick" id="inamePick">
+        <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
+        <div class="pick-menu" id="inameMenu"></div>
+      </div>
+      <label>Last 4 digits of student number</label>
       <div class="idline">
-        <input class="input" id="idName" placeholder="Your name (optional)" autocomplete="off" />
-        <input class="input" id="idNo" placeholder="Student / exam number (optional)" autocomplete="off" />
+        <input class="input" id="idNo" placeholder="e.g. 0178" autocomplete="off" maxlength="8" />
         <button class="btn ghost" id="idSave">Save identity</button>
       </div>
       <div class="idbadge" id="idBadge"></div>
@@ -287,11 +309,12 @@
 </div>
 </body>
 
-<script src="data.js"></script>
-<script src="structured-data.js"></script>
-<script src="config.js"></script>
+<script src="data.js?v=20260906ah"></script>
+<script src="structured-data.js?v=20260906ah"></script>
+<script src="roster.js?v=20260906ah"></script>
+<script src="config.js?v=20260906ah"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js"></script>
+<script src="supabase-client.js?v=20260906ah"></script>
 <script>
 "use strict";
 
@@ -303,6 +326,7 @@ STRUCTURED.forEach(q => BYID.set(q.id, q));
 
 const SYLLABUS = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.syllabus) || [];
 const PDB = window.PracticeDB;                // progress/records backend (may be null if not configured)
+const Portal = window.ChemBankPortal;
 const SUP = window.SUPABASE_CONFIG || {};
 
 const pool = {
@@ -881,9 +905,10 @@ document.getElementById("syllAll").addEventListener("click", () => {
 });
 
 // ---------- Student identity ----------
-const idNameEl = document.getElementById("idName");
 const idNoEl = document.getElementById("idNo");
 const idBadgeEl = document.getElementById("idBadge");
+let classValue = "";
+let nameValue = "";
 
 function loadIdentity() {
   try { const s = JSON.parse(localStorage.getItem(LS_IDENTITY) || "{}"); if (s && s.name && s.no) return s; } catch (e) {}
@@ -893,42 +918,114 @@ let __identity = loadIdentity();
 
 function identityLabel(i) { return i ? i.name : "Guest"; }
 
+function closePicks() {
+  document.querySelectorAll(".pick").forEach((p) => p.classList.remove("open"));
+}
+
+function fillPick(menuId, btnId, items, current, onPick) {
+  const menu = document.getElementById(menuId);
+  const btn = document.getElementById(btnId);
+  menu.innerHTML = "";
+  items.forEach((item) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "pick-opt" + (item.value === current ? " on" : "");
+    b.textContent = item.label;
+    b.onclick = () => {
+      onPick(item.value, item.label);
+      closePicks();
+    };
+    menu.appendChild(b);
+  });
+  const chosen = items.find((x) => x.value === current);
+  btn.querySelector(".lab").textContent = chosen ? chosen.label : items[0].label;
+}
+
+function rosterStudents() {
+  return Portal.roster("as").filter((s) => s.class !== "T" && s.student_no !== "TESTER");
+}
+
+function fillClassOptions() {
+  const items = Portal.classOptions("as").filter((o) => o.value !== "T");
+  if (!items.some((o) => o.value === classValue)) classValue = items[0] ? items[0].value : "";
+  fillPick("iclassMenu", "iclassBtn", items, classValue, (value) => {
+    classValue = value;
+    nameValue = "";
+    fillClassOptions();
+    fillRoster();
+  });
+}
+
+function fillRoster() {
+  const list = rosterStudents()
+    .filter((s) => !classValue || s.class === classValue)
+    .slice()
+    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  const items = [{ value: "", label: "Select your name…" }].concat(
+    list.map((s) => ({
+      value: s.student_no,
+      label: s.name + "  " + s.name_zh + "  (" + s.class_name + ")",
+    }))
+  );
+  if (!items.some((o) => o.value === nameValue)) nameValue = "";
+  fillPick("inameMenu", "inameBtn", items, nameValue, (value) => {
+    nameValue = value;
+    fillRoster();
+  });
+}
+
+function selectedStudent() {
+  return rosterStudents().find((s) => s.student_no === nameValue) || null;
+}
+
 function renderIdentityBadge() {
   const stuId = localStorage.getItem(LS_STUDENT_ID);
   if (__identity && stuId) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> (${escHtml(__identity.no)}) · progress syncs across devices.` +
+      `Signed in as <b>${escHtml(__identity.name)}</b> · progress syncs across devices.` +
       `<button class="ghost2" id="idClear">switch</button>`;
   } else if (__identity && PDB) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> (${escHtml(__identity.no)}) · not yet synced.` +
+      `Signed in as <b>${escHtml(__identity.name)}</b> · not yet synced.` +
       `<button class="ghost2" id="idClear">switch</button>`;
   } else {
     idBadgeEl.innerHTML =
-      `Guest — progress saved on this device only. Add your name + number to sync across devices.`;
+      `Guest — progress saved on this device only. Pick your name to sync across devices.`;
   }
   const c = document.getElementById("idClear");
-  if (c) c.onclick = () => { __identity = null; localStorage.removeItem(LS_IDENTITY); localStorage.removeItem(LS_STUDENT_ID); idNameEl.value = ""; idNoEl.value = ""; renderIdentityBadge(); };
+  if (c) c.onclick = () => {
+    __identity = null;
+    nameValue = "";
+    localStorage.removeItem(LS_IDENTITY);
+    localStorage.removeItem(LS_STUDENT_ID);
+    idNoEl.value = "";
+    fillRoster();
+    renderIdentityBadge();
+  };
 }
 
 async function saveIdentity() {
-  const name = idNameEl.value.trim();
-  const no = idNoEl.value.trim();
-  if (!name || !no) { idBadgeEl.textContent = "Enter both name and student number to sync."; return; }
+  const stu = selectedStudent();
+  const typed = (idNoEl.value || "").replace(/\s+/g, "");
+  const last4 = (s) => String(s || "").slice(-4).toUpperCase();
+  if (!stu) { idBadgeEl.textContent = "Please select your name from the list."; return; }
+  if (!typed) { idBadgeEl.textContent = "Type the last 4 digits of your student number."; return; }
+  if (last4(typed) !== last4(stu.student_no) && typed.toUpperCase() !== String(stu.student_no).toUpperCase()) {
+    idBadgeEl.textContent = "Those 4 digits do not match this name.";
+    return;
+  }
   const prev = identityLabel(__identity);
-  __identity = { name, no };
+  __identity = { name: stu.name, no: stu.student_no };
   localStorage.setItem(LS_IDENTITY, JSON.stringify(__identity));
-  // Best-effort cloud resolve; on failure we still keep local recording under "guest".
   if (PDB) {
     try {
-      const stu = await PDB.resolveStudent(name, no);
-      localStorage.setItem(LS_STUDENT_ID, String(stu.id));
+      const cloud = await PDB.resolveStudent(stu.name, stu.student_no);
+      localStorage.setItem(LS_STUDENT_ID, String(cloud.id));
     } catch (e) {
       localStorage.removeItem(LS_STUDENT_ID);
     }
   }
   if (localStorage.getItem(LS_STUDENT_ID) && prev !== identityLabel(__identity)) {
-    // moving from guest to a real identity: migrate this device's guest records
     const guestRecs = __store["guest"];
     if (guestRecs) {
       const stuId = localStorage.getItem(LS_STUDENT_ID);
@@ -940,10 +1037,35 @@ async function saveIdentity() {
 }
 
 document.getElementById("idSave").onclick = saveIdentity;
+document.getElementById("iclassBtn").onclick = (e) => {
+  e.stopPropagation();
+  const pick = document.getElementById("iclassPick");
+  const open = !pick.classList.contains("open");
+  closePicks();
+  if (open) pick.classList.add("open");
+};
+document.getElementById("inameBtn").onclick = (e) => {
+  e.stopPropagation();
+  const pick = document.getElementById("inamePick");
+  const open = !pick.classList.contains("open");
+  closePicks();
+  if (open) pick.classList.add("open");
+};
+document.addEventListener("click", closePicks);
+
 if (__identity) {
-  idNameEl.value = __identity.name;
-  idNoEl.value = __identity.no;
+  const saved = rosterStudents().find((s) => s.student_no === __identity.no && s.name === __identity.name);
+  if (saved) {
+    classValue = saved.class || "";
+    nameValue = saved.student_no;
+  } else {
+    __identity = null;
+    localStorage.removeItem(LS_IDENTITY);
+    localStorage.removeItem(LS_STUDENT_ID);
+  }
 }
+fillClassOptions();
+fillRoster();
 
 // ---------- My progress / review modal ----------
 let __recTab = "records";
@@ -982,7 +1104,7 @@ function renderRecList() {
   title.textContent = `My progress${__identity ? " · " + __identity.name : ""}`;
   const stuId = localStorage.getItem(LS_STUDENT_ID);
   document.getElementById("recSub").textContent =
-    (stuId ? "Synced — shows answers from any device." : "Local only — add name + number to sync across devices.") +
+    (stuId ? "Synced — shows answers from any device." : "Local only — pick your name to sync across devices.") +
     ` · ${__recData.length} recorded question${__recData.length === 1 ? "" : "s"}`;
   document.getElementById("recResync").style.display =
     (PDB && __identity && stuId) ? "" : "none";

@@ -113,11 +113,11 @@
   </div>
 </div>
 
-<script src="data.js"></script>
-<script src="structured-data.js"></script>
-<script src="config.js"></script>
+<script src="data.js?v=20260906v"></script>
+<script src="structured-data.js?v=20260906v"></script>
+<script src="config.js?v=20260906v"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js"></script>
+<script src="supabase-client.js?v=20260906v"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
@@ -158,9 +158,11 @@ async function selectAssignment(id, pillEl) {
     const pack = await DB.readTeacherStats(id, getToken());
     const rows = (pack && pack.rows) ? pack.rows : (Array.isArray(pack) ? pack : []);
     const submissions = (pack && pack.submissions) ? pack.submissions : [];
-    const snap = ass.question_snapshot && ass.question_snapshot.length ? ass.question_snapshot : qs;
+    const snap = (ass.question_snapshot || []).length ? ass.question_snapshot : qs;
+    const bySnap = new Map((snap || []).map((q) => [q.id, q]));
+    const merged = (ass.question_ids || []).map((qid) => Object.assign({}, bySnap.get(qid) || {}, BYID.get(qid) || {}, { id: qid }));
     hideStatsErr();
-    renderOverview(ass, snap, rows, submissions);
+    renderOverview(ass, merged.length ? merged : snap, rows, submissions);
   } catch (e) {
     showStatsErr("统计失败：" + (e && e.message ? e.message : e));
   }
@@ -316,8 +318,9 @@ function renderHandoutTable(rows, qs, totalStudents) {
   const qEmpty = document.getElementById("qEmpty");
   const perQ = qs.map(q => {
     const hits = rows.filter(r => r.question_id === q.id);
-    const ok = hits.filter(h => h.correct).length;
-    return { q, answered:hits.length, ok };
+    const ok = hits.filter(h => h.correct === true).length;
+    const wrong = hits.filter(h => h.correct === false).length;
+    return { q, answered:hits.length, ok, wrong };
   });
   perQ.sort((a,b) => {
     const aa = a.answered ? a.ok/a.answered : 1; // 无人作答视为满分，排在最后
@@ -327,8 +330,7 @@ function renderHandoutTable(rows, qs, totalStudents) {
   });
   qEmpty.style.display = perQ.length ? "none" : "block";
 
-  perQ.forEach(({q, answered, ok}) => {
-    const wrong = hits.filter(h => h.correct === false).length;
+  perQ.forEach(({q, answered, ok, wrong}) => {
     const acc = answered ? Math.round(ok/answered*100) : null;
     const color = acc==null ? "" : (acc>=80?"green":acc>=50?"amber":"red");
     const isStructured = q.type === "structured";

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-course="teacher">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>作业统计 · ChemBank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
 <style>
-  :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; --amber:#f0c17c; }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
   a { color:var(--accent); }
   header { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:16px; }
   header h1 { font-size:17px; margin:0; }
@@ -17,16 +20,16 @@
   .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:18px; }
   .card h2 { font-size:15px; margin:0 0 12px; }
   .pick { display:flex; gap:8px; flex-wrap:wrap; }
-  .pill { background:#262241; border:1px solid var(--line); padding:6px 12px; border-radius:20px; font-size:13px; cursor:pointer; color:var(--muted); }
-  .pill.on { background:#262241; color:#fff; border-color:var(--accent); }
+  .pill { background:var(--panel-2); border:1px solid var(--line); padding:6px 12px; border-radius:20px; font-size:13px; cursor:pointer; color:var(--muted); }
+  .pill.on { background:var(--accent); color:#fff; border-color:var(--accent); }
   .hwpick { position:relative; max-width:420px; }
-  .hwpick-btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; background:#262241; border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit; font-size:15px; cursor:pointer; }
+  .hwpick-btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit; font-size:15px; cursor:pointer; }
   .hwpick-btn .chev { color:var(--muted); font-size:13px; }
   .hwpick.open .hwpick-btn { border-color:var(--accent); }
-  .hwpick-menu { display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20; background:#262241; border:1px solid var(--line); border-radius:12px; max-height:320px; overflow:auto; }
+  .hwpick-menu { display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20; background:var(--panel); border:1px solid var(--line); border-radius:12px; max-height:320px; overflow:auto; }
   .hwpick.open .hwpick-menu { display:block; }
   .hwpick-opt { display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); font-family:inherit; font-size:14px; padding:11px 14px; cursor:pointer; }
-  .hwpick-opt:hover, .hwpick-opt.on { background:#1e1b2e; }
+  .hwpick-opt:hover, .hwpick-opt.on { background:var(--accent-soft); color:var(--accent-deep); }
   .hwpick-opt .meta { color:var(--muted); font-size:12px; margin-top:2px; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
@@ -36,7 +39,7 @@
   .green { color:var(--green); } .red { color:var(--red); } .amber{color:var(--amber);}
   .sum-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:18px; }
   .sum { background:var(--panel); border:1px solid var(--line); border-radius:11px; padding:15px; text-align:center; }
-  .sum .v { font-size:22px; font-weight:800; color:var(--amber); }
+  .sum .v { font-size:22px; font-weight:800; color:var(--accent); }
   .sum .k { font-size:12px; color:var(--muted); margin-top:3px; }
   .empty { color:var(--muted); padding:30px; text-align:center; }
   .err { color:var(--red); font-size:13px; }
@@ -48,10 +51,10 @@
   /* 学生钻取表 */
   tr.stu-main { cursor:pointer; border-bottom:none; }
   tr.stu-main:focus { outline:1px solid var(--accent); outline-offset:-1px; }
-  tr.stu-main:hover { background:rgba(124,108,240,.06); }
+  tr.stu-main:hover { background:var(--accent-soft); }
   tr.stu-main .caret { display:inline-block; width:12px; color:var(--muted); font-size:10px; transition:transform .15s; }
   tr.stu-main.open .caret { transform:rotate(90deg); color:var(--accent); }
-  tr.stu-detail { display:none; background:rgba(255,255,255,.03); }
+  tr.stu-detail { display:none; background:var(--bg-soft); }
   tr.stu-detail.open { display:table-row; }
   tr.stu-detail.open td { padding:12px 14px; }
   .each-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; }

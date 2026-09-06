@@ -94,6 +94,34 @@
   --accent-border: #A9DDD8;
 }
 
+/* Teacher tools (刷题库 / 布置作业 / 作业统计) — neutral graphite grey */
+[data-course="teacher"] {
+  /* Accent — graphite/grey (NOT coral/teal) */
+  --accent:        #59636E;
+  --accent-deep:   #3F4852;
+  --accent-soft:   #EEF1F4;
+  --accent-soft-2: #E7EAEE;
+  --accent-hover:  #E7EAEE;
+  --accent-border: #9AA3AC;
+  --focus:         #68737F;
+
+  /* Neutral palette (teacher: slightly denser light grey) */
+  --bg:        #F6F7F9;
+  --bg-soft:   #F1F3F5;
+  --panel:     #FFFFFF;
+  --panel-2:   #ECEFF2;
+  --line:      #DDE1E6;
+  --line-soft: #E8EBEF;
+  --text:      #1F2933;
+  --muted:     #667085;
+  --muted-2:   #98A2B3;
+
+  /* Compact radii for a denser feel */
+  --radius:    12px;
+  --radius-sm: 8px;
+  --radius-lg: 14px;
+}
+
 /* --------------------------------------------------------------------------
    3. RESET / BASE
    -------------------------------------------------------------------------- */

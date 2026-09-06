@@ -286,6 +286,28 @@ window.ChemBankPortal = {
   homeHref: function (track) {
     return track === "ig" ? "ig.html" : "as.html";
   },
+  topicSlug: function (title, track) {
+    const g = this.homeworkGroup(title, track);
+    const map = {
+      "Chemical Bonding": "bonding",
+      "Atomic Structure": "atomic",
+      "Energetics": "energetics",
+      "States of matter": "states",
+      "Atomic structure": "atomic",
+      "Periodic table": "periodic",
+      "Homework": "hw",
+      "Other": "other",
+    };
+    return map[g] || "other";
+  },
+  shortCode: function (a) {
+    const track = this.trackOf(a);
+    const prefix = track === "ig" ? "IG" : "AS";
+    const slug = this.topicSlug((a && a.title) || "", track);
+    const m = String((a && a.title) || "").match(/(\d+\.\d+)/);
+    const num = m ? m[1] : String((a && a.id) || "x");
+    return prefix + "-" + slug + "-" + num;
+  },
   homeworkGroup: function (title, track) {
     const t = title || "";
     if (track === "ig") {
@@ -332,7 +354,7 @@ window.ChemBankPortal = {
       order.forEach(function (name) {
         const items = grouped.get(name);
         if (!items || !items.length) return;
-        items.sort(function (a, b) { return (a.title || "").localeCompare(b.title || ""); });
+        items.sort(function (a, b) { return window.ChemBankPortal.shortCode(a).localeCompare(window.ChemBankPortal.shortCode(b), "en", { numeric: true }); });
         const sec = document.createElement("div");
         sec.className = "hw-folder";
         const btn = document.createElement("button");
@@ -349,8 +371,8 @@ window.ChemBankPortal = {
           link.className = "hw-item";
           link.href = "homework.html?id=" + a.id + "&track=" + track;
           link.innerHTML = "<b></b><div class=\"meta\"></div>";
-          link.querySelector("b").textContent = a.title || ("Assignment " + a.id);
-          link.querySelector(".meta").textContent = (n || "") + (n ? " questions · " : "") + "tap, then choose your name";
+          link.querySelector("b").textContent = window.ChemBankPortal.shortCode(a);
+          link.querySelector(".meta").textContent = (a.title || "") + (n ? " · " + n + " questions" : "");
           ul.appendChild(link);
         });
         btn.addEventListener("click", function () {

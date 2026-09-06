@@ -17,8 +17,17 @@
   .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:18px; }
   .card h2 { font-size:15px; margin:0 0 12px; }
   .pick { display:flex; gap:8px; flex-wrap:wrap; }
-  .pill { background:var(--panel-2); border:1px solid var(--line); padding:6px 12px; border-radius:20px; font-size:13px; cursor:pointer; color:var(--muted); }
-  .pill.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .pill { background:#262241; border:1px solid var(--line); padding:6px 12px; border-radius:20px; font-size:13px; cursor:pointer; color:var(--muted); }
+  .pill.on { background:#262241; color:#fff; border-color:var(--accent); }
+  .hwpick { position:relative; max-width:420px; }
+  .hwpick-btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; background:#262241; border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit; font-size:15px; cursor:pointer; }
+  .hwpick-btn .chev { color:var(--muted); font-size:13px; }
+  .hwpick.open .hwpick-btn { border-color:var(--accent); }
+  .hwpick-menu { display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20; background:#262241; border:1px solid var(--line); border-radius:12px; max-height:320px; overflow:auto; }
+  .hwpick.open .hwpick-menu { display:block; }
+  .hwpick-opt { display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); font-family:inherit; font-size:14px; padding:11px 14px; cursor:pointer; }
+  .hwpick-opt:hover, .hwpick-opt.on { background:#1e1b2e; }
+  .hwpick-opt .meta { color:var(--muted); font-size:12px; margin-top:2px; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
   th { color:var(--muted); font-weight:600; font-size:12px; }
@@ -89,7 +98,10 @@
       <span class="pill" data-track="as">AS 9701</span>
       <span class="pill" data-track="ig">IGCSE 0620</span>
     </div>
-    <div class="pick" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
+    <div class="hwpick" id="hwPick">
+      <button type="button" class="hwpick-btn" id="hwPickBtn"><span class="lab">选择作业…</span><span class="chev">▼</span></button>
+      <div class="hwpick-menu" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
+    </div>
   </div>
 
   <div class="card err" id="statsErr" style="display:none"></div>
@@ -118,12 +130,12 @@
   </div>
 </div>
 
-<script src="data.js?v=20260906w"></script>
-<script src="structured-data.js?v=20260906w"></script>
-<script src="roster.js?v=20260906w"></script>
-<script src="config.js?v=20260906w"></script>
+<script src="data.js?v=20260906z"></script>
+<script src="structured-data.js?v=20260906z"></script>
+<script src="roster.js?v=20260906z"></script>
+<script src="config.js?v=20260906z"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906w"></script>
+<script src="supabase-client.js?v=20260906z"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
@@ -144,21 +156,44 @@ async function loadAssignments() {
 }
 function renderPickList() {
   const pl = document.getElementById("pickList");
+  const btn = document.getElementById("hwPickBtn").querySelector(".lab");
   pl.innerHTML = "";
   const shown = assignments.filter((a) => {
     if (!trackFilter) return true;
     return window.ChemBankPortal.trackOf(a) === trackFilter;
-  });
-  if (!shown.length) { pl.innerHTML = '<span class="empty">这一边还没有作业。</span>'; return; }
-  shown.forEach(a => {
-    const p = document.createElement("span");
-    p.className = "pill";
-    const tag = window.ChemBankPortal.trackOf(a) === "ig" ? "IG" : "AS";
-    p.textContent = `${tag} · ${a.title} · ${(a.question_ids||[]).length}题`;
-    p.onclick = () => selectAssignment(a.id, p);
+  }).slice().sort((a, b) => window.ChemBankPortal.shortCode(a).localeCompare(window.ChemBankPortal.shortCode(b), "en", { numeric: true }));
+  if (!shown.length) {
+    pl.innerHTML = '<span class="empty">这一边还没有作业。</span>';
+    btn.textContent = "选择作业…";
+    return;
+  }
+  shown.forEach((a) => {
+    const p = document.createElement("button");
+    p.type = "button";
+    p.className = "hwpick-opt" + (currentAss && currentAss.id === a.id ? " on" : "");
+    const code = window.ChemBankPortal.shortCode(a);
+    const n = (a.question_ids || []).length;
+    p.innerHTML = "<b></b><div class=\"meta\"></div>";
+    p.querySelector("b").textContent = code;
+    p.querySelector(".meta").textContent = (a.title || "") + (n ? " · " + n + "题" : "");
+    p.onclick = () => {
+      document.getElementById("hwPick").classList.remove("open");
+      selectAssignment(a.id, p);
+    };
     pl.appendChild(p);
   });
+  if (currentAss && shown.some((a) => a.id === currentAss.id)) {
+    btn.textContent = window.ChemBankPortal.shortCode(currentAss);
+  } else {
+    btn.textContent = "选择作业…";
+  }
 }
+document.getElementById("hwPickBtn").onclick = (e) => {
+  e.stopPropagation();
+  document.getElementById("hwPick").classList.toggle("open");
+};
+document.addEventListener("click", () => document.getElementById("hwPick").classList.remove("open"));
+document.getElementById("hwPick").addEventListener("click", (e) => e.stopPropagation());
 document.getElementById("trackFilter").onclick = (e) => {
   const pill = e.target.closest(".pill");
   if (!pill) return;
@@ -169,10 +204,11 @@ document.getElementById("trackFilter").onclick = (e) => {
 
 let currentAss = null;
 async function selectAssignment(id, pillEl) {
-  document.querySelectorAll("#pickList .pill").forEach(x=>x.classList.remove("on"));
-  if (pillEl) pillEl.classList.add("on");
   const ass = assignments.find(a => a.id === id);
   if (!ass) return;
+  currentAss = ass;
+  document.getElementById("hwPickBtn").querySelector(".lab").textContent = window.ChemBankPortal.shortCode(ass);
+  renderPickList();
   const qs = (ass.question_ids||[]).map(qid => BYID.get(qid)).filter(Boolean);
   try {
     // 安全收紧后：anon 已不能直接 select students/answers，

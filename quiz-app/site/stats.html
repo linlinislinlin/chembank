@@ -86,6 +86,8 @@
     <div class="pick" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
   </div>
 
+  <div class="card err" id="statsErr" style="display:none"></div>
+
   <div id="overview" style="display:none">
     <div class="sum-cards" id="sumCards"></div>
     <div class="card">
@@ -153,13 +155,13 @@ async function selectAssignment(id, pillEl) {
     // 安全收紧后：anon 已不能直接 select students/answers，
     // 统一走带密钥校验的 Edge Function（readTeacherStats）。
     const pack = await DB.readTeacherStats(id, getToken());
-    const rows = pack.rows || pack;
-    const submissions = pack.submissions || [];
+    const rows = (pack && pack.rows) ? pack.rows : (Array.isArray(pack) ? pack : []);
+    const submissions = (pack && pack.submissions) ? pack.submissions : [];
     const snap = ass.question_snapshot && ass.question_snapshot.length ? ass.question_snapshot : qs;
+    hideStatsErr();
     renderOverview(ass, snap, rows, submissions);
   } catch (e) {
-    document.getElementById("overview").style.display = "block";
-    document.getElementById("overview").innerHTML = '<div class="card err">统计失败：' + e.message + '</div>';
+    showStatsErr("统计失败：" + (e && e.message ? e.message : e));
   }
 }
 
@@ -167,10 +169,31 @@ let stuSort = { field:"acc", dir:-1 }; // 默认正确率降序
 function stuKey(r){ return r.student_id ?? (r.students ? (r.students.student_no+"|"+r.students.name) : JSON.stringify(r.students)); }
 function qLabel(q){ return `${q.year||""} ${q.session||""} P${q.paper} Q${q.question}`.replace(/\s+/g," ").trim() || (q.id||""); }
 
+function showStatsErr(msg) {
+  const el = document.getElementById("statsErr");
+  if (!el) return;
+  el.style.display = "block";
+  el.textContent = msg;
+  const ov = document.getElementById("overview");
+  if (ov) ov.style.display = "none";
+}
+function hideStatsErr() {
+  const el = document.getElementById("statsErr");
+  if (el) { el.style.display = "none"; el.textContent = ""; }
+}
+
 function renderOverview(ass, qs, rows, submissions) {
+  rows = rows || [];
+  submissions = submissions || [];
+  qs = qs || [];
+  const sumCards = document.getElementById("sumCards");
+  if (!sumCards) {
+    showStatsErr("统计页需要刷新后才能查看（请 Cmd+R 刷新本页）。");
+    return;
+  }
   document.getElementById("overview").style.display = "block";
 
-  const totalStudents = new Set((submissions || []).map(s => s.student_id).concat(rows.map(stuKey))).size;
+  const totalStudents = new Set(submissions.map(s => s.student_id).concat(rows.map(stuKey))).size;
   const graded = rows.filter(r => r.correct === true || r.correct === false);
   const correctCount = rows.filter(r => r.correct === true).length;
   const avgAcc = submissions && submissions.length

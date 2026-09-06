@@ -72,14 +72,14 @@ Deno.serve(async (req: Request) => {
     return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { ...cors, "content-type": "application/json" } });
   }
 
-  const { data: submissions } = await supabase
+  const { data: submissions, error: subErr } = await supabase
     .from("submissions")
     .select("student_id, submitted_at, score, total_score, accuracy")
     .eq("assignment_id", assignmentId);
 
   return new Response(JSON.stringify({
     rows: rows ?? [],
-    submissions: submissions ?? [],
+    submissions: subErr ? [] : (submissions ?? []),
   }), { status: 200, headers: { ...cors, "content-type": "application/json" } });
 });
 

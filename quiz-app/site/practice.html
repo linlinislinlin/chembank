@@ -309,12 +309,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906ai"></script>
-<script src="structured-data.js?v=20260906ai"></script>
-<script src="roster.js?v=20260906ai"></script>
-<script src="config.js?v=20260906ai"></script>
+<script src="data.js?v=20260906aj"></script>
+<script src="structured-data.js?v=20260906aj"></script>
+<script src="roster.js?v=20260906aj"></script>
+<script src="config.js?v=20260906aj"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ai"></script>
+<script src="supabase-client.js?v=20260906aj"></script>
 <script>
 "use strict";
 
@@ -820,8 +820,12 @@ function currentCloudStudent() {
   const id = localStorage.getItem(LS_STUDENT_ID);
   return id ? { id: id } : null;
 }
+function storeKeyFor(identity) {
+  if (!identity || !identity.no) return null;
+  return "no:" + identity.no;
+}
 function currentStudentKey() {
-  return localStorage.getItem(LS_STUDENT_ID) || "guest";
+  return storeKeyFor(__identity) || "guest";
 }
 
 function showFeedback(res, q) {
@@ -970,6 +974,7 @@ function fillClassOptions() {
     fillClassOptions();
     fillRoster();
     syncIdField();
+    if (__identity) signOutIdentity();
   });
 }
 
@@ -985,6 +990,7 @@ function fillRoster() {
     nameValue = value;
     fillRoster();
     syncIdField();
+    if (__identity && value !== __identity.no) signOutIdentity();
   });
 }
 
@@ -1002,32 +1008,36 @@ function selectedStudent() {
   return allRoster().find((s) => s.student_no === nameValue) || null;
 }
 
+function signOutIdentity() {
+  __identity = null;
+  localStorage.removeItem(LS_IDENTITY);
+  localStorage.removeItem(LS_STUDENT_ID);
+  renderIdentityBadge();
+}
+
 function renderIdentityBadge() {
   const stuId = localStorage.getItem(LS_STUDENT_ID);
   const recBtn = document.getElementById("recordsBtn");
   recBtn.style.display = __identity ? "inline-block" : "none";
   if (__identity && stuId) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> · progress syncs across devices.` +
+      `Signed in as <b>${escHtml(__identity.name)}</b> · showing only this student’s record.` +
       `<button class="ghost2" id="idClear">switch</button>`;
-  } else if (__identity && PDB) {
+  } else if (__identity) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> · not yet synced.` +
+      `Signed in as <b>${escHtml(__identity.name)}</b> · showing only this student’s record.` +
       `<button class="ghost2" id="idClear">switch</button>`;
   } else {
     idBadgeEl.innerHTML =
-      `Guest — you can still practise. Pick your name to save and review your record.`;
+      `Pick your name and last 4 digits to open your own progress.`;
   }
   const c = document.getElementById("idClear");
   if (c) c.onclick = () => {
-    __identity = null;
     nameValue = "";
-    localStorage.removeItem(LS_IDENTITY);
-    localStorage.removeItem(LS_STUDENT_ID);
     idNoEl.value = "";
+    signOutIdentity();
     fillRoster();
     syncIdField();
-    renderIdentityBadge();
   };
 }
 
@@ -1046,7 +1056,6 @@ async function saveIdentity() {
     idBadgeEl.textContent = isTester ? "Wrong Tester code." : "Those 4 digits do not match this name.";
     return;
   }
-  const prev = identityLabel(__identity);
   __identity = { name: stu.name, no: stu.student_no };
   localStorage.setItem(LS_IDENTITY, JSON.stringify(__identity));
   if (PDB) {
@@ -1055,14 +1064,6 @@ async function saveIdentity() {
       localStorage.setItem(LS_STUDENT_ID, String(cloud.id));
     } catch (e) {
       localStorage.removeItem(LS_STUDENT_ID);
-    }
-  }
-  if (localStorage.getItem(LS_STUDENT_ID) && prev !== identityLabel(__identity)) {
-    const guestRecs = __store["guest"];
-    if (guestRecs) {
-      const stuId = localStorage.getItem(LS_STUDENT_ID);
-      __store[stuId] = Object.assign({}, __store[stuId], guestRecs);
-      saveStore(__store);
     }
   }
   renderIdentityBadge();
@@ -1108,29 +1109,27 @@ function openRecords() {
     idBadgeEl.textContent = "Select your name first to see your record.";
     return;
   }
-  const stuId = localStorage.getItem(LS_STUDENT_ID);
+  const key = storeKeyFor(__identity);
+  if (!key) return;
   (async () => {
-    // Merge cloud history into local store so cross-device answers appear too.
-    if (PDB && __identity && stuId) {
+    const mine = Object.assign({}, __store[key] || {});
+    if (PDB) {
       try {
         const rows = await PDB.readHistory(__identity.name, __identity.no, 500);
-        const key = stuId;
-        __store[key] = __store[key] || {};
-        rows.forEach(rt => {
-          if (!__store[key][rt.question_id]) {
-            __store[key][rt.question_id] = {
+        rows.forEach((rt) => {
+          if (!mine[rt.question_id]) {
+            mine[rt.question_id] = {
               correct: rt.correct, qtype: rt.qtype, year: rt.year, session: rt.session,
               paper: rt.paper, qno: rt.qno, t: Date.parse(rt.answered_at || 0) || Date.now(),
             };
           }
         });
-        saveStore(__store);
-      } catch (e) { /* keep local-only */ }
+      } catch (e) { /* keep this student’s local bucket only */ }
     }
+    __store[key] = mine;
+    saveStore(__store);
     __recData = [];
-    const key = localStorage.getItem(LS_STUDENT_ID) || "guest";
-    const recs = __store[key] || {};
-    Object.keys(recs).forEach(qid => { if (BYID.has(qid)) __recData.push({ qid, rec: recs[qid] }); });
+    Object.keys(mine).forEach((qid) => { if (BYID.has(qid)) __recData.push({ qid, rec: mine[qid] }); });
     __recData.sort((a, b) => (b.rec.t || 0) - (a.rec.t || 0));
     document.getElementById("recordsOverlay").classList.add("open");
     renderRecList();
@@ -1205,11 +1204,11 @@ document.querySelectorAll(".rec-tabs .tab").forEach(tab => {
 });
 document.getElementById("recResync").onclick = async () => {
   const stuId = localStorage.getItem(LS_STUDENT_ID);
-  if (!PDB || !__identity || !stuId) return;
+  const key = storeKeyFor(__identity);
+  if (!PDB || !__identity || !stuId || !key) return;
   const btn = document.getElementById("recResync");
   btn.textContent = "Syncing…"; btn.disabled = true;
   try {
-    const key = stuId;
     const recs = __store[key] || {};
     for (const qid of Object.keys(recs)) {
       const rec = recs[qid];

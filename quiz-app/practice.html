@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>Free Practice · ChemBank</title>
 <style>
   :root { --accent:#7c6cf0; --bg:#0f0d1a; --bg-soft:#171427; --panel:#1e1b2e; --panel-2:#262241; --line:#2f2a4a; --text:#eceaf6; --muted:#9b95b8; --green:#4ece9d; --red:#f07c7c; --amber:#f0c17c; }
@@ -309,12 +310,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906ak"></script>
-<script src="structured-data.js?v=20260906ak"></script>
-<script src="roster.js?v=20260906ak"></script>
-<script src="config.js?v=20260906ak"></script>
+<script src="data.js?v=20260906al"></script>
+<script src="structured-data.js?v=20260906al"></script>
+<script src="roster.js?v=20260906al"></script>
+<script src="config.js?v=20260906al"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ak"></script>
+<script src="supabase-client.js?v=20260906al"></script>
 <script>
 "use strict";
 
@@ -345,7 +346,7 @@ const settled = new Set();       // node codes expanded by default (sections)
 // ---- Per-device / per-student progress store (always local, never lost) ----
 // pr-store = { <studentKey>: { <question_id>: { correct, chosen, qtype, year, session, paper, qno, t } } }
 //   studentKey is the cloud student id when registered+synced, else "guest".
-const LS_STORE = "pr-store";
+const LS_STORE = "pr-store-v3";
 const LS_IDENTITY = "pr-identity";
 const LS_STUDENT_ID = "pr-student-id";
 function loadStore() { try { return JSON.parse(localStorage.getItem(LS_STORE)) || {}; } catch (e) { return {}; } }

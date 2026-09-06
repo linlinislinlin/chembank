@@ -197,8 +197,12 @@
         <button class="btn ghost" id="idSave">Save identity</button>
       </div>
       <div class="idbadge" id="idBadge"></div>
-      <button class="records-btn" id="recordsBtn" style="display:none">📈 My progress &amp; review</button>
-    </div>
+      <div id="recPanel" style="display:none;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
+        <div class="flabel">我的刷题记录</div>
+        <div class="stat-grid" id="recSum" style="margin:10px 0 12px"></div>
+        <div class="rec-list" id="recMini" style="max-height:260px"></div>
+      </div>
+      <button class="records-btn" id="recordsBtn" style="display:none">查看全部记录</button>
 
     <div class="stat-grid" id="statGrid"></div>
 
@@ -283,6 +287,7 @@
     <div style="font-size:44px;margin:10px 0">🎉</div>
     <h2>Practice session complete!</h2>
     <div class="stat-grid" id="doneStats"></div>
+    <div class="rec-list" id="doneReview" style="text-align:left;margin:16px 0;max-height:40vh"></div>
     <div class="big-actions">
       <button class="btn" id="doneRecordsBtn">📈 My progress</button>
       <button class="btn green" id="againBtn">Practice again</button>
@@ -294,12 +299,12 @@
 <!-- My progress / review -->
 <div class="overlay" id="recordsOverlay">
   <div class="modal">
-    <h3 id="recTitle">My progress</h3>
+    <h3 id="recTitle">我的刷题记录</h3>
     <div class="sub" id="recSub"></div>
     <div class="rec-tabs">
-      <button class="tab on" data-tab="records">📖 All records</button>
-      <button class="tab" data-tab="correct">✅ Practised correct</button>
-      <button class="tab" data-tab="wrong">❌ Wrong book</button>
+      <button class="tab on" data-tab="records">全部</button>
+      <button class="tab" data-tab="correct">做对的</button>
+      <button class="tab" data-tab="wrong">做错的</button>
     </div>
     <div class="rec-list" id="recList"></div>
     <div class="rec-preview" id="recPreview"></div>
@@ -311,12 +316,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906an"></script>
-<script src="structured-data.js?v=20260906an"></script>
-<script src="roster.js?v=20260906an"></script>
-<script src="config.js?v=20260906an"></script>
+<script src="data.js?v=20260906ao"></script>
+<script src="structured-data.js?v=20260906ao"></script>
+<script src="roster.js?v=20260906ao"></script>
+<script src="config.js?v=20260906ao"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906an"></script>
+<script src="supabase-client.js?v=20260906ao"></script>
 <script>
 "use strict";
 
@@ -921,12 +926,28 @@ function showDone() {
   const g = document.getElementById("doneStats");
   g.innerHTML = "";
   const mk = (v, k) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`; return d; };
-  g.appendChild(mk(total, "Questions in run"));
-  g.appendChild(mk(done, "Answered"));
-  g.appendChild(mk(acc + "%", "Accuracy"));
+  g.appendChild(mk(total, "本题组"));
+  g.appendChild(mk(ok + " / " + done, "做对"));
+  g.appendChild(mk(acc + "%", "正确率"));
+  const review = document.getElementById("doneReview");
+  review.innerHTML = "";
+  (window.__qs || []).forEach((q, i) => {
+    const res = window.__results[q.id];
+    if (!res) return;
+    const item = document.createElement("div");
+    item.className = "rec-item";
+    const you = res.chosen && res.chosen !== "self-ok" && res.chosen !== "self-no" ? "你选 " + res.chosen : (res.correct ? "自评：对" : "自评：错");
+    const ans = q.type === "structured" ? "" : ("答案 " + (q.ms_answer || ""));
+    item.innerHTML =
+      `<span class="okdot">${res.correct ? "✅" : "❌"}</span>` +
+      `<span class="src">第${i + 1}题 · ${escHtml(sourceLabel(q))}<br><span class="tag">${escHtml(you)}${ans ? " · " + escHtml(ans) : ""}</span></span>`;
+    review.appendChild(item);
+  });
+  refreshRecordPanel();
   document.getElementById("againBtn").onclick = () => {
     document.getElementById("doneCard").style.display = "none";
     document.getElementById("setupCard").style.display = "block";
+    refreshRecordPanel();
   };
   document.getElementById("homeBtn").onclick = () => (location.href = "home.html");
   document.getElementById("doneRecordsBtn").onclick = () => openRecords();
@@ -1061,17 +1082,18 @@ function signOutIdentity() {
 function renderIdentityBadge() {
   const recBtn = document.getElementById("recordsBtn");
   recBtn.style.display = __identity ? "inline-block" : "none";
+  document.getElementById("recPanel").style.display = __identity ? "block" : "none";
   if (__identity && __cloudId) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> · saved online, any device.` +
-      `<button class="ghost2" id="idClear">switch</button>`;
+      `已登录 <b>${escHtml(__identity.name)}</b> · 记录已存到网上，换设备也能看。` +
+      `<button class="ghost2" id="idClear">换人</button>`;
   } else if (__identity) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> · server not reached, this visit only.` +
-      `<button class="ghost2" id="idClear">switch</button>`;
+      `已登录 <b>${escHtml(__identity.name)}</b> · 这次先记在本页，还没存上网上。` +
+      `<button class="ghost2" id="idClear">换人</button>`;
   } else {
     idBadgeEl.innerHTML =
-      `Not signed in. Confirm your name to save and open your online record.`;
+      `先选名字并确认学号，才能保存和查看自己的刷题记录。`;
   }
   const c = document.getElementById("idClear");
   if (c) c.onclick = () => {
@@ -1114,6 +1136,7 @@ async function saveIdentity() {
   }
   persistSession();
   renderIdentityBadge();
+  refreshRecordPanel();
 }
 
 document.getElementById("idSave").onclick = saveIdentity;
@@ -1143,73 +1166,107 @@ syncIdField();
 // ---------- My progress / review modal ----------
 let __recTab = "records";
 let __recData = [];   // array of { qid, rec }
+function recSource(x) {
+  const q = BYID.get(x.qid);
+  if (q) return sourceLabel(q);
+  return [x.rec.year, x.rec.session, x.rec.paper ? "P" + x.rec.paper : "", x.rec.qno ? "Q" + x.rec.qno : ""].filter(Boolean).join(" ");
+}
+function recDetail(x) {
+  const q = BYID.get(x.qid);
+  const bits = [];
+  if (x.rec.chosen && x.rec.chosen !== "self-ok" && x.rec.chosen !== "self-no") bits.push("你选 " + x.rec.chosen);
+  else if (x.rec.chosen === "self-ok") bits.push("自评：对");
+  else if (x.rec.chosen === "self-no") bits.push("自评：错");
+  if (q && q.type !== "structured" && q.ms_answer) bits.push("正确答案 " + q.ms_answer);
+  if (q && q.topics && q.topics[0]) bits.push(q.topics[0]);
+  return bits.join(" · ");
+}
+function paintRecItems(box, rows) {
+  box.innerHTML = "";
+  if (!rows.length) {
+    const e = document.createElement("div");
+    e.className = "rec-empty";
+    e.textContent = "还没有记录。先做几道题，这里就会出现对错。";
+    box.appendChild(e);
+    return;
+  }
+  rows.forEach((x) => {
+    const item = document.createElement("div");
+    item.className = "rec-item";
+    item.innerHTML =
+      `<span class="okdot">${x.rec.correct ? "✅ 对" : "❌ 错"}</span>` +
+      `<span class="src">${escHtml(recSource(x))}<br><span class="tag">${escHtml(recDetail(x) || "点击可看原题")}</span></span>`;
+    item.onclick = () => {
+      if (BYID.has(x.qid)) showRecPreview(x.qid);
+    };
+    box.appendChild(item);
+  });
+}
+async function collectMine() {
+  const mine = Object.assign({}, __sessionRecs);
+  if (PDB && __identity) {
+    try {
+      const rows = await PDB.readHistory(__identity.name, __identity.no, 500);
+      rows.forEach((rt) => {
+        if (!mine[rt.question_id]) {
+          mine[rt.question_id] = {
+            correct: rt.correct, chosen: rt.chosen, qtype: rt.qtype, year: rt.year, session: rt.session,
+            paper: rt.paper, qno: rt.qno, t: Date.parse(rt.answered_at || 0) || Date.now(),
+          };
+        }
+      });
+    } catch (e) { /* this visit’s answers only */ }
+  }
+  return Object.keys(mine)
+    .filter((qid) => qid !== "probe-record")
+    .map((qid) => ({ qid, rec: mine[qid] }))
+    .sort((a, b) => (b.rec.t || 0) - (a.rec.t || 0));
+}
+function refreshRecordPanel() {
+  const panel = document.getElementById("recPanel");
+  if (!__identity) {
+    panel.style.display = "none";
+    return;
+  }
+  panel.style.display = "block";
+  collectMine().then((rows) => {
+    const ok = rows.filter((x) => x.rec.correct).length;
+    const sum = document.getElementById("recSum");
+    sum.innerHTML = "";
+    const mk = (v, k) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`; return d; };
+    sum.appendChild(mk(rows.length, "已做"));
+    sum.appendChild(mk(ok, "做对"));
+    sum.appendChild(mk(rows.length - ok, "做错"));
+    paintRecItems(document.getElementById("recMini"), rows.slice(0, 8));
+  });
+}
 function openRecords() {
   if (!__identity) {
-    idBadgeEl.textContent = "Select your name first to see your record.";
+    idBadgeEl.textContent = "请先选自己的名字并确认学号。";
     return;
   }
   (async () => {
-    const mine = Object.assign({}, __sessionRecs);
-    if (PDB) {
-      try {
-        const rows = await PDB.readHistory(__identity.name, __identity.no, 500);
-        rows.forEach((rt) => {
-          if (!mine[rt.question_id]) {
-            mine[rt.question_id] = {
-              correct: rt.correct, qtype: rt.qtype, year: rt.year, session: rt.session,
-              paper: rt.paper, qno: rt.qno, t: Date.parse(rt.answered_at || 0) || Date.now(),
-            };
-          }
-        });
-      } catch (e) { /* this visit’s answers only */ }
-    }
-    __recData = [];
-    Object.keys(mine).forEach((qid) => { if (BYID.has(qid)) __recData.push({ qid, rec: mine[qid] }); });
-    __recData.sort((a, b) => (b.rec.t || 0) - (a.rec.t || 0));
+    __recData = await collectMine();
     document.getElementById("recordsOverlay").classList.add("open");
     renderRecList();
   })();
 }
 function renderRecList() {
   const title = document.getElementById("recTitle");
-  title.textContent = `My progress${__identity ? " · " + __identity.name : ""}`;
+  title.textContent = `我的刷题记录${__identity ? " · " + __identity.name : ""}`;
+  const ok = __recData.filter((x) => x.rec.correct).length;
   document.getElementById("recSub").textContent =
-    (__cloudId
-      ? "Online record for " + __identity.name + " — same on any device."
-      : "This visit only — not saved online.") +
-    ` · ${__recData.length} recorded question${__recData.length === 1 ? "" : "s"}`;
+    (__cloudId ? "已存到网上，换手机或电脑用同一个名字登录就能看。" : "这次还没存上网上。") +
+    ` 共 ${__recData.length} 题，对 ${ok}，错 ${__recData.length - ok}。`;
   document.getElementById("recResync").style.display =
     (PDB && __identity && __cloudId) ? "" : "none";
-
-  const list = document.getElementById("recList");
-  document.getElementById("recPreview").classList.remove("show");
-  list.innerHTML = "";
-  const filtered = __recData.filter(x => {
+  const filtered = __recData.filter((x) => {
     if (__recTab === "correct") return x.rec.correct;
     if (__recTab === "wrong") return !x.rec.correct;
     return true;
   });
-  if (!filtered.length) {
-    const e = document.createElement("div");
-    e.className = "rec-empty";
-    e.textContent = __recTab === "wrong"
-      ? "No wrong questions yet — keep practising! 🎉"
-      : "No recorded questions yet. Answer some questions first.";
-    list.appendChild(e);
-    return;
-  }
-  filtered.forEach(x => {
-    const q = BYID.get(x.qid);
-    const item = document.createElement("div");
-    item.className = "rec-item";
-    item.innerHTML =
-      `<span class="okdot">${x.rec.correct ? "✅" : "❌"}</span>` +
-      `<span class="type ${x.rec.qtype === "structured" ? "structured" : "mcq"}">${x.rec.qtype === "structured" ? "Structured" : "MCQ"}</span>` +
-      `<span class="src">${escHtml(sourceLabel(q))}</span>` +
-      `<span class="tag">${escHtml((q.topics || [])[0] || "")}</span>`;
-    item.onclick = () => showRecPreview(x.qid);
-    list.appendChild(item);
-  });
+  document.getElementById("recPreview").classList.remove("show");
+  paintRecItems(document.getElementById("recList"), filtered);
 }
 
 function showRecPreview(qid) {
@@ -1265,6 +1322,7 @@ bindChips();
 updateSyllStatus();
 updateSyllAllButton();
 renderIdentityBadge();
+refreshRecordPanel();
 // Default to expanding the top-level sections so teachers can see topics at a glance.
 SYLLABUS.forEach(r => { if ((r.children || []).some(c => (c.children || []).length)) settled.add(r.code); });
 </script>

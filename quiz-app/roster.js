@@ -290,7 +290,7 @@ window.ChemBankPortal = {
     const t = title || "";
     if (track === "ig") {
       if (/states of matter/i.test(t)) return "States of matter";
-      if (/atomic structure/i.test(t)) return "Atomic structure";
+      if (/2\.1|2\.2|2\.3|atomic structure|isotope/i.test(t)) return "Atomic structure";
       if (/periodic table/i.test(t)) return "Periodic table";
       return "Homework";
     }

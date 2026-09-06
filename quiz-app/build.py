@@ -29,6 +29,11 @@ ASSETS_DIR = REPO / "vault" / "assets"
 SYLLABUS_DIR = REPO / "vault" / "syllabus"
 STRUCTURED_DIR = REPO / "vault-structured" / "questions"
 STRUCTURED_ASSETS = REPO / "vault-structured" / "assets"
+IGCSE_QUESTIONS = REPO / "vault-igcse" / "questions"
+IGCSE_ASSETS = REPO / "vault-igcse" / "assets"
+IGCSE_STRUCTURED_DIR = REPO / "vault-igcse-structured" / "questions"
+IGCSE_STRUCTURED_ASSETS = REPO / "vault-igcse-structured" / "assets"
+IGCSE_PICKS = REPO / "pick"
 SITE_DIR = Path(__file__).resolve().parent / "site"
 OUT_ASSETS = SITE_DIR / "assets"
 OUT_STRUCTURED_ASSETS = SITE_DIR / "assets" / "structured"
@@ -191,6 +196,54 @@ def build_structured_data() -> tuple[list[dict], int, list[str]]:
     return records, copied, skips
 
 
+def igcse_homework_ids() -> list[str]:
+    """IDs from pick/igcse-*-hw.yaml so published IG homework images stay in site/."""
+    ids: list[str] = []
+    seen: set[str] = set()
+    if not IGCSE_PICKS.is_dir():
+        return ids
+    for path in sorted(IGCSE_PICKS.glob("igcse-*-hw.yaml")):
+        try:
+            data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        except OSError:
+            continue
+        for qid in data.get("include_ids") or []:
+            qid = str(qid).strip()
+            if qid and qid not in seen:
+                seen.add(qid)
+                ids.append(qid)
+    return ids
+
+
+def copy_igcse_homework_assets() -> tuple[int, list[str]]:
+    """Copy paper/MS clips for curated IGCSE homework into site/assets."""
+    copied = 0
+    missing: list[str] = []
+    OUT_ASSETS.mkdir(parents=True, exist_ok=True)
+    OUT_STRUCTURED_ASSETS.mkdir(parents=True, exist_ok=True)
+    for qid in igcse_homework_ids():
+        mcq_paper = IGCSE_ASSETS / f"{qid}-paper.png"
+        st_paper = IGCSE_STRUCTURED_ASSETS / f"{qid}-paper.png"
+        st_ms = IGCSE_STRUCTURED_ASSETS / f"{qid}-ms.png"
+        if mcq_paper.exists():
+            dest = OUT_ASSETS / mcq_paper.name
+            shutil.copy2(mcq_paper, dest)
+            copied += 1
+            continue
+        if st_paper.exists():
+            dest = OUT_STRUCTURED_ASSETS / st_paper.name
+            shutil.copy2(st_paper, dest)
+            copied += 1
+            if st_ms.exists():
+                shutil.copy2(st_ms, OUT_STRUCTURED_ASSETS / st_ms.name)
+                copied += 1
+            else:
+                missing.append(f"{qid} (no MS clip)")
+            continue
+        missing.append(qid)
+    return copied, missing
+
+
 def content_hash(questions: list[dict], tree: list[dict]) -> str:
     """Content-addressed version: changes whenever the question set or syllabus tree does."""
     blob = json.dumps(
@@ -344,6 +397,13 @@ def main() -> int:
         f"OK: {len(questions)} MCQ questions, {copied} MCQ assets, "
         f"{len(tree)} top-level syllabus nodes."
     )
+    ig_copied, ig_missing = copy_igcse_homework_assets()
+    print(f"OK: {ig_copied} IGCSE homework assets copied.")
+    if ig_missing:
+        print(f"WARN: {len(ig_missing)} IGCSE homework images missing:")
+        for e in ig_missing[:20]:
+            print("  -", e)
+
     print(f"OK: {len(s_records)} structured questions, {s_copied} structured assets.")
     if s_skips:
         print(f"WARN: {len(s_skips)} structured skipped:")

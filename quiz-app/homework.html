@@ -229,6 +229,7 @@ function pickTester() {
   nameValue = "TESTER";
   fillClassOptions();
   fillRoster();
+  document.getElementById("istudentNo").value = "123456";
 }
 
 document.getElementById("testerBtn").onclick = pickTester;
@@ -259,9 +260,13 @@ document.getElementById("startBtn").onclick = async () => {
   if (!stu) { err.textContent = "Please select your name from the list"; return; }
   const typedNo = document.getElementById("istudentNo").value.replace(/\s+/g, "");
   const last4 = (s) => String(s || "").slice(-4).toUpperCase();
+  const isTester = stu.student_no === "TESTER" || stu.class === "T";
   if (!typedNo) { err.textContent = "Type the last 4 digits of your student number"; return; }
-  if (last4(typedNo) !== last4(stu.student_no) && typedNo.toUpperCase() !== String(stu.student_no).toUpperCase()) {
-    err.textContent = "Those 4 digits do not match this name";
+  const ok = isTester
+    ? typedNo === "123456"
+    : (last4(typedNo) === last4(stu.student_no) || typedNo.toUpperCase() === String(stu.student_no).toUpperCase());
+  if (!ok) {
+    err.textContent = isTester ? "Tester code is 123456" : "Those 4 digits do not match this name";
     return;
   }
   const name = stu.name;

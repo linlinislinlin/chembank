@@ -18,6 +18,18 @@
   label { display:block; font-size:13px; color:var(--muted); margin:14px 0 4px; }
   .input, textarea { background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; width:100%; font-size:16px; font-family:inherit; }
   .input:focus, textarea:focus { outline:none; border-color:var(--accent); }
+  select.input {
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    background-color:var(--panel-2);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%239b95b8' d='M1 1.5l5 5 5-5'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    background-size:12px 8px;
+    padding-right:36px;
+    text-align:left;
+  }
   textarea { min-height:88px; resize:vertical; }
   .btn { background:var(--accent); color:#fff; border:none; border-radius:11px; padding:13px 20px; font-size:16px; font-weight:600; cursor:pointer; width:100%; margin-top:18px; }
   .btn:disabled { opacity:.5; cursor:not-allowed; }
@@ -97,10 +109,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906w"></script>
-<script src="config.js?v=20260906w"></script>
+<script src="roster.js?v=20260906x"></script>
+<script src="config.js?v=20260906x"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906w"></script>
+<script src="supabase-client.js?v=20260906x"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;

@@ -61,6 +61,7 @@ window.HomeworkDB = (() => {
       name: input.name,
       student_no: input.studentNo,
       class_name: input.className || "",
+      teacher_token: input.teacherToken || "",
       answers: input.answers || [],
     });
   }
@@ -72,6 +73,7 @@ window.HomeworkDB = (() => {
       name: input.name,
       student_no: input.studentNo,
       class_name: input.className || "",
+      teacher_token: input.teacherToken || "",
     });
   }
 

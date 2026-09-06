@@ -294,6 +294,14 @@ Deno.serve(async (req: Request) => {
       const ass = await loadAssignment(id);
       if (!ass) return json(404, { error: "Assignment not found or has been deleted" });
 
+      const isTester = studentNo === "TESTER" || name.toLowerCase() === "tester";
+      if (isTester) {
+        const token = clean(body.teacher_token);
+        if (!TEACHER_TOKEN || !tokEq(token, TEACHER_TOKEN)) {
+          return json(401, { error: "Tester is for teachers only" });
+        }
+      }
+
       const stu = await resolveStudent(name, studentNo, clean(body.class_name));
       const showKeys = ass.show_answers_after_submit !== false || ass.show_explanations_after_submit !== false;
 

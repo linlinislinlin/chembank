@@ -102,6 +102,7 @@
       <button type="button" class="hwpick-btn" id="hwPickBtn"><span class="lab">选择作业…</span><span class="chev">▼</span></button>
       <div class="hwpick-menu" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
     </div>
+    <p class="small-note" id="testerOpen" style="display:none;margin:12px 0 0"></p>
   </div>
 
   <div class="card err" id="statsErr" style="display:none"></div>
@@ -253,6 +254,19 @@ function renderOverview(ass, qs, rows, submissions) {
     return;
   }
   document.getElementById("overview").style.display = "block";
+  const testerOpen = document.getElementById("testerOpen");
+  if (testerOpen) {
+    const track = window.ChemBankPortal.trackOf(ass);
+    testerOpen.style.display = "block";
+    testerOpen.innerHTML = "";
+    const a = document.createElement("a");
+    a.href = "homework.html?id=" + encodeURIComponent(ass.id) + "&track=" + encodeURIComponent(track) + "&check=" + encodeURIComponent((window.SUPABASE_CONFIG || {}).statsToken || "");
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "用 Tester 打开学生页";
+    testerOpen.appendChild(a);
+    testerOpen.appendChild(document.createTextNode(" · 在学号框输入 0818"));
+  }
 
   const totalStudents = new Set(submissions.map(s => s.student_id).concat(rows.map(stuKey))).size;
   const graded = rows.filter(r => r.correct === true || r.correct === false);

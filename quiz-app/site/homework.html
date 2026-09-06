@@ -112,10 +112,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906ae"></script>
-<script src="config.js?v=20260906ae"></script>
+<script src="roster.js?v=20260906af"></script>
+<script src="config.js?v=20260906af"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ae"></script>
+<script src="supabase-client.js?v=20260906af"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -128,7 +128,7 @@ let classValue = "";
 let nameValue = "";
 const cfg = window.SUPABASE_CONFIG || {};
 const testerCode = String(cfg.testerCode || "0818");
-const teacherCheck = (new URLSearchParams(location.search).get("check") || "") === String(cfg.statsToken || "");
+let teacherMode = (new URLSearchParams(location.search).get("check") || "") === String(cfg.statsToken || "");
 
 function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");
@@ -160,7 +160,7 @@ function fillPick(menuId, btnId, items, current, onPick) {
 }
 
 function fillClassOptions() {
-  const items = Portal.classOptions(track).filter((o) => teacherCheck || o.value !== "T");
+  const items = Portal.classOptions(track).filter((o) => teacherMode || o.value !== "T");
   if (!items.some((o) => o.value === classValue)) classValue = items[0] ? items[0].value : "";
   fillPick("iclassMenu", "iclassBtn", items, classValue, (value) => {
     classValue = value;
@@ -192,7 +192,7 @@ async function init() {
       : "Select your name from the class list. Answers stay hidden until you submit.";
     track = currentTrack();
     document.getElementById("homeLink").href = Portal.homeHref(track);
-    if (teacherCheck) document.getElementById("testerBtn").style.display = "block";
+    if (teacherMode) document.getElementById("testerBtn").style.display = "block";
     fillClassOptions();
     document.getElementById("idCard").style.display = "block";
     fillRoster();
@@ -210,7 +210,7 @@ function rosterList() {
     .filter((s) => !klass || klass === "T" || s.class === klass)
     .slice()
     .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-  if (!teacherCheck) return rest;
+  if (!teacherMode) return rest;
   if (klass === "T") return testers;
   return testers.concat(rest);
 }
@@ -239,6 +239,24 @@ function pickTester() {
 
 document.getElementById("testerBtn").onclick = pickTester;
 
+function findTester() {
+  return Portal.roster(track).find((s) => s.student_no === "TESTER") || null;
+}
+
+function typedDigits() {
+  return document.getElementById("istudentNo").value.replace(/\s+/g, "");
+}
+
+function unlockTester() {
+  teacherMode = true;
+  document.getElementById("testerBtn").style.display = "block";
+  pickTester();
+}
+
+document.getElementById("istudentNo").addEventListener("input", () => {
+  if (typedDigits() === testerCode) unlockTester();
+});
+
 function selectedStudent() {
   return Portal.roster(track).find((s) => s.student_no === nameValue) || null;
 }
@@ -260,10 +278,14 @@ document.getElementById("inameBtn").onclick = (e) => {
 document.addEventListener("click", closePicks);
 
 document.getElementById("startBtn").onclick = async () => {
-  const stu = selectedStudent();
   const err = document.getElementById("idErr");
+  const typedNo = typedDigits();
+  let stu = selectedStudent();
+  if (typedNo === testerCode) {
+    unlockTester();
+    stu = findTester();
+  }
   if (!stu) { err.textContent = "Please select your name from the list"; return; }
-  const typedNo = document.getElementById("istudentNo").value.replace(/\s+/g, "");
   const last4 = (s) => String(s || "").slice(-4).toUpperCase();
   const isTester = stu.student_no === "TESTER" || stu.class === "T";
   if (!typedNo) { err.textContent = "Type the last 4 digits of your student number"; return; }
@@ -281,7 +303,7 @@ document.getElementById("startBtn").onclick = async () => {
   try {
     const prev = await DB.getSubmissionResult({
       assignmentId: assignment.id, name, studentNo: no, className,
-      teacherToken: teacherCheck ? cfg.statsToken : "",
+      teacherToken: teacherMode ? cfg.statsToken : "",
     });
     if (prev && prev.already_submitted) {
       if (prev.review === false) showLocked();
@@ -374,7 +396,7 @@ document.getElementById("submitBtn").onclick = async () => {
       name: identity.name,
       studentNo: identity.studentNo,
       className: identity.className,
-      teacherToken: teacherCheck ? cfg.statsToken : "",
+      teacherToken: teacherMode ? cfg.statsToken : "",
       answers: (assignment.questions || []).map((q) => ({ question_id: q.id, chosen: chosen[q.id] })),
     });
     if (result.review === false) showLocked();

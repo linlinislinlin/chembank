@@ -84,6 +84,11 @@
 <div class="wrap" id="mainWrap" style="display:none">
   <div class="card">
     <h2>选择作业</h2>
+    <div class="pick" id="trackFilter" style="margin-bottom:10px">
+      <span class="pill on" data-track="">全部</span>
+      <span class="pill" data-track="as">AS 9701</span>
+      <span class="pill" data-track="ig">IGCSE 0620</span>
+    </div>
     <div class="pick" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
   </div>
 
@@ -113,11 +118,12 @@
   </div>
 </div>
 
-<script src="data.js?v=20260906v"></script>
-<script src="structured-data.js?v=20260906v"></script>
-<script src="config.js?v=20260906v"></script>
+<script src="data.js?v=20260906w"></script>
+<script src="structured-data.js?v=20260906w"></script>
+<script src="roster.js?v=20260906w"></script>
+<script src="config.js?v=20260906w"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906v"></script>
+<script src="supabase-client.js?v=20260906w"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
@@ -127,27 +133,43 @@ STRUCTURED.forEach(q => BYID.set(q.id, q));
 const DB = window.HomeworkDB;
 
 let assignments = [];
+let trackFilter = "";
 async function loadAssignments() {
   try {
     assignments = await DB.listAssignments();
-    const pl = document.getElementById("pickList");
-    pl.innerHTML = "";
-    if (!assignments.length) { pl.innerHTML = '<span class="empty">还没有布置作业。去 <a href="assign.html">布置作业</a></span>'; return; }
-    assignments.forEach(a => {
-      const p = document.createElement("span");
-      p.className = "pill";
-      p.textContent = `${a.title} · ${(a.question_ids||[]).length}题`;
-      p.onclick = () => selectAssignment(a.id, p);
-      pl.appendChild(p);
-    });
+    renderPickList();
   } catch (e) {
     document.getElementById("pickList").innerHTML = '<span class="err">加载失败：' + e.message + '</span>';
   }
 }
+function renderPickList() {
+  const pl = document.getElementById("pickList");
+  pl.innerHTML = "";
+  const shown = assignments.filter((a) => {
+    if (!trackFilter) return true;
+    return window.ChemBankPortal.trackOf(a) === trackFilter;
+  });
+  if (!shown.length) { pl.innerHTML = '<span class="empty">这一边还没有作业。</span>'; return; }
+  shown.forEach(a => {
+    const p = document.createElement("span");
+    p.className = "pill";
+    const tag = window.ChemBankPortal.trackOf(a) === "ig" ? "IG" : "AS";
+    p.textContent = `${tag} · ${a.title} · ${(a.question_ids||[]).length}题`;
+    p.onclick = () => selectAssignment(a.id, p);
+    pl.appendChild(p);
+  });
+}
+document.getElementById("trackFilter").onclick = (e) => {
+  const pill = e.target.closest(".pill");
+  if (!pill) return;
+  trackFilter = pill.getAttribute("data-track") || "";
+  document.querySelectorAll("#trackFilter .pill").forEach((x) => x.classList.toggle("on", x === pill));
+  renderPickList();
+};
 
 let currentAss = null;
 async function selectAssignment(id, pillEl) {
-  document.querySelectorAll(".pick .pill").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll("#pickList .pill").forEach(x=>x.classList.remove("on"));
   if (pillEl) pillEl.classList.add("on");
   const ass = assignments.find(a => a.id === id);
   if (!ass) return;

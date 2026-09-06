@@ -52,7 +52,7 @@
 <div class="top">
   <h1>📝 Chemistry Homework</h1>
   <span class="meta" id="topMeta">Loading…</span>
-  <span class="meta" style="margin-left:auto;text-decoration:underline;"><a href="home.html" style="color:var(--accent)">🏠 Home</a></span>
+  <span class="meta" style="margin-left:auto;text-decoration:underline;"><a href="home.html" id="homeLink" style="color:var(--accent)">🏠 Home</a></span>
 </div>
 
 <div class="wrap">
@@ -62,12 +62,7 @@
     <p class="hint" id="idInstr"></p>
     <button type="button" class="btn" id="testerBtn" style="background:var(--amber);color:#3a2a00;margin-top:8px">Teacher check — use Tester</button>
     <label>Class</label>
-    <select class="input" id="iclass">
-      <option value="">All AS students</option>
-      <option value="C">Class C</option>
-      <option value="F">Class F</option>
-      <option value="T">Tester</option>
-    </select>
+    <select class="input" id="iclass"></select>
     <label>Your name</label>
     <select class="input" id="iname">
       <option value="">Select your name…</option>
@@ -102,16 +97,35 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906t"></script>
-<script src="config.js?v=20260906t"></script>
+<script src="roster.js?v=20260906w"></script>
+<script src="config.js?v=20260906w"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906t"></script>
+<script src="supabase-client.js?v=20260906w"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
+const Portal = window.ChemBankPortal;
 const chosen = {};
 let assignment = null;
 let identity = null;
+let track = "as";
+
+function currentTrack() {
+  const q = new URLSearchParams(location.search).get("track");
+  if (q === "ig" || q === "as") return q;
+  return Portal.trackOf(assignment || {});
+}
+
+function fillClassOptions() {
+  const sel = document.getElementById("iclass");
+  sel.innerHTML = "";
+  Portal.classOptions(track).forEach((o) => {
+    const opt = document.createElement("option");
+    opt.value = o.value;
+    opt.textContent = o.label;
+    sel.appendChild(opt);
+  });
+}
 
 init();
 
@@ -133,6 +147,9 @@ async function init() {
     document.getElementById("idInstr").textContent = assignment.instructions
       ? assignment.instructions.slice(0, 240)
       : "Select your name from the class list. Answers stay hidden until you submit.";
+    track = currentTrack();
+    document.getElementById("homeLink").href = Portal.homeHref(track);
+    fillClassOptions();
     document.getElementById("idCard").style.display = "block";
     fillRoster();
   } catch (e) {
@@ -141,7 +158,7 @@ async function init() {
 }
 
 function rosterList() {
-  const all = window.AS_ROSTER || [];
+  const all = Portal.roster(track);
   const klass = document.getElementById("iclass").value;
   const testers = all.filter((s) => s.class === "T" || s.student_no === "TESTER");
   const rest = all
@@ -164,7 +181,6 @@ function fillRoster() {
     sel.appendChild(opt);
   });
   if ([...sel.options].some((o) => o.value === prev)) sel.value = prev;
-  else if ([...sel.options].some((o) => o.value === "TESTER")) sel.value = "TESTER";
 }
 
 function pickTester() {
@@ -177,7 +193,7 @@ document.getElementById("testerBtn").onclick = pickTester;
 
 function selectedStudent() {
   const no = document.getElementById("iname").value;
-  return (window.AS_ROSTER || []).find((s) => s.student_no === no) || null;
+  return Portal.roster(track).find((s) => s.student_no === no) || null;
 }
 
 document.getElementById("iclass").onchange = fillRoster;

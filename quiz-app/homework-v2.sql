@@ -14,7 +14,8 @@ alter table public.assignments
   add column if not exists status text not null default 'published',
   add column if not exists show_answers_after_submit boolean not null default true,
   add column if not exists show_explanations_after_submit boolean not null default true,
-  add column if not exists question_snapshot jsonb not null default '[]'::jsonb;
+  add column if not exists question_snapshot jsonb not null default '[]'::jsonb,
+  add column if not exists programme text not null default 'as';
 
 -- 旧行补默认值（若某列刚加上来已有 default，这里无害）
 update public.assignments

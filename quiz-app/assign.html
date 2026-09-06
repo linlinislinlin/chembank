@@ -86,8 +86,13 @@
     <div>
       <div class="card">
         <h2>1 · 新建作业</h2>
+        <label>课程</label>
+        <select class="input" id="programme">
+          <option value="as">AS Chemistry 9701（C / F 班）</option>
+          <option value="ig">IGCSE Chemistry 0620（青云班）</option>
+        </select>
         <label>作业标题</label>
-        <input class="input" id="title" placeholder="例如：5.1 键能 & 焓变 · 第3周作业" />
+        <input class="input" id="title" placeholder="例如：3.1 Electronegativity homework" />
         <label>说明（可选）</label>
         <textarea class="input" id="instructions" rows="3" placeholder="发给学生的简短说明"></textarea>
         <label>截止时间（可选）</label>
@@ -284,7 +289,7 @@ document.querySelectorAll("#filters button").forEach(b => {
 $("qsearch").addEventListener("input", () => renderList());
 
 $("createBtn").onclick = async () => {
-  const title = $("title").value.trim();
+  let title = $("title").value.trim();
   const idArr = [...selected];
   const msg = $("createMsg");
   if (!title) { msg.className="msg err"; msg.textContent="请输入作业标题"; return; }
@@ -296,6 +301,10 @@ $("createBtn").onclick = async () => {
   try {
     const dueAt = $("due").value ? new Date($("due").value).toISOString() : null;
     const questions = idArr.map(id => BYID.get(id)).filter(Boolean);
+    const programme = $("programme").value === "ig" ? "ig" : "as";
+    if (programme === "ig" && !/^\s*(\[?igcse\]?|ig\b|0620)/i.test(title)) {
+      title = "IGCSE " + title;
+    }
     const ass = await window.HomeworkDB.createAssignment({
       title,
       instructions: $("instructions").value.trim(),
@@ -303,9 +312,12 @@ $("createBtn").onclick = async () => {
       showAnswers: $("showAns").checked,
       showExplanations: $("showExp").checked,
       questions,
+      programme,
     }, __token);
-    const link = location.origin + location.pathname.replace("assign.html","") + "homework.html?id=" + ass.id;
-    $("linkBox").textContent = link;
+    const base = location.origin + location.pathname.replace("assign.html","");
+    const portal = programme === "ig" ? "ig.html" : "as.html";
+    const link = base + "homework.html?id=" + ass.id + "&track=" + programme;
+    $("linkBox").textContent = "学生入口：" + base + portal + "\n作业直链：" + link;
     $("linkCard").style.display = "block";
     msg.className = "msg ok"; msg.textContent = "作业已创建！ID=" + ass.id;
   } catch (e) {

@@ -138,6 +138,7 @@ function publicAssignment(ass: Record<string, unknown>) {
     instructions: ass.instructions || "",
     due_at: ass.due_at,
     status: ass.status || "published",
+    programme: String(ass.programme || "as").toLowerCase() === "ig" ? "ig" : "as",
     show_answers_after_submit: ass.show_answers_after_submit !== false,
     show_explanations_after_submit: ass.show_explanations_after_submit !== false,
     questions: snap,
@@ -234,6 +235,7 @@ Deno.serve(async (req: Request) => {
       if (!pubs.length) return json(400, { error: "no valid question ids" });
 
       const dueAt = clean(body.due_at) || null;
+      const programme = clean(body.programme).toLowerCase() === "ig" ? "ig" : "as";
       const { data: ass, error } = await supabase
         .from("assignments")
         .insert({
@@ -243,10 +245,11 @@ Deno.serve(async (req: Request) => {
           question_snapshot: pubs,
           due_at: dueAt,
           status: "published",
+          programme,
           show_answers_after_submit: body.show_answers_after_submit !== false,
           show_explanations_after_submit: body.show_explanations_after_submit !== false,
         })
-        .select("id, title")
+        .select("id, title, programme")
         .single();
       if (error || !ass) return json(500, { error: error?.message || "insert failed" });
 

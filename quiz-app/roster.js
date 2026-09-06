@@ -233,3 +233,137 @@ window.AS_ROSTER = [
     "class": "F"
   }
 ];
+
+// IGCSE Chemistry 0620 · Qingyun 青云班（不含 Caleb Liu）
+window.IG_ROSTER = [
+  {
+    "id": "TESTER",
+    "name": "Tester",
+    "name_zh": "测试账号",
+    "student_no": "TESTER",
+    "class_name": "IGCSE-Test",
+    "class": "T"
+  },
+  { "id": "T20291259", "name": "Phoebe He", "name_zh": "何依璟", "student_no": "T20291259", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291270", "name": "Alex Huang", "name_zh": "黄潇霆", "student_no": "T20291270", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291260", "name": "Lynn Lin", "name_zh": "林予浠", "student_no": "T20291260", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291246", "name": "Zeki Liu", "name_zh": "刘知几", "student_no": "T20291246", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291230", "name": "Cindy Ma", "name_zh": "马心霖", "student_no": "T20291230", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291263", "name": "Steven Shen", "name_zh": "沈子铭", "student_no": "T20291263", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20301191", "name": "Joy Wang", "name_zh": "王子晗", "student_no": "T20301191", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291112", "name": "Brice Yang", "name_zh": "杨梓谦", "student_no": "T20291112", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291257", "name": "Queeny Ye", "name_zh": "叶晴", "student_no": "T20291257", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291271", "name": "Tina Yi", "name_zh": "易涵菁", "student_no": "T20291271", "class_name": "IGCSE-Qingyun", "class": "Q" },
+  { "id": "T20291017", "name": "Aden Zhou", "name_zh": "周子峻", "student_no": "T20291017", "class_name": "IGCSE-Qingyun", "class": "Q" }
+];
+
+window.ChemBankPortal = {
+  trackOf: function (a) {
+    const t = String((a && a.title) || "");
+    if (/^\s*(\[?igcse\]?|ig\b|0620)/i.test(t)) return "ig";
+    const p = String((a && a.programme) || "").toLowerCase();
+    if (p === "ig" || p === "igcse") return "ig";
+    return "as";
+  },
+  roster: function (track) {
+    return track === "ig" ? (window.IG_ROSTER || []) : (window.AS_ROSTER || []);
+  },
+  classOptions: function (track) {
+    if (track === "ig") {
+      return [
+        { value: "", label: "All IGCSE students" },
+        { value: "Q", label: "Qingyun" },
+        { value: "T", label: "Tester" },
+      ];
+    }
+    return [
+      { value: "", label: "All AS students" },
+      { value: "C", label: "Class C" },
+      { value: "F", label: "Class F" },
+      { value: "T", label: "Tester" },
+    ];
+  },
+  homeHref: function (track) {
+    return track === "ig" ? "ig.html" : "as.html";
+  },
+  homeworkGroup: function (title, track) {
+    const t = title || "";
+    if (track === "ig") {
+      if (/states of matter/i.test(t)) return "States of matter";
+      if (/atomic structure/i.test(t)) return "Atomic structure";
+      if (/periodic table/i.test(t)) return "Periodic table";
+      return "Homework";
+    }
+    if (/^3\.\d/.test(t) || /electronegativity|ionic bonding|metallic bonding|sigma\s*\/\s*pi|shapes of molecules|intermolecular/i.test(t)) {
+      return "Chemical Bonding";
+    }
+    if (/^1\.\d/.test(t) || /atomic structure/i.test(t)) return "Atomic Structure";
+    if (/^5\.\d/.test(t) || /enthalpy|energetics/i.test(t)) return "Energetics";
+    return "Other";
+  },
+  renderHomeworkList: async function (opts) {
+    const box = opts.box;
+    const err = opts.err;
+    const track = opts.track === "ig" ? "ig" : "as";
+    const order = track === "ig"
+      ? ["Homework", "States of matter", "Atomic structure", "Periodic table", "Other"]
+      : ["Chemical Bonding", "Atomic Structure", "Energetics", "Other"];
+    try {
+      if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
+      const all = await window.HomeworkDB.listAssignments();
+      const list = (all || []).filter(function (a) {
+        if (a.status && a.status !== "published") return false;
+        if (/sample/i.test(a.title || "")) return false;
+        return window.ChemBankPortal.trackOf(a) === track;
+      });
+      box.innerHTML = "";
+      if (!list.length) {
+        box.innerHTML = track === "ig"
+          ? '<span class="sub">No IGCSE homework published yet.</span>'
+          : '<span class="sub">No AS homework published yet.</span>';
+        return;
+      }
+      const grouped = new Map();
+      list.forEach(function (a) {
+        const g = window.ChemBankPortal.homeworkGroup(a.title || "", track);
+        if (!grouped.has(g)) grouped.set(g, []);
+        grouped.get(g).push(a);
+      });
+      order.forEach(function (name) {
+        const items = grouped.get(name);
+        if (!items || !items.length) return;
+        items.sort(function (a, b) { return (a.title || "").localeCompare(b.title || ""); });
+        const sec = document.createElement("div");
+        sec.className = "hw-folder";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "hw-folder-btn";
+        btn.innerHTML = "<span class=\"chev\">▶</span><span class=\"lab\"></span><span class=\"count\"></span>";
+        btn.querySelector(".lab").textContent = name;
+        btn.querySelector(".count").textContent = items.length + (items.length === 1 ? " homework" : " homeworks");
+        const ul = document.createElement("div");
+        ul.className = "hw-list";
+        items.forEach(function (a) {
+          const n = (a.question_ids || []).length;
+          const link = document.createElement("a");
+          link.className = "hw-item";
+          link.href = "homework.html?id=" + a.id + "&track=" + track;
+          link.innerHTML = "<b></b><div class=\"meta\"></div>";
+          link.querySelector("b").textContent = a.title || ("Assignment " + a.id);
+          link.querySelector(".meta").textContent = (n || "") + (n ? " questions · " : "") + "tap, then choose your name";
+          ul.appendChild(link);
+        });
+        btn.addEventListener("click", function () {
+          const open = sec.classList.toggle("open");
+          btn.querySelector(".chev").textContent = open ? "▼" : "▶";
+        });
+        sec.appendChild(btn);
+        sec.appendChild(ul);
+        box.appendChild(sec);
+      });
+    } catch (e) {
+      box.innerHTML = "";
+      if (err) err.textContent = "Could not load homework list: " + (e.message || e);
+    }
+  },
+};

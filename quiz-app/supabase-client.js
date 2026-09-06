@@ -44,6 +44,7 @@ window.HomeworkDB = (() => {
       show_answers_after_submit: input.showAnswers !== false,
       show_explanations_after_submit: input.showExplanations !== false,
       questions: input.questions || [],
+      programme: input.programme === "ig" ? "ig" : "as",
     });
     return data.assignment;
   }
@@ -77,7 +78,7 @@ window.HomeworkDB = (() => {
   async function listAssignments() {
     const c = ready(); if (!c) throw new Error("Supabase 未配置");
     let { data, error } = await c.from("assignments")
-      .select("id, title, question_ids, question_snapshot, created_at, due_at, instructions, status")
+      .select("id, title, question_ids, question_snapshot, created_at, due_at, instructions, status, programme")
       .order("created_at", { ascending: false });
     if (error) {
       const retry = await c.from("assignments")

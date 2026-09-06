@@ -80,8 +80,8 @@
       <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
       <div class="pick-menu" id="inameMenu"></div>
     </div>
-    <label>Student number</label>
-    <input class="input" id="istudentNo" placeholder="Type your student number" autocomplete="off" />
+    <label>Last 4 digits of student number</label>
+    <input class="input" id="istudentNo" placeholder="e.g. 0178" autocomplete="off" maxlength="8" />
     <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
   </div>
@@ -112,10 +112,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906ab"></script>
-<script src="config.js?v=20260906ab"></script>
+<script src="roster.js?v=20260906ac"></script>
+<script src="config.js?v=20260906ac"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906ab"></script>
+<script src="supabase-client.js?v=20260906ac"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -257,9 +257,13 @@ document.getElementById("startBtn").onclick = async () => {
   const stu = selectedStudent();
   const err = document.getElementById("idErr");
   if (!stu) { err.textContent = "Please select your name from the list"; return; }
-  const typedNo = document.getElementById("istudentNo").value.trim();
-  if (!typedNo) { err.textContent = "Type your student number to confirm it is you"; return; }
-  if (typedNo !== stu.student_no) { err.textContent = "Student number does not match this name"; return; }
+  const typedNo = document.getElementById("istudentNo").value.replace(/\s+/g, "");
+  const last4 = (s) => String(s || "").slice(-4).toUpperCase();
+  if (!typedNo) { err.textContent = "Type the last 4 digits of your student number"; return; }
+  if (last4(typedNo) !== last4(stu.student_no) && typedNo.toUpperCase() !== String(stu.student_no).toUpperCase()) {
+    err.textContent = "Those 4 digits do not match this name";
+    return;
+  }
   const name = stu.name;
   const no = stu.student_no;
   const className = stu.class_name;

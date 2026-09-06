@@ -265,7 +265,7 @@ function renderOverview(ass, qs, rows, submissions) {
     a.rel = "noopener";
     a.textContent = "用 Tester 打开学生页";
     testerOpen.appendChild(a);
-    testerOpen.appendChild(document.createTextNode(" · 在学号框输入 0818"));
+    testerOpen.appendChild(document.createTextNode(" · 选 Tester 后输入口令"));
   }
 
   const totalStudents = new Set(submissions.map(s => s.student_id).concat(rows.map(stuKey))).size;

@@ -69,7 +69,6 @@
     <div class="big">🧑‍🎓</div>
     <h2 id="idTitle">First, tell us who you are</h2>
     <p class="hint" id="idInstr"></p>
-    <button type="button" class="btn" id="testerBtn" style="display:none;background:var(--amber);color:#3a2a00;margin-top:8px">Teacher check — use Tester</button>
     <label>Class</label>
     <div class="pick" id="iclassPick">
       <button type="button" class="pick-btn" id="iclassBtn"><span class="lab">All students</span><span class="chev">▼</span></button>
@@ -80,7 +79,7 @@
       <button type="button" class="pick-btn" id="inameBtn"><span class="lab">Select your name…</span><span class="chev">▼</span></button>
       <div class="pick-menu" id="inameMenu"></div>
     </div>
-    <label>Last 4 digits of student number</label>
+    <label id="idNoLabel">Last 4 digits of student number</label>
     <input class="input" id="istudentNo" placeholder="e.g. 0178" autocomplete="off" maxlength="8" />
     <button class="btn" id="startBtn">Start →</button>
     <div class="err" id="idErr"></div>
@@ -112,10 +111,10 @@
   </div>
 </div>
 
-<script src="roster.js?v=20260906af"></script>
-<script src="config.js?v=20260906af"></script>
+<script src="roster.js?v=20260906ag"></script>
+<script src="config.js?v=20260906ag"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906af"></script>
+<script src="supabase-client.js?v=20260906ag"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -127,8 +126,8 @@ let track = "as";
 let classValue = "";
 let nameValue = "";
 const cfg = window.SUPABASE_CONFIG || {};
-const testerCode = String(cfg.testerCode || "0818");
-let teacherMode = (new URLSearchParams(location.search).get("check") || "") === String(cfg.statsToken || "");
+const testerCode = String(cfg.testerCode || "");
+const fromTeacherLink = (new URLSearchParams(location.search).get("check") || "") === String(cfg.statsToken || "");
 
 function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");
@@ -160,13 +159,14 @@ function fillPick(menuId, btnId, items, current, onPick) {
 }
 
 function fillClassOptions() {
-  const items = Portal.classOptions(track).filter((o) => teacherMode || o.value !== "T");
+  const items = Portal.classOptions(track);
   if (!items.some((o) => o.value === classValue)) classValue = items[0] ? items[0].value : "";
   fillPick("iclassMenu", "iclassBtn", items, classValue, (value) => {
     classValue = value;
     nameValue = "";
     fillClassOptions();
     fillRoster();
+    syncIdField();
   });
 }
 
@@ -192,10 +192,14 @@ async function init() {
       : "Select your name from the class list. Answers stay hidden until you submit.";
     track = currentTrack();
     document.getElementById("homeLink").href = Portal.homeHref(track);
-    if (teacherMode) document.getElementById("testerBtn").style.display = "block";
+    if (fromTeacherLink) {
+      classValue = "T";
+      nameValue = "TESTER";
+    }
     fillClassOptions();
     document.getElementById("idCard").style.display = "block";
     fillRoster();
+    syncIdField();
   } catch (e) {
     showErr(e.message);
   }
@@ -210,7 +214,6 @@ function rosterList() {
     .filter((s) => !klass || klass === "T" || s.class === klass)
     .slice()
     .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-  if (!teacherMode) return rest;
   if (klass === "T") return testers;
   return testers.concat(rest);
 }
@@ -226,36 +229,28 @@ function fillRoster() {
   fillPick("inameMenu", "inameBtn", items, nameValue, (value) => {
     nameValue = value;
     fillRoster();
+    syncIdField();
   });
 }
 
-function pickTester() {
-  classValue = "T";
-  nameValue = "TESTER";
-  fillClassOptions();
-  fillRoster();
-  document.getElementById("istudentNo").value = testerCode;
+function isTesterPick() {
+  return nameValue === "TESTER" || classValue === "T";
 }
 
-document.getElementById("testerBtn").onclick = pickTester;
-
-function findTester() {
-  return Portal.roster(track).find((s) => s.student_no === "TESTER") || null;
+function syncIdField() {
+  const box = document.getElementById("istudentNo");
+  const lab = document.getElementById("idNoLabel");
+  const tester = isTesterPick();
+  box.type = tester ? "password" : "text";
+  box.placeholder = tester ? "Tester code" : "e.g. 0178";
+  box.maxLength = tester ? 16 : 8;
+  box.value = "";
+  lab.textContent = tester ? "Tester code" : "Last 4 digits of student number";
 }
 
 function typedDigits() {
   return document.getElementById("istudentNo").value.replace(/\s+/g, "");
 }
-
-function unlockTester() {
-  teacherMode = true;
-  document.getElementById("testerBtn").style.display = "block";
-  pickTester();
-}
-
-document.getElementById("istudentNo").addEventListener("input", () => {
-  if (typedDigits() === testerCode) unlockTester();
-});
 
 function selectedStudent() {
   return Portal.roster(track).find((s) => s.student_no === nameValue) || null;
@@ -280,17 +275,14 @@ document.addEventListener("click", closePicks);
 document.getElementById("startBtn").onclick = async () => {
   const err = document.getElementById("idErr");
   const typedNo = typedDigits();
-  let stu = selectedStudent();
-  if (typedNo === testerCode) {
-    unlockTester();
-    stu = findTester();
-  }
+  const stu = selectedStudent();
   if (!stu) { err.textContent = "Please select your name from the list"; return; }
   const last4 = (s) => String(s || "").slice(-4).toUpperCase();
   const isTester = stu.student_no === "TESTER" || stu.class === "T";
-  if (!typedNo) { err.textContent = "Type the last 4 digits of your student number"; return; }
+  if (!typedNo) { err.textContent = isTester ? "Enter the Tester code" : "Type the last 4 digits of your student number"; return; }
+  const testerOk = isTester && !!testerCode && typedNo === testerCode;
   const ok = isTester
-    ? typedNo === testerCode
+    ? testerOk
     : (last4(typedNo) === last4(stu.student_no) || typedNo.toUpperCase() === String(stu.student_no).toUpperCase());
   if (!ok) {
     err.textContent = isTester ? "Wrong Tester code" : "Those 4 digits do not match this name";
@@ -299,11 +291,11 @@ document.getElementById("startBtn").onclick = async () => {
   const name = stu.name;
   const no = stu.student_no;
   const className = stu.class_name;
-  identity = { name, studentNo: no, className };
+  identity = { name, studentNo: no, className, testerOk };
   try {
     const prev = await DB.getSubmissionResult({
       assignmentId: assignment.id, name, studentNo: no, className,
-      teacherToken: teacherMode ? cfg.statsToken : "",
+      teacherToken: testerOk ? cfg.statsToken : "",
     });
     if (prev && prev.already_submitted) {
       if (prev.review === false) showLocked();
@@ -396,7 +388,7 @@ document.getElementById("submitBtn").onclick = async () => {
       name: identity.name,
       studentNo: identity.studentNo,
       className: identity.className,
-      teacherToken: teacherMode ? cfg.statsToken : "",
+      teacherToken: identity.testerOk ? cfg.statsToken : "",
       answers: (assignment.questions || []).map((q) => ({ question_id: q.id, chosen: chosen[q.id] })),
     });
     if (result.review === false) showLocked();

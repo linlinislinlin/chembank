@@ -60,6 +60,7 @@
     <div class="big">🧑‍🎓</div>
     <h2 id="idTitle">First, tell us who you are</h2>
     <p class="hint" id="idInstr"></p>
+    <button type="button" class="btn" id="testerBtn" style="background:var(--amber);color:#3a2a00;margin-top:8px">Teacher check — use Tester</button>
     <label>Class</label>
     <select class="input" id="iclass">
       <option value="">All AS students</option>
@@ -101,10 +102,10 @@
   </div>
 </div>
 
-<script src="roster.js"></script>
-<script src="config.js"></script>
+<script src="roster.js?v=20260906t"></script>
+<script src="config.js?v=20260906t"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js"></script>
+<script src="supabase-client.js?v=20260906t"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -163,7 +164,16 @@ function fillRoster() {
     sel.appendChild(opt);
   });
   if ([...sel.options].some((o) => o.value === prev)) sel.value = prev;
+  else if ([...sel.options].some((o) => o.value === "TESTER")) sel.value = "TESTER";
 }
+
+function pickTester() {
+  document.getElementById("iclass").value = "T";
+  fillRoster();
+  document.getElementById("iname").value = "TESTER";
+}
+
+document.getElementById("testerBtn").onclick = pickTester;
 
 function selectedStudent() {
   const no = document.getElementById("iname").value;

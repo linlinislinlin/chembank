@@ -179,7 +179,7 @@
     <!-- Student identity (optional, roster + last 4) -->
     <div class="idbox" style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
       <div class="flabel">Save progress under your class name</div>
-      <p class="hint" style="margin-top:0">Pick yourself from the list, then type the last 4 digits of your student number. You can still practice as a guest without this.</p>
+      <p class="hint" style="margin-top:0">Pick yourself and confirm the last 4 digits every time. My progress then shows only that student. You can still practise as a guest without saving.</p>
       <label>Class</label>
       <div class="pick" id="iclassPick">
         <button type="button" class="pick-btn" id="iclassBtn"><span class="lab">All AS students</span><span class="chev">▼</span></button>
@@ -309,12 +309,12 @@
 </div>
 </body>
 
-<script src="data.js?v=20260906aj"></script>
-<script src="structured-data.js?v=20260906aj"></script>
-<script src="roster.js?v=20260906aj"></script>
-<script src="config.js?v=20260906aj"></script>
+<script src="data.js?v=20260906ak"></script>
+<script src="structured-data.js?v=20260906ak"></script>
+<script src="roster.js?v=20260906ak"></script>
+<script src="config.js?v=20260906ak"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906aj"></script>
+<script src="supabase-client.js?v=20260906ak"></script>
 <script>
 "use strict";
 
@@ -802,6 +802,7 @@ function recordAnswered(q, r) {
   __store[key] = __store[key] || {};
   __store[key][q.id] = rec;
   saveStore(__store);
+  if (__identity) __sessionRecs[q.id] = rec;
   pushCloud(q.id, rec);
 }
 
@@ -816,9 +817,9 @@ async function pushCloud(qid, rec) {
 }
 
 // ---- Student identity ----
+let __cloudId = null;
 function currentCloudStudent() {
-  const id = localStorage.getItem(LS_STUDENT_ID);
-  return id ? { id: id } : null;
+  return __cloudId ? { id: __cloudId } : null;
 }
 function storeKeyFor(identity) {
   if (!identity || !identity.no) return null;
@@ -914,11 +915,8 @@ const idBadgeEl = document.getElementById("idBadge");
 let classValue = "";
 let nameValue = "";
 
-function loadIdentity() {
-  try { const s = JSON.parse(localStorage.getItem(LS_IDENTITY) || "{}"); if (s && s.name && s.no) return s; } catch (e) {}
-  return null;
-}
-let __identity = loadIdentity();
+let __identity = null;
+let __sessionRecs = {};
 
 function identityLabel(i) { return i ? i.name : "Guest"; }
 
@@ -1010,26 +1008,23 @@ function selectedStudent() {
 
 function signOutIdentity() {
   __identity = null;
+  __sessionRecs = {};
+  __cloudId = null;
   localStorage.removeItem(LS_IDENTITY);
   localStorage.removeItem(LS_STUDENT_ID);
   renderIdentityBadge();
 }
 
 function renderIdentityBadge() {
-  const stuId = localStorage.getItem(LS_STUDENT_ID);
   const recBtn = document.getElementById("recordsBtn");
   recBtn.style.display = __identity ? "inline-block" : "none";
-  if (__identity && stuId) {
+  if (__identity) {
     idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> · showing only this student’s record.` +
-      `<button class="ghost2" id="idClear">switch</button>`;
-  } else if (__identity) {
-    idBadgeEl.innerHTML =
-      `Signed in as <b>${escHtml(__identity.name)}</b> · showing only this student’s record.` +
+      `Signed in as <b>${escHtml(__identity.name)}</b> · My progress is only this student.` +
       `<button class="ghost2" id="idClear">switch</button>`;
   } else {
     idBadgeEl.innerHTML =
-      `Pick your name and last 4 digits to open your own progress.`;
+      `Not signed in. Confirm your name to open your own progress.`;
   }
   const c = document.getElementById("idClear");
   if (c) c.onclick = () => {
@@ -1057,13 +1052,14 @@ async function saveIdentity() {
     return;
   }
   __identity = { name: stu.name, no: stu.student_no };
-  localStorage.setItem(LS_IDENTITY, JSON.stringify(__identity));
+  __sessionRecs = {};
+  localStorage.removeItem(LS_IDENTITY);
   if (PDB) {
     try {
       const cloud = await PDB.resolveStudent(stu.name, stu.student_no);
-      localStorage.setItem(LS_STUDENT_ID, String(cloud.id));
+      __cloudId = String(cloud.id);
     } catch (e) {
-      localStorage.removeItem(LS_STUDENT_ID);
+      __cloudId = null;
     }
   }
   renderIdentityBadge();
@@ -1086,17 +1082,8 @@ document.getElementById("inameBtn").onclick = (e) => {
 };
 document.addEventListener("click", closePicks);
 
-if (__identity) {
-  const saved = allRoster().find((s) => s.student_no === __identity.no && s.name === __identity.name);
-  if (saved) {
-    classValue = saved.class || "";
-    nameValue = saved.student_no;
-  } else {
-    __identity = null;
-    localStorage.removeItem(LS_IDENTITY);
-    localStorage.removeItem(LS_STUDENT_ID);
-  }
-}
+localStorage.removeItem(LS_IDENTITY);
+localStorage.removeItem(LS_STUDENT_ID);
 fillClassOptions();
 fillRoster();
 syncIdField();
@@ -1109,10 +1096,8 @@ function openRecords() {
     idBadgeEl.textContent = "Select your name first to see your record.";
     return;
   }
-  const key = storeKeyFor(__identity);
-  if (!key) return;
   (async () => {
-    const mine = Object.assign({}, __store[key] || {});
+    const mine = Object.assign({}, __sessionRecs);
     if (PDB) {
       try {
         const rows = await PDB.readHistory(__identity.name, __identity.no, 500);
@@ -1124,10 +1109,8 @@ function openRecords() {
             };
           }
         });
-      } catch (e) { /* keep this student’s local bucket only */ }
+      } catch (e) { /* this visit’s answers only */ }
     }
-    __store[key] = mine;
-    saveStore(__store);
     __recData = [];
     Object.keys(mine).forEach((qid) => { if (BYID.has(qid)) __recData.push({ qid, rec: mine[qid] }); });
     __recData.sort((a, b) => (b.rec.t || 0) - (a.rec.t || 0));
@@ -1138,12 +1121,11 @@ function openRecords() {
 function renderRecList() {
   const title = document.getElementById("recTitle");
   title.textContent = `My progress${__identity ? " · " + __identity.name : ""}`;
-  const stuId = localStorage.getItem(LS_STUDENT_ID);
   document.getElementById("recSub").textContent =
-    (stuId ? "Synced — shows answers from any device." : "Local only — pick your name to sync across devices.") +
+    (__cloudId ? "Only " + __identity.name + "’s saved practice." : "This visit only.") +
     ` · ${__recData.length} recorded question${__recData.length === 1 ? "" : "s"}`;
   document.getElementById("recResync").style.display =
-    (PDB && __identity && stuId) ? "" : "none";
+    (PDB && __identity && __cloudId) ? "" : "none";
 
   const list = document.getElementById("recList");
   document.getElementById("recPreview").classList.remove("show");
@@ -1203,16 +1185,14 @@ document.querySelectorAll(".rec-tabs .tab").forEach(tab => {
   };
 });
 document.getElementById("recResync").onclick = async () => {
-  const stuId = localStorage.getItem(LS_STUDENT_ID);
-  const key = storeKeyFor(__identity);
-  if (!PDB || !__identity || !stuId || !key) return;
+  if (!PDB || !__identity || !__cloudId) return;
   const btn = document.getElementById("recResync");
   btn.textContent = "Syncing…"; btn.disabled = true;
   try {
-    const recs = __store[key] || {};
+    const recs = __sessionRecs;
     for (const qid of Object.keys(recs)) {
       const rec = recs[qid];
-      await PDB.recordPractice(stuId, Object.assign({ question_id: qid }, rec));
+      await PDB.recordPractice(__cloudId, Object.assign({ question_id: qid }, rec));
     }
     btn.textContent = "✓ Synced";
   } catch (e) {

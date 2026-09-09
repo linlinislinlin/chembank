@@ -231,6 +231,14 @@ window.AS_ROSTER = [
     "student_no": "T20281157",
     "class_name": "AS-F",
     "class": "F"
+  },
+  {
+    "id": "T20281136",
+    "name": "Cici Wang",
+    "name_zh": "王溪琳",
+    "student_no": "T20281136",
+    "class_name": "AS-F",
+    "class": "F"
   }
 ];
 

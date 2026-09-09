@@ -1,6 +1,23 @@
 -- ============================================================
 -- 作业系统 · 安全加固（收紧 anon 读取权限）· v2
 --
+-- ⚠️⚠️ 已过时 / 勿再单独执行 ⚠️⚠️
+-- 本文件是早期「v1 → v2」过渡期的加固脚本。它的授权部分会
+-- **重新授予** anon 对 answers 的 update、students 的 insert、
+-- assignments 的 insert（见文件末尾），这与最终安全模型冲突：
+--   - homework-v2.sql     已经 REVOKE 了这些写权限（更严格）
+--   - revoke-anon-writes.sql 又进一步撤销了 students/answers/
+--     practice_logs 的 anon 写权限
+-- 因此若你**再次执行本文件**，会把这些已撤销的写权限重新加回来，
+-- 重新打开「学生用 anonKey 直接往 answers 表写假数据」的漏洞。
+--
+-- 正确的执行顺序（新部署时）：
+--   1) homework-db.sql        建表
+--   2) homework-v2.sql        增量列 + 收紧
+--   3) practice-logs.sql      练习记录表
+--   4) revoke-anon-writes.sql 最终撤销 anon 写权限
+-- 本文件保留仅作历史参考，不要重复执行。
+--
 -- 背景：原 homework-db.sql 给了 anon 对 students/answers 的
 --       select 权限（`grant select, insert, update ... to anon`），
 --       并且 RLS 策略是 `for select using (true)`，导致任何拿到
@@ -12,7 +29,7 @@
 --   身份读到全部行（v1 只 drop 策略、只 grant insert/update，
 --    没撤销 select，所以没堵住）。
 --
--- 本文件做的事：
+-- 本文件做的事（历史）：
 --  1) 强制开启三张表的 RLS
 --  2) 撤销所有旧的读/写策略，只留安全模型需要的
 --  3) REVOKE anon 对 students / answers 的 SELECT（关键）

@@ -1295,10 +1295,6 @@ function fillPick(menuId, btnId, items, current, onPick) {
   btn.querySelector(".lab").textContent = chosen ? chosen.label : items[0].label;
 }
 
-function isTesterPick() {
-  return nameValue === "TESTER" || classValue === "T";
-}
-
 function allRoster() {
   return Portal.roster("as");
 }
@@ -1345,13 +1341,12 @@ function fillRoster() {
 }
 
 function syncIdField() {
-  const tester = isTesterPick();
   const lab = document.getElementById("idNoLabel");
-  idNoEl.type = tester ? "password" : "text";
-  idNoEl.placeholder = tester ? "Tester code" : "e.g. 1111";
-  idNoEl.maxLength = tester ? 16 : 8;
+  idNoEl.type = "text";
+  idNoEl.placeholder = "e.g. 1111";
+  idNoEl.maxLength = 8;
   idNoEl.value = "";
-  lab.textContent = tester ? "Tester code" : "Last 4 digits of student number";
+  lab.textContent = "Last 4 digits of student number";
 }
 
 function selectedStudent() {
@@ -1408,15 +1403,11 @@ async function saveIdentity() {
   const stu = selectedStudent();
   const typed = (idNoEl.value || "").replace(/\s+/g, "");
   const last4 = (s) => String(s || "").slice(-4).toUpperCase();
-  const testerCode = String((SUP && SUP.testerCode) || "");
-  const isTester = stu.student_no === "TESTER" || stu.class === "T";
   if (!stu) { idBadgeEl.textContent = "Please select your name from the list."; return; }
-  if (!typed) { idBadgeEl.textContent = isTester ? "Enter the Tester code." : "Type the last 4 digits of your student number."; return; }
-  const ok = isTester
-    ? (!!testerCode && typed === testerCode)
-    : (last4(typed) === last4(stu.student_no) || typed.toUpperCase() === String(stu.student_no).toUpperCase());
+  if (!typed) { idBadgeEl.textContent = "Type the last 4 digits of your student number."; return; }
+  const ok = last4(typed) === last4(stu.student_no) || typed.toUpperCase() === String(stu.student_no).toUpperCase();
   if (!ok) {
-    idBadgeEl.textContent = isTester ? "Wrong Tester code." : "Those 4 digits do not match this name.";
+    idBadgeEl.textContent = "Those 4 digits do not match this name.";
     return;
   }
   __identity = { name: stu.name, no: stu.student_no };

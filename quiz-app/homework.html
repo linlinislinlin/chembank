@@ -107,9 +107,6 @@ let identity = null;
 let track = "as";
 let classValue = "";
 let nameValue = "";
-const cfg = window.SUPABASE_CONFIG || {};
-const testerCode = String(cfg.testerCode || "");
-const fromTeacherLink = (new URLSearchParams(location.search).get("check") || "") === String(cfg.statsToken || "");
 
 function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");
@@ -181,10 +178,6 @@ async function init() {
     track = currentTrack();
     applyTrackTheme(track);
     document.getElementById("homeLink").href = Portal.homeHref(track);
-    if (fromTeacherLink) {
-      classValue = "T";
-      nameValue = "TESTER";
-    }
     fillClassOptions();
     document.getElementById("idCard").style.display = "block";
     fillRoster();
@@ -231,10 +224,10 @@ function syncIdField() {
   const lab = document.getElementById("idNoLabel");
   const tester = isTesterPick();
   box.type = tester ? "password" : "text";
-  box.placeholder = tester ? "Tester code" : "e.g. 1111";
-  box.maxLength = tester ? 16 : 8;
+  box.placeholder = tester ? "Teacher token" : "e.g. 1111";
+  box.maxLength = tester ? 64 : 8;
   box.value = "";
-  lab.textContent = tester ? "Tester code" : "Last 4 digits of student number";
+  lab.textContent = tester ? "Teacher token" : "Last 4 digits of student number";
 }
 
 function typedDigits() {
@@ -268,23 +261,22 @@ document.getElementById("startBtn").onclick = async () => {
   if (!stu) { err.textContent = "Please select your name from the list"; return; }
   const last4 = (s) => String(s || "").slice(-4).toUpperCase();
   const isTester = stu.student_no === "TESTER" || stu.class === "T";
-  if (!typedNo) { err.textContent = isTester ? "Enter the Tester code" : "Type the last 4 digits of your student number"; return; }
-  const testerOk = isTester && !!testerCode && typedNo === testerCode;
-  const ok = isTester
-    ? testerOk
-    : (last4(typedNo) === last4(stu.student_no) || typedNo.toUpperCase() === String(stu.student_no).toUpperCase());
-  if (!ok) {
-    err.textContent = isTester ? "Wrong Tester code" : "Those 4 digits do not match this name";
+  if (!typedNo) { err.textContent = isTester ? "Enter the teacher token" : "Type the last 4 digits of your student number"; return; }
+  let testerOk = false;
+  if (isTester) {
+    testerOk = true; // 真实校验在后端：typedNo 将作为 teacher_token 传给后端比对 TEACHER_TOKEN
+  } else if (last4(typedNo) !== last4(stu.student_no) && typedNo.toUpperCase() !== String(stu.student_no).toUpperCase()) {
+    err.textContent = "Those 4 digits do not match this name";
     return;
   }
   const name = stu.name;
   const no = stu.student_no;
   const className = stu.class_name;
-  identity = { name, studentNo: no, className, testerOk };
+  identity = { name, studentNo: no, className, testerOk, teacherToken: testerOk ? typedNo : "" };
   try {
     const prev = await DB.getSubmissionResult({
       assignmentId: assignment.id, name, studentNo: no, className,
-      teacherToken: testerOk ? cfg.statsToken : "",
+      teacherToken: identity.teacherToken,
     });
     if (prev && prev.already_submitted) {
       if (prev.review === false) showLocked();
@@ -377,7 +369,7 @@ document.getElementById("submitBtn").onclick = async () => {
       name: identity.name,
       studentNo: identity.studentNo,
       className: identity.className,
-      teacherToken: identity.testerOk ? cfg.statsToken : "",
+      teacherToken: identity.teacherToken || "",
       answers: (assignment.questions || []).map((q) => ({ question_id: q.id, chosen: chosen[q.id] })),
     });
     if (result.review === false) showLocked();

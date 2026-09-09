@@ -339,13 +339,10 @@ function escapeHtml(s) {
 }
 
 function setupGate() {
-  const cfg = window.SUPABASE_CONFIG || {};
   const unlock = () => {
-    const expected = (cfg.statsToken || "").trim();
     const v = $("tokenInput").value.trim();
-    if (!expected) { $("gateErr").textContent = "config.js 未设置 statsToken"; return; }
-    if (v !== expected) { $("gateErr").textContent = "口令错误"; return; }
-    __token = v;
+    if (!v) { $("gateErr").textContent = "请输入教师口令"; return; }
+    __token = v; // 真实校验在后端（创建作业时 401 → 提示口令错误）
     try { sessionStorage.setItem("stats-token", __token); } catch (e) {}
     $("loginGate").style.display = "none";
     $("mainWrap").style.display = "block";

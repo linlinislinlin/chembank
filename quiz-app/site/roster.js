@@ -265,6 +265,23 @@ window.IG_ROSTER = [
   { "id": "T20291017", "name": "Aden Zhou", "name_zh": "周子峻", "student_no": "T20291017", "class_name": "IGCSE-Qingyun", "class": "Q" }
 ];
 
+/* IGCSE 0620 syllabus units — used to file homework under 2 → 2.4 etc.
+   Source: syllabus/cie-0620-igcse-chemistry.yaml (topics + subtopics). */
+const IG_UNITS = {
+  "1": "States of matter",
+  "2": "Atoms, elements and compounds",
+  "3": "Stoichiometry",
+  "4": "Electrochemistry",
+  "5": "Chemical energetics",
+  "6": "Chemical reactions",
+  "7": "Acids, bases and salts",
+  "8": "The Periodic Table",
+  "9": "Metals",
+  "10": "Chemistry of the environment",
+  "11": "Organic chemistry",
+  "12": "Experimental techniques and chemical analysis"
+};
+
 window.ChemBankPortal = {
   trackOf: function (a) {
     const t = String((a && a.title) || "");
@@ -313,22 +330,87 @@ window.ChemBankPortal = {
     };
     return map[g] || "other";
   },
+  /* --- IGCSE syllabus helpers -------------------------------------------- */
+  /* Pull syllabus codes out of a homework title, e.g.
+       "IGCSE 2.4 Ions and ionic bonds"     -> ["2.4"]
+       "IGCSE 2.1–2.3 Atomic structure..."  -> ["2.1","2.2","2.3"] */
+  igCodes: function (title) {
+    const t = String(title || "");
+    const out = [];
+    const add = function (c) { if (out.indexOf(c) < 0) out.push(c); };
+    const covered = [];
+    let m;
+    const rangeRe = /(\d{1,2})\.(\d{1,2})\s*[–—~-]\s*(\d{1,2})\.(\d{1,2})/g;
+    while ((m = rangeRe.exec(t))) {
+      covered.push([m.index, rangeRe.lastIndex]);
+      const u1 = Number(m[1]), s1 = Number(m[2]), u2 = Number(m[3]), s2 = Number(m[4]);
+      if (u1 === u2 && s1 <= s2) {
+        for (let i = s1; i <= s2; i++) add(u1 + "." + i);
+      } else {
+        add(u1 + "." + s1);
+        add(u2 + "." + s2);
+      }
+    }
+    const oneRe = /(\d{1,2})\.(\d{1,2})/g;
+    while ((m = oneRe.exec(t))) {
+      const inside = covered.some(function (c) { return m.index >= c[0] && m.index < c[1]; });
+      if (!inside) add(m[1] + "." + m[2]);
+    }
+    return out;
+  },
+  compressCodes: function (codes) {
+    const sorted = (codes || []).slice().sort(function (a, b) {
+      return a.localeCompare(b, "en", { numeric: true });
+    });
+    const out = [];
+    let i = 0;
+    while (i < sorted.length) {
+      const u = Number(sorted[i].split(".")[0]);
+      const base = Number(sorted[i].split(".")[1]);
+      let j = i;
+      while (j + 1 < sorted.length) {
+        const p = sorted[j + 1].split(".");
+        if (Number(p[0]) === u && Number(p[1]) === base + (j + 1 - i)) j++;
+        else break;
+      }
+      out.push(j > i ? sorted[i] + "–" + sorted[j] : sorted[i]);
+      i = j + 1;
+    }
+    return out.join(", ");
+  },
+  igUnitOf: function (title) {
+    const codes = this.igCodes(title);
+    for (let i = 0; i < codes.length; i++) {
+      const u = codes[i].split(".")[0];
+      if (IG_UNITS[u]) return u;
+    }
+    return "";
+  },
+  igGroupLabel: function (title) {
+    const u = this.igUnitOf(title);
+    return u ? (u + " " + IG_UNITS[u]) : "Other";
+  },
+  groupRank: function (name) {
+    const m = String(name || "").match(/^(\d{1,2})\b/);
+    return m ? Number(m[1]) : 999;
+  },
   shortCode: function (a) {
+    const title = String((a && a.title) || "");
     const track = this.trackOf(a);
-    const prefix = track === "ig" ? "IG" : "AS";
-    const slug = this.topicSlug((a && a.title) || "", track);
-    const m = String((a && a.title) || "").match(/(\d+\.\d+)/);
+    if (track === "ig") {
+      const codes = this.igCodes(title);
+      return codes.length
+        ? ("IG " + this.compressCodes(codes))
+        : ("IG " + String((a && a.id) || "x"));
+    }
+    const slug = this.topicSlug(title, track);
+    const m = title.match(/(\d+\.\d+)/);
     const num = m ? m[1] : String((a && a.id) || "x");
-    return prefix + "-" + slug + "-" + num;
+    return "AS-" + slug + "-" + num;
   },
   homeworkGroup: function (title, track) {
     const t = title || "";
-    if (track === "ig") {
-      if (/states of matter/i.test(t)) return "States of matter";
-      if (/2\.1|2\.2|2\.3|atomic structure|isotope/i.test(t)) return "Atomic structure";
-      if (/periodic table/i.test(t)) return "Periodic table";
-      return "Homework";
-    }
+    if (track === "ig") return this.igGroupLabel(t);
     if (/^3\.\d/.test(t) || /electronegativity|ionic bonding|metallic bonding|sigma\s*\/\s*pi|shapes of molecules|intermolecular/i.test(t)) {
       return "Chemical Bonding";
     }
@@ -341,7 +423,7 @@ window.ChemBankPortal = {
     const err = opts.err;
     const track = opts.track === "ig" ? "ig" : "as";
     const order = track === "ig"
-      ? ["Homework", "States of matter", "Atomic structure", "Periodic table", "Other"]
+      ? null
       : ["Chemical Bonding", "Atomic Structure", "Energetics", "Other"];
     try {
       if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
@@ -364,7 +446,19 @@ window.ChemBankPortal = {
         if (!grouped.has(g)) grouped.set(g, []);
         grouped.get(g).push(a);
       });
-      order.forEach(function (name) {
+      let names;
+      if (order) {
+        names = order.filter(function (n) { return grouped.has(n); });
+        grouped.forEach(function (_v, n) { if (names.indexOf(n) < 0) names.push(n); });
+      } else {
+        names = Array.from(grouped.keys()).sort(function (a, b) {
+          const ra = window.ChemBankPortal.groupRank(a);
+          const rb = window.ChemBankPortal.groupRank(b);
+          if (ra !== rb) return ra - rb;
+          return a.localeCompare(b, "en");
+        });
+      }
+      names.forEach(function (name) {
         const items = grouped.get(name);
         if (!items || !items.length) return;
         items.sort(function (a, b) { return window.ChemBankPortal.shortCode(a).localeCompare(window.ChemBankPortal.shortCode(b), "en", { numeric: true }); });

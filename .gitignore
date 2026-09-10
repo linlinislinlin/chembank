@@ -77,6 +77,9 @@ vault-structured/题库首页.md
 dist/
 build/
 
+# 作业排版产物（chemistry-homework-formatter 本地生成，含受版权保护的试卷图）
+print/
+
 # Supabase CLI local state (do not commit)
 quiz-app/supabase/.temp/
 

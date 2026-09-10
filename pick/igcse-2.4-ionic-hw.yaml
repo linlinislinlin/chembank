@@ -1,0 +1,27 @@
+# IGCSE 0620 homework: 2.4 Ions and ionic bonds (+ 离子化合物命名/化学式)
+# 选择题 9 + 简答题 6（14 分）= 23 分。Curated include_ids keep exam order.
+#
+#   chembank select pick/igcse-2.4-ionic-hw.yaml -o build/igcse-2.4-ionic-hw.json
+#   chembank assemble build/igcse-2.4-ionic-hw.json -o vault-igcse/handouts/作业-2.4-离子键.md --vault vault-igcse
+title: "IGCSE 化学作业 · 2.4 离子键与离子化合物命名"
+syllabus_codes: ["2.4", "3.1"]
+preserve_order: true
+include_ids:
+  # A 选择题 · 离子/离子键概念（2.4）
+  - cie-0620-2023-fm-p22-q4     # 关于离子与离子键的正确说法
+  - cie-0620-2021-on-p23-q6     # 第 I 族 + 第 VII 族形成离子键
+  - cie-0620-2024-on-p22-q4     # 哪对元素形成带相反电荷离子的化合物
+  - cie-0620-2025-on-p21-q6     # 溴化锂中键的形成
+  - cie-0620-2025-on-p22-q7     # 氯化钠的结构（巨型晶格）
+  - cie-0620-2025-on-p23-q5     # 关于所有正离子的描述
+  # A 选择题 · 离子化合物命名 / 由离子推化学式（3.1）
+  - cie-0620-2023-mj-p23-q9     # 氧化钾的化学式
+  - cie-0620-2024-on-p21-q9     # 氧化铁(III) 的化学式
+  - cie-0620-2021-on-p23-q9     # 由 Al3+/O2-/OH- 推氧化铝、氢氧化铝化学式
+  # B 简答题 · 离子化合物性质与点叉图（14 分）
+  - cie-0620-2022-on-p41-q2b-i   # (2分) 写出离子化合物的两条物理性质
+  - cie-0620-2022-on-p41-q2b-ii  # (3分) 完成硫化钾 K2S 的点叉图并标电荷
+  - cie-0620-2023-mj-p43-q3a-i   # (3分) 完成氟化镁 MgF2 的点叉图并标电荷
+  - cie-0620-2024-mj-p41-q3b-iv  # (3分) 解释 NaF 熔点远高于 F2
+  - cie-0620-2023-mj-p41-q3c-i   # (2分) 从成键角度解释氧化钠熔点高
+  - cie-0620-2023-mj-p43-q3a-iii # (1分) 使固态 MgF2 导电的另一改变

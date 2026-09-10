@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -62,18 +63,19 @@ def load_config() -> dict:
     src = CONFIG.read_text(encoding="utf-8")
     url = re.search(r'url\s*:\s*"([^"]+)"', src)
     key = re.search(r'anonKey\s*:\s*"([^"]+)"', src)
-    token = re.search(r'statsToken\s*:\s*"([^"]+)"', src)
     edge = re.search(r'assignmentEdgeUrl\s*:\s*"([^"]+)"', src)
     if not url or not key:
         sys.exit("config.js 里 url / anonKey 未配置")
     if not edge:
         sys.exit("config.js 里 assignmentEdgeUrl 未配置")
-    if not token:
-        sys.exit("config.js 里 statsToken 未配置（发布作业需要教师口令）")
+    # 教师口令不再写进公开的 config.js（安全修复）。改用：
+    #   1) --token 参数，或
+    #   2) 环境变量 CHEMBANK_TEACHER_TOKEN
+    token = os.environ.get("CHEMBANK_TEACHER_TOKEN", "").strip()
     return {
         "url": url.group(1),
         "key": key.group(1),
-        "token": token.group(1),
+        "token": token,
         "edge": edge.group(1).rstrip("/"),
     }
 
@@ -245,8 +247,13 @@ def main() -> int:
     ap.add_argument("--title", help="作业标题（默认用讲义标题）")
     ap.add_argument("--due", help="截止日期 YYYY-MM-DD")
     ap.add_argument("--programme", choices=["ig", "as"], help="课程：ig 或 as（默认识别）")
+    ap.add_argument("--token", help="教师口令（默认读环境变量 CHEMBANK_TEACHER_TOKEN）")
+    ap.add_argument("--instructions", help="作业说明文字（学生页顶部显示）")
     ap.add_argument("--force", action="store_true", help="标题已存在时仍新建一份")
     args = ap.parse_args()
+
+    if args.token:
+        os.environ["CHEMBANK_TEACHER_TOKEN"] = args.token.strip()
 
     path = resolve_handout(args.handout)
     text = path.read_text(encoding="utf-8")
@@ -272,6 +279,8 @@ def main() -> int:
             return 1
 
     cfg = load_config()
+    if not cfg.get("token"):
+        sys.exit("缺少教师口令：请用 --token 传入，或设置环境变量 CHEMBANK_TEACHER_TOKEN（新口令见交付说明）")
     if not args.force:
         for row in list_assignments(cfg):
             if (row.get("title") or "").strip() == title and row.get("status", "published") == "published":
@@ -282,13 +291,16 @@ def main() -> int:
                 return 0
 
     due_at = args.due + "T23:59:00Z" if args.due else None
-    instructions = (
-        "CIE 0620 IGCSE Chemistry (Extended) · 42 marks · 45 minutes. "
-        "Section A: 20 MCQ (20 marks). Section B: structured questions (22 marks). "
-        "A Periodic Table may be used. Show working in structured questions."
-        if programme == "ig" and "2.1" in title
-        else ""
-    )
+    if args.instructions:
+        instructions = args.instructions
+    else:
+        instructions = (
+            "CIE 0620 IGCSE Chemistry (Extended) · 42 marks · 45 minutes. "
+            "Section A: 20 MCQ (20 marks). Section B: structured questions (22 marks). "
+            "A Periodic Table may be used. Show working in structured questions."
+            if programme == "ig" and "2.1" in title
+            else ""
+        )
     ass = create_assignment(cfg, {
         "action": "create",
         "teacher_token": cfg["token"],

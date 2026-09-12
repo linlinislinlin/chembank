@@ -35,9 +35,12 @@ from typing import Any, Iterable
 
 #: Question and part labels both hang in the far-left margin.
 LEFT_X_MAX = 95.0
-#: Sub-part labels ``(i)`` / ``(ii)`` are indented one level.
+#: Sub-part labels ``(i)`` / ``(ii)`` are indented one level. A question that
+#: prints its items in two columns puts the second column further right again
+#: (2023 Q2(d)/(f) put it at x≈313), so the band has to reach past it — otherwise
+#: Q2(f)(iii) is never seen and its mark is silently folded into a neighbour.
 SUBPART_X_MIN = 100.0
-SUBPART_X_MAX = 128.0
+SUBPART_X_MAX = 360.0
 
 #: A question heading. The format changed over the years: 2022+ prefixes the
 #: number with ``Q`` (``Q1 This question is about ...``), while 2003-2021 uses a
@@ -118,6 +121,10 @@ MS_SUBPART_X_MAX = 100.0
 #: An MS question heading sits at the very top of its page, so this doubles as a
 #: page-furniture filter: it excludes the footer page number.
 MS_HEADER_Y_MAX = 90.0
+#: Labels this close together vertically are cells of one line. The MS prints
+#: "(f)  (i)  B" as three cells of a single line, and the two labels can land a
+#: fraction of a point apart, so equality alone would not group them.
+MS_SAME_LINE_Y = 2.0
 
 #: ``"6."`` bare on a line, or ``"1. This question is about ..."``. The mark
 #: scheme spells a heading the same way the question paper does, so it reuses
@@ -561,6 +568,28 @@ def find_ms_labels(doc) -> list[Label]:
                             subpart=s.group(1),
                         )
                     )
+    return _attach_ms_subparts_to_their_line(labels)
+
+
+def _attach_ms_subparts_to_their_line(labels: list[Label]) -> list[Label]:
+    """Give a sub-part the part printed on its own line.
+
+    The MS writes "(f)  (i)  B" as three cells of one line. The two labels can sit
+    a fraction of a point apart in ``y``, and the sort puts the *lower* one first —
+    so ``(i)`` is read before ``(f)`` and the running parent is still the previous
+    part. When a part label shares the line, it is the real parent.
+    """
+    for lb in labels:
+        if lb.kind != "subpart":
+            continue
+        for other in labels:
+            if (
+                other.kind == "part"
+                and other.page == lb.page
+                and abs(other.y - lb.y) <= MS_SAME_LINE_Y
+            ):
+                lb.part = other.part
+                break
     return labels
 
 
@@ -657,6 +686,8 @@ def mark_scheme_bands(
                 lb = seq[j]
                 if (lb.page, lb.y) <= pos:
                     continue
+                if lb.page == seq[i].page and lb.y <= pos[1] + MS_SAME_LINE_Y:
+                    continue  # a cell of this label's own line
                 if lb.subpart is None or (lb.part, lb.subpart) in claimed:
                     return lb.page, lb.y
             return stop_page, stop_y

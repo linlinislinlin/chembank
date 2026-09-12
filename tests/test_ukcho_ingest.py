@@ -1529,6 +1529,79 @@ def test_mark_scheme_bands_never_invert_on_the_last_question() -> None:
         assert (ep, ey) > (sp, sy), f"{key} band inverts: {bands[key]}"
 
 
+def test_a_part_label_and_a_subpart_on_one_line_stay_together() -> None:
+    """The MS writes "(f)   (i)   B" as three cells of one line, and the two labels
+    can land a fraction of a point apart. The sort then reads (i) *before* (f), so
+    (i) would be fathered on the previous part — here (e) — and its own line would
+    cut the band to nothing. 2023 Q2(f) is exactly this shape.
+    """
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(44.1, 49.0, "2."),
+            _line(75.2, 46.9, "(e)"),
+            _line(95.0, 76.8, "AlP"),
+            _line(109.8, 76.8, "(i)"),     # same line as (f), 0.2 above it
+            _line(110.0, 46.9, "(f)"),
+            _line(110.0, 84.3, "B"),
+            _line(134.7, 76.8, "(ii)"),
+            _line(140.0, 84.3, "N"),
+            _line(159.3, 76.8, "(iii)"),
+            _line(165.0, 84.3, "E"),
+            _line(215.9, 46.9, "(g)"),
+        ]),
+    ])
+    labels = X.find_ms_labels(doc)
+    parent = {(lb.part, lb.subpart): lb.part for lb in labels if lb.kind == "subpart"}
+    assert parent[("f", "i")] == "f", "the (i) on (f)'s line must belong to (f)"
+
+    parts = [
+        XPart(question=2, part="e", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=2, part="f", subpart="i", page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=2, part="f", subpart="ii", page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=2, part="f", subpart="iii", page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=2, part="g", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+    assert bands["2f-i"][:2] == (0, 109.8)
+    # Not 110.0: the (f) label is on (i)'s own line, so it must not become the end.
+    assert bands["2f-i"][2:] == (0, 134.7)
+    assert bands["2f-ii"][2:] == (0, 159.3)
+    assert bands["2f-iii"][2:] == (0, 215.9)
+
+
+def test_a_two_column_run_of_items_is_split_not_merged() -> None:
+    """2023 Q2(f) prints its three items in two columns, so (iii) sits at x≈313.
+
+    It is a real sub-question — the MS gives "One mark each" — so the wider
+    sub-part band must find it (it used to be lost, folding its mark into 2f-ii)
+    while the lead-in, which merely mentions the periodic table in prose, must not
+    condemn the run the way "complete the table" does.
+    """
+    two_column = FakeDoc([[
+        (60.0, 40.0, "Q2 This question is about electronegativity"),
+        (100.0, 50.0, "(f)"),
+        (115.0, 50.0, "Three substances have been marked on the plot below. Based on your"),
+        (128.0, 50.0, "knowledge of trends in electronegativity in the periodic table, identify"),
+        (141.0, 50.0, "which point A-P describes where the following substances would be located."),
+        (170.0, 107.5, "(i)"),
+        (170.0, 142.9, "CsCl"),
+        (170.0, 313.1, "(iii)"),
+        (170.0, 348.5, "GaN"),
+        (195.0, 107.5, "(ii)"),
+        (195.0, 142.9, "NaK"),
+    ]])
+    parts, _ = X.split_parts(two_column)
+    # Reading order: (i) and (iii) share the first row, (ii) is on the second.
+    assert [p.key for p in parts] == ["2f-i", "2f-iii", "2f-ii"]
+    # Two columns jumble which part carries which cell text, so only the union is
+    # guaranteed; the rendered clip is what the student sees.
+    joined = " ".join(p.text or "" for p in parts)
+    assert all(name in joined for name in ("CsCl", "GaN", "NaK"))
+    assert all((p.text or "").strip() for p in parts)
+
+
 def test_ms_question_heading_may_be_a_bare_number() -> None:
     """Q6's MS puts "6." alone on a line with the title on the next one."""
     doc = _FakeMsDoc([_FakePage([_line(42.3, 49.1, "6."), _line(44.1, 76.8, "This question is about iodination")])])

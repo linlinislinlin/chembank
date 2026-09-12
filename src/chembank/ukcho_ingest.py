@@ -269,9 +269,12 @@ def build_records(
         for field in EXTRA_FIELDS:
             if field in tags:
                 raw[field] = tags[field]
-        # Clips are derived from the extract, never from the sheet.
+        # Clips are derived from the extract, never from the sheet. MS clips go in
+        # the same `figures` list as the AS/IGCSE banks; `-ms` in the name is what
+        # tells the body builder (and the site) which is which.
         raw["figures"] = [
-            f"assets/{Path(str(c)).name}" for c in (part.get("clips") or [])
+            f"assets/{Path(str(c)).name}"
+            for c in (part.get("clips") or []) + (part.get("ms_clips") or [])
         ]
         rec = U.normalize_record(raw, fallback_id=raw["id"])
         # A part is "untagged" if any core tag is missing — not merely if the
@@ -492,7 +495,11 @@ def write_sheet(
 def _body(rec: dict[str, Any], parent: dict[str, Any]) -> str:
     label = f"{rec.get('year')} {U.question_label(rec)}"
     lines = [f"# UKChO {label} — {parent.get('title', '')}", ""]
-    for fig in rec.get("figures") or []:
+    # Paper clips head the note; mark-scheme clips belong with the mark scheme, so
+    # the two are split on the `-ms` marker rather than dumped together.
+    paper_figs = [f for f in (rec.get("figures") or []) if "-ms" not in f]
+    ms_figs = [f for f in (rec.get("figures") or []) if "-ms" in f]
+    for fig in paper_figs:
         lines.append(f"![[{fig}]]")
         lines.append("")
     if rec.get("marks"):
@@ -500,8 +507,14 @@ def _body(rec: dict[str, Any], parent: dict[str, Any]) -> str:
         lines.append("")
     if rec.get("question_text"):
         lines += ["## Question", "", rec["question_text"], ""]
-    if rec.get("mark_scheme"):
-        lines += ["## Mark scheme", "", rec["mark_scheme"], ""]
+    if ms_figs or rec.get("mark_scheme"):
+        # One section: the marked-answer image first, then the extracted text.
+        lines += ["## Mark scheme", ""]
+        for fig in ms_figs:
+            lines.append(f"![[{fig}]]")
+            lines.append("")
+        if rec.get("mark_scheme"):
+            lines += [rec["mark_scheme"], ""]
     if rec.get("answer"):
         lines += ["## Answer", "", rec["answer"], ""]
     lines += [
@@ -601,8 +614,10 @@ def ingest_paper(
     # --- clips ------------------------------------------------------------
     clips_dir = Path(clip_source_dir) if clip_source_dir else Path(manifest_dir) / "clips"
     copied = 0
+    ms_copied = 0
     for part in manifest.get("parts") or []:
-        for clip in part.get("clips") or []:
+        for clip in (part.get("clips") or []) + (part.get("ms_clips") or []):
+            is_ms = "-ms" in Path(str(clip)).name
             src = Path(clip)
             if not src.is_absolute() and not src.exists():
                 src = clips_dir / Path(clip).name
@@ -612,6 +627,8 @@ def ingest_paper(
             dest = assets_dir / src.name
             shutil.copy2(src, dest)
             copied += 1
+            if is_ms:
+                ms_copied += 1
 
     # --- records ----------------------------------------------------------
     # A teacher's work outranks the tagging sheet: carry it over before writing.
@@ -673,6 +690,7 @@ def ingest_paper(
         "parents": len(parents),
         "subquestions": len(subs),
         "clips": copied,
+        "ms_clips": ms_copied,
         "written": written,
         "preserved": preserved,
         "problems": problems,

@@ -64,6 +64,30 @@ MAX_CLIP_HEIGHT = 1400.0
 #: Clips shorter than this are page furniture (a stray header, a page number).
 MIN_CLIP_HEIGHT = 60.0
 
+# --- mark scheme geometry -------------------------------------------------
+#
+# The mark scheme is a different layout from the question paper, so it needs its
+# own geometry: MS labels hang further left and a part's own text sits directly
+# to their right, rather than in a separate column.
+#
+# A roman label is the trap. ``(i)`` is *indented* when it is a sub-part of
+# ``(a)`` — Q1(a)(i) — but sits at the left margin when it is a part in its own
+# right, which is how Q3 and Q6 use it. Indentation alone cannot settle the
+# question, so :func:`mark_scheme_bands` resolves it against the QP's known part
+# list instead of guessing.
+
+#: MS part labels start this far left (QP parts sit further right).
+MS_LEFT_X_MAX = 70.0
+#: MS sub-part labels are indented into this band.
+MS_SUBPART_X_MIN = 70.0
+MS_SUBPART_X_MAX = 100.0
+#: An MS question heading sits at the very top of its page, so this doubles as a
+#: page-furniture filter: it excludes the footer page number.
+MS_HEADER_Y_MAX = 90.0
+
+#: ``"6."`` bare on a line, or ``"1. This question is about ..."``.
+MS_QUESTION_RE = re.compile(r"^([1-9]\d?)\.(?:\s+(.*))?$")
+
 
 @dataclass
 class Label:
@@ -339,6 +363,146 @@ def _page_height(doc, pno: int) -> float:
     return float(doc[pno].rect.height)
 
 
+# --- mark scheme splitting ------------------------------------------------
+
+
+def find_ms_labels(doc) -> list[Label]:
+    """Detect mark-scheme question / part / sub-part labels, in document order.
+
+    Reuses :class:`Label`, but with MS geometry. A left-margin label is recorded
+    as a ``part`` (even a roman one — see the module notes) and only an *indented*
+    label is a ``subpart``.
+    """
+    labels: list[Label] = []
+    for pno in range(doc.page_count):
+        for y, x, text in _lines_in_order(doc[pno]):
+            if x > MS_SUBPART_X_MAX:
+                continue  # MS answer columns and the right-hand mark column
+            if y <= MS_HEADER_Y_MAX and x <= MS_LEFT_X_MAX:
+                q = MS_QUESTION_RE.match(text)
+                if q:
+                    labels.append(
+                        Label(
+                            kind="question",
+                            page=pno,
+                            y=y,
+                            x=x,
+                            text=text,
+                            question=int(q.group(1)),
+                            rest=(q.group(2) or "").strip(),
+                        )
+                    )
+                    continue
+            if x <= MS_LEFT_X_MAX:
+                p = PART_RE.match(text)
+                if p:
+                    labels.append(
+                        Label(kind="part", page=pno, y=y, x=x, text=text, part=p.group(1))
+                    )
+                    continue
+                s = SUBPART_RE.match(text)
+                if s:
+                    # A multi-letter roman at the margin is a question-level part.
+                    labels.append(
+                        Label(kind="part", page=pno, y=y, x=x, text=text, part=s.group(1))
+                    )
+                    continue
+            elif x >= MS_SUBPART_X_MIN:
+                s = SUBPART_RE.match(text)
+                if s:
+                    labels.append(
+                        Label(
+                            kind="subpart",
+                            page=pno,
+                            y=y,
+                            x=x,
+                            text=text,
+                            subpart=s.group(1),
+                        )
+                    )
+    return labels
+
+
+def mark_scheme_bands(
+    doc, parts: list[Part]
+) -> dict[str, tuple[int, float, int, float]]:
+    """Map each QP part key to its MS band ``(page, y, end_page, end_y)``.
+
+    The MS label stream cannot say whether ``(i)`` is a part or a sub-part, so the
+    QP's known part list drives the match: for every part, in reading order, take
+    the next MS label whose own text equals that part's label. Because the cursor
+    only moves forward, the two streams stay aligned even when a question has both
+    ``(b)`` and ``(b)(i)``.
+
+    A part with no MS label simply gets no band, so a missing clip is visible
+    rather than silently wrong.
+    """
+    labels = find_ms_labels(doc)
+
+    q_start: dict[int, tuple[int, float]] = {}
+    for lb in labels:
+        if lb.kind == "question" and lb.question is not None:
+            q_start.setdefault(lb.question, (lb.page, lb.y))
+    ordered_q = sorted(q_start.items(), key=lambda kv: kv[1])
+
+    by_q: dict[int, list[Label]] = {}
+    current: int | None = None
+    for lb in labels:
+        if lb.kind == "question":
+            current = lb.question
+            continue
+        if current is not None:
+            by_q.setdefault(current, []).append(lb)
+
+    # A question's MS runs to the next question's heading. The final question has
+    # no successor, so it runs to the last page that actually carries its labels —
+    # using the heading's page would invert the band when (as here) the last part
+    # sits on a later page than its own heading.
+    q_end: dict[int, tuple[int, float]] = {}
+    for i, (q, start) in enumerate(ordered_q):
+        if i + 1 < len(ordered_q):
+            q_end[q] = ordered_q[i + 1][1]
+        else:
+            last = max((lb.page for lb in by_q.get(q, [])), default=start[0])
+            q_end[q] = (last, _page_height(doc, last))
+
+    bands: dict[str, tuple[int, float, int, float]] = {}
+    cursor: dict[int, int] = {}
+    for part in parts:
+        seq = by_q.get(part.question) or []
+        want = part.subpart or part.part
+        start = cursor.get(part.question, 0)
+        found = next(
+            (
+                j
+                for j in range(start, len(seq))
+                if (seq[j].subpart or seq[j].part) == want
+            ),
+            None,
+        )
+        if found is None:
+            continue
+        cursor[part.question] = found + 1
+        label = seq[found]
+        if found + 1 < len(seq):
+            nxt: Label | None = seq[found + 1]
+        else:
+            ep, ey = q_end.get(
+                part.question, (label.page, _page_height(doc, label.page))
+            )
+            nxt = Label(
+                kind="question",
+                page=ep,
+                y=ey,
+                x=0.0,
+                text="",
+                question=part.question,
+            )
+        end_page, end_y = _part_end(doc, label, nxt)
+        bands[part.key] = (label.page, label.y, end_page, end_y)
+    return bands
+
+
 # --- clip rendering -------------------------------------------------------
 
 
@@ -390,15 +554,22 @@ def extract_paper(
     clip_prefix: str,
     make_clips: bool = True,
     zoom: float = 2.4,
+    ms_pdf: Path | None = None,
 ) -> dict[str, Any]:
     """Extract one UKChO paper: split parts, render clips, write a manifest JSON.
+
+    Pass ``ms_pdf`` to also render one mark-scheme clip per part, named
+    ``<prefix>-<key>-ms.png`` (``-ms-2.png`` when a band runs over a page break).
+    The MS is a separate PDF with its own layout, so its bands are matched against
+    the parts found in the QP — see :func:`mark_scheme_bands`.
 
     Output layout::
 
         out_dir/
           parts.json          # machine-readable split
           parts/<prefix>-<key>.txt
-          clips/<prefix>-<key>.png
+          clips/<prefix>-<key>-paper.png
+          clips/<prefix>-<key>-ms.png
 
     Returns the manifest dict.
     """
@@ -423,19 +594,48 @@ def extract_paper(
     text_dir.mkdir(parents=True, exist_ok=True)
     clip_dir = out_dir / "clips"
 
-    for part in parts:
-        entry = part.to_dict()
-        txt_path = text_dir / f"{clip_prefix}-{part.key}.txt"
-        txt_path.write_text(part.text + "\n", encoding="utf-8")
-        entry["text_path"] = str(txt_path)
-        if make_clips:
-            png = clip_dir / f"{clip_prefix}-{part.key}-paper.png"
-            entry["clips"] = render_part_clip(doc, part, png, zoom=zoom)
-        else:
-            entry["clips"] = []
-        manifest["parts"].append(entry)
+    ms_doc = None
+    ms_bands: dict[str, tuple[int, float, int, float]] = {}
+    if ms_pdf is not None and Path(ms_pdf).exists():
+        ms_doc = fitz.open(Path(ms_pdf))
+        ms_bands = mark_scheme_bands(ms_doc, parts)
+        manifest["source_ms"] = str(ms_pdf)
 
-    doc.close()
+    try:
+        for part in parts:
+            entry = part.to_dict()
+            txt_path = text_dir / f"{clip_prefix}-{part.key}.txt"
+            txt_path.write_text(part.text + "\n", encoding="utf-8")
+            entry["text_path"] = str(txt_path)
+            if make_clips:
+                png = clip_dir / f"{clip_prefix}-{part.key}-paper.png"
+                entry["clips"] = render_part_clip(doc, part, png, zoom=zoom)
+            else:
+                entry["clips"] = []
+            entry["ms_clips"] = []
+            band = ms_bands.get(part.key)
+            if make_clips and ms_doc is not None and band is not None:
+                # A Part is just a page span, so the QP renderer does the MS too.
+                ms_part = Part(
+                    question=part.question,
+                    part=part.part,
+                    subpart=part.subpart,
+                    page=band[0],
+                    y=band[1],
+                    text="",
+                    end_page=band[2],
+                    end_y=band[3],
+                )
+                ms_png = clip_dir / f"{clip_prefix}-{part.key}-ms.png"
+                entry["ms_clips"] = render_part_clip(
+                    ms_doc, ms_part, ms_png, zoom=zoom
+                )
+            manifest["parts"].append(entry)
+    finally:
+        doc.close()
+        if ms_doc is not None:
+            ms_doc.close()
+
     (out_dir / "parts.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
     )

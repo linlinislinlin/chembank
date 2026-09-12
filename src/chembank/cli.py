@@ -638,10 +638,19 @@ def _cmd_ukcho(args: argparse.Namespace) -> int:
             args.prefix,
             make_clips=not args.no_clips,
             zoom=args.zoom,
+            ms_pdf=Path(args.ms) if args.ms else None,
         )
         n_parts = len(manifest["parts"])
         n_clips = sum(len(p.get("clips") or []) for p in manifest["parts"])
-        print(f"Wrote {n_parts} parts, {n_clips} clips -> {args.out}/parts.json")
+        n_ms = sum(len(p.get("ms_clips") or []) for p in manifest["parts"])
+        print(f"Wrote {n_parts} parts, {n_clips} clips, {n_ms} MS clips -> {args.out}/parts.json")
+        if args.ms and n_ms == 0:
+            print("WARNING no mark-scheme bands were matched; check --ms")
+        elif args.ms and n_ms < n_parts:
+            print(
+                f"NOTE {n_parts - n_ms} part(s) got no MS clip — "
+                "their MS label may be missing or worded differently"
+            )
         counts = {}
         for p in manifest["parts"]:
             counts[p["question"]] = counts.get(p["question"], 0) + 1
@@ -1369,6 +1378,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ukx.add_argument("--prefix", required=True, help="Filename prefix, e.g. ukcho-2025")
     ukx.add_argument("--no-clips", action="store_true", help="Skip PNG rendering")
+    ukx.add_argument(
+        "--ms",
+        default="",
+        help=(
+            "Mark scheme PDF. Renders one <prefix>-<key>-ms.png per part, so the "
+            "vault shows the marked answers like the AS/IGCSE banks do."
+        ),
+    )
     ukx.add_argument("--zoom", type=float, default=2.4, help="Clip render zoom (default 2.4)")
     ukx.set_defaults(func=_cmd_ukcho)
 

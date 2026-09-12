@@ -1162,3 +1162,153 @@ def test_verbatim_quote_detector_ignores_original_wording() -> None:
 def test_verbatim_quote_detector_tolerates_missing_text() -> None:
     rec = {"id": "x", "question_text": "", "difficulty_reason": "Anything at all here."}
     assert G.find_verbatim_quotes_from([rec]) == []
+
+
+# ---------------------------------------------------------------------------
+# Mark scheme clips
+#
+# The MS is a second PDF with its own layout. Its one real trap is that a roman
+# label means different things depending on indentation, so these tests pin the
+# disambiguation: it must follow the QP's known part list, never guess.
+# ---------------------------------------------------------------------------
+
+class _FakePage:
+    """Minimal stand-in for a PyMuPDF page: lines plus a page height."""
+
+    def __init__(self, lines, height=800.0):
+        self._lines = lines
+        self.rect = type("R", (), {"height": height, "width": 595.0})()
+
+    def get_text(self, kind="text", clip=None):
+        if kind != "dict":
+            return ""
+        # Mirror the shape `_lines_in_order` walks.
+        return {
+            "blocks": [
+                {
+                    "type": 0,
+                    "lines": [
+                        {
+                            "bbox": (x, y, x + 200.0, y + 12.0),
+                            "spans": [{"text": text}],
+                        }
+                        for y, x, text in self._lines
+                    ],
+                }
+            ]
+        }
+
+
+class _FakeMsDoc:
+    def __init__(self, pages):
+        self._pages = pages
+        self.page_count = len(pages)
+
+    def __getitem__(self, i):
+        return self._pages[i]
+
+
+def _line(y, x, text):
+    return (y, x, text)
+
+
+def test_ms_labels_only_match_bare_labels() -> None:
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(42.8, 49.1, "1. This question is about epoxides"),
+            _line(75.2, 46.9, "(a)"),
+            _line(75.2, 84.3, "(i)"),
+            _line(93.8, 112.3, "State symbols are not required."),
+            _line(119.0, 82.9, "(ii)"),
+            # Page furniture that must not be read as a label.
+            _line(788.7, 294.6, "2"),
+            _line(74.9, 526.9, "\uf0fe"),
+        ])
+    ])
+    labels = X.find_ms_labels(doc)
+    kinds = [(lb.kind, lb.part or lb.subpart) for lb in labels]
+    assert kinds == [
+        ("question", None),
+        ("part", "a"),
+        ("subpart", "i"),   # indented => sub-part
+        ("subpart", "ii"),
+    ]
+    assert labels[0].question == 1
+
+
+def test_ms_roman_label_at_the_margin_is_a_part() -> None:
+    """Q3 and Q6 use (i)/(ii) as question-level parts, not sub-parts."""
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(42.8, 48.6, "(i)"),
+            _line(142.2, 76.6, "One mark."),
+        ])
+    ])
+    labels = X.find_ms_labels(doc)
+    assert [(lb.kind, lb.part) for lb in labels] == [("part", "i")]
+
+
+def test_mark_scheme_bands_follow_the_qp_part_list() -> None:
+    """The MS cannot say whether (i) is a part or sub-part, so the QP list decides."""
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(44.0, 49.1, "1. This question is about clay pigeon shooting"),
+            _line(75.2, 46.9, "(a)"),
+            _line(75.2, 84.3, "(i)"),      # sub-part of (a)
+            _line(119.0, 82.9, "(ii)"),    # sub-part of (a)
+            _line(213.1, 46.9, "(b)"),     # a part in its own right
+        ]),
+    ])
+    parts = [
+        XPart(question=1, part="a", subpart="i", page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=1, part="a", subpart="ii", page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=1, part="b", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+    assert bands["1a-i"][:2] == (0, 75.2)
+    assert bands["1a-ii"][:2] == (0, 119.0)
+    assert bands["1b"][:2] == (0, 213.1)
+    # Bands are contiguous: each ends where the next begins.
+    assert bands["1a-i"][2:] == (0, 119.0)
+    assert bands["1a-ii"][2:] == (0, 213.1)
+
+
+def test_mark_scheme_bands_skip_a_part_with_no_ms_label() -> None:
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([_line(44.0, 49.1, "1. This question is about something"), _line(75.2, 46.9, "(a)")])
+    ])
+    parts = [
+        XPart(question=1, part="a", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=1, part="z", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+    assert "1a" in bands
+    assert "1z" not in bands  # visible gap, never a silently wrong clip
+
+
+def test_mark_scheme_bands_never_invert_on_the_last_question() -> None:
+    """The last question has no successor; its band must not end before it starts."""
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([_line(44.0, 49.1, "1. First")]),
+        _FakePage([_line(42.8, 48.2, "(a)"), _line(500.0, 46.7, "(b)")]),
+    ])
+    parts = [
+        XPart(question=1, part="a", subpart=None, page=1, y=42.8, text="", end_page=1, end_y=0),
+        XPart(question=1, part="b", subpart=None, page=1, y=500.0, text="", end_page=1, end_y=0),
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+    for key, (sp, sy, ep, ey) in bands.items():
+        assert (ep, ey) > (sp, sy), f"{key} band inverts: {bands[key]}"
+
+
+def test_ms_question_heading_may_be_a_bare_number() -> None:
+    """Q6's MS puts "6." alone on a line with the title on the next one."""
+    doc = _FakeMsDoc([_FakePage([_line(42.3, 49.1, "6."), _line(44.1, 76.8, "This question is about iodination")])])
+    labels = X.find_ms_labels(doc)
+    assert labels[0].kind == "question" and labels[0].question == 6

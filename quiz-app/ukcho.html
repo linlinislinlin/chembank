@@ -77,6 +77,12 @@
   .qfigcap {
     font-size: 11.5px; color: var(--muted); margin: -4px 0 10px;
   }
+  /* Mark scheme is collapsed: a student practising the question should not be
+     shown the answer until they ask for it. */
+  .qmsbox { display: none; margin-top: 10px; }
+  .qmsbox.open { display: block; }
+  .qmsbox .qclip { margin-bottom: 10px; }
+  .qmsbtn { margin-top: 12px; }
   .qbtn {
     margin-top: 12px; appearance: none; border: 1px solid var(--line); background: var(--panel-2);
     color: var(--accent-deep); font-weight: 700; font-size: 12.5px; padding: 7px 12px;
@@ -259,8 +265,14 @@
     `;
     const btn = el.querySelector(".qbtn");
     const body = el.querySelector(".qbody");
+    /* Mark-scheme clips live in the same `figure_urls` list as the question clips
+       (that is how the vault and the AS/IGCSE banks store them), so split on the
+       `-ms` marker rather than adding a parallel field. The MS half stays hidden
+       until the student asks for it. */
     const clips = q.figure_urls || [];
-    clips.forEach((src, i) => {
+    const paperClips = clips.filter((src) => !/-ms/.test(src));
+    const msClips = clips.filter((src) => /-ms/.test(src));
+    paperClips.forEach((src, i) => {
       const img = document.createElement("img");
       img.className = "qclip";
       img.src = src;
@@ -268,10 +280,10 @@
       img.alt = `${label} question paper clip ${i + 1}`;
       body.appendChild(img);
     });
-    if (clips.length > 1) {
+    if (paperClips.length > 1) {
       const cap = document.createElement("div");
       cap.className = "qfigcap";
-      cap.textContent = `Shown in ${clips.length} parts (the question runs over a page break).`;
+      cap.textContent = `Shown in ${paperClips.length} parts (the question runs over a page break).`;
       body.appendChild(cap);
     }
     if (q.question_text) {
@@ -279,6 +291,28 @@
       p.className = "qtext";
       p.textContent = q.question_text;
       body.appendChild(p);
+    }
+    if (msClips.length) {
+      const msBtn = document.createElement("button");
+      msBtn.className = "qbtn qmsbtn";
+      msBtn.type = "button";
+      msBtn.textContent = "Show mark scheme";
+      const msBox = document.createElement("div");
+      msBox.className = "qmsbox";
+      msClips.forEach((src, i) => {
+        const img = document.createElement("img");
+        img.className = "qclip";
+        img.src = src;
+        img.loading = "lazy";
+        img.alt = `${label} mark scheme clip ${i + 1}`;
+        msBox.appendChild(img);
+      });
+      body.appendChild(msBtn);
+      body.appendChild(msBox);
+      msBtn.addEventListener("click", () => {
+        const shown = msBox.classList.toggle("open");
+        msBtn.textContent = shown ? "Hide mark scheme" : "Show mark scheme";
+      });
     }
     if (!body.childNodes.length) {
       body.textContent = "(no question text or clip yet)";

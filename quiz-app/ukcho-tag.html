@@ -529,30 +529,48 @@
       ${problems.length ? `<div class="problem">Check: ${problems.map(escapeHtml).join("; ")}</div>` : ""}
     `;
 
-    // ---- question paper clip (the authoritative rendering) ----
+    // ---- clips: the question paper, then the mark scheme ----
+    // Both live in `figure_urls` (as in the AS/IGCSE banks), so they are split on
+    // the `-ms` marker. Each is its own section because a teacher reads them for
+    // different reasons and the mark scheme is the authority on what earns marks.
     const clips = rec.figure_urls || [];
-    if (clips.length) {
+    const paperClips = clips.filter((src) => !/-ms/.test(src));
+    const msClips = clips.filter((src) => /-ms/.test(src));
+    const addClipSection = (heading, hint, sources, alt) => {
+      if (!sources.length) return;
       const clipSection = document.createElement("div");
       clipSection.className = "section";
-      clipSection.innerHTML = `<h3>Question paper clip</h3>
-        <p class="hint">The part exactly as it appears on the paper. Structures, tables and data
-        are only complete in the clip — check the chemistry against this, not the extracted text.</p>`;
-      clips.forEach((src, i) => {
+      clipSection.innerHTML = `<h3>${heading}</h3><p class="hint">${hint}</p>`;
+      sources.forEach((src, i) => {
         const img = document.createElement("img");
         img.className = "qclip";
         img.src = src;
         img.loading = "lazy";
-        img.alt = `Question paper clip ${i + 1}`;
+        img.alt = `${alt} ${i + 1}`;
         clipSection.appendChild(img);
       });
-      if (clips.length > 1) {
+      if (sources.length > 1) {
         const cap = document.createElement("div");
         cap.className = "qfigcap";
-        cap.textContent = `Part runs over a page break — shown in ${clips.length} clips.`;
+        cap.textContent = `Runs over a page break — shown in ${sources.length} clips.`;
         clipSection.appendChild(cap);
       }
       box.appendChild(clipSection);
-    }
+    };
+    addClipSection(
+      "Question paper clip",
+      `The part exactly as it appears on the paper. Structures, tables and data are only
+       complete in the clip — check the chemistry against this, not the extracted text.`,
+      paperClips,
+      "Question paper clip"
+    );
+    addClipSection(
+      "Mark scheme clip",
+      `The official mark scheme for this part, including the award ticks. This is what the
+       extracted "mark scheme" text below summarises — prefer the clip when they differ.`,
+      msClips,
+      "Mark scheme clip"
+    );
 
     // ---- AI suggestion panel ----
     const aiPanel = document.createElement("div");

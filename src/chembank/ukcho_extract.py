@@ -50,9 +50,39 @@ QUESTION_RE = re.compile(r"^(?:Q([1-9])|([1-9]\d?)\.)(?:\s+(.*))?$")
 PART_RE = re.compile(r"^\(([a-z])\)(?:\s+(.*))?$")
 SUBPART_RE = re.compile(r"^\(([ivx]+)\)(?:\s+(.*))?$")
 
-#: The final page of a UKChO paper lists image credits as "Q1 The image is © ...".
-#: Those lines look exactly like question labels, so they must be dropped.
-CREDITS_RE = re.compile(r"^The image is ©|^This work is published|^The image of ")
+#: The first word of a sub-question instruction. A roman label followed by one of
+#: these opens a real sub-question; a roman label followed by anything else is a
+#: row of a table the candidate fills in (see :func:`_drop_table_rows`).
+INSTRUCTION_RE = re.compile(
+    r"^(?:Add|Balance|Calculate|Choose|Comment|Compare|Complete|Construct|Convert"
+    r"|Deduce|Define|Describe|Determine|Discuss|Draw|Estimate|Explain|Give"
+    r"|How|Identify|Include|Justify|Label|List|Name|Outline|Predict|Propose"
+    r"|Select|Show|Sketch|State|Suggest|Tick|Use|What|When|Where|Which|Why"
+    r"|Write)\b",
+    re.IGNORECASE,
+)
+
+#: A table cell holds a name or a formula, so it is short. Text longer than this
+#: is prose and therefore an instruction, however it starts.
+TABLE_CELL_MAX_WORDS = 6
+
+#: A table the candidate fills in is announced by its lead-in — "Complete the table
+#: in the answer booklet with the number of peaks in the 13C NMR spectrum of:".
+#: That wording is what separates such a table from a list of sub-questions that
+#: merely share a stem: "Write the number of conjugated C=C bonds in: (i) α-carotene
+#: (ii) β-carotene" grades the two items "one mark each", so each stays a
+#: sub-question in its own right. The phrases are spelled out because a bare
+#: ``table`` would also match "trends in electronegativity in the periodic table",
+#: which introduces three separately marked sub-questions.
+TABLE_LEAD_IN_RE = re.compile(
+    r"answer booklet|complete the table|following table|table below",
+    re.IGNORECASE,
+)
+
+#: The final page of a UKChO paper lists image credits as "Q1 The image is © ...",
+#: which the 2022 and 2024 papers word as "Q4 The images are © ...". Those lines
+#: look exactly like question labels, so they must be dropped.
+CREDITS_RE = re.compile(r"^The images? (?:is|are) ©|^This work is published|^The image of ")
 
 #: A label this close to the top of a page is the first thing on the page, so the
 #: *previous* part did not continue onto this page.
@@ -181,11 +211,79 @@ def _lines_in_order(page) -> list[tuple[float, float, str]]:
     return out
 
 
+def _cell_text(rows, idx: int, label_x: float, label_y: float) -> str:
+    """The text sitting to the right of a label on the same line.
+
+    A table row is written as two cells at one ``y`` — ``(i)`` then ``Cubane`` —
+    so the label's own line carries no text and the row's content is a separate
+    entry. Joining the entries to the right recovers ``"Cubane"``.
+    """
+    chunks: list[str] = []
+    for y, x, text in rows[idx + 1 :]:
+        if y > label_y + 1.5:
+            break
+        if abs(y - label_y) <= 1.5 and x > label_x + 1.0:
+            chunks.append(text)
+    return " ".join(chunks).strip()
+
+
+def _looks_like_table_cell(cell: str) -> bool:
+    """Whether a label's right-hand text is a table cell rather than a question."""
+    tokens = cell.split()
+    if not tokens or len(tokens) > TABLE_CELL_MAX_WORDS:
+        return False
+    return not INSTRUCTION_RE.match(cell)
+
+
+def _drop_table_rows(labels: list[Label], cells: list[str], leads: list[str]) -> list[Label]:
+    """Drop roman labels that are rows of a table, not sub-questions.
+
+    ``(b) Complete the table in the answer booklet with the number of peaks in
+    the 13C NMR spectrum of: (i) Cubane (ii) Cubane-carboxylic acid ...`` labels
+    the rows of one table, and the mark scheme grades that table as a single item
+    ("3 marks for all five correct"), so the rows are not sub-questions and must
+    not become records of their own. The same holds for a multi-column table such
+    as ``(i) AlP / (iv) HgO / (ii) CsH ...``.
+
+    Two things have to hold. A run of consecutive roman labels is a table when its
+    *first* label carries a cell to its right — judging by the first entry keeps
+    the run together even when a later row is long enough to read as prose, and
+    leaves a run of genuine sub-questions alone because those open with an
+    instruction. The run's lead-in must also announce a table, which keeps a list
+    of items that merely share a stem ("Write the number of conjugated C=C bonds
+    in: (i) ... (ii) ...", marked one mark each) as the separate sub-questions the
+    mark scheme scores them as.
+    """
+    keep = [True] * len(labels)
+    i = 0
+    while i < len(labels):
+        if labels[i].kind != "subpart":
+            i += 1
+            continue
+        j = i
+        while j + 1 < len(labels) and labels[j + 1].kind == "subpart":
+            j += 1
+        if (
+            j > i
+            and _looks_like_table_cell(cells[i])
+            and TABLE_LEAD_IN_RE.search(leads[i])
+        ):
+            for k in range(i, j + 1):
+                keep[k] = False
+        i = j + 1
+    return [label for label, kept in zip(labels, keep) if kept]
+
+
 def find_labels(doc) -> list[Label]:
     """Detect every question / part / sub-part label, in document order."""
     labels: list[Label] = []
+    cells: list[str] = []  # text sitting to the right of each label, if any
+    leads: list[str] = []  # text between a sub-part label and its enclosing label
     for pno in range(doc.page_count):
-        for y, x, text in _lines_in_order(doc[pno]):
+        rows = _lines_in_order(doc[pno])
+        anchor_ri = -1  # row index of the last question/part label on this page
+        anchor_rest = ""  # text sharing that label's own line
+        for idx, (y, x, text) in enumerate(rows):
             if x <= LEFT_X_MAX:
                 head = question_heading(text)
                 if head:
@@ -203,6 +301,10 @@ def find_labels(doc) -> list[Label]:
                             rest=rest,
                         )
                     )
+                    cells.append("")
+                    leads.append("")
+                    anchor_ri = idx
+                    anchor_rest = rest
                     continue
                 p = PART_RE.match(text)
                 if p:
@@ -217,6 +319,10 @@ def find_labels(doc) -> list[Label]:
                             rest=(p.group(2) or "").strip(),
                         )
                     )
+                    cells.append("")
+                    leads.append("")
+                    anchor_ri = idx
+                    anchor_rest = (p.group(2) or "").strip()
                     continue
             elif SUBPART_X_MIN <= x <= SUBPART_X_MAX:
                 s = SUBPART_RE.match(text)
@@ -232,7 +338,16 @@ def find_labels(doc) -> list[Label]:
                             rest=(s.group(2) or "").strip(),
                         )
                     )
-    return labels
+                    cells.append(_cell_text(rows, idx, x, y))
+                    leads.append(
+                        " ".join(
+                            [anchor_rest]
+                            + [t for _y, _x, t in rows[anchor_ri + 1 : idx]]
+                        ).strip()
+                        if anchor_ri >= 0
+                        else ""
+                    )
+    return _drop_table_rows(labels, cells, leads)
 
 
 def _text_between(doc, start: Label, end: Label | None) -> str:
@@ -505,6 +620,13 @@ def mark_scheme_bands(
         stop_page, stop_y = q_end.get(
             part.question, (seq[-1].page, _page_height(doc, seq[-1].page))
         )
+        #: The (part, sub-part) pairs the question paper actually asks for. The MS
+        #: sometimes labels rows of an answer table ("(i) I  (ii) E ...") that are
+        #: not sub-questions, and a band must run past those rather than stop at
+        #: them — otherwise Q2(d) would show only its first row.
+        claimed = {
+            (other.part, other.subpart) for other in parts if other.question == part.question
+        }
 
         def band_from(
             i: int, end_page: int, end_y: float
@@ -525,11 +647,18 @@ def mark_scheme_bands(
             Labels sharing a line must be skipped. The MS writes a compound label
             such as ``(a)(i)`` as two labels at the same ``y``, and ending a band at
             its own line would produce a zero-height (blank) clip.
+
+            A sub-part label the question paper never asks for is skipped too: it
+            labels a row of an answer table, and it belongs inside the band of the
+            part it sits under.
             """
             pos = (seq[i].page, seq[i].y)
             for j in range(i + 1, len(seq)):
-                if (seq[j].page, seq[j].y) > pos:
-                    return seq[j].page, seq[j].y
+                lb = seq[j]
+                if (lb.page, lb.y) <= pos:
+                    continue
+                if lb.subpart is None or (lb.part, lb.subpart) in claimed:
+                    return lb.page, lb.y
             return stop_page, stop_y
 
         def tight(i: int) -> tuple[int, float, int, float]:

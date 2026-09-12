@@ -155,6 +155,229 @@ def test_part_ending_at_top_of_next_page_stays_on_its_own_page(doc: FakeDoc) -> 
     assert last.end_page == last.page
 
 
+# --- table rows are not sub-questions -------------------------------------
+#
+# "Complete the table in the answer booklet with the number of peaks in the 13C
+# NMR spectrum of: (i) Cubane (ii) Cubane-carboxylic acid ..." labels the rows of
+# one table, and the mark scheme grades that table as a single item ("3 marks for
+# all five correct"). Those roman labels must not become records of their own.
+# The trap is the reverse case: a stem that merely introduces a list, such as
+# "Write the number of conjugated C=C bonds in: (i) alpha-carotene (ii)
+# beta-carotene", which the mark scheme scores "one mark each" and so keeps both
+# items as separate sub-questions.
+
+
+def test_table_rows_are_folded_into_the_part() -> None:
+    table = FakeDoc(
+        [
+            [
+                (60.0, 40.0, "Q3 This question is about cubane"),
+                (100.0, 50.0, "(b)"),
+                (120.0, 50.0, "Complete the table in the answer booklet with the number of"),
+                (135.0, 50.0, "peaks in the 13C NMR spectrum of:"),
+                (170.0, 110.0, "(i)"),
+                (170.0, 142.0, "Cubane"),
+                (195.0, 110.0, "(ii)"),
+                (195.0, 142.0, "Cubane-carboxylic acid"),
+            ]
+        ]
+    )
+    parts, _ = X.split_parts(table)
+    # One record for the whole table, not one per row.
+    assert [p.key for p in parts] == ["3b"]
+    # The rows survive as text inside that record rather than being lost.
+    assert "Cubane" in parts[0].text
+    assert "Cubane-carboxylic acid" in parts[0].text
+
+
+def test_a_two_column_answer_table_is_folded_in_too() -> None:
+    """Q2(d) of 2023 writes its rows in two columns, so (iv) precedes (ii)."""
+    table = FakeDoc(
+        [
+            [
+                (60.0, 40.0, "Q2 This question is about electronegativity"),
+                (100.0, 50.0, "(d) Identify the letter in the answer booklet which represents the"),
+                (115.0, 50.0, "position of the following substances."),
+                (145.0, 110.0, "(i)"),
+                (145.0, 142.0, "AlP"),
+                (145.0, 310.0, "(iv)"),
+                (145.0, 342.0, "HgO"),
+                (170.0, 110.0, "(ii)"),
+                (170.0, 142.0, "CsH"),
+            ]
+        ]
+    )
+    parts, _ = X.split_parts(table)
+    assert [p.key for p in parts] == ["2d"]
+
+
+def test_a_list_of_items_that_shares_a_stem_is_not_a_table() -> None:
+    """The 2026 paper's "one mark each" list must stay two sub-questions."""
+    listing = FakeDoc(
+        [
+            [
+                (60.0, 40.0, "Q4 This question is about rice, spice, and mice"),
+                (100.0, 50.0, "(b)"),
+                (120.0, 50.0, "Write the number of conjugated C=C bonds in:"),
+                (150.0, 110.0, "(i)"),
+                (150.0, 142.0, "alpha-carotene"),
+                (175.0, 110.0, "(ii)"),
+                (175.0, 142.0, "beta-carotene"),
+            ]
+        ]
+    )
+    parts, _ = X.split_parts(listing)
+    assert [p.key for p in parts] == ["4b-i", "4b-ii"]
+
+
+def test_the_word_table_alone_does_not_condemn_a_run() -> None:
+    """2023 Q2(f): "...trends in electronegativity in the periodic table..." is
+    prose, and the mark scheme gives "one mark each" for (i)/(ii)/(iii)."""
+    prose = FakeDoc(
+        [
+            [
+                (60.0, 40.0, "Q2 This question is about electronegativity"),
+                (100.0, 50.0, "(f)"),
+                (120.0, 50.0, "Based on trends in electronegativity in the periodic table, identify"),
+                (135.0, 50.0, "which point A-P describes."),
+                (145.0, 110.0, "(i)"),
+                (145.0, 142.0, "CsCl"),
+                (170.0, 110.0, "(ii)"),
+                (170.0, 142.0, "NaK"),
+            ]
+        ]
+    )
+    parts, _ = X.split_parts(prose)
+    assert [p.key for p in parts] == ["2f-i", "2f-ii"]
+
+
+def test_a_run_that_opens_with_an_instruction_is_not_a_table() -> None:
+    """A cell is a name or a formula; prose means a real sub-question."""
+    instructions = FakeDoc(
+        [
+            [
+                (60.0, 40.0, "Q5 This question is about a synthesis"),
+                (100.0, 50.0, "(a)"),
+                (110.0, 50.0, "Complete the table in the answer booklet."),
+                (130.0, 110.0, "(i)"),
+                (130.0, 142.0, "Draw the structure of A."),
+                (155.0, 110.0, "(ii)"),
+                (155.0, 142.0, "Draw the structure of B."),
+            ]
+        ]
+    )
+    parts, _ = X.split_parts(instructions)
+    assert [p.key for p in parts] == ["5a-i", "5a-ii"]
+
+
+def test_credits_page_wording_in_the_plural_is_dropped() -> None:
+    """2022 and 2024 write "The images are (c) ..."."""
+    credits = FakeDoc([[(60.0, 40.0, "Q4 The images are © Scott Ollington")]])
+    assert X.find_labels(credits) == []
+
+
+# --- table rows are not sub-questions -------------------------------------
+#
+# Older papers ask the candidate to complete a table, printing the rows on
+# indented roman labels: "(i) Cubane", "(ii) Cubane-carboxylic acid". The mark
+# scheme grades the whole table as one item ("3 marks for all five correct"), so
+# those rows must stay inside their part instead of becoming records of their own.
+
+
+def _qp(*lines: tuple[float, float, str]) -> FakeDoc:
+    """A one-page question paper built from ``(y, x, text)`` lines."""
+    return FakeDoc([list(lines)])
+
+
+def test_table_rows_do_not_become_sub_questions() -> None:
+    """2022 Q3(b): five table rows are one sub-question worth three marks."""
+    doc = _qp(
+        (60.0, 40.0, "Q1 This question is about cubane."),
+        (100.0, 50.0, "(b)"),
+        (120.0, 50.0, "Complete the table in the answer booklet with the number of"),
+        (132.0, 50.0, "peaks in the 13C NMR spectrum of:"),
+        (160.0, 108.0, "(i)"),
+        (160.0, 143.0, "Cubane"),
+        (185.0, 108.0, "(ii)"),
+        (185.0, 143.0, "Cubane-carboxylic acid"),
+        (210.0, 108.0, "(iii)"),
+        (210.0, 143.0, "Cubane-1,2-dicarboxylic acid"),
+        (240.0, 50.0, "(c) Explain why cubane is strained."),
+    )
+    parts, _ = X.split_parts(doc)
+    assert [p.key for p in parts] == ["1b", "1c"]
+    # The rows stay in the part's own text, so nothing is lost from the paper.
+    assert "Complete the table" in parts[0].text
+    assert "Cubane-1,2-dicarboxylic acid" in parts[0].text
+
+
+def test_short_items_sharing_a_stem_stay_sub_questions() -> None:
+    """2026 Q4(b): items marked "one mark each" are sub-questions in their own right."""
+    doc = _qp(
+        (60.0, 40.0, "Q1 This question is about carotene."),
+        (100.0, 50.0, "(b)"),
+        (120.0, 50.0, "Write the number of conjugated C=C bonds in:"),
+        (160.0, 108.0, "(i)"),
+        (160.0, 143.0, "a-carotene"),
+        (185.0, 108.0, "(ii)"),
+        (185.0, 143.0, "b-carotene"),
+    )
+    parts, _ = X.split_parts(doc)
+    assert [p.key for p in parts] == ["1b-i", "1b-ii"]
+
+
+def test_table_lead_in_does_not_swallow_real_sub_questions() -> None:
+    """A table lead-in only merges rows; instruction-bearing labels still split."""
+    doc = _qp(
+        (60.0, 40.0, "Q1 This question is about something."),
+        (100.0, 50.0, "(b)"),
+        (120.0, 50.0, "Complete the table below."),
+        (160.0, 108.0, "(i)"),
+        (160.0, 143.0, "Draw the structure of A."),
+        (185.0, 108.0, "(ii)"),
+        (185.0, 143.0, "Draw the structure of B."),
+    )
+    parts, _ = X.split_parts(doc)
+    assert [p.key for p in parts] == ["1b-i", "1b-ii"]
+
+
+def test_periodic_table_is_not_a_table_lead_in() -> None:
+    """2023 Q2(f): "trends ... in the periodic table" introduces three sub-questions."""
+    doc = _qp(
+        (60.0, 40.0, "Q1 This question is about bonding."),
+        (100.0, 50.0, "(f)"),
+        (120.0, 50.0, "Based on trends in electronegativity in the periodic table,"),
+        (132.0, 50.0, "identify where the following substances would be located."),
+        (160.0, 108.0, "(i)"),
+        (160.0, 143.0, "CsCl"),
+        (185.0, 108.0, "(ii)"),
+        (185.0, 143.0, "NaK"),
+    )
+    parts, _ = X.split_parts(doc)
+    assert [p.key for p in parts] == ["1f-i", "1f-ii"]
+
+
+def test_a_lone_short_label_is_not_a_table() -> None:
+    """A label with no run to belong to is left alone rather than silently merged."""
+    doc = _qp(
+        (60.0, 40.0, "Q1 This question is about something."),
+        (100.0, 50.0, "(b)"),
+        (120.0, 50.0, "Complete the table below."),
+        (160.0, 108.0, "(i)"),
+        (160.0, 143.0, "Cubane"),
+    )
+    parts, _ = X.split_parts(doc)
+    assert [p.key for p in parts] == ["1b-i"]
+
+
+def test_credits_page_plural_wording_is_not_a_question() -> None:
+    """2022 and 2024 word the credits "The images are © ..."."""
+    credits = FakeDoc(
+        [[(60.0, 40.0, "Q4 The images are © Scott Ollington and © Dr Alex Thom")]]
+    )
+    assert X.find_labels(credits) == []
+
+
 # --- id helpers -----------------------------------------------------------
 
 
@@ -1379,3 +1602,33 @@ def test_band_falls_back_only_to_the_same_part() -> None:
     bands = X.mark_scheme_bands(doc, parts)
     assert bands["3a"][:2] == (0, 75.2)
     assert "3b-i" not in bands
+
+
+def test_band_runs_past_mark_scheme_rows_the_paper_never_asked_for() -> None:
+    """2023 Q2(d): the MS labels its answer-table rows (i)-(v), but the paper
+    asks one question, so the band must reach (e) instead of stopping at (i)."""
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(44.1, 49.0, "2."),
+            _line(75.2, 46.8, "(d)"),
+            _line(119.0, 84.3, "(i)"),
+            _line(130.0, 90.0, "I"),
+            _line(141.0, 84.3, "(ii)"),
+            _line(152.0, 90.0, "E"),
+            _line(300.0, 46.8, "(e)"),
+            _line(320.0, 90.0, "AlP"),
+        ]),
+    ])
+    parts = [
+        XPart(question=2, part="d", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+        XPart(question=2, part="e", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+    start_page, start_y, end_page, end_y = bands["2d"]
+    assert (start_page, start_y) == (0, 75.2)
+    # The band absorbs the table rows and stops at (e), not at row (i).
+    assert end_y > 152.0
+    assert end_y <= 300.0
+    assert bands["2e"][:2] == (0, 300.0)

@@ -42,6 +42,7 @@ from chembank.syllabus import (
     load_syllabus,
 )
 from chembank.tag import infer_paper_meta_from_name, parse_paper_meta_string, tag_draft_dir
+from chembank.ukcho import parse_frontmatter as parse_ukcho_frontmatter
 
 
 def _cmd_extract(args: argparse.Namespace) -> int:
@@ -606,6 +607,271 @@ def _cmd_serve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _ukcho_questions_dir(args: argparse.Namespace) -> Path:
+    return Path(getattr(args, "dir", None) or "vault-ukcho/questions")
+
+
+def _find_ukcho_md(questions_dir: Path, record_id: str) -> Path | None:
+    for md_path in sorted(questions_dir.glob("*.md")):
+        try:
+            fm = parse_ukcho_frontmatter(md_path.read_text(encoding="utf-8"))
+        except OSError:
+            continue
+        if str(fm.get("id") or md_path.stem) == record_id:
+            return md_path
+    return None
+
+
+def _cmd_ukcho(args: argparse.Namespace) -> int:
+    """UKChO tagging foundation: taxonomy, validation, AI prompt/apply, ingest."""
+    from chembank import ukcho as U
+
+    questions_dir = _ukcho_questions_dir(args)
+    cmd = args.ukcho_cmd
+
+    if cmd == "extract":
+        from chembank import ukcho_extract as X
+
+        manifest = X.extract_paper(
+            Path(args.pdf),
+            Path(args.out),
+            args.prefix,
+            make_clips=not args.no_clips,
+            zoom=args.zoom,
+        )
+        n_parts = len(manifest["parts"])
+        n_clips = sum(len(p.get("clips") or []) for p in manifest["parts"])
+        print(f"Wrote {n_parts} parts, {n_clips} clips -> {args.out}/parts.json")
+        counts = {}
+        for p in manifest["parts"]:
+            counts[p["question"]] = counts.get(p["question"], 0) + 1
+        print("Parts per question: " + ", ".join(f"Q{k}={v}" for k, v in sorted(counts.items())))
+        return 0
+
+    if cmd == "ingest":
+        from chembank import ukcho_ingest as I
+
+        summary = I.ingest_paper(
+            manifest_dir=Path(args.manifest),
+            tagging_path=Path(args.tagging),
+            vault_dir=Path(args.vault),
+            clip_source_dir=Path(args.clips) if args.clips else None,
+            source_qp=args.source_qp,
+            source_ms=args.source_ms,
+        )
+        print(
+            f"Ingested {summary['parents']} parents + {summary['subquestions']} sub-questions "
+            f"into {args.vault} ({summary['clips']} clips)"
+        )
+        if summary.get("preserved"):
+            print(
+                f"  kept teacher-reviewed tags on {summary['preserved']} sub-question(s) "
+                "— re-ingest never overwrites a teacher's judgement"
+            )
+        if summary["needs_tags"]:
+            print(
+                f"  {len(summary['needs_tags'])} of {summary['subquestions']} sub-questions "
+                "still need tags (empty skeleton slots) — fill the tagging sheet and re-ingest"
+            )
+            sample = ", ".join(summary["needs_tags"][:8])
+            more = len(summary["needs_tags"]) - 8
+            print(f"    {sample}{f' (+{more} more)' if more > 0 else ''}")
+        for qid, errs in summary["other_errors"].items():
+            print(f"  ERROR {qid}")
+            for err in errs:
+                print(f"    - {err}")
+        for problem in summary["problems"]:
+            print(f"  ERROR {problem}")
+        for warn in summary["warnings"][:40]:
+            print(f"  warn  {warn}")
+        real_errors = sum(len(v) for v in summary["other_errors"].values()) + len(
+            summary["problems"]
+        )
+        return 1 if real_errors else 0
+
+    if cmd == "snapshot":
+        from chembank import ukcho_ingest as I
+
+        try:
+            summary = I.write_snapshot(
+                Path(args.vault), Path(args.out), prefix=args.prefix
+            )
+        except ValueError as exc:
+            print(f"ERROR {exc}", file=__import__("sys").stderr)
+            return 2
+        for snap in summary["snapshots"]:
+            print(
+                f"{snap['prefix']}: {snap['parts']} parts "
+                f"({snap['reviewed']} teacher-reviewed), "
+                f"{snap['bytes'] // 1024} KB -> {snap['path']}"
+            )
+            for q in snap.get("quotes") or []:
+                print(
+                    f"  warn  {q['id']} quotes the paper in {q['field']}: "
+                    f"\"{q['quote']}\""
+                )
+        print(
+            "\nNo question or mark-scheme text is included, so this is safe to commit.\n"
+            "Restore with the normal pipeline (same PDF -> same part keys):\n"
+            "  chembank ukcho extract --pdf <qp.pdf> --out draft/ukcho/<year> --prefix <prefix>\n"
+            "  chembank ukcho ingest --manifest draft/ukcho/<year> "
+            "--tagging <prefix>-tags.json --vault vault-ukcho"
+        )
+        return 0
+
+    if cmd == "import":
+        from chembank import ukcho_ingest as I
+
+        summary = I.import_edits(Path(args.edits), Path(args.vault))
+        print(
+            f"Imported teacher edits: {len(summary['updated'])} updated, "
+            f"{len(summary['unchanged'])} unchanged, {len(summary['missing'])} not in the vault"
+        )
+        for rid in summary["missing"]:
+            print(f"  ERROR no vault record for {rid}")
+        for rid, errs in summary["errors"].items():
+            print(f"  ERROR {rid}")
+            for err in errs:
+                print(f"    - {err}")
+        if summary["ignored"]:
+            print(f"  ignored {len(summary['ignored'])} entr(ies) with no id")
+        if summary["updated"]:
+            print("  Rebuild the site to publish them: python quiz-app/build.py")
+            print(
+                "  Back up the tags (the vault is gitignored): "
+                "chembank ukcho snapshot"
+            )
+        return 1 if summary["missing"] or summary["errors"] else 0
+
+    if cmd == "taxonomy":
+        tax = U.taxonomy()
+        if args.json:
+            print(json.dumps(tax, ensure_ascii=False, indent=2))
+        else:
+            print(f"AS Anchors ({len(tax['asAnchors'])}):")
+            for a in tax["asAnchors"]:
+                print(f"  - {a}")
+            print(f"\nUKChO Extension Topics ({len(tax['extensionTopics'])}):")
+            for group, topics in tax["extensionTopicGroups"].items():
+                print(f"  [{group}] {', '.join(topics)}")
+            print(f"\nSkills: {', '.join(tax['skills'])}")
+            print(f"Difficulty: {', '.join(tax['difficultyLevels'])}")
+            print(f"Question Features: {', '.join(tax['questionFeatures'])}")
+        return 0
+
+    if cmd == "validate":
+        records = U.load_ukcho_questions(questions_dir)
+        if not records:
+            print(f"No UKChO records found under {questions_dir}", file=__import__("sys").stderr)
+            return 2
+        report = U.validate_all(records)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+        else:
+            print(f"# UKChO validation — {report['ok']}/{report['count']} sub-questions clean")
+            for qid, errs in report["errors"].items():
+                print(f"ERROR {qid}")
+                for e in errs:
+                    print(f"  - {e}")
+            for qid, warns in report["warnings"].items():
+                print(f"warn  {qid}")
+                for w in warns:
+                    print(f"  - {w}")
+        return 1 if report["errors"] else 0
+
+    if cmd == "export":
+        records = U.load_ukcho_questions(questions_dir)
+        records = [U.to_ordered_dict(r) for r in records]
+        payload = {"source": "UKChO", "count": len(records), "questions": records}
+        out = Path(args.out) if args.out else None
+        text = json.dumps(payload, ensure_ascii=False, indent=2)
+        if out:
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(text, encoding="utf-8")
+            print(f"Wrote {len(records)} records -> {out}")
+        else:
+            print(text)
+        return 0
+
+    # ---- whole-paper batch prompt (extract -> tagging sheet) ----------------
+    if cmd == "prompt" and getattr(args, "manifest", None):
+        from chembank import ukcho_ingest as I
+
+        result = I.write_sheet(
+            manifest_dir=Path(args.manifest),
+            out_dir=Path(args.out) if args.out else None,
+            prefix=args.prefix,
+            year=args.year,
+            source_ms=args.source_ms,
+            force=args.force,
+        )
+        print(
+            f"Prompt for {result['parts']} parts across {result['questions']} questions "
+            f"-> {result['prompt_path']}"
+        )
+        print(f"Tagging sheet ({result['year'] or 'year ?'}) {result['sheet_status']}"
+              f" -> {result['sheet_path']}")
+        print(
+            "\nNext: fill the tags in the sheet (or have a model answer prompt.json), "
+            "then:\n"
+            f"  chembank ukcho ingest --manifest {args.manifest} "
+            f"--tagging {result['sheet_path']} --vault vault-ukcho"
+        )
+        if not result["sheet_written"]:
+            print("\nNote: the existing sheet was left untouched so your tags survive.")
+        return 0
+
+    # ---- single-record commands need an id ---------------------------------
+    record_id = args.id
+    if not record_id:
+        print(
+            "This ukcho subcommand needs a record id, or --manifest for a whole paper.",
+            file=__import__("sys").stderr,
+        )
+        return 2
+    md_path = _find_ukcho_md(questions_dir, record_id)
+    if md_path is None:
+        print(f"Record {record_id!r} not found under {questions_dir}", file=__import__("sys").stderr)
+        return 2
+    text = md_path.read_text(encoding="utf-8")
+    rec = U.normalize_record(U.parse_frontmatter(text), fallback_id=md_path.stem)
+
+    if cmd == "prompt":
+        bundle = U.build_tagging_request(rec)
+        print(json.dumps(bundle, ensure_ascii=False, indent=2))
+        return 0
+
+    if cmd == "apply":
+        try:
+            ai_payload = json.loads(Path(args.ai).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"Could not read AI JSON: {exc}", file=__import__("sys").stderr)
+            return 2
+        if isinstance(ai_payload, dict) and "result" in ai_payload and isinstance(
+            ai_payload["result"], dict
+        ):
+            ai_payload = ai_payload["result"]
+        if not isinstance(ai_payload, dict):
+            print("AI JSON must be an object.", file=__import__("sys").stderr)
+            return 2
+        merged = U.apply_ai_tags(rec, ai_payload)
+        ordered = U.to_ordered_dict(merged)
+        if args.write:
+            body = U.split_body(text)
+            md_path.write_text(U.to_frontmatter(ordered) + body, encoding="utf-8")
+            print(f"Applied suggested tags -> {md_path} (tag_status=suggested)")
+        else:
+            draft_dir = Path("draft/ukcho")
+            draft_dir.mkdir(parents=True, exist_ok=True)
+            draft = draft_dir / f"{record_id}.json"
+            draft.write_text(json.dumps(ordered, ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"Wrote suggested tags -> {draft} (review, then --write to update the vault)")
+        return 0
+
+    print(f"Unknown ukcho subcommand: {cmd}", file=__import__("sys").stderr)
+    return 2
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="chembank",
@@ -993,6 +1259,132 @@ def build_parser() -> argparse.ArgumentParser:
         help="Skip QP paper-clip geometry / A–D / Section B key checks",
     )
     aud.set_defaults(func=_cmd_audit)
+
+    uk = sub.add_parser(
+        "ukcho",
+        help="UKChO tagging foundation: taxonomy, validate, AI prompt/apply",
+    )
+    uk.add_argument(
+        "--dir",
+        default="vault-ukcho/questions",
+        help="UKChO questions dir (default: vault-ukcho/questions)",
+    )
+    uksub = uk.add_subparsers(dest="ukcho_cmd", required=True)
+
+    ukt = uksub.add_parser("taxonomy", help="Print the controlled UKChO tag taxonomy")
+    ukt.add_argument("--json", action="store_true")
+    ukt.set_defaults(func=_cmd_ukcho)
+
+    ukv = uksub.add_parser("validate", help="Validate the UKChO vault against the taxonomy")
+    ukv.add_argument("--json", action="store_true")
+    ukv.set_defaults(func=_cmd_ukcho)
+
+    uke = uksub.add_parser("export", help="Dump all UKChO records as JSON")
+    uke.add_argument("-o", "--out", help="Write JSON here instead of stdout")
+    uke.set_defaults(func=_cmd_ukcho)
+
+    ukp = uksub.add_parser(
+        "prompt",
+        help=(
+            "Print a ready-to-paste AI tagging request: for one sub-question by id, "
+            "or a whole extracted paper with --manifest"
+        ),
+    )
+    ukp.add_argument("id", nargs="?", help="Record id, e.g. ukcho-2025-q3b")
+    ukp.add_argument(
+        "--manifest",
+        help=(
+            "Dir containing parts.json from `ukcho extract`: writes prompt.json "
+            "(for the tagger) and tagging.json (a fillable sheet) for the whole paper"
+        ),
+    )
+    ukp.add_argument(
+        "-o", "--out", help="Output dir for prompt.json/tagging.json (default: the manifest dir)"
+    )
+    ukp.add_argument("--prefix", default="", help="Override prefix, e.g. ukcho-2024")
+    ukp.add_argument("--year", type=int, help="Override year (default: read from the prefix)")
+    ukp.add_argument("--source-ms", default="", help="Mark scheme PDF path to record in the sheet")
+    ukp.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite an existing tagging.json (it holds the only copy of the tags)",
+    )
+    ukp.set_defaults(func=_cmd_ukcho)
+
+    uka = uksub.add_parser(
+        "apply", help="Merge an AI JSON response in as *suggested* tags (never locked)"
+    )
+    uka.add_argument("id", help="Record id, e.g. ukcho-2025-q3b")
+    uka.add_argument("--ai", required=True, help="AI JSON response file")
+    uka.add_argument(
+        "--write",
+        action="store_true",
+        help="Write back to the vault markdown (default: draft only)",
+    )
+    uka.set_defaults(func=_cmd_ukcho)
+
+    uks = uksub.add_parser(
+        "snapshot",
+        help=(
+            "Write a content-free tag snapshot per paper (safe to commit) — the "
+            "only backup of the tagging work, since the vault is gitignored"
+        ),
+    )
+    uks.add_argument(
+        "--vault", default="vault-ukcho", help="Vault dir (default: vault-ukcho)"
+    )
+    uks.add_argument(
+        "-o",
+        "--out",
+        default="fixtures/ukcho-tags",
+        help="Output dir (default: fixtures/ukcho-tags)",
+    )
+    uks.add_argument("--prefix", default="", help="Only this paper, e.g. ukcho-2025")
+    uks.set_defaults(func=_cmd_ukcho)
+
+    uki2 = uksub.add_parser(
+        "import",
+        help=(
+            "Merge a teacher-edits download into the vault, stamping the records as "
+            "reviewed so a later re-ingest cannot revert them"
+        ),
+    )
+    uki2.add_argument(
+        "--edits",
+        required=True,
+        help="ukcho-teacher-edits.json downloaded from the tagging workspace",
+    )
+    uki2.add_argument(
+        "--vault", default="vault-ukcho", help="Vault dir (default: vault-ukcho)"
+    )
+    uki2.set_defaults(func=_cmd_ukcho)
+
+    ukx = uksub.add_parser(
+        "extract",
+        help="Extract a UKChO paper PDF into parts + per-part page-clip PNGs",
+    )
+    ukx.add_argument("pdf", help="UKChO question paper PDF")
+    ukx.add_argument(
+        "-o", "--out", required=True, help="Output dir for parts.json, parts/ and clips/"
+    )
+    ukx.add_argument("--prefix", required=True, help="Filename prefix, e.g. ukcho-2025")
+    ukx.add_argument("--no-clips", action="store_true", help="Skip PNG rendering")
+    ukx.add_argument("--zoom", type=float, default=2.4, help="Clip render zoom (default 2.4)")
+    ukx.set_defaults(func=_cmd_ukcho)
+
+    uki = uksub.add_parser(
+        "ingest",
+        help="Materialise an extracted paper + tagging sheet into the vault",
+    )
+    uki.add_argument(
+        "--manifest", required=True, help="Dir containing parts.json from `ukcho extract`"
+    )
+    uki.add_argument("--tagging", required=True, help="Tagging sheet JSON (parents + parts)")
+    uki.add_argument("--vault", default="vault-ukcho", help="Vault dir (default: vault-ukcho)")
+    uki.add_argument("--clips", help="Dir of clip PNGs (default: <manifest>/clips)")
+    uki.add_argument("--source-qp", default="", help="Repo-relative QP path for provenance")
+    uki.add_argument("--source-ms", default="", help="Repo-relative MS path for provenance")
+    uki.set_defaults(func=_cmd_ukcho)
 
     return p
 

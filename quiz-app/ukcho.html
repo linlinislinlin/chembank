@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" data-course="ukcho">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#5B5BD6" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>ChemBank · UKChO Question Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
+<style>
+  .filters { margin: 8px 0 4px; }
+  .fg { margin-bottom: 16px; }
+  .fg h4 {
+    margin: 0 0 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .filterbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap; margin: 18px 0 16px; padding: 12px 14px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+  .filterbar .count { font-size: 14px; color: var(--muted); }
+  .filterbar .count b { color: var(--accent-deep); }
+
+  .qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .qcard {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 18px 18px 16px; box-shadow: var(--shadow);
+    transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+  }
+  .qcard:hover { border-color: var(--accent-border); box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .qhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .qid { font-size: 15px; font-weight: 800; letter-spacing: -.2px; color: var(--text); }
+  .qid .mock {
+    font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); background: var(--bg-soft); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 999px; margin-left: 7px; vertical-align: 1px;
+  }
+  .lvl {
+    flex-shrink: 0; font-size: 11.5px; font-weight: 800; padding: 4px 9px; border-radius: 999px;
+    border: 1px solid var(--accent-border); background: var(--accent-soft); color: var(--accent-deep);
+    white-space: nowrap;
+  }
+  .lvl-1 { border-color: #A9DDD8; background: #EAF8F6; color: #087C78; }
+  .lvl-3 { border-color: #F4B9BF; background: #FFF2F3; color: #C94252; }
+  .qanchor { font-size: 14px; font-weight: 700; color: var(--accent-deep); margin-bottom: 6px; }
+  .qext { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .qext span {
+    font-size: 12px; color: var(--text); background: var(--accent-soft);
+    border: 1px solid var(--accent-border); padding: 2px 8px; border-radius: 6px;
+  }
+  .qskills { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .qpre { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .qpre b { color: var(--text); font-weight: 700; }
+  .qfeat { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .qfeat span {
+    font-size: 11px; color: var(--muted); background: var(--bg-soft);
+    border: 1px solid var(--line); padding: 2px 7px; border-radius: 999px;
+  }
+  .qbody {
+    display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line);
+    font-size: 13.5px; line-height: 1.6; color: var(--text);
+  }
+  .qcard.open .qbody { display: block; }
+  .qbody .qtext { margin: 0; white-space: pre-wrap; }
+  .qbody .qtext + .qclip { margin-top: 10px; }
+  /* Page clip: UKChO parts are answered by drawing structures, so the clipping of
+     the real paper is the authoritative rendering of the question. */
+  .qclip {
+    display: block; width: 100%; height: auto; margin: 0 0 10px;
+    border: 1px solid var(--line); border-radius: 8px; background: #fff;
+  }
+  .qfigcap {
+    font-size: 11.5px; color: var(--muted); margin: -4px 0 10px;
+  }
+  .qbtn {
+    margin-top: 12px; appearance: none; border: 1px solid var(--line); background: var(--panel-2);
+    color: var(--accent-deep); font-weight: 700; font-size: 12.5px; padding: 7px 12px;
+    border-radius: 999px; cursor: pointer; transition: var(--ease);
+  }
+  .qbtn:hover { border-color: var(--accent-border); background: var(--accent-hover); }
+  .notice {
+    margin: 0 0 20px; padding: 12px 14px; border-radius: var(--radius);
+    background: var(--accent-soft); border: 1px solid var(--accent-border);
+    color: var(--accent-deep); font-size: 13px; line-height: 1.55;
+  }
+  .empty { text-align: center; color: var(--muted); padding: 48px 0; grid-column: 1 / -1; }
+  @media (max-width: 640px) { .qgrid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1><span class="brand-flask">🧪</span> ChemBank · UKChO</h1>
+  <div class="navline">
+    <a href="home.html">Switch course</a>
+    <a href="ukcho-tag.html">Tagging workspace</a>
+  </div>
+</div>
+
+<div class="wrap wide">
+  <div class="hero">
+    <div class="eyebrow">UK Chemistry Olympiad</div>
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>
+        <ellipse cx="12" cy="12" rx="9" ry="4"/>
+        <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(60 12 12)"/>
+        <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(120 12 12)"/>
+      </svg>
+    </div>
+    <h2>UKChO Question Bank</h2>
+    <p class="sub">Cross-topic Olympiad problems. Filter by AS anchor, extension topic, skill and difficulty.</p>
+    <div class="meta">
+      <span><b id="statSub">–</b> sub-questions</span>
+      <span><b id="statParents">–</b> parent questions</span>
+    </div>
+  </div>
+
+  <div class="notice" id="mockNotice" hidden>
+    <b>Sample tags.</b> These records are mock questions used to build and test the tagging
+    system. Real UKChO papers can be dropped into <code>vault-ukcho/questions/</code> and will
+    appear here after the next build.
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="filterbar">
+    <div class="count" id="count">Loading…</div>
+    <div class="chiprow">
+      <button class="chip" id="clearBtn" type="button">Clear all filters</button>
+    </div>
+  </div>
+
+  <section class="qgrid" id="cards"></section>
+
+  <div class="foot">ChemBank · UKChO · tagging foundation</div>
+</div>
+
+<script src="ukcho-data.js"></script>
+<script>
+"use strict";
+(function () {
+  const DATA = window.UKCHO_DATA || { questions: [], parents: [], taxonomy: {} };
+  const QUESTIONS = DATA.questions || [];
+
+  const LEVEL_NUM = { Foundation: 1, Standard: 2, Challenge: 3 };
+  const state = {
+    asAnchor: new Set(), extension: new Set(), skill: new Set(),
+    difficulty: new Set(), feature: new Set(),
+  };
+
+  document.getElementById("statSub").textContent = QUESTIONS.length;
+  document.getElementById("statParents").textContent = (DATA.parents || []).length;
+  document.getElementById("mockNotice").hidden = !QUESTIONS.some(q => q.mock);
+
+  // Build facet lists from the values actually present (scales to a full bank).
+  function used(field) {
+    const counts = new Map();
+    QUESTIONS.forEach(q => {
+      const vals = Array.isArray(q[field]) ? q[field] : (q[field] ? [q[field]] : []);
+      vals.forEach(v => counts.set(v, (counts.get(v) || 0) + 1));
+    });
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }
+
+  // Skills live across two fields (primary + secondary), so count them together.
+  function usedSkills() {
+    const counts = new Map();
+    QUESTIONS.forEach(q => {
+      [q.primary_skill].concat(q.secondary_skills || []).filter(Boolean)
+        .forEach(v => counts.set(v, (counts.get(v) || 0) + 1));
+    });
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }
+
+  const FACETS = [
+    ["asAnchor", "AS Anchor", used("primary_as_anchor")],
+    ["extension", "UKChO Extension Topic", used("extension_topics")],
+    ["skill", "Skill", usedSkills()],
+    ["difficulty", "Difficulty", used("difficulty_level")],
+    ["feature", "Question Features", used("question_features")],
+  ];
+
+  const filtersBox = document.getElementById("filters");
+  FACETS.forEach(([key, title, values]) => {
+    if (!values.length) return;
+    const group = document.createElement("div");
+    group.className = "fg";
+    const h = document.createElement("h4");
+    h.textContent = title;
+    const row = document.createElement("div");
+    row.className = "chiprow";
+    values.forEach(([value, count]) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "chip";
+      btn.dataset.key = key;
+      btn.dataset.value = value;
+      btn.textContent = count ? `${value} (${count})` : value;
+      btn.addEventListener("click", () => {
+        const set = state[key];
+        if (set.has(value)) set.delete(value); else set.add(value);
+        btn.classList.toggle("on", set.has(value));
+        render();
+      });
+      row.appendChild(btn);
+    });
+    group.appendChild(h);
+    group.appendChild(row);
+    filtersBox.appendChild(group);
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    Object.values(state).forEach(s => s.clear());
+    document.querySelectorAll("#filters .chip.on").forEach(c => c.classList.remove("on"));
+    render();
+  });
+
+  function matches(q) {
+    const inSet = (set, vals) => !set.size || (Array.isArray(vals) ? vals : [vals]).some(v => set.has(v));
+    const skills = [q.primary_skill].concat(q.secondary_skills || []);
+    return inSet(state.asAnchor, q.primary_as_anchor)
+      && inSet(state.extension, q.extension_topics)
+      && inSet(state.skill, skills)
+      && inSet(state.difficulty, q.difficulty_level)
+      && inSet(state.feature, q.question_features);
+  }
+
+  function shortPrereqs(list) {
+    const items = (list || []).slice(0, 4);
+    return items.join(" · ") + ((list || []).length > items.length ? " · …" : "");
+  }
+
+  function card(q) {
+    const el = document.createElement("article");
+    el.className = "qcard";
+    const level = LEVEL_NUM[q.difficulty_level] || "?";
+    const label = `UKChO ${q.year} ${q.label || ("Q" + q.question_number)}`;
+    const ext = (q.extension_topics || []).map(t => `<span>${t}</span>`).join("");
+    const feats = (q.question_features || []).map(t => `<span>${t}</span>`).join("");
+    const skills = [q.primary_skill].concat(q.secondary_skills || []).filter(Boolean).join(" · ");
+    el.innerHTML = `
+      <div class="qhead">
+        <div class="qid">${label}${q.mock ? '<span class="mock">sample</span>' : ""}</div>
+        <div class="lvl lvl-${level}">Level ${level} · ${q.difficulty_level}</div>
+      </div>
+      <div class="qanchor">${q.primary_as_anchor || "—"}</div>
+      ${ext ? `<div class="qext">${ext}</div>` : ""}
+      <div class="qskills">${skills}</div>
+      <div class="qpre"><b>Prerequisites:</b> ${shortPrereqs(q.prerequisites) || "—"}</div>
+      ${feats ? `<div class="qfeat">${feats}</div>` : ""}
+      <button class="qbtn" type="button">Show question</button>
+      <div class="qbody"></div>
+    `;
+    const btn = el.querySelector(".qbtn");
+    const body = el.querySelector(".qbody");
+    const clips = q.figure_urls || [];
+    clips.forEach((src, i) => {
+      const img = document.createElement("img");
+      img.className = "qclip";
+      img.src = src;
+      img.loading = "lazy";
+      img.alt = `${label} question paper clip ${i + 1}`;
+      body.appendChild(img);
+    });
+    if (clips.length > 1) {
+      const cap = document.createElement("div");
+      cap.className = "qfigcap";
+      cap.textContent = `Shown in ${clips.length} parts (the question runs over a page break).`;
+      body.appendChild(cap);
+    }
+    if (q.question_text) {
+      const p = document.createElement("p");
+      p.className = "qtext";
+      p.textContent = q.question_text;
+      body.appendChild(p);
+    }
+    if (!body.childNodes.length) {
+      body.textContent = "(no question text or clip yet)";
+    }
+    btn.addEventListener("click", () => {
+      el.classList.toggle("open");
+      btn.textContent = el.classList.contains("open") ? "Hide question" : "Show question";
+    });
+    return el;
+  }
+
+  function render() {
+    const cards = document.getElementById("cards");
+    cards.innerHTML = "";
+    const visible = QUESTIONS.filter(matches);
+    document.getElementById("count").innerHTML =
+      `<b>${visible.length}</b> of ${QUESTIONS.length} sub-questions match`;
+    if (!visible.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No sub-questions match these filters.";
+      cards.appendChild(empty);
+      return;
+    }
+    visible.forEach(q => cards.appendChild(card(q)));
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

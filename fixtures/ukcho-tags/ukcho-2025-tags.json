@@ -1,0 +1,1382 @@
+{
+  "generated": "chembank-ukcho-tag-snapshot",
+  "source": "UKChO",
+  "prefix": "ukcho-2025",
+  "year": 2025,
+  "source_qp": "raw/ukcho/ukcho_2025_r1_qp.pdf",
+  "source_ms": "raw/ukcho/ukcho_2025_r1_ms.pdf",
+  "parents": [
+    {
+      "question_number": 1,
+      "title": "Clay pigeon shooting: combustion of cellulose trinitrate",
+      "total_marks": 8,
+      "overall_themes": [
+        "Nitrocellulose chemistry",
+        "Balanced equations",
+        "Enthalpy of combustion",
+        "Ideal gas calculation"
+      ]
+    },
+    {
+      "question_number": 2,
+      "title": "Astatine, BrAt and alloy stoichiometry",
+      "total_marks": 9,
+      "overall_themes": [
+        "Mole calculations",
+        "Empirical formulae",
+        "Isotopes and nuclear equations",
+        "Half-life"
+      ]
+    },
+    {
+      "question_number": 3,
+      "title": "Epoxides: formation, ring opening and BADGE synthesis",
+      "total_marks": 20,
+      "overall_themes": [
+        "Epoxide structure and strain",
+        "Stereoisomerism",
+        "Nucleophilic ring opening",
+        "Multi-step organic synthesis"
+      ]
+    },
+    {
+      "question_number": 4,
+      "title": "Carbon nanotubes and Raman spectroscopy",
+      "total_marks": 12,
+      "overall_themes": [
+        "Raman spectroscopy",
+        "Stoichiometry",
+        "Polymerisation",
+        "Graph analysis"
+      ]
+    },
+    {
+      "question_number": 5,
+      "title": "Total synthesis of agarospirol",
+      "total_marks": 19,
+      "overall_themes": [
+        "Stereocentres",
+        "Enolate chemistry",
+        "Ozonolysis",
+        "Multi-step synthesis",
+        "Carbocation rearrangement"
+      ]
+    },
+    {
+      "question_number": 6,
+      "title": "Iodination of ketones: kinetics and mechanism",
+      "total_marks": 15,
+      "overall_themes": [
+        "Rate equations",
+        "Rate-determining step",
+        "Equilibrium constants",
+        "Mechanism deduction"
+      ]
+    }
+  ],
+  "parts": {
+    "1a-i": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: recognise the three alcohol groups named in the stem and balance a described esterification against water.",
+      "question_features": [
+        "Information Provided in Question",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Alcohol functional group",
+        "Empirical formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1a-ii": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Formal Charge"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Unfamiliar ion: students must count valence electrons, allow for the single positive charge and place it correctly before drawing a valid dot-and-cross diagram.",
+      "question_features": [
+        "Unfamiliar Context",
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Covalent bonding",
+        "Dot-and-cross diagrams",
+        "Valence electron counting"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1b": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: transfer a proton from the acid to the base identified in the stem.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Bronsted-Lowry acids and bases",
+        "Proton transfer",
+        "Balanced equations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: decompose the given intermediate and balance the water produced.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Bronsted-Lowry acids and bases",
+        "Balanced equations",
+        "Stability of intermediates"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1d": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Straightforward balancing once the combustion products (CO2, H2O and N2) are identified.",
+      "question_features": [
+        "Information Provided in Question",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Combustion products of C/H/N compounds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1e": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Single application of Hess's law with every enthalpy of formation supplied.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Standard enthalpy of formation",
+        "Standard enthalpy of combustion",
+        "Hess's law"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1f": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The product set is not stated: students must derive it by mass balance from the stated constraints that the products are gases and that oxygen is not released.",
+      "question_features": [
+        "Multi-step",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Conservation of mass",
+        "Combustion products of C/H/N compounds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "edited",
+      "tag_source": "teacher"
+    },
+    "1g": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Three to four linked steps: M, moles of cellulose trinitrate, moles of gas using the part (f) equation, then pV = nRT with a conversion into m3 as demanded by the question.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Ideal gas equation pV = nRT",
+        "Unit conversion (dm3 to m3)",
+        "Kelvin conversion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2a": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Atomic Structure"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Students must source the estimated mass of astatine in the crust and combine moles with Avogadro's constant, then justify a single significant figure.",
+      "question_features": [
+        "Unfamiliar Context",
+        "Data-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Avogadro constant",
+        "Relative atomic mass",
+        "Significant figures"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2b": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Standard percentage-composition empirical formula with one 'by difference' step for bismuth.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Empirical formula from percentage composition",
+        "Mole calculations",
+        "Relative atomic masses"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2c": {
+      "primary_as_anchor": "Group 2",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Deduce formulae from the known +2 oxidation state of Group 2 metals and the stated 2:1 product ratio.",
+      "question_features": [
+        "Information Provided in Question",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Group 2 oxidation states",
+        "Ionic formulae",
+        "Mole ratios from an equation"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2d": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Conservation of mass number and atomic number across a nuclear equation, plus reading x and y off the given scheme.",
+      "question_features": [
+        "Information Provided in Question",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Mass number and atomic number",
+        "Nuclear equations",
+        "Conservation of nucleon number and charge"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2e": {
+      "primary_as_anchor": "Nitrogen and Sulfur",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Students must identify the colourless gas with Mr = 30.01 as NO and then balance a redox equation that also produces water.",
+      "question_features": [
+        "Multi-step",
+        "Unfamiliar Context",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Molar mass",
+        "Oxidation states",
+        "Nitric acid as an oxidising agent"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2f": {
+      "primary_as_anchor": "Group 17",
+      "secondary_as_anchors": [
+        "Analytical Techniques"
+      ],
+      "extension_topics": [
+        "Mass Spectrometry"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Link the near 1:1 isotope pattern at M+ (79Br/81Br) to a bromine-containing diatomic, then use the reaction sequence to identify D and E.",
+      "question_features": [
+        "Unfamiliar Context",
+        "Data-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Isotopes",
+        "Mass spectrometry basics",
+        "Group 17 diatomic molecules",
+        "Relative atomic mass"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2g": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Atomic Structure"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Requires logarithms (or repeated halving) to extract the number of half-lives from a very large mass ratio, then conversion of minutes into hours.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Half-life",
+        "Logarithms",
+        "Mass unit conversion (g to mg)",
+        "Rounding to the nearest hour"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3a": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: generalise the epoxide formula from the three-membered ring and the examples given.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "General formulae of homologous series",
+        "Molecular formula"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Unusual VSEPR"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Requires rationalising the strained 60 degree ring angle in an epoxide against the approximately 109.5 degree ether angle, i.e. applying VSEPR where ring strain overrides the ideal angle.",
+      "question_features": [
+        "Diagram",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "VSEPR theory",
+        "Bond angles",
+        "Ring strain"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3c": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [
+        "Organic Synthesis"
+      ],
+      "extension_topics": [
+        "Electrophilic Addition"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Students must follow an unfamiliar, fully drawn mechanism and produce the intermediate or transition state with correct bonding.",
+      "question_features": [
+        "Diagram",
+        "Multi-step",
+        "Organic Mechanism",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Alkene structure and bonding",
+        "Curly arrows",
+        "Electrophiles and nucleophiles"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3d": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Spatial Reasoning",
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Requires recognising that attack from above or below the plane gives two epoxide stereoisomers with the methyl and hydrogen arranged cis and trans.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Multi-step",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Geometric isomerism",
+        "Alkene structure",
+        "Epoxide ring structure"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "The starter taxonomy has no dedicated stereochemistry extension topic, so no extension tag was applied. Consider adding one (e.g. 'Stereochemistry') if sterochemistry questions recur.",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3e": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Requires working through all four C4H8 isomers, taking geometric isomerism into account, to count how many distinct epoxides each can form.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Multi-step",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Isomerism of C4H8",
+        "Geometric isomerism",
+        "Epoxide formation",
+        "Stereocentres"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [
+        "Nucleophilic Addition"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce",
+        "Apply"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Ring opening of the simplest epoxide by three different nucleophiles; students must track where the nucleophile adds and where the resulting alcohol/ether forms.",
+      "question_features": [
+        "Multi-step",
+        "Organic Mechanism",
+        "Structure Deduction",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Nucleophiles and electrophiles",
+        "Epoxide ring opening",
+        "Alcohol and ether functional groups",
+        "Curly arrows"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Genuinely ambiguous taxonomy choice: epoxide ring opening is described in textbooks as both nucleophilic addition (to the C-O bond) and as an SN2-type substitution. Tagged as Nucleophilic Addition; a teacher may prefer SN2. Flagged for review.",
+      "review_required": true,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3g": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Two-stage sequence: form the phenoxide-epichlorohydrin adduct with the correct charge placement (worth two marks), then close the ring intramolecularly.",
+      "question_features": [
+        "Multi-step",
+        "Organic Mechanism",
+        "Structure Deduction",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Phenol acidity",
+        "Curly arrow mechanisms",
+        "Nucleophiles and electrophiles",
+        "Ether formation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3h": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydrocarbons",
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The longest sequence in the paper: benzene to BADGE requires several standard and unfamiliar transformations, including a diazonium salt, with no scaffolding.",
+      "question_features": [
+        "Multi-step",
+        "Cross-topic",
+        "Structure Deduction",
+        "Long Reading"
+      ],
+      "prerequisites": [
+        "Electrophilic substitution of benzene",
+        "Phenol chemistry",
+        "Diazonium salts",
+        "Nucleophiles and electrophiles",
+        "Epoxide formation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3i": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Nitrogen Compounds"
+      ],
+      "extension_topics": [
+        "Structure Deduction",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Structure Deduction",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Students must work backwards from polymer repeat units to deduce the hardener structures, which are never stated.",
+      "question_features": [
+        "Structure Deduction",
+        "Multi-step",
+        "Cross-topic"
+      ],
+      "prerequisites": [
+        "Amine chemistry",
+        "Polymer repeat units",
+        "Reaction of epoxides with nucleophiles"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4a": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Hydrocarbons"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Balance a described combustion side-reaction whose carbon product is the general formula Cn.",
+      "question_features": [
+        "Information Provided in Question",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Combustion reactions",
+        "General formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4b": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Multi-step: ideal gas to find moles of ethyne, then moles of carbon atoms, then the mass of carbon ending up in the nanotubes as a percentage.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Ideal gas equation pV = nRT",
+        "Mole calculations",
+        "Percentage by mass"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4c": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Recognise that trimerisation of ethyne gives benzene.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Alkyne structure",
+        "Bonding in benzene"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4d": {
+      "primary_as_anchor": "Polymerisation",
+      "secondary_as_anchors": [
+        "Hydrocarbons"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Draw a repeat unit with correct brackets and with the double bond retained.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Addition polymerisation",
+        "Repeat units"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e-i": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Raman Spectroscopy"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Convert Angstrom to metres, apply c = f x lambda twice, then subtract; the unfamiliar part is the spectroscopic wavelength convention.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "c = f x lambda",
+        "Unit conversion (Angstrom to m)",
+        "Significant figures"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e-ii": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Raman Spectroscopy"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "As (e)(i) but the frequency difference must be converted into a wavenumber in cm-1.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Wavenumber definition",
+        "c = f x lambda",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4f": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "IR Spectroscopy",
+        "Raman Spectroscopy"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Requires matching observed Raman shifts to specific bond vibrations and reasoning about which modes are Raman active rather than IR active.",
+      "question_features": [
+        "Data-heavy",
+        "Unfamiliar Context",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Bond vibration wavenumbers",
+        "IR absorption",
+        "Functional group identification",
+        "Raman vs IR activity"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4g-i": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Raman Spectroscopy"
+      ],
+      "primary_skill": "Interpret Data",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Requires plotting or regressing wavenumber against 1/d (doubling the given radii), reading the gradient as A and justifying its units.",
+      "question_features": [
+        "Data-heavy",
+        "Graph",
+        "Multi-step",
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Linear graphs y = mx + c",
+        "Deducing units of a gradient",
+        "Radius versus diameter"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4g-ii": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Raman Spectroscopy"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Use the intercept of the same plot to obtain the incident wavenumber, then invert it to a wavelength.",
+      "question_features": [
+        "Graph",
+        "Multi-step",
+        "Calculation-heavy",
+        "Data-heavy"
+      ],
+      "prerequisites": [
+        "Linear graphs",
+        "Wavenumber and wavelength relationship",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4g-iii": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Raman Spectroscopy"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Chains three relationships (A/d, incident wavenumber, scattered wavenumber) and requires a cm to Angstrom conversion; depends on the earlier deductions in (g).",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Raman shift concept",
+        "Wavenumber and wavelength relationship",
+        "Unit conversion (cm to Angstrom)"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Requires locating all stereocentres in a complex polycyclic natural product; marking is all-or-nothing, so a single omission loses the mark.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Stereocentres / chiral centres",
+        "Interpreting skeletal structures",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5b": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds",
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [
+        "Reaction Pathways",
+        "Multi-Step Synthesis"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce",
+        "Multi-step Reasoning",
+        "Mechanism"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four linked structures in a base-mediated cyclisation; each depends on the previous one, and the multi-mark structures carry no partial credit.",
+      "question_features": [
+        "Multi-step",
+        "Organic Mechanism",
+        "Structure Deduction",
+        "Long Reading"
+      ],
+      "prerequisites": [
+        "Curly arrow mechanisms",
+        "Enolate formation",
+        "Ester and carbonyl chemistry",
+        "Intramolecular cyclisation",
+        "Carboxylate salts"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Reaction Pathways",
+        "Multi-Step Synthesis"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Ozonolysis of an unfamiliar alkene followed by an enolate cyclisation and dehydration; E and G are worth two marks each and must match the given molecular formula.",
+      "question_features": [
+        "Multi-step",
+        "Organic Mechanism",
+        "Structure Deduction",
+        "Long Reading"
+      ],
+      "prerequisites": [
+        "Ozonolysis of alkenes",
+        "Enolate and enol chemistry",
+        "Aldol-type cyclisation",
+        "Dehydration",
+        "Checking against a molecular formula"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 5,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5d": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds",
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [
+        "Protecting Group Logic",
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce",
+        "Multi-step Reasoning",
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Six structures worth nine marks, including a carbocation rearrangement and a Wittig-type step that can only be inferred from earlier work in the question.",
+      "question_features": [
+        "Multi-step",
+        "Organic Mechanism",
+        "Structure Deduction",
+        "Long Reading",
+        "Cross-topic"
+      ],
+      "prerequisites": [
+        "Acetal/ketal hydrolysis",
+        "Ester hydrolysis",
+        "Wittig reaction",
+        "Carbocation stability and rearrangement",
+        "Checking against a molecular formula",
+        "More substituted alkenes are more stable"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 9,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6a": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Rate Equation"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Interpreting a multi-step mechanism to decide which species appears in the rate equation under a specified limiting condition.",
+      "question_features": [
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Rate equations",
+        "Rate-determining step",
+        "Interpreting a mechanism"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6b-i": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Rate Equation",
+        "Reaction Order"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Interpret Data"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Read the initial-rate graph to establish first-order dependence on A and zero-order dependence on I2 at high [I2].",
+      "question_features": [
+        "Graph"
+      ],
+      "prerequisites": [
+        "Rate equation",
+        "Order of reaction",
+        "Rate-concentration graphs"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6b-ii": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Rate Equation",
+        "Initial Rates"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Interpret Data"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Gradient of the initial-rate graph, with the units of a first-order rate constant having to be derived.",
+      "question_features": [
+        "Graph",
+        "Calculation-heavy",
+        "Data-heavy"
+      ],
+      "prerequisites": [
+        "Determining rate from a graph",
+        "Units of rate constants",
+        "Significant figures"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6c": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Kinetics"
+      ],
+      "extension_topics": [
+        "Coupled Equilibria"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Rearrange the given equilibrium constant expression to make [B] the subject.",
+      "question_features": [
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Equilibrium constant expression",
+        "Algebraic rearrangement"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6d": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [
+        "Rate Equation",
+        "Mechanism from Rate Law"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Substitute the equilibrium expression for [B] into the rate-determining step to eliminate the intermediate.",
+      "question_features": [
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Rate-determining step",
+        "Equilibrium constant expression",
+        "Algebraic substitution"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6e": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [
+        "Rate Equation",
+        "Mechanism from Rate Law"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Requires abandoning the equilibrium assumption, working with the given expression for [B] and substituting it into the rate law.",
+      "question_features": [
+        "Multi-step",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Rate-determining step",
+        "Steady-state reasoning",
+        "Algebraic substitution"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6f": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [
+        "Reaction Order",
+        "Coupled Equilibria"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Interpret Data",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Compares two competing pathways using the supplied rate and equilibrium constants; four independent judgements are required and no ECF is available.",
+      "question_features": [
+        "Data-heavy",
+        "Multi-step",
+        "Cross-topic"
+      ],
+      "prerequisites": [
+        "Rate constants",
+        "Equilibrium constants",
+        "Comparing competing pathways",
+        "Rate-determining step"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6g": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [
+        "Rate Equation",
+        "Mechanism from Rate Law"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Set two composite rate expressions equal and solve for [I2] algebraically before substituting six rate constants.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Data-heavy",
+        "Cross-topic"
+      ],
+      "prerequisites": [
+        "Rate equations",
+        "Algebraic manipulation",
+        "Powers and indices",
+        "Significant figures"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    }
+  }
+}

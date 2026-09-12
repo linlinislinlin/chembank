@@ -126,3 +126,23 @@ questions-igcse-structured/**
 questions-igcse-practical/**
 !questions-igcse-practical/.gitkeep
 
+# UKChO (UK Chemistry Olympiad).
+# Mock records + the taxonomy are committed so tests and quiz-app/build.py work on
+# a fresh clone: fixtures/ukcho-mock/. Real ingested papers are copyrighted, so the
+# live vault is local-only — exactly like vault-structured/.
+vault-ukcho/questions/**
+!vault-ukcho/questions/.gitkeep
+vault-ukcho/assets/**
+!vault-ukcho/assets/.gitkeep
+vault-ukcho/papers/**
+vault-ukcho/queries/**
+vault-ukcho/题库首页.md
+
+# UKChO raw past papers (copyrighted) and extraction scratch
+raw/ukcho/**
+draft/ukcho/**
+
+!fixtures/ukcho-mock/**
+# Tag snapshots (chembank ukcho snapshot): the tagging work with all past-paper
+# content stripped, so it is safe to commit even though the vault is not.
+!fixtures/ukcho-tags/

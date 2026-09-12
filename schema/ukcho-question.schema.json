@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.chembank/schema/ukcho-question.schema.json",
+  "title": "UKChOQuestion",
+  "description": "UK Chemistry Olympiad question/sub-question record. Parent questions and sub-questions are separate records; a sub-question NEVER inherits the parent's tags. Controlled lists mirror src/chembank/ukcho.py (single source of truth) and are checked by tests/test_ukcho.py.",
+  "type": "object",
+  "required": ["id", "record_type", "source", "year", "question_number"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^ukcho-\\d{4}-q\\d+[a-z]?$",
+      "description": "Stable id, e.g. ukcho-2025-q3 (parent) or ukcho-2025-q3b (sub-question)"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": ["ukcho-parent", "ukcho-subquestion"]
+    },
+    "source": { "type": "string", "const": "UKChO" },
+    "mock": { "type": "boolean", "description": "True for placeholder/test records not sourced from a real paper" },
+    "year": { "type": "integer" },
+    "question_number": { "type": ["integer", "string"] },
+    "sub_question": {
+      "type": ["string", "null"],
+      "description": "Sub-question label, e.g. 'b' or '(b)(ii)'"
+    },
+    "parent_question_id": {
+      "type": ["string", "null"],
+      "description": "Required for sub-questions"
+    },
+    "title": { "type": ["string", "null"], "description": "Parent context / theme" },
+    "total_marks": { "type": ["integer", "null"] },
+    "overall_themes": { "type": "array", "items": { "type": "string" } },
+    "sub_question_ids": { "type": "array", "items": { "type": "string" } },
+    "marks": { "type": ["integer", "null"] },
+    "question_text": { "type": ["string", "null"] },
+    "primary_as_anchor": {
+      "type": "string",
+      "enum": [
+        "Atomic Structure",
+        "Stoichiometry",
+        "Chemical Bonding",
+        "States of Matter",
+        "Energetics",
+        "Electrochemistry",
+        "Equilibria",
+        "Kinetics",
+        "Periodicity",
+        "Group 2",
+        "Group 17",
+        "Nitrogen and Sulfur",
+        "Introduction to Organic Chemistry",
+        "Hydrocarbons",
+        "Halogen Compounds",
+        "Hydroxy Compounds",
+        "Carbonyl Compounds",
+        "Carboxylic Acids and Derivatives",
+        "Nitrogen Compounds",
+        "Polymerisation",
+        "Organic Synthesis",
+        "Analytical Techniques"
+      ]
+    },
+    "secondary_as_anchors": {
+      "type": "array",
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/asAnchor" }
+    },
+    "extension_topics": {
+      "type": "array",
+      "maxItems": 3,
+      "description": "May be empty when only standard AS knowledge is used in an Olympiad context. Unknown values produce a warning, not an error.",
+      "items": { "type": "string" }
+    },
+    "primary_skill": { "$ref": "#/$defs/skill" },
+    "secondary_skills": {
+      "type": "array",
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/skill" }
+    },
+    "difficulty_level": {
+      "type": "string",
+      "enum": ["Foundation", "Standard", "Challenge"]
+    },
+    "difficulty_reason": {
+      "type": ["string", "null"],
+      "description": "Why the AI/teacher assigned this level"
+    },
+    "question_features": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/questionFeature" }
+    },
+    "prerequisites": { "type": "array", "items": { "type": "string" } },
+    "requires_extension_knowledge": { "type": "boolean" },
+    "tag_status": {
+      "type": "string",
+      "enum": ["unset", "suggested", "accepted", "edited", "teacher"],
+      "description": "AI tags are never locked; 'suggested' invites teacher accept/edit/remove"
+    },
+    "tag_source": {
+      "type": "string",
+      "enum": ["none", "ai", "teacher", "imported"]
+    },
+    "review_required": {
+      "type": "boolean",
+      "description": "Set true when the classification is uncertain and must be teacher-reviewed"
+    },
+    "answer": { "type": ["string", "null"] },
+    "mark_scheme": { "type": ["string", "null"] },
+    "teacher_notes": { "type": ["string", "null"] },
+    "year_tags": { "type": "array", "items": { "type": "string" } },
+    "figures": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relative asset paths, e.g. assets/ukcho-2025-q3b-paper.png"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "record_type": { "const": "ukcho-subquestion" } }, "required": ["record_type"] },
+      "then": {
+        "required": [
+          "parent_question_id",
+          "sub_question",
+          "primary_as_anchor",
+          "primary_skill",
+          "difficulty_level"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": true,
+  "$defs": {
+    "asAnchor": {
+      "type": "string",
+      "enum": [
+        "Atomic Structure",
+        "Stoichiometry",
+        "Chemical Bonding",
+        "States of Matter",
+        "Energetics",
+        "Electrochemistry",
+        "Equilibria",
+        "Kinetics",
+        "Periodicity",
+        "Group 2",
+        "Group 17",
+        "Nitrogen and Sulfur",
+        "Introduction to Organic Chemistry",
+        "Hydrocarbons",
+        "Halogen Compounds",
+        "Hydroxy Compounds",
+        "Carbonyl Compounds",
+        "Carboxylic Acids and Derivatives",
+        "Nitrogen Compounds",
+        "Polymerisation",
+        "Organic Synthesis",
+        "Analytical Techniques"
+      ]
+    },
+    "skill": {
+      "type": "string",
+      "enum": [
+        "Recall",
+        "Apply",
+        "Deduce",
+        "Calculate",
+        "Interpret Data",
+        "Explain",
+        "Draw / Represent",
+        "Multi-step Reasoning",
+        "Spatial Reasoning",
+        "Structure Deduction",
+        "Mechanism",
+        "Experimental Reasoning"
+      ]
+    },
+    "questionFeature": {
+      "type": "string",
+      "enum": [
+        "Unfamiliar Context",
+        "Data-heavy",
+        "Calculation-heavy",
+        "Long Reading",
+        "Multi-step",
+        "Cross-topic",
+        "Diagram",
+        "Graph",
+        "Experimental",
+        "Organic Mechanism",
+        "Structure Deduction",
+        "Spatial Reasoning",
+        "Information Provided in Question",
+        "No Prior Knowledge Required Beyond Prerequisites"
+      ]
+    }
+  }
+}

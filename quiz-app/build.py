@@ -34,13 +34,26 @@ IGCSE_ASSETS = REPO / "vault-igcse" / "assets"
 IGCSE_STRUCTURED_DIR = REPO / "vault-igcse-structured" / "questions"
 IGCSE_STRUCTURED_ASSETS = REPO / "vault-igcse-structured" / "assets"
 IGCSE_PICKS = REPO / "pick"
+UKCHO_QUESTIONS = REPO / "vault-ukcho" / "questions"
+#: Committed mock records, used as a fallback when the (gitignored, copyrighted)
+#: live vault has not been ingested yet — e.g. on a fresh clone or in CI.
+UKCHO_FIXTURES = REPO / "fixtures" / "ukcho-mock" / "questions"
+UKCHO_ASSETS = REPO / "vault-ukcho" / "assets"
+UKCHO_FIXTURE_ASSETS = REPO / "fixtures" / "ukcho-mock" / "assets"
 SITE_DIR = Path(__file__).resolve().parent / "site"
 OUT_ASSETS = SITE_DIR / "assets"
 OUT_STRUCTURED_ASSETS = SITE_DIR / "assets" / "structured"
+OUT_UKCHO_ASSETS = SITE_DIR / "assets" / "ukcho"
 OUT_DATA = SITE_DIR / "data.js"
 OUT_STRUCTURED_DATA = SITE_DIR / "structured-data.js"
+OUT_UKCHO_DATA = SITE_DIR / "ukcho-data.js"
 INDEX_SRC = Path(__file__).resolve().parent / "index.html"
 INDEX_DST = SITE_DIR / "index.html"
+
+# The UKChO taxonomy lives in the chembank package (single source of truth).
+SRC_DIR = REPO / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 EMBED_RE = re.compile(r"!\[\[([^\]]+?)\]\]")
@@ -194,6 +207,130 @@ def build_structured_data() -> tuple[list[dict], int, list[str]]:
             "ms_img": "assets/structured/" + ms_name,
         })
     return records, copied, skips
+
+
+def _ukcho_label(rec: dict) -> str:
+    """Human label for a sub-question, e.g. 'Q3(b)' or 'Q3(b)(i)'.
+
+    Delegates to the chembank package so the site, the teacher workspace and the
+    tagging prompt can never disagree about how a question is named.
+    """
+    from chembank import ukcho as U
+
+    return U.question_label(rec)
+
+
+def _ukcho_sort_key(rec: dict) -> tuple:
+    def as_int(value) -> int:
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 999
+
+    year = as_int(rec.get("year"))
+    return (-year, as_int(rec.get("question_number")), str(rec.get("sub_question") or ""))
+
+
+def build_ukcho_data() -> tuple[dict, tuple[int, int], list[str], dict]:
+    """Build UKChO records + taxonomy for the tagging and filter pages.
+
+    Reads ``vault-ukcho/questions/*.md`` — one parent record per main question and
+    one record per sub-question — attaches sub-questions to their parents, copies
+    any assets, and returns ``(payload, (new_assets, total_assets), problems,
+    warnings)``. New and total are reported separately because a rebuild usually
+    copies nothing, and "0 assets" would read as a failure.
+
+    Sub-questions are kept as independent records: nothing here copies a parent's
+    tags down to a sub-question.
+    """
+    from chembank import ukcho as U
+
+    questions_dir = UKCHO_QUESTIONS
+    if not any(questions_dir.glob("*.md")) and any(UKCHO_FIXTURES.glob("*.md")):
+        questions_dir = UKCHO_FIXTURES  # fresh clone / CI: fall back to mocks
+
+    records = U.load_ukcho_questions(questions_dir)
+    problems: list[str] = []
+    parents: list[dict] = []
+    parent_by_id: dict[str, dict] = {}
+    subs: list[dict] = []
+
+    for rec in records:
+        if rec.get("record_type") == "ukcho-parent":
+            node = {
+                "id": rec["id"],
+                "year": rec.get("year"),
+                "question_number": rec.get("question_number"),
+                "title": rec.get("title") or "",
+                "total_marks": rec.get("total_marks"),
+                "overall_themes": rec.get("overall_themes") or [],
+                "sub_question_ids": rec.get("sub_question_ids") or [],
+                "mock": bool(rec.get("mock")),
+            }
+            parents.append(node)
+            parent_by_id[node["id"]] = node
+        else:
+            sub = U.to_ordered_dict(rec)
+            sub["label"] = _ukcho_label(rec)
+            subs.append(sub)
+
+    for sub in subs:
+        parent = parent_by_id.get(sub.get("parent_question_id") or "")
+        sub["parent_title"] = (parent or {}).get("title", "")
+        # Page-clip PNGs (the question as it appears on the paper). UKChO parts are
+        # answered by drawing structures, so the clip — not the extracted text — is
+        # the authoritative rendering of the question.
+        sub["figure_urls"] = [
+            f"assets/ukcho/{Path(str(f)).name}" for f in (sub.get("figures") or [])
+        ]
+        if parent is None:
+            problems.append(f"{sub.get('id')}: parent_question_id not found in vault")
+
+    subs.sort(key=_ukcho_sort_key)
+    parents.sort(key=lambda p: (-(p.get("year") or 0), p.get("question_number") or 0))
+
+    for parent in parents:
+        parent["sub_question_ids"] = [
+            s["id"] for s in subs if s.get("parent_question_id") == parent["id"]
+        ]
+
+    copied = 0
+    ukcho_asset_total = 0
+    assets_dir = UKCHO_ASSETS if UKCHO_ASSETS.is_dir() and any(
+        p for p in UKCHO_ASSETS.glob("*") if not p.name.startswith(".")
+    ) else UKCHO_FIXTURE_ASSETS
+    if assets_dir.is_dir():
+        OUT_UKCHO_ASSETS.mkdir(parents=True, exist_ok=True)
+        for src in sorted(assets_dir.glob("*")):
+            if not src.is_file() or src.name.startswith("."):
+                continue
+            ukcho_asset_total += 1
+            dest = OUT_UKCHO_ASSETS / src.name
+            if not dest.exists() or dest.stat().st_mtime < src.stat().st_mtime:
+                shutil.copy2(src, dest)
+                copied += 1
+
+    report = U.validate_all(records)
+    for qid, errs in report["errors"].items():
+        for err in errs:
+            problems.append(f"{qid}: {err}")
+
+    payload = {
+        "generated": "chembank-ukcho",
+        "builtAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "stats": {
+            "parents": len(parents),
+            "subQuestions": len(subs),
+            "needsReview": sum(1 for s in subs if s.get("review_required")),
+            "suggested": sum(1 for s in subs if s.get("tag_status") == "suggested"),
+            "validationErrors": len(report["errors"]),
+            "validationWarnings": len(report["warnings"]),
+        },
+        "taxonomy": U.taxonomy(),
+        "parents": parents,
+        "questions": subs,
+    }
+    return payload, (copied, ukcho_asset_total), problems, report["warnings"]
 
 
 def igcse_homework_ids() -> list[str]:
@@ -382,12 +519,25 @@ def main() -> int:
     )
     OUT_STRUCTURED_DATA.write_text(s_js, encoding="utf-8")
 
+    # Build UKChO tagging data + taxonomy (separate track; never touches AS/IG).
+    ukcho_payload, (ukcho_copied, ukcho_asset_total), ukcho_problems, ukcho_warnings = build_ukcho_data()
+    ukcho_js = (
+        "// Generated by quiz-app/build.py — do not edit by hand.\n"
+        "window.UKCHO_DATA = "
+        + json.dumps(ukcho_payload, ensure_ascii=False)
+        + ";\n"
+        "window.UKCHO_TAXONOMY = window.UKCHO_DATA.taxonomy;\n"
+    )
+    OUT_UKCHO_DATA.write_text(ukcho_js, encoding="utf-8")
+
     # Copy front-end pages/assets into site/ (any quiz-app/*.{html,js}).
     FRONTEND_SOURCES = [INDEX_SRC, INDEX_SRC.parent / "assign.html",
                         INDEX_SRC.parent / "homework.html", INDEX_SRC.parent / "stats.html",
                         INDEX_SRC.parent / "home.html", INDEX_SRC.parent / "as.html",
                         INDEX_SRC.parent / "ig.html", INDEX_SRC.parent / "practice.html",
                         INDEX_SRC.parent / "as-shapes-of-molecules.html",
+                        INDEX_SRC.parent / "ukcho.html",
+                        INDEX_SRC.parent / "ukcho-tag.html",
                         INDEX_SRC.parent / "theme.css",
                         INDEX_SRC.parent / "config.js", INDEX_SRC.parent / "supabase-client.js",
                         INDEX_SRC.parent / "roster.js"]
@@ -411,11 +561,24 @@ def main() -> int:
         print(f"WARN: {len(s_skips)} structured skipped:")
         for e in s_skips[:20]:
             print("  -", e)
+    ukstats = ukcho_payload["stats"]
+    print(
+        f"OK: {ukstats['subQuestions']} UKChO sub-questions across "
+        f"{ukstats['parents']} parents, {ukcho_asset_total} UKChO assets "
+        f"({ukcho_copied} new; {ukstats['suggested']} suggested, "
+        f"{ukstats['needsReview']} need review)."
+    )
+    if ukcho_problems:
+        print(f"ERROR: {len(ukcho_problems)} UKChO validation problems:")
+        for e in ukcho_problems[:20]:
+            print("  -", e)
+    if ukcho_warnings:
+        print(f"WARN: {len(ukcho_warnings)} UKChO review prompts.")
     if errors:
         print(f"WARN: {len(errors)} asset problems:")
         for e in errors[:20]:
             print("  -", e)
-    return 0
+    return 0 if not ukcho_problems else 1
 
 
 if __name__ == "__main__":

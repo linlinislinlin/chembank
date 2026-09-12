@@ -4,8 +4,9 @@
    One shared visual language for every student-facing page.
 
    Course themes are driven by `data-course` on <html>:
-     <html data-course="as">  → soft coral / red   (AS Chemistry)
-     <html data-course="ig">  → calm teal           (IGCSE Chemistry)
+     <html data-course="as">    → soft coral / red   (AS Chemistry)
+     <html data-course="ig">    → calm teal          (IGCSE Chemistry)
+     <html data-course="ukcho"> → deep indigo        (UK Chemistry Olympiad)
 
    The default (no attribute) is the AS coral theme.
 
@@ -92,6 +93,16 @@
   --accent-soft-2: #DDF3F0;
   --accent-hover:  #E6F5F2;
   --accent-border: #A9DDD8;
+}
+
+/* UK Chemistry Olympiad (UKChO) — deep indigo / olympiad blue */
+[data-course="ukcho"] {
+  --accent:        #5B5BD6;
+  --accent-deep:   #4343B8;
+  --accent-soft:   #EEEFFC;
+  --accent-soft-2: #E2E3FA;
+  --accent-hover:  #E9EAFB;
+  --accent-border: #B9BAEE;
 }
 
 /* Teacher tools (刷题库 / 布置作业 / 作业统计) — neutral graphite grey */
@@ -547,6 +558,12 @@ button.ghost2:hover { color: var(--accent-deep); }
 .course-card.ig:hover { border-color: #A9DDD8; }
 .course-card.ig .cta { background: #169C96; }
 .course-card.ig .cta:hover { background: #087C78; }
+
+/* UK Chemistry Olympiad (UKChO) — extension / olympiad track */
+.course-card.ukcho .icon { background: #EEEFFC; color: #5B5BD6; border: 1px solid #B9BAEE; }
+.course-card.ukcho:hover { border-color: #B9BAEE; }
+.course-card.ukcho .cta { background: #5B5BD6; }
+.course-card.ukcho .cta:hover { background: #4343B8; }
 
 /* --------------------------------------------------------------------------
    17. HOMEWORK FOLDER LIST (as.html / ig.html)

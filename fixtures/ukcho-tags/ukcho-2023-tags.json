@@ -1,0 +1,1483 @@
+{
+  "generated": "chembank-ukcho-tag-snapshot",
+  "source": "UKChO",
+  "prefix": "ukcho-2023",
+  "year": 2023,
+  "source_qp": "raw/ukcho/ukcho_2023_r1_qp.pdf",
+  "source_ms": "raw/ukcho/ukcho_2023_r1_ms.pdf",
+  "parents": [
+    {
+      "question_number": 1,
+      "title": "Rocket fuels: hydrogen combustion and the Sabatier reaction",
+      "total_marks": 7,
+      "overall_themes": [
+        "Bond enthalpy of the O=O bond",
+        "Density and mole calculations",
+        "Enthalpy of combustion and Hess's law",
+        "Oxidation numbers",
+        "Sabatier reaction equations"
+      ]
+    },
+    {
+      "question_number": 2,
+      "title": "Electronegativity scales and boron nitride crystal structures",
+      "total_marks": 20,
+      "overall_themes": [
+        "Pauling and Mulliken electronegativity",
+        "van Arkel–Ketelaar bonding triangles",
+        "Unit cells and crystal density",
+        "Atom sharing in unit cells",
+        "Balancing inorganic equations"
+      ]
+    },
+    {
+      "question_number": 3,
+      "title": "Amino acid complexes: protonation, stereoisomers and spin states",
+      "total_marks": 18,
+      "overall_themes": [
+        "Acid–base behaviour and isoelectric points",
+        "Titration curves",
+        "Stereoisomerism in metal complexes",
+        "d-Orbital splitting and high/low spin",
+        "Spin magnetic moment calculations"
+      ]
+    },
+    {
+      "question_number": 4,
+      "title": "Vitamin E acetate: its toxic breakdown product and synthesis",
+      "total_marks": 21,
+      "overall_themes": [
+        "Functional group identification",
+        "Structure elucidation from MS and NMR",
+        "Wittig reaction stereochemistry",
+        "Multi-step synthesis",
+        "Ozonolysis"
+      ]
+    },
+    {
+      "question_number": 5,
+      "title": "Cheese chemistry: lactose fermentation and carbon dioxide bubbles",
+      "total_marks": 20,
+      "overall_themes": [
+        "Acid–base chemistry of lactic acid",
+        "Reaction classification and equations",
+        "Ideal gas and mole calculations",
+        "Equilibrium with Henry's law and Ka",
+        "Algebraic modelling and quadratic solution"
+      ]
+    }
+  ],
+  "parts": {
+    "1a": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single balanced equation for a familiar combustion; the only decision is the H2:O2 ratio, and the half-mole form is accepted.",
+      "question_features": [
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Formulae of H2, O2 and H2O"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1b": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "An enthalpy cycle has to be set up and rearranged, and the value found for the half mole of O2 in the equation must be doubled to reach the O=O bond enthalpy.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Bond enthalpies",
+        "Bonds broken minus bonds formed",
+        "Stoichiometric ratios"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c-i": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "States of Matter"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Two short steps — convert 1 dm3 to 1000 cm3 and use density and molar mass — so it is a routine mole calculation.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Density, mass and volume",
+        "Mole calculations",
+        "Molar mass of H2"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c-ii": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One multiplication of the moles found in (c)(i) by the energy released per mole of hydrogen, so it is quick if the earlier answer is carried through.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Enthalpy of combustion",
+        "Mole calculations",
+        "Using a previous answer"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1d-i": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One balanced equation built from the stated reactants and products, where only the water coefficient is not immediately obvious.",
+      "question_features": [
+        "Unfamiliar Context",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Formulae of CO2, H2, CH4 and H2O"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1d-ii": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Four oxidation states are needed for the single mark; hydrogen is straightforward, but carbon must be followed from +4 in CO2 down to −4 in CH4.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxidation numbers",
+        "Rules for assigning oxidation states",
+        "Electronegativity"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1e": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The vaporisation enthalpies of both liquid reactants must be added to the combustion enthalpy, and oxygen counts twice, which is the step most often missed.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Hess's law",
+        "Enthalpy of vaporisation",
+        "Enthalpy of combustion",
+        "Stoichiometric ratios"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2a": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Direct substitution into the supplied Pauling equation; the only care is taking the mean of the two homonuclear bond energies.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Bond dissociation energies",
+        "Substitution into a given equation"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2b": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [
+        "Periodicity"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single addition to the answer from (a), but the periodic trend must be used to decide that chlorine is the more electronegative atom.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Periodic trends in electronegativity",
+        "Using a reference value"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2c": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The ionisation energy has to be converted from eV to kJ mol−1 before substitution, and that conversion is the step most likely to be overlooked.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Unit conversion (eV to kJ mol−1)",
+        "Substitution into a given equation"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2d": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Interpret Data",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Five compounds have to be placed by comparing both average electronegativity and electronegativity difference, and several of them fall close together on the triangle.",
+      "question_features": [
+        "Graph",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electronegativity values",
+        "Ionic, metallic and covalent bonding extremes",
+        "Reading a triangular plot"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2e": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The point closest to the metallic corner must be recognised, which means comparing the compounds rather than relying on how familiar they are.",
+      "question_features": [
+        "Graph"
+      ],
+      "prerequisites": [
+        "Metallic corner of the bonding triangle",
+        "Trends in electronegativity"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2f-i": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Caesium chloride sits at a large electronegativity difference with a moderate average, so it must be placed by reasoning about where an ionic pair falls on the triangle.",
+      "question_features": [
+        "Graph",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electronegativity values",
+        "Bonding triangle interpretation"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2f-ii": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The NaK alloy has almost no electronegativity difference and a very low average, so it must be put near the metallic corner rather than with the ionic compounds.",
+      "question_features": [
+        "Graph",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electronegativity values",
+        "Bonding triangle interpretation",
+        "Metallic character"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2f-iii": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Gallium nitride has an intermediate electronegativity difference and average, so its position has to be estimated between the covalent and ionic regions.",
+      "question_features": [
+        "Graph",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electronegativity values",
+        "Bonding triangle interpretation"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2g-i": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A short balanced equation from named reactants and products; only the water coefficient has to be worked out.",
+      "question_features": [
+        "Unfamiliar Context",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Formulae of H3BO3 and NH3"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2g-ii": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The stoichiometry is large and boron has to be balanced across three boron-containing species at once, so a systematic balance is needed.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Balancing by inspection",
+        "Formulae of B2O3 and CaB6"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h-i": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Unit Cells",
+        "Lattice Dimensions"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Cubing a cell parameter is easy, but the Å-to-cm conversion must be applied before cubing and the volume then expressed in cm3.",
+      "question_features": [
+        "Calculation-heavy",
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Volume of a cube",
+        "Unit conversion (Å to cm)",
+        "Index notation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h-ii": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Unit Cells",
+        "Face-Centred Cubic",
+        "Crystal Density"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The number of atoms per cell must be counted from corner and face sharing, converted to a mass, and divided by the cell volume — three linked steps for three marks.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Atom sharing on corners and faces",
+        "Avogadro constant",
+        "Density = mass / volume"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h-iii": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Unit Cells",
+        "Lattice Dimensions"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "A regular hexagon's area has to be found from the given formula and multiplied by the prism height, with both lengths converted into cm.",
+      "question_features": [
+        "Calculation-heavy",
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Area of a regular hexagon",
+        "Volume of a prism",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h-iv": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Unit Cells",
+        "Crystal Packing",
+        "Crystal Density"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Atoms are shared between neighbouring cells through both corners and edges, so the count per cell must be established before the mass and density follow.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Atom sharing in a unit cell",
+        "Avogadro constant",
+        "Density = mass / volume"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h-v": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Unit Cells",
+        "Crystal Packing"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The wurtzite cell shares atoms using unfamiliar fractions (1/12 and 2/12), so both element counts must be worked through carefully for the single mark.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Atom sharing in a unit cell",
+        "Geometry of a rhombic prism"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3a-i": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [
+        "Nitrogen Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The pH has to be compared with the two pKa values to decide that both the carboxyl and amino groups are protonated at pH 2, and the whole side chain must be drawn out.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Skeletal structures",
+        "Acid–base behaviour of carboxylic acids and amines",
+        "pKa"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3a-ii": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [
+        "Nitrogen Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "At pH 11 both groups are past their pKa values, so the carboxylate and the free amine must be shown — the opposite protonation pattern to part (a)(i).",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Skeletal structures",
+        "Acid–base behaviour of carboxylic acids and amines",
+        "pKa"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b-i": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [
+        "Nitrogen Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The zwitterion has to be recognised as the neutral form at the isoelectric point, with a carboxylate and an ammonium but no overall charge.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Zwitterions",
+        "Isoelectric point",
+        "Skeletal structures"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b-ii": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Carboxylic Acids and Derivatives"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria",
+        "pKa"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The isoelectric point is simply the mean of the two pKa values, but recognising that the side chain is not ionisable is what makes it a two-number average.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "pKa",
+        "Average of two values",
+        "Isoelectric point"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3c": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Carboxylic Acids and Derivatives"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria",
+        "Buffers"
+      ],
+      "primary_skill": "Interpret Data",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The right curve must show two buffer plateaus at the pKa values as well as the overall rise, so the shape near pH 2.36 and 9.60 has to be judged, not just the direction.",
+      "question_features": [
+        "Graph",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "pH titration curves",
+        "Buffer regions",
+        "pKa"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3d": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [
+        "Complex Ions"
+      ],
+      "primary_skill": "Spatial Reasoning",
+      "secondary_skills": [
+        "Draw / Represent"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two square-pyramidal isomers must be drawn with the water kept axial while the bidentate ligands are arranged cis and trans, so the geometry has to be held in three dimensions.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning",
+        "Structure Deduction",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Square pyramidal geometry",
+        "Bidentate ligands",
+        "Geometric (cis/trans) isomerism"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3e": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [
+        "Complex Ions"
+      ],
+      "primary_skill": "Spatial Reasoning",
+      "secondary_skills": [
+        "Draw / Represent"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The fac and mer isomers of an octahedral tris-chelate differ only in whether the donor atoms lie on a face or on a meridian, which is a genuinely three-dimensional distinction.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning",
+        "Structure Deduction",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Octahedral geometry",
+        "Chelate rings",
+        "fac/mer isomerism"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [
+        "Periodicity"
+      ],
+      "extension_topics": [
+        "Crystal Field Splitting",
+        "Paramagnetism",
+        "Complex Ions"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Draw / Represent",
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Six d-electron counts feed two orbital diagrams and two spin magnetic moments, and Rh(III) has both high- and low-spin options while Cu(II) has only one — many linked steps for the eight marks.",
+      "question_features": [
+        "Diagram",
+        "Multi-step",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electron configuration",
+        "Orbital filling and Hund's rule",
+        "Unpaired electrons",
+        "μ = √(n(n+2))"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 8,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3g": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [
+        "Periodicity"
+      ],
+      "extension_topics": [
+        "Crystal Field Splitting",
+        "Paramagnetism"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The experimental moment must be compared with the theoretical values for n = 5 (5.91 BM) and n = 1 (1.73 BM), and only the high-spin value is close.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "μ = √(n(n+2))",
+        "Unpaired electrons",
+        "High- and low-spin configurations"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4a-i": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Recall",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single recognition of two common functional groups in a large molecule, with the risk of losing marks by ticking extra boxes.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Functional groups",
+        "Esters",
+        "Ethers"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4a-ii": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One count of the carbon atoms in the displayed structure to complete the molecular formula; no calculation is needed beyond the count.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Molecular formulae",
+        "Counting atoms in a structure"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4b": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [
+        "Mass Spectrometry",
+        "1H NMR",
+        "Structure Deduction"
+      ],
+      "primary_skill": "Interpret Data",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four candidate structures must be tested against three techniques, and the proton and carbon environments have to be counted for each while the mass-spectral fragment is checked as well.",
+      "question_features": [
+        "Data-heavy",
+        "Multi-step",
+        "Structure Deduction",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Number of proton and carbon environments (NMR)",
+        "Molecular symmetry",
+        "Mass-spectrum fragmentation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4c": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Selectivity",
+        "Multi-Step Synthesis"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Draw / Represent",
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Each row requires the phosphonium ylide to be combined with the carbonyl and the major alkene drawn with the correct E/Z geometry, so both the coupling and the stereochemistry must be controlled.",
+      "question_features": [
+        "Diagram",
+        "Multi-step",
+        "Structure Deduction",
+        "Spatial Reasoning",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Wittig reaction",
+        "Carbonyl compounds",
+        "E/Z alkene stereochemistry"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 6,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4d": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds",
+        "Hydrocarbons"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four intermediates along a multi-step sequence have to be deduced one after another, with the E geometry of B fixed by the stated reaction outcome.",
+      "question_features": [
+        "Multi-step",
+        "Cross-topic",
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Carbonyl chemistry",
+        "Reagents and conditions",
+        "Functional group interconversion",
+        "E/Z alkenes"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [
+        "Organic Synthesis"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The intermediate must be a tertiary carbocation formed where the proton adds, so the position of the positive charge has to be reasoned rather than guessed.",
+      "question_features": [
+        "Diagram",
+        "Organic Mechanism",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electrophilic addition",
+        "Carbocation stability",
+        "Curly arrows"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4f": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Carbonyl Chemistry",
+        "Retrosynthesis"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Ozonolysis products must be read backwards to reconstruct W, with the by-product and the reagent identified at the same time, and no error carried forward is allowed.",
+      "question_features": [
+        "Multi-step",
+        "Structure Deduction",
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ozonolysis of alkenes",
+        "Carbonyl chemistry",
+        "Working backwards from products"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a-i": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single deprotonation of the carboxyl group; the hydroxyl must be left intact, which is the only trap.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Conjugate acid–base pairs",
+        "Carboxylic acids",
+        "Skeletal structures"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a-ii": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Carboxylic Acids and Derivatives"
+      ],
+      "extension_topics": [
+        "pKa",
+        "Acid-Base Equilibria"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single negative log of the given Ka, so it is quick provided the logarithm is handled correctly.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Logarithms",
+        "Definition of pKa"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5b": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The hydrogen bond must be shown coming from the hydroxyl H to the carboxylate oxygen, so the donor and acceptor have to be chosen correctly and the geometry drawn.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Hydrogen bonding",
+        "Conjugate base stabilisation",
+        "Acid strength"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c-i": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One classification from the tick list: breaking a disaccharide into two sugars clearly requires water.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Reaction types",
+        "Hydrolysis",
+        "Glycosidic bonds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c-ii": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Recall",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "Pure recall that lactose is a glucose–galactose disaccharide, one mark for each name.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Monosaccharides",
+        "Disaccharides"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5d": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The C12 sugar becomes four C3 units, so the water and the coefficient 4 both have to be balanced.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Conservation of atoms",
+        "Mole relationships"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5e": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Five species must be balanced at once with the ethanoic acid:CO2 ratio fixed at 1:1, so it is a genuine multi-species balancing task.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Balancing by inspection",
+        "Conservation of atoms"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5f-i": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One substitution into the sphere-volume formula with the radius taken as half the diameter, and the result converted from cm3 to m3.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Volume of a sphere",
+        "Radius and diameter",
+        "Unit conversion (cm3 to m3)"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5f-ii": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "States of Matter"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The ideal-gas moles must be converted through the 3:1 equation ratio into lactic acid and then into a mass, so three calculations chain together — but the whole sequence carries a single mark.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ideal gas law pV = nRT",
+        "Mole calculations",
+        "Stoichiometric ratios",
+        "Molar mass"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5g": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria",
+        "Ka",
+        "Multiple Equilibria"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The Ka expression must be combined with the mass balance [CO2] + [HCO3−] = ctot and rearranged before any numbers are put in, which is much more than a direct substitution.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ka expression",
+        "pH and [H+]",
+        "Mass balance and simultaneous equations",
+        "Algebraic rearrangement"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5h": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "States of Matter"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria",
+        "Ka"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Interpret Data",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Each species needs a different relationship — ideal gas, Henry's law or Ka — and the offered expressions differ only in which constants appear, so all three must be matched carefully.",
+      "question_features": [
+        "Data-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ideal gas law",
+        "Henry's law",
+        "Ka expression",
+        "pH and [H+]"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5i": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria",
+        "Multiple Equilibria"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The three molar-amount expressions must be summed, factored into the form (a + br³)(patm + γ/r) and the coefficients matched, which is heavy symbolic rearrangement.",
+      "question_features": [
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Algebraic manipulation",
+        "Factorising",
+        "Ideal gas law",
+        "Henry's law"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5j": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The equation for r is self-referential, so it must be turned into a quadratic and solved for two roots, after which the approximation γ/r much smaller than patm selects the physical one.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Long Reading",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Quadratic formula",
+        "Rearranging equations",
+        "Approximation arguments"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    }
+  }
+}

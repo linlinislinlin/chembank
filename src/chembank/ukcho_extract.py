@@ -91,6 +91,13 @@ CREDITS_RE = re.compile(r"^The images? (?:is|are) ©|^This work is published|^Th
 #: *previous* part did not continue onto this page.
 HEADER_Y = 90.0
 
+#: Labels this close together vertically are cells of one line rather than
+#: consecutive sub-questions. 2023 Q2(f) prints its items in two columns — the
+#: row ``(i) CsCl … (iii) GaN`` with ``(ii) NaK`` on the row below — so ``(iii)``
+#: shares ``(i)``'s line. Reading a row-mate as the end of ``(i)`` gives it a
+#: zero-height page clip, i.e. a question with no picture.
+SAME_LINE_Y = 2.0
+
 #: Trim this much whitespace from the top/bottom of each clip.
 CLIP_MARGIN = 4.0
 #: Horizontal clip bounds as a fraction of page width.
@@ -401,6 +408,27 @@ def _next_boundary(labels: list[Label], start_idx: int) -> tuple[Label | None, i
     return None, len(labels)
 
 
+def _closing_boundary(
+    labels: list[Label], start_idx: int, label: Label
+) -> tuple[Label | None, int]:
+    """First label strictly below ``label``'s own line, plus its index.
+
+    A part is closed by the next label that starts a *new* line. A label printed
+    as a cell of the part's own line — the second column of a table row — cannot
+    close it: taking it as the boundary leaves the part a zero-height page clip.
+
+    Only the returned label is used (for the end geometry and the text); advancing
+    through the label sequence must still use :func:`_next_boundary`, or the
+    row-mate skipped here would never become a part of its own.
+    """
+    for j in range(start_idx, len(labels)):
+        other = labels[j]
+        if other.page == label.page and abs(other.y - label.y) <= SAME_LINE_Y:
+            continue
+        return other, j
+    return None, len(labels)
+
+
 def _part_end(doc, label: Label, end: Label | None) -> tuple[int, float]:
     """Resolve where a part ends, clamping a top-of-next-page boundary away.
 
@@ -445,9 +473,10 @@ def split_parts(doc) -> tuple[list[Part], dict[int, str]]:
                 pending_prefix = _text_between(doc, label, nxt)
                 i += 1
                 continue
-            end, j = _next_boundary(labels, i + 1)
-            end_page, end_y = _part_end(doc, label, end)
-            text = _text_between(doc, label, end)
+            _end, j = _next_boundary(labels, i + 1)
+            close, _ = _closing_boundary(labels, i + 1, label)
+            end_page, end_y = _part_end(doc, label, close)
+            text = _text_between(doc, label, close)
             if label.rest:
                 text = (label.rest + "\n" + text).strip()
             parts.append(
@@ -471,9 +500,10 @@ def split_parts(doc) -> tuple[list[Part], dict[int, str]]:
             parent = next(
                 (lb for lb in reversed(labels[:i]) if lb.kind == "part"), None
             )
-            end, j = _next_boundary(labels, i + 1)
-            end_page, end_y = _part_end(doc, label, end)
-            text = _text_between(doc, label, end)
+            _end, j = _next_boundary(labels, i + 1)
+            close, _ = _closing_boundary(labels, i + 1, label)
+            end_page, end_y = _part_end(doc, label, close)
+            text = _text_between(doc, label, close)
             if label.rest:
                 text = (label.rest + "\n" + text).strip()
             if pending_prefix:

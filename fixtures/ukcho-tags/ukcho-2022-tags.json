@@ -1,0 +1,1381 @@
+{
+  "generated": "chembank-ukcho-tag-snapshot",
+  "source": "UKChO",
+  "prefix": "ukcho-2022",
+  "year": 2022,
+  "source_qp": "raw/ukcho/ukcho_2022_r1_qp.pdf",
+  "source_ms": "raw/ukcho/ukcho_2022_r1_ms.pdf",
+  "parents": [
+    {
+      "question_number": 1,
+      "title": "E10 petrol: ethanol blending and fuel energy",
+      "total_marks": 9,
+      "overall_themes": [
+        "Bioethanol and photosynthesis",
+        "Skeletal formulae of branched alkanes",
+        "Enthalpy of combustion from bond enthalpies",
+        "Density and volume conversions",
+        "Carbon footprints of fuels"
+      ]
+    },
+    {
+      "question_number": 2,
+      "title": "Nitrous oxide: formulae and oxide structures",
+      "total_marks": 9,
+      "overall_themes": [
+        "Empirical formula from elemental analysis",
+        "Dot-and-cross and VSEPR structures",
+        "Oxides of nitrogen",
+        "Redox and equilibria in nitrogen chemistry"
+      ]
+    },
+    {
+      "question_number": 3,
+      "title": "Cubane: cage synthesis and Diels-Alder chemistry",
+      "total_marks": 24,
+      "overall_themes": [
+        "Platonic-solid cage structures",
+        "13C NMR symmetry counting",
+        "Diels-Alder cycloaddition",
+        "Photochemical and Favorskii rearrangements",
+        "Multi-step structure deduction"
+      ]
+    },
+    {
+      "question_number": 4,
+      "title": "Lateral-flow COVID testing: buffers and binding equilibria",
+      "total_marks": 13,
+      "overall_themes": [
+        "Buffer solutions",
+        "Avogadro and concentration calculations",
+        "Equilibrium binding constants",
+        "Surface density"
+      ]
+    },
+    {
+      "question_number": 5,
+      "title": "Smallest Chinese knot: ligand synthesis and coordination",
+      "total_marks": 19,
+      "overall_themes": [
+        "Electrophilic aromatic substitution",
+        "Nucleophilic aromatic substitution",
+        "NMR structure elucidation",
+        "Transition-metal coordination geometry",
+        "Alkene metathesis and topology"
+      ]
+    },
+    {
+      "question_number": 6,
+      "title": "Storing vaccines: silica formation and light scattering",
+      "total_marks": 12,
+      "overall_themes": [
+        "Hydrolysis and condensation of silicates",
+        "Hess's law",
+        "Gibbs free energy and equilibrium",
+        "Autocorrelation and dynamic light scattering"
+      ]
+    }
+  ],
+  "parts": {
+    "1a": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One conversion of an IUPAC name into a skeletal formula: locate the pentane chain, then place two methyls on C2 and one on C4.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Skeletal formulae",
+        "IUPAC naming of branched alkanes"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1b": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A familiar balanced equation has to be reproduced with the correct coefficients; the only trap is forgetting that water is a reactant as well as a product.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Photosynthesis",
+        "Combustion of organic compounds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One balanced equation for fermentation, with ethanol and carbon dioxide both required in the ratio 2:2.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Fermentation of glucose",
+        "Ethanol"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1d": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "A full bond-enthalpy cycle: the combustion equation must be balanced first (including the 12.5 O2), then all bonds broken and formed totalled and subtracted to give a value per mole of octane.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Average bond enthalpies",
+        "Balanced combustion equations",
+        "Bond breaking and bond making"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1e": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Energetics"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Three linked steps per fuel: convert each enthalpy of combustion to a value per cm3 using molar mass and density, then scale by the volumes of ethanol and octane present in E5 and E10.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Density",
+        "Molar mass",
+        "Enthalpy of combustion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1f": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single percentage ratio of the two energy values found in (e), with error carried forward permitted.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Percentages"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1g": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "The same percentage ratio applied to carbon dioxide, but only the octane contribution counts, so the octane volumes (950 and 900 cm3) have to be used rather than the total fuel volume.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Percentages",
+        "Combustion stoichiometry"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2a": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Resonance"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "All valence electrons have to be placed on a small oxyacid skeleton, including the lone pair on nitrogen and the O-H bond, while the two N-O bonds may be drawn as a delocalised pair.",
+      "question_features": [
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Covalent bonding",
+        "Lone pairs",
+        "Valence electrons"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2b": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The two percentages must be converted into a mole ratio, and the resulting near-integer ratio C:H:N:O = 1:1:1:3 identifies the formula.",
+      "question_features": [
+        "Data-heavy",
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Empirical formula from percentage composition",
+        "Mole calculations",
+        "Molar mass"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2c": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [
+        "Nitrogen and Sulfur"
+      ],
+      "extension_topics": [
+        "Resonance",
+        "Delocalisation"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two ion shapes must be represented accurately: a tetrahedral ammonium ion and a trigonal planar nitrate ion whose bonding is best shown as delocalised.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "VSEPR theory",
+        "Shapes of simple ions",
+        "Delocalisation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2d": {
+      "primary_as_anchor": "Nitrogen and Sulfur",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four species have to be deduced from a described sequence: the NO/NO2 pair, the NO2/N2O4 equilibrium and the mixed oxide F = N2O3 all have to be inferred from the behaviour given.",
+      "question_features": [
+        "Multi-step",
+        "Unfamiliar Context",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxides of nitrogen",
+        "Redox",
+        "Equilibria"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2e": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Formal Charge",
+        "Resonance"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The structure must keep nitrogen within its octet, which rules out a five-bonded nitrogen and forces a choice between the N=N=O and N(triple)N-O forms.",
+      "question_features": [
+        "Information Provided in Question",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Covalent bonding",
+        "Octet rule",
+        "Formal charge"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3a": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "The formula follows by counting the eight cage vertices, each of which must carry one hydrogen.",
+      "question_features": [
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Molecular formulae",
+        "Skeletal formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Five substitution patterns on the cubic framework must each be checked for symmetry so that equivalent carbons are merged; the highly symmetric 1,4-isomer contrasted with the unsymmetrical 1,2-isomer is the crux.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Structure Deduction",
+        "Diagram",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "13C NMR",
+        "Molecular symmetry and equivalent environments",
+        "Organic structures"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3c": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydrocarbons"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The formula C7H9O2Br3 together with the clue that all three bromines lie three bonds from both oxygens fixes the substitution pattern, so the precursor and its tribromide must be built to satisfy both the formula and the symmetry constraint.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Bromination of carbonyl compounds",
+        "Functional groups",
+        "Molecular formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3d": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [
+        "Organic Synthesis"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two Diels-Alder adducts must be formed by pairing the diene and dienophile halves of each example and joining them across the new six-membered ring.",
+      "question_features": [
+        "Diagram",
+        "Organic Mechanism",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Diels-Alder cycloaddition",
+        "Curly arrows",
+        "Diene and dienophile"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3e": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Retrosynthesis"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Working backwards from the symmetric Diels-Alder dimer requires recognising the cyclohexene ring and cleaving it into the diene and dienophile halves to recover the single monomer Y.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Diels-Alder cycloaddition",
+        "Retrosynthetic analysis"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydrocarbons"
+      ],
+      "extension_topics": [
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Intermediate C must be deduced from the Diels-Alder behaviour implied by the sodium hydroxide step, so the brominated precursor has to be converted into the correct diene and the adduct drawn.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Organic Mechanism",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Diels-Alder cycloaddition",
+        "Curly arrows",
+        "Elimination"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3g": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The electrophilic centres must be identified on the given framework: both carbonyl carbons have to be circled, so any extra or missing carbon loses the mark.",
+      "question_features": [
+        "Diagram",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Carbonyl polarity",
+        "Nucleophile and electrophile",
+        "Favorskii rearrangement"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3h": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Two cage structures must be built on the supplied frameworks: the acid-catalysed product E and then the intramolecular photochemical product F, which has to contain two four-membered rings.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Multi-step",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Carbonyl chemistry",
+        "Photochemical cycloaddition",
+        "Cage structures"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3i": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The barrelene route must be followed through two further structures G and H, each constrained by the frameworks supplied and by the Diels-Alder step that precedes them.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Diels-Alder cycloaddition",
+        "Functional groups",
+        "Reaction conditions"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3j": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydrocarbons"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Retrosynthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four structures Q, R, S and T must be deduced through the barrelene sequence; the marking is all-or-nothing for each structure and one product is the small gas CO2, so the whole route has to be internally consistent.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Multi-step",
+        "Cross-topic"
+      ],
+      "prerequisites": [
+        "Diels-Alder cycloaddition",
+        "Decarboxylation",
+        "Reaction sequences"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 7,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4a": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Buffers"
+      ],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One recognition that the dihydrogen phosphate and hydrogen phosphate ions are a conjugate acid-base pair whose role is to buffer the solution.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Buffers",
+        "Conjugate acid-base pairs"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4b": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Buffers",
+        "Acid-Base Equilibria"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The relative amounts matter: 1.0 cm3 of 0.10 mol dm-3 HCl is far more concentrated than the millimolar buffer, so the acid overwhelms the buffer capacity.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Buffers",
+        "Acid-base reactions",
+        "Mole calculations"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4c": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Particles per cm3 must be converted to mol dm-3 through Avogadro's constant, then multiplied by the 20 spike proteins carried by each virus particle.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Avogadro's constant",
+        "Unit conversion",
+        "Mole calculations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4d": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The binding equilibrium must be set up with an initial/change table, and the large excess of nanoparticles used to justify treating [NP] as constant, which simplifies the algebra to x = K[NP]0[SP]0 / (1 + K[NP]0).",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Equilibrium constant",
+        "Mole calculations",
+        "Algebraic rearrangement",
+        "Avogadro's constant"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e-i": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single multiplication: the strip surface area (3 mm2) times the surface density of antibodies gives the total number on the strip.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Areas",
+        "Surface density",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e-ii": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The strip volume must be computed and the SPNP concentration converted into an amount and then a count, with the free SP found by subtracting the bound SPNP from the initial spike-protein concentration.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Concentration",
+        "Volume conversion",
+        "Avogadro's constant"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4f": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The surface and solution equilibria have to be combined, the simplification K sigma_AB/V >> 1 used to show that essentially all SPNP binds, and the whole 0.10 cm3 sample then scaled up.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Equilibrium constant",
+        "Surface density",
+        "Mole calculations",
+        "Avogadro's constant"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4g": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The observed immobilised count must be converted into a surface density and then scaled to the 3 x 106 mm-2 visibility limit to find the minimum number of virus particles giving a positive result.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Proportionality",
+        "Surface density",
+        "Ratios"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a-i": {
+      "primary_as_anchor": "Hydroxy Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "A has to be identified as the phenol that gives 3-fluoro-4-nitrophenol on nitration, so the fluorine must be placed meta to the hydroxyl group with C4 left free.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Phenols",
+        "Electrophilic aromatic substitution",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a-ii": {
+      "primary_as_anchor": "Hydroxy Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Mechanism",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The electrophile generated in the nitrating mixture has to be identified as the nitronium ion rather than neutral nitric acid.",
+      "question_features": [
+        "Information Provided in Question",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Electrophilic aromatic substitution",
+        "Nitrating mixture",
+        "Nucleophile and electrophile"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5b": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The percentages give the empirical formula C6H5NO3; combining that formula with the nitrophenol chemistry implied by the rest of the question fixes the structure.",
+      "question_features": [
+        "Data-heavy",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Empirical formula from percentage composition",
+        "Phenols",
+        "Nitro compounds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c-i": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Compound C lies between 3-fluoro-4-nitrophenol and the amine-displacement product, so the functional group that will undergo nucleophilic aromatic substitution has to be recognised.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Nucleophilic aromatic substitution",
+        "Activating groups",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c-ii": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Hydroxy Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The amine displaces the activated aryl fluoride by nucleophilic aromatic substitution, so D keeps the ring substitution pattern with R-NH replacing F.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Nucleophilic aromatic substitution",
+        "Activating groups",
+        "Nucleophile and electrophile"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5d": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Halogen Compounds"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways",
+        "Unknown Reagent Deduction"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Two structures must be deduced: compound E must carry the palladium-coupling handle on the strand and reagent G must be the terminal-alkene partner for the later metathesis step.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Multi-step",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Cross-coupling reactions",
+        "Terminal alkenes",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5e": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [
+        "Nitrogen Compounds"
+      ],
+      "extension_topics": [
+        "1H NMR"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Interpret Data"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The splitting patterns and integrations must be combined to build R: a 6H doublet requires an isopropyl terminus, while the two 2H doublet-of-triplets signals place two CH2 groups between that terminus and the nitrogen.",
+      "question_features": [
+        "Data-heavy",
+        "Structure Deduction",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "1H NMR",
+        "Splitting patterns",
+        "Integration",
+        "Amines"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5f": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Complex Ions",
+        "Coordination Number"
+      ],
+      "primary_skill": "Spatial Reasoning",
+      "secondary_skills": [
+        "Draw / Represent"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The coordinating atoms on the rigid strand must be mapped onto three metal centres so that every donor atom is arrowed to the correct metal and no metal is left under- or over-coordinated.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Coordinate (dative) bonding",
+        "Ligands",
+        "Transition metal complexes"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5g": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Complex Ions",
+        "Coordination Number"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The geometry follows from counting the donors around each metal ion in the 3 x 3 grid, which gives six-coordinate octahedral centres.",
+      "question_features": [
+        "Information Provided in Question",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Coordination geometry",
+        "Ligands"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5h": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Periodicity"
+      ],
+      "extension_topics": [
+        "Complex Ions"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Deduce",
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Two independent deductions are needed: the green-to-brown hydroxide behaviour identifies Fe2+, and the 32.0% mass loss gives the molar mass from which the tetrahedral anion BF4- follows.",
+      "question_features": [
+        "Data-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Water of crystallisation",
+        "Transition metal ion tests",
+        "Molar mass"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5i": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Spatial Reasoning",
+      "secondary_skills": [
+        "Deduce",
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Each set of joins must be followed around the 3 x 3 grid to see which strand ends can still reach one another, and hence whether the product is one knot, two interlinked rings, separate rings or a linear molecule.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Multi-step",
+        "Diagram",
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Topology of rings",
+        "Following connectivity",
+        "Structural reasoning"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6a": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two linked equations must be balanced: the hydrolysis of the orthosilicate ester to orthosilicic acid, then the condensation of that acid to silica.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Hydrolysis",
+        "Silicon compounds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6b": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The three supplied equations must be combined with the right multiples (reverse the HF reaction six times and use the other two as written) so that the target reaction is reproduced before the enthalpies are summed.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Hess's law",
+        "Enthalpy cycles",
+        "Manipulating equations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6c": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Energetics"
+      ],
+      "extension_topics": [
+        "Gibbs Free Energy",
+        "Entropy",
+        "Thermodynamic Feasibility"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The supplied logarithmic expression must be matched to the rearranged Gibbs equation, so the slope of the ln[Si(OH)4] against 1/T plot yields ΔH and the intercept yields ΔS.",
+      "question_features": [
+        "Multi-step",
+        "Information Provided in Question",
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Gibbs free energy",
+        "Equilibrium constant",
+        "Logarithms",
+        "Algebra"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6d": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single substitution: at t = 0 every time-dependent term vanishes, so A is just c0 minus 1.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Substitution into formulae",
+        "Significant figures"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6e": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Interpret Data"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two values of f must be formed from the given c values, then the slope and intercept extracted from the two points; the arithmetic is very sensitive to rounding.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Data-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Gradients from two points",
+        "Significant figures",
+        "Substitution"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "6f": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The two expressions for a and b must be combined to eliminate one reciprocal radius, giving a quadratic in x1 whose two roots then have to be tested for physical meaning before the radii are reported.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Simultaneous equations",
+        "Quadratic formula",
+        "Significant figures",
+        "Physical interpretation of roots"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    }
+  }
+}

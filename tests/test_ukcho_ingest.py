@@ -1595,6 +1595,13 @@ def test_a_two_column_run_of_items_is_split_not_merged() -> None:
     parts, _ = X.split_parts(two_column)
     # Reading order: (i) and (iii) share the first row, (ii) is on the second.
     assert [p.key for p in parts] == ["2f-i", "2f-iii", "2f-ii"]
+    # A row-mate must not close the block: (i) ends at the row *below* it, not at
+    # (iii) on its own line. Ending at (iii)'s y gives a zero-height page clip,
+    # which is how 2f-i shipped without a picture.
+    by_key = {p.key: p for p in parts}
+    assert by_key["2f-i"].y == 170.0 and by_key["2f-i"].end_y == 195.0
+    assert by_key["2f-iii"].y == 170.0 and by_key["2f-iii"].end_y == 195.0
+    assert all(p.end_y > p.y for p in parts), "no part may collapse to zero height"
     # Two columns jumble which part carries which cell text, so only the union is
     # guaranteed; the rendered clip is what the student sees.
     joined = " ".join(p.text or "" for p in parts)

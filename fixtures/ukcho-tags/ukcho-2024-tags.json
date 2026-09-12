@@ -1,0 +1,1444 @@
+{
+  "generated": "chembank-ukcho-tag-snapshot",
+  "source": "UKChO",
+  "prefix": "ukcho-2024",
+  "year": 2024,
+  "source_qp": "raw/ukcho/ukcho_2024_r1_qp.pdf",
+  "source_ms": "",
+  "parents": [
+    {
+      "question_number": 1,
+      "title": "Bronze: alloy composition and the copper unit cell",
+      "total_marks": 8,
+      "overall_themes": [
+        "Transition metal electronic configurations",
+        "Density and volume",
+        "Face-centred cubic unit cells",
+        "Crystal density"
+      ]
+    },
+    {
+      "question_number": 2,
+      "title": "Iodate salts: redox titration and mineral analysis",
+      "total_marks": 15,
+      "overall_themes": [
+        "Oxidation states",
+        "VSEPR and bonding",
+        "Redox titration stoichiometry",
+        "Back-calculation from titration data",
+        "Deducing ions from molar mass and charge"
+      ]
+    },
+    {
+      "question_number": 3,
+      "title": "Fuel-producing bacteria: ring strain and enolate chemistry",
+      "total_marks": 20,
+      "overall_themes": [
+        "Ring strain and enthalpy of combustion",
+        "Hess's law",
+        "Enolate formation and delocalisation",
+        "Multi-step synthesis",
+        "Enzyme-catalysed reaction types"
+      ]
+    },
+    {
+      "question_number": 4,
+      "title": "MRI contrast agent gadopiclenol: synthesis and relaxation",
+      "total_marks": 24,
+      "overall_themes": [
+        "Multi-step organic synthesis",
+        "Protecting groups",
+        "Stereocentres",
+        "Mole calculations",
+        "NMR and relaxation",
+        "Algebraic rearrangement",
+        "Graph-based data analysis"
+      ]
+    },
+    {
+      "question_number": 5,
+      "title": "Sulfur in the atmosphere: oxidation states and gas-phase kinetics",
+      "total_marks": 15,
+      "overall_themes": [
+        "Oxidation states from electronegativity",
+        "Acid-base and pH",
+        "Radical chemistry",
+        "Rate law determination",
+        "Units of rate constants"
+      ]
+    }
+  ],
+  "parts": {
+    "1a": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Recall",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single recall step: silver is one of the elements whose configuration departs from the simple filling order, so the d/s anomaly has to be known rather than worked out.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electron configuration",
+        "Filling order and the d-block exceptions"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1b": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One application of the rule that the 4s electrons are removed before 3d when a transition metal is ionised, giving a d9 ion.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Electron configuration",
+        "Ionisation of transition metals"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "States of Matter"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One substitution into density = mass / volume, with a kilogram to gram conversion.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Density",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1d": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "States of Matter"
+      ],
+      "extension_topics": [
+        "Crystal Density"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The supplied density equation has to be rearranged for the fraction of tin before the value is substituted, so it is more than a one-step calculation.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Algebra",
+        "Molar mass"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1e": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [
+        "Atomic Structure"
+      ],
+      "extension_topics": [
+        "Unit Cells",
+        "Face-Centred Cubic",
+        "Lattice Dimensions"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The face diagonal has to be related to the atomic radius by Pythagoras before the edge length can be converted into cm.",
+      "question_features": [
+        "Diagram",
+        "Calculation-heavy",
+        "Spatial Reasoning",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Pythagoras",
+        "Face-centred cubic geometry",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1f": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Unit Cells",
+        "Crystal Density"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single cubing of the cell edge obtained in the previous part.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Volume of a cube"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1g": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Unit Cells",
+        "Face-Centred Cubic",
+        "Crystal Density"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Several linked steps: count the atoms per face-centred cell, turn that count into a mass with Avogadro's constant, then divide by the cell volume.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Face-centred cubic atom count",
+        "Avogadro's constant",
+        "Density",
+        "Mole calculations"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2a": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One application of the oxidation state rules, with oxygen fixed at -2 and an overall charge of -1.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxidation states",
+        "Polyatomic ions"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2b": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Formal Charge",
+        "Resonance",
+        "Unusual VSEPR"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Every outer electron must be placed and the overall -1 charge shown; iodine has to expand its octet, which is not the default assumption at this level.",
+      "question_features": [
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Covalent bonding",
+        "Lone pairs",
+        "Expanded octet"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2c": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Unusual VSEPR"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The angle has to be deduced from the lone pair on iodine, which compresses it below the tetrahedral value.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "VSEPR",
+        "Lone pair repulsion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2d": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single proportion: the two compounds are compared through their molar masses.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Molar mass"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2e-i": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two half-equations have to be combined so the electrons cancel, giving three iodine molecules from each iodate ion.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balancing redox equations",
+        "Half equations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2e-ii": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One classification step: the same element is both oxidised and reduced.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxidation and reduction"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2f": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The thiosulfate-iodine equation has to be recalled or built from the change in oxidation state of sulfur.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Redox equations",
+        "Thiosulfate titration"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2g": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Electrochemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "An aliquot has to be scaled up to the stock solution, then carried through the iodate-iodine-thiosulfate ratios before the volume is found.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Experimental"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Solution concentration",
+        "Aliquot scaling"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Electrochemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The metal's own contribution has to be isolated by difference, converted into an amount of iodine, then compared with the amount of metal ion present.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Solution concentration",
+        "Thiosulfate titration"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2i": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The change in oxidation state has to be linked back to the amount of iodine produced in the previous part.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Oxidation states",
+        "Electron transfer"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2j": {
+      "primary_as_anchor": "Nitrogen and Sulfur",
+      "secondary_as_anchors": [
+        "Electrochemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The absence of effervescence has to be turned into a list of anions whose protonated forms are gaseous.",
+      "question_features": [
+        "Unfamiliar Context"
+      ],
+      "prerequisites": [
+        "Acid reactions of anions",
+        "Gas tests"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2k": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Electrochemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Charge balance fixes the sum of the ion charges, and the leftover molar mass then has to be matched against the candidate ions.",
+      "question_features": [
+        "Multi-step",
+        "Unfamiliar Context",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Molar mass",
+        "Charge balance"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3a": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: read the skeletal formula and count the ring carbons and the hydrogens they imply.",
+      "question_features": [
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Skeletal formulae",
+        "Molecular formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b-i": {
+      "primary_as_anchor": "Hydrocarbons",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A standard combustion equation to balance, with an odd oxygen count that forces a whole-number multiple.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Combustion of organic compounds"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b-ii": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The combustion enthalpy has to be combined with the formation enthalpies of the products through a Hess cycle before the unknown can be found.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Hess's law",
+        "Enthalpy of formation",
+        "Enthalpy of combustion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b-iii": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "A single division of the combustion enthalpy by the number of carbon atoms, keeping the sign.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Enthalpy of combustion",
+        "Sign conventions"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b-iv": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "The same single division as the previous part, applied to the six-carbon ring.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Enthalpy of combustion",
+        "Sign conventions"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3c": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [
+        "Resonance",
+        "Delocalisation"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The lone pair and the pi bond have to be moved to show the carbanion form of the enolate, which needs the delocalised picture rather than a single structure.",
+      "question_features": [
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Curly arrows",
+        "Delocalisation",
+        "Enolate formation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3d": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [
+        "Halogen Compounds"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The polarity of the two reactants has to be reasoned about: the enolate carbon is electron-rich and the methyl carbon of iodomethane is electron-poor.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Nucleophile and electrophile",
+        "Polar bonds",
+        "Electronegativity"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3e": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Mechanism"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The intermediate of an enolate addition has to be constructed, including the new bond formed at the alpha carbon.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Nucleophilic addition to carbonyls",
+        "Enolate chemistry"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f-i": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways",
+        "Selectivity"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four structures have to be deduced in sequence, each resting on the previous one, including a stereochemically undefined alkene and a hydrazone.",
+      "question_features": [
+        "Multi-step",
+        "Cross-topic",
+        "Diagram",
+        "Structure Deduction",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Carbonyl chemistry",
+        "Reagents and conditions",
+        "Functional group interconversion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 6,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f-ii": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [
+        "Organic Synthesis"
+      ],
+      "extension_topics": [
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Each of the five steps has to be inspected for enolate intermediacy rather than just the obvious ones.",
+      "question_features": [
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Enolate chemistry",
+        "Reaction conditions"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3g": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One classification step, choosing between the standard reaction types for an enzyme that removes oxygen from a functional group.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Reaction types",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3h": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [
+        "Organic Synthesis"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The fate of the carboxylate group has to be recognised so that both fragments of the enzyme-3 step are accounted for.",
+      "question_features": [
+        "Information Provided in Question",
+        "Multi-step",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Decarboxylation",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3i": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The order in which the four enzymes act has to be worked out from the structures and the constraint that each is used exactly once.",
+      "question_features": [
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Reaction sequences",
+        "Functional group interconversion"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4a": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carboxylic Acids and Derivatives"
+      ],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Retrosynthesis",
+        "Nucleophilic Acyl Substitution"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Four structures must be built in sequence, including recognising that a carboxylic acid is reduced by a milder hydride than expected because the ring activates it.",
+      "question_features": [
+        "Multi-step",
+        "Diagram",
+        "Structure Deduction",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Carbonyl chemistry",
+        "Reagents and conditions",
+        "Reducing agents"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 4,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4b": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Spatial Reasoning",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "All the stereocentres in a large structure have to be located, with no false positives, which means checking each candidate carbon for four different groups.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Stereocentres",
+        "Isomerism",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4c": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [
+        "Carbonyl Compounds"
+      ],
+      "extension_topics": [
+        "Protecting Group Logic",
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Three further structures have to be deduced, one of which requires reasoning about why a protecting group is needed before the next transformation.",
+      "question_features": [
+        "Multi-step",
+        "Diagram",
+        "Structure Deduction",
+        "Organic Mechanism"
+      ],
+      "prerequisites": [
+        "Carbonyl chemistry",
+        "Protecting groups",
+        "Reagents and conditions"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 5,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4d": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The molar mass of the complex has to be found first, then converted through concentration and dose volume to a mass of gadolinium.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Molar mass",
+        "Solution concentration"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Recall",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One recall step, linking the energy gap between nuclear spin states to the radiowave region.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "NMR",
+        "Electromagnetic spectrum"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4f": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One substitution into the given exponential expression, with the ratio of times simplifying to a whole number.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Exponential decay",
+        "Logarithms",
+        "Percentages"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4g": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Equilibria"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The concentration of water has to be derived from its density and molar mass before the molar fraction can be formed.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Density",
+        "Solution concentration"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4h": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "An expression for the field-independent relaxation time has to be extracted by eliminating the unknown constant between two simultaneous equations.",
+      "question_features": [
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Algebra",
+        "Simultaneous equations",
+        "Proportionality"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4i": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Arrhenius Reasoning"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The expression has to be inverted and logarithms taken so that it matches a straight-line form, which is the step students find hardest.",
+      "question_features": [
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Logarithms",
+        "Rearranging equations",
+        "Exponential relationships"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4j": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Arrhenius Reasoning",
+        "Rate Equation"
+      ],
+      "primary_skill": "Interpret Data",
+      "secondary_skills": [
+        "Multi-step Reasoning",
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The intercept of the straight-line form has to be evaluated from two data points, and the result then exponentiated to recover the required product.",
+      "question_features": [
+        "Data-heavy",
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Logarithms",
+        "Linear relationships",
+        "Tabulated data"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4k": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Arrhenius Reasoning"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "A separate result at higher temperature has to be combined with the molar fraction from earlier to isolate the square of q.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Algebra",
+        "Ratios",
+        "Powers and roots"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Three oxidation states must be found by applying the electron-allocation method given in the stem to each molecule in turn.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxidation states",
+        "Electronegativity",
+        "Bond polarity"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5b-i": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [
+        "Nitrogen and Sulfur"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One balanced equation, with a half coefficient that may be doubled.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Formulae from structural formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5b-ii": {
+      "primary_as_anchor": "Nitrogen and Sulfur",
+      "secondary_as_anchors": [
+        "Introduction to Organic Chemistry"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The sulfur atom has to be shown with the correct bonding and lone pair after the oxygen has been added.",
+      "question_features": [
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Functional groups",
+        "Sulfur chemistry"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c": {
+      "primary_as_anchor": "Nitrogen and Sulfur",
+      "secondary_as_anchors": [
+        "Analytical Techniques"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The formula has to be deduced from the behaviour described: a highly soluble oxide that gives a diprotic acid.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxides of sulfur",
+        "Acid-base behaviour"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5d": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Acid-Base Equilibria"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "An amount of gas is found from the ideal gas equation, doubled because the acid is diprotic, and then converted to a pH.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ideal gas equation",
+        "Stoichiometry of strong acids",
+        "pH"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5e": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [
+        "Kinetics"
+      ],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Interpret Data"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Each description has to be tested against what the two radical pathways can do, distinguishing hydrogen-atom loss from proton and hydride loss.",
+      "question_features": [
+        "Multi-step",
+        "Cross-topic",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Radical chemistry",
+        "Oxidation and reduction",
+        "Hydrogen atom transfer"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "Verify which column each tick belongs to (Forming J• vs Forming N•) against the clip.",
+      "review_required": true,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5f": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The identity of the attacking radical has to be inferred from the chemistry of the atmosphere and the element being added.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Radicals",
+        "Atmospheric chemistry"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5g": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Reaction Order",
+        "Half-Life",
+        "Rate Equation"
+      ],
+      "primary_skill": "Interpret Data",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The orders cannot be read off directly, because one reactant is in large excess; the change in half-life between the two experiments has to be used instead.",
+      "question_features": [
+        "Data-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Rate equation",
+        "Half-life",
+        "Order of reaction"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5h": {
+      "primary_as_anchor": "Kinetics",
+      "secondary_as_anchors": [
+        "Stoichiometry"
+      ],
+      "extension_topics": [
+        "Rate Equation"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The concentration of the third body has to be derived from the total pressure, then used to convert a second-order constant into a third-order one with unfamiliar units.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ideal gas equation",
+        "Concentration conversions",
+        "Units of rate constants"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    }
+  }
+}

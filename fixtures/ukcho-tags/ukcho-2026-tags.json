@@ -1,0 +1,1454 @@
+{
+  "generated": "chembank-ukcho-tag-snapshot",
+  "source": "UKChO",
+  "prefix": "ukcho-2026",
+  "year": 2026,
+  "source_qp": "raw/ukcho/ukcho_2026_r1_qp.pdf",
+  "source_ms": "raw/ukcho/ukcho_2026_r1_ms.pdf",
+  "parents": [
+    {
+      "question_number": 1,
+      "title": "Pee in the pool: chlorine disinfection and chloramine formation",
+      "total_marks": 8,
+      "overall_themes": [
+        "Oxidation numbers of chlorine species",
+        "Acid-base and disproportionation equations",
+        "Shapes of ions",
+        "Dot-and-cross diagrams",
+        "Henry's law"
+      ]
+    },
+    {
+      "question_number": 2,
+      "title": "Isocyanides: smell, synthesis and the Passerini reaction",
+      "total_marks": 18,
+      "overall_themes": [
+        "Resonance structures of isocyanides",
+        "Nucleophilic substitution with cyanide",
+        "Structure deduction from reactions",
+        "Zaytsev's test",
+        "Combinatorial counting in the Passerini reaction"
+      ]
+    },
+    {
+      "question_number": 3,
+      "title": "Henna tattoos: lawsone and keto-enol tautomerism",
+      "total_marks": 19,
+      "overall_themes": [
+        "Keto-enol tautomerism",
+        "Equilibrium constants",
+        "Drawing tautomers of unfamiliar functional groups",
+        "Bond enthalpy estimation",
+        "Gibbs free energy and solvation cycles"
+      ]
+    },
+    {
+      "question_number": 4,
+      "title": "Rice, spice and mice: carotene, tartrazine and UV-vis",
+      "total_marks": 26,
+      "overall_themes": [
+        "Molecular formula from unsaturation",
+        "Conjugation and molecular orbitals",
+        "UV-vis absorption and wavelength calculations",
+        "Refractive index and concentration",
+        "Multi-step aromatic synthesis of tartrazine",
+        "Assigning spectra from a separation scheme"
+      ]
+    },
+    {
+      "question_number": 5,
+      "title": "Minerals: turquoise and variscite unit cells",
+      "total_marks": 13,
+      "overall_themes": [
+        "Charge balance in an idealised formula",
+        "Percentage composition of minerals",
+        "Polyhedra geometry from bond lengths",
+        "Unit cell volumes and packing fractions",
+        "Crystal density"
+      ]
+    }
+  ],
+  "parts": {
+    "1a": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: apply the oxidation-number rules to three related chlorine species. Only the number of correct answers, not the reasoning, is graded.",
+      "question_features": [],
+      "prerequisites": [
+        "Oxidation numbers",
+        "Electronegativity"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1b": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: transfer protons from the supplied acid to carbonate and balance the products. The distractor is writing NaCl (i.e. reducing the chlorine) instead of NaOCl.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Acid-carbonate reactions",
+        "Proton transfer",
+        "Balanced equations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c-i": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Disproportionation"
+      ],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One step once 'disproportionation' is recognised, but chlorine must be balanced across two different oxidation states, and the ionic form is required.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Ionic equations",
+        "Balancing redox equations",
+        "Disproportionation"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1c-ii": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One step, but an ion rather than a molecule: the lone pair on chlorine must first be worked out from the formula, otherwise the shape is misread as trigonal planar.",
+      "question_features": [
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "VSEPR theory",
+        "Lone pairs",
+        "Shapes of molecules"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1d": {
+      "primary_as_anchor": "Nitrogen and Sulfur",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: turn the stated hydrolysis products into a balanced equation, keeping the nitrogen count right (2NH3, not NH3).",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Hydrolysis"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1e": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: place three bonding pairs and the lone pairs of a small molecule. The triple bonded haem-like error (giving Cl a double bond) is the usual slip.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Covalent bonding",
+        "Dot-and-cross diagrams",
+        "Lone pairs"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "1f": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One substitution after rearranging the supplied law; the unfamiliar law and the units of the constant are what make it non-trivial.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Rearranging equations",
+        "Mole calculations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2a": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Resonance",
+        "Formal Charge"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One structure, but a lone pair must be relocated onto the other atom of an unfamiliar functional group and the electron count kept right.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Lone pairs",
+        "Covalent bonding",
+        "Formal charge"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "The exact form depends on the arrow printed in the question. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2b-i": {
+      "primary_as_anchor": "Halogen Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "SN2"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One substitution, but the student must pick the carbon end of the ambident cyanide nucleophile instead of the nitrogen end.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Nucleophilic substitution",
+        "Nitriles",
+        "Nucleophile and electrophile"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Answer inferred from the AgCN/NaCN contrast; confirm the drawn structure against the mark scheme clip.",
+      "review_required": true,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2b-ii": {
+      "primary_as_anchor": "Halogen Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: pair the silver ion from AgCN with the bromide released by the halogenoalkane.",
+      "question_features": [],
+      "prerequisites": [
+        "Halide tests",
+        "Colours of silver halides"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2c": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two steps with a hidden unit trap: 50 m3 must be converted to dm3 before multiplying by the Avogadro constant.",
+      "question_features": [
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Avogadro constant",
+        "Unit conversion (m3 to dm3)"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2d-i": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Structure Deduction",
+        "Unknown Reagent Deduction"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The functional group must be deduced by combining two different reactions of the same unknown compound, and one of those products (D) is only identified in the next part.",
+      "question_features": [
+        "Structure Deduction",
+        "Multi-step",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Functional groups",
+        "Hydrolysis of amides",
+        "Dehydration"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2d-ii": {
+      "primary_as_anchor": "Carboxylic Acids and Derivatives",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Structure Deduction"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Calculate",
+        "Deduce"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The formula must be back-calculated from the percentage carbon, then recognised as the carboxylic acid that pairs with R-NH2.",
+      "question_features": [
+        "Structure Deduction",
+        "Multi-step",
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Percentage composition",
+        "Molar mass",
+        "Functional groups",
+        "Hydrolysis of amides"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2e": {
+      "primary_as_anchor": "Nitrogen Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One equation, but it has three reactants and six products (three NaCl and three water), so the balancing is easy to get wrong.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Balanced equations",
+        "Amines"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2f": {
+      "primary_as_anchor": "Nitrogen Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The stated scope of the test (some amines react, amides do not) must be applied across a set of drawn structures, with partial credit for partial correctness.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Amines",
+        "Primary vs secondary amines",
+        "Amides"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "The mark scheme does not reproduce which molecules were circled. Confirm the two structures from the question paper image.",
+      "review_required": true,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2g": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Retrosynthesis",
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Three structures must be found by disconnecting the product, though the reacting classes are named in the question.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Functional groups",
+        "Carbonyl compounds",
+        "Carboxylic acids",
+        "Isocyanides"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Structures depend on the printed compound E. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2h": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One multiplication, but the three compound classes must first be sorted out of the cupboard list.",
+      "question_features": [],
+      "prerequisites": [
+        "Functional groups",
+        "Combinatorial counting"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2i": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One decision, but the four-different-substituents test must be applied to an unfamiliar skeleton.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Stereocentres / chiral centres",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2j": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Selectivity"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Requires deciding which carbonyl compounds have two different substituents (so give a pair of enantiomers as two products) before the count can be made.",
+      "question_features": [
+        "Multi-step",
+        "Structure Deduction",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Stereocentres",
+        "Enantiomers",
+        "Combinatorial counting"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "2k": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Selectivity"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The drawn molecules contain chemically equivalent groups, so the count is 5 × 2 × 5 rather than the (larger) number of drawn compounds.",
+      "question_features": [
+        "Multi-step",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Symmetry and equivalent groups",
+        "Functional groups",
+        "Combinatorial counting"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3a": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One substitution into the equilibrium expression that the question supplies.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Equilibrium constant expression",
+        "Mole calculations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3b": {
+      "primary_as_anchor": "Equilibria",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two-step algebra: the equilibrium expression must be combined with the 100% mass balance before either percentage can be found.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Equilibrium constant expression",
+        "Algebra",
+        "Percentages"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3c": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The supplied rule about the hydrogen next to the C=O group must be applied across a list that includes compounds with no such hydrogen.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Carbonyl compounds",
+        "Alpha-hydrogens",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3d-i": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Structure Deduction"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Two distinct enols must be generated from a molecule with three ketone groups, deciding which carbonyl enolises each time.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Carbonyl compounds",
+        "Keto-enol tautomerism",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Mark scheme answers with a drawn structure. Confirm the two enol forms against the mark scheme clip.",
+      "review_required": true,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3d-ii": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One addition, but the donor and acceptor must both be located within the same tautomer.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Hydrogen bonding",
+        "Keto-enol tautomerism"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Depends on the drawing produced in (d)(i). Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3e": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Apply",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One classification, but the reaction type must be inferred from a described colour change rather than from named reagents.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Reaction types",
+        "Oxidation and reduction",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f-i": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One proton-and-double-bond shift, but on a sulfur-containing functional group rather than a plain ketone.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Keto-enol tautomerism",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Mark scheme answers with a drawn structure. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3f-ii": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry",
+        "Formal Charge"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "One shift, but the product is charged, so a formal-charge error or a five-bond nitrogen is easy to produce.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Keto-enol tautomerism",
+        "Formal charge",
+        "Valence"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Mark scheme answers with a drawn structure. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3g-i": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One step, but both tautomers must be found; a single structure scores nothing.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Keto-enol tautomerism",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Mark scheme answers with a drawn structure. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3g-ii": {
+      "primary_as_anchor": "Carbonyl Compounds",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Carbonyl Chemistry"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Three distinct tautomers must be located, so one proton shift is not enough and a partial answer scores only one mark.",
+      "question_features": [
+        "Diagram",
+        "Structure Deduction",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Keto-enol tautomerism",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "Mark scheme answers with a drawn structure. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3h": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One calculation, but the C=O, C=C, C–H and O–H bonds broken and formed must be selected correctly from the data table.",
+      "question_features": [
+        "Data-heavy",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Bond enthalpies",
+        "Balanced equations"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3i": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Gibbs Free Energy",
+        "Entropy"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Two chained calculations with a J/kJ conversion, requiring the exponential form of ΔG⦵ = −RT lnK rather than a simple substitution.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Gibbs free energy equation",
+        "Entropy",
+        "Logarithms",
+        "Rearranging equations"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "3j": {
+      "primary_as_anchor": "Energetics",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Gibbs Free Energy",
+        "Coupled Equilibria"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "A Hess-like cycle must be built from the gas-phase value and two solvation values before K can be found, and the sign convention on the solvation terms is easy to invert.",
+      "question_features": [
+        "Multi-step",
+        "Cross-topic",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Gibbs free energy",
+        "Hess cycles",
+        "Logarithms",
+        "Sign conventions"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4a": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One step: use the unsaturation implied by the C=C bonds and the two rings to reach the hydrogen count.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Degrees of unsaturation",
+        "Molecular formula"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4b-i": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Delocalisation"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The C=C bonds in one unbroken conjugated chain must be distinguished from those in the rings.",
+      "question_features": [
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Conjugation",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4b-ii": {
+      "primary_as_anchor": "Introduction to Organic Chemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Delocalisation"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "The same judgement as in (i), applied to the isomer with one extra conjugated C=C.",
+      "question_features": [
+        "Structure Deduction"
+      ],
+      "prerequisites": [
+        "Conjugation",
+        "Functional groups"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4c": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Molecular Orbital Theory",
+        "Delocalisation"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Node counts must be worked out from the interference of the p orbitals rather than recalled as a memorised energy ordering.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Pi bonding",
+        "Molecular orbitals",
+        "Wavefunction phase"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4d": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Molecular Orbital Theory",
+        "Antibonding Molecular Orbitals"
+      ],
+      "primary_skill": "Draw / Represent",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Six independent rows each have to be shaded correctly, so partial credit is spread thinly and a single mistake in phase propagates.",
+      "question_features": [
+        "Diagram",
+        "Spatial Reasoning",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Pi bonding",
+        "Molecular orbitals",
+        "Wavefunction phase"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "The answer is a shading pattern that the extract cannot carry. Confirm against the mark scheme clip.",
+      "review_required": true,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e-i": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One substitution into a supplied equation, provided N is read as 6 for hexatriene.",
+      "question_features": [
+        "Information Provided in Question",
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Trigonometry (sine)",
+        "Substitution into formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4e-ii": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One division once the energy gap is known, but the metre-to-nanometre conversion is part of the requirement.",
+      "question_features": [
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "λ = hc/ΔE",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4f": {
+      "primary_as_anchor": "Atomic Structure",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Foundation",
+      "difficulty_reason": "One comparison of the calculated wavelength with the stated visible range.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Visible light range"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4g": {
+      "primary_as_anchor": "Chemical Bonding",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Delocalisation"
+      ],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One reasoning step: more p orbitals narrow the HOMO-LUMO gap, so the absorbed wavelength increases.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Conjugation",
+        "HOMO-LUMO gap"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4h": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two steps, with the volume needing conversion from cm3 to dm3 and the molar mass of tartrazine needing to be worked out from the structure.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Mole calculations",
+        "Concentration",
+        "Molar mass",
+        "Unit conversion"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4i": {
+      "primary_as_anchor": "Organic Synthesis",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Multi-Step Synthesis",
+        "Reaction Pathways"
+      ],
+      "primary_skill": "Structure Deduction",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Six structures must be carried through a multi-step sequence from nitrobenzene, including diazotisation, azo coupling and a reduction; later structures depend on earlier ones, with ECF available.",
+      "question_features": [
+        "Multi-step",
+        "Structure Deduction",
+        "Diagram",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Aromatic substitution",
+        "Diazonium salts",
+        "Reduction of nitro groups",
+        "Reagents and conditions"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "The six structures are drawn in the mark scheme and are not in its text layer. Confirm each against the mark scheme clip.",
+      "review_required": true,
+      "marks": 8,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4j": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One inference, from the wavelength absorbed to the colour observed (the complementary colour), which requires reading the spectrum.",
+      "question_features": [
+        "Graph",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "UV-vis absorption",
+        "Complementary colours"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "4k": {
+      "primary_as_anchor": "Analytical Techniques",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Combined Spectroscopy",
+        "UV-Vis"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Interpret Data"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Five spectra must be assigned by tracking the mixture through an extraction, a pH change, an evaporation and a solvent change, so each assignment depends on the previous ones.",
+      "question_features": [
+        "Multi-step",
+        "Data-heavy",
+        "Experimental",
+        "Graph"
+      ],
+      "prerequisites": [
+        "UV-vis",
+        "Solubility and extraction",
+        "Acid-base behaviour of indicators"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5a": {
+      "primary_as_anchor": "Electrochemistry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Deduce",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One charge balance, but the oxidation states of copper, aluminium and phosphorus must all be assigned before the hydroxide count follows.",
+      "question_features": [
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Oxidation numbers",
+        "Charge balance",
+        "Formulae"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5b": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "Two steps: the dehydrated formula must be assembled into Mr (which varies with x), then the percentage by mass found.",
+      "question_features": [
+        "Calculation-heavy",
+        "Multi-step"
+      ],
+      "prerequisites": [
+        "Molar mass",
+        "Percentage composition",
+        "Algebra"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5c": {
+      "primary_as_anchor": "Stoichiometry",
+      "secondary_as_anchors": [],
+      "extension_topics": [],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate",
+        "Interpret Data"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The percentage of copper must be computed across the ranges of x and y for each mineral and then matched to a table of samples, so the reasoning spans several compositions.",
+      "question_features": [
+        "Data-heavy",
+        "Multi-step",
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Molar mass",
+        "Percentage composition",
+        "Ranges"
+      ],
+      "requires_extension_knowledge": false,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5d": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Lattice Dimensions"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Multi-step geometry: the P-O bond length must be related to the cube edge, then to the tetrahedron edge, then to a volume, in a figure the student has to read.",
+      "question_features": [
+        "Spatial Reasoning",
+        "Multi-step",
+        "Calculation-heavy",
+        "Diagram"
+      ],
+      "prerequisites": [
+        "Geometry of tetrahedra and cubes",
+        "Unit cell dimensions",
+        "Pythagoras"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5e-i": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Unit Cells"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [
+        "Multi-step Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "The contributions of three different species must be totalled and then divided by the stated filling fraction, so the number of each species per cell has to be read off the description.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Information Provided in Question"
+      ],
+      "prerequisites": [
+        "Unit cell composition",
+        "Percentages",
+        "Volume addition"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 2,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5e-ii": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Crystal Density"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One route, but the mass of eight formula units must be found and the cell volume converted from Å3 to cm3.",
+      "question_features": [
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Density",
+        "Molar mass",
+        "Avogadro constant",
+        "Unit conversion (Å3 to cm3)"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5f-i": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Unit Cells",
+        "Crystal Packing"
+      ],
+      "primary_skill": "Multi-step Reasoning",
+      "secondary_skills": [
+        "Calculate",
+        "Spatial Reasoning"
+      ],
+      "difficulty_level": "Challenge",
+      "difficulty_reason": "Three stages are chained: scale the octahedron volume by the bond-length ratio, total the filled volume including the hydroxide ions, then divide by the stated filling fraction.",
+      "question_features": [
+        "Multi-step",
+        "Calculation-heavy",
+        "Spatial Reasoning"
+      ],
+      "prerequisites": [
+        "Volume scaling with bond length",
+        "Unit cell composition",
+        "Percentages"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 3,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    },
+    "5f-ii": {
+      "primary_as_anchor": "States of Matter",
+      "secondary_as_anchors": [],
+      "extension_topics": [
+        "Crystal Density"
+      ],
+      "primary_skill": "Calculate",
+      "secondary_skills": [],
+      "difficulty_level": "Standard",
+      "difficulty_reason": "One route, but the formula unit includes Al, Cu, P, O and H, so building Mr and converting Å3 to cm3 are both required.",
+      "question_features": [
+        "Calculation-heavy"
+      ],
+      "prerequisites": [
+        "Density",
+        "Molar mass",
+        "Unit conversion (Å3 to cm3)"
+      ],
+      "requires_extension_knowledge": true,
+      "teacher_notes": "",
+      "review_required": false,
+      "marks": 1,
+      "tag_status": "suggested",
+      "tag_source": "ai"
+    }
+  }
+}

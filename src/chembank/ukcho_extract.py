@@ -39,7 +39,11 @@ LEFT_X_MAX = 95.0
 SUBPART_X_MIN = 100.0
 SUBPART_X_MAX = 128.0
 
-QUESTION_RE = re.compile(r"^Q([1-9])\b\s*(.*)$")
+#: A question heading. The format changed over the years: 2022+ prefixes the
+#: number with ``Q`` (``Q1 This question is about ...``), while 2003-2021 uses a
+#: bare numbered heading (``1.  This question is about ...``), and in 2011 the
+#: number sits alone on its line with the title on the next. All are accepted.
+QUESTION_RE = re.compile(r"^(?:Q([1-9])|([1-9]\d?)\.)(?:\s+(.*))?$")
 #: A part/sub-part label is usually alone on its line, but may share the line with
 #: the start of the question text (e.g. "(ii) Determine the value of ..."), which
 #: the trailing group captures.
@@ -85,8 +89,10 @@ MS_SUBPART_X_MAX = 100.0
 #: page-furniture filter: it excludes the footer page number.
 MS_HEADER_Y_MAX = 90.0
 
-#: ``"6."`` bare on a line, or ``"1. This question is about ..."``.
-MS_QUESTION_RE = re.compile(r"^([1-9]\d?)\.(?:\s+(.*))?$")
+#: ``"6."`` bare on a line, or ``"1. This question is about ..."``. The mark
+#: scheme spells a heading the same way the question paper does, so it reuses
+#: :func:`question_heading` / :data:`QUESTION_RE` directly.
+
 
 
 @dataclass
@@ -146,6 +152,19 @@ class Part:
 # --- text extraction ------------------------------------------------------
 
 
+def question_heading(text: str) -> tuple[int, str] | None:
+    """Return ``(question_number, trailing_text)`` for a question heading.
+
+    Shared by the question paper and the mark scheme, because both use the same
+    two historical spellings of a heading (see :data:`QUESTION_RE`).
+    """
+    m = QUESTION_RE.match(text)
+    if not m:
+        return None
+    number = m.group(1) or m.group(2)
+    return int(number), (m.group(3) or "").strip()
+
+
 def _lines_in_order(page) -> list[tuple[float, float, str]]:
     """Return ``(y, x, text)`` for every text line, in reading order."""
     out: list[tuple[float, float, str]] = []
@@ -168,9 +187,9 @@ def find_labels(doc) -> list[Label]:
     for pno in range(doc.page_count):
         for y, x, text in _lines_in_order(doc[pno]):
             if x <= LEFT_X_MAX:
-                q = QUESTION_RE.match(text)
-                if q:
-                    rest = q.group(2).strip()
+                head = question_heading(text)
+                if head:
+                    number, rest = head
                     if CREDITS_RE.match(rest):
                         continue  # image-credits page, not a real question
                     labels.append(
@@ -180,7 +199,7 @@ def find_labels(doc) -> list[Label]:
                             y=y,
                             x=x,
                             text=text,
-                            question=int(q.group(1)),
+                            question=number,
                             rest=rest,
                         )
                     )
@@ -371,16 +390,20 @@ def find_ms_labels(doc) -> list[Label]:
 
     Reuses :class:`Label`, but with MS geometry. A left-margin label is recorded
     as a ``part`` (even a roman one — see the module notes) and only an *indented*
-    label is a ``subpart``.
+    label is a ``subpart``. A sub-part carries its parent's letter in ``part``, so
+    a label is self-describing without re-scanning the sequence.
     """
     labels: list[Label] = []
+    current_part: str | None = None
     for pno in range(doc.page_count):
         for y, x, text in _lines_in_order(doc[pno]):
             if x > MS_SUBPART_X_MAX:
                 continue  # MS answer columns and the right-hand mark column
             if y <= MS_HEADER_Y_MAX and x <= MS_LEFT_X_MAX:
-                q = MS_QUESTION_RE.match(text)
-                if q:
+                head = question_heading(text)
+                if head:
+                    number, rest = head
+                    current_part = None
                     labels.append(
                         Label(
                             kind="question",
@@ -388,14 +411,15 @@ def find_ms_labels(doc) -> list[Label]:
                             y=y,
                             x=x,
                             text=text,
-                            question=int(q.group(1)),
-                            rest=(q.group(2) or "").strip(),
+                            question=number,
+                            rest=rest,
                         )
                     )
                     continue
             if x <= MS_LEFT_X_MAX:
                 p = PART_RE.match(text)
                 if p:
+                    current_part = p.group(1)
                     labels.append(
                         Label(kind="part", page=pno, y=y, x=x, text=text, part=p.group(1))
                     )
@@ -403,6 +427,7 @@ def find_ms_labels(doc) -> list[Label]:
                 s = SUBPART_RE.match(text)
                 if s:
                     # A multi-letter roman at the margin is a question-level part.
+                    current_part = s.group(1)
                     labels.append(
                         Label(kind="part", page=pno, y=y, x=x, text=text, part=s.group(1))
                     )
@@ -417,6 +442,7 @@ def find_ms_labels(doc) -> list[Label]:
                             y=y,
                             x=x,
                             text=text,
+                            part=current_part,
                             subpart=s.group(1),
                         )
                     )
@@ -429,21 +455,26 @@ def mark_scheme_bands(
     """Map each QP part key to its MS band ``(page, y, end_page, end_y)``.
 
     The MS label stream cannot say whether ``(i)`` is a part or a sub-part, so the
-    QP's known part list drives the match: for every part, in reading order, take
-    the next MS label whose own text equals that part's label. Because the cursor
-    only moves forward, the two streams stay aligned even when a question has both
-    ``(b)`` and ``(b)(i)``.
+    QP's known part list decides: each part is looked up by its own label.
 
-    A part with no MS label simply gets no band, so a missing clip is visible
-    rather than silently wrong.
+    The MS is not always as finely divided as the question paper — it routinely
+    answers ``(d)(i)`` and ``(d)(ii)`` under a single ``(d)``. A part with no MS
+    label of its own therefore falls back to its parent part's *full* extent, which
+    is the region the shared answer actually occupies. An earlier version advanced
+    a cursor through the MS labels instead, which silently mis-aligned the whole
+    question from there on: it consumed ``(f)``'s sub-part labels to satisfy
+    ``(d)(i)`` and lost every later part.
+
+    A part whose label is genuinely absent from the MS gets no band at all, so the
+    gap stays visible instead of becoming a wrong clip.
     """
     labels = find_ms_labels(doc)
 
-    q_start: dict[int, tuple[int, float]] = {}
+    heading: dict[int, tuple[int, float]] = {}
     for lb in labels:
         if lb.kind == "question" and lb.question is not None:
-            q_start.setdefault(lb.question, (lb.page, lb.y))
-    ordered_q = sorted(q_start.items(), key=lambda kv: kv[1])
+            heading.setdefault(lb.question, (lb.page, lb.y))
+    ordered_q = sorted(heading.items(), key=lambda kv: kv[1])
 
     by_q: dict[int, list[Label]] = {}
     current: int | None = None
@@ -467,39 +498,78 @@ def mark_scheme_bands(
             q_end[q] = (last, _page_height(doc, last))
 
     bands: dict[str, tuple[int, float, int, float]] = {}
-    cursor: dict[int, int] = {}
     for part in parts:
         seq = by_q.get(part.question) or []
-        want = part.subpart or part.part
-        start = cursor.get(part.question, 0)
-        found = next(
+        if not seq:
+            continue
+        stop_page, stop_y = q_end.get(
+            part.question, (seq[-1].page, _page_height(doc, seq[-1].page))
+        )
+
+        def band_from(
+            i: int, end_page: int, end_y: float
+        ) -> tuple[int, float, int, float]:
+            """The band of label ``i``, ending at the given boundary.
+
+            The boundary reuses the QP's page-break rule, so a band never becomes a
+            sliver of the next page's header.
+            """
+            lb = seq[i]
+            boundary = Label(kind="question", page=end_page, y=end_y, x=0.0, text="")
+            ep, ey = _part_end(doc, lb, boundary)
+            return (lb.page, lb.y, ep, ey)
+
+        def next_boundary(i: int) -> tuple[int, float]:
+            """The next label position strictly after label ``i``.
+
+            Labels sharing a line must be skipped. The MS writes a compound label
+            such as ``(a)(i)`` as two labels at the same ``y``, and ending a band at
+            its own line would produce a zero-height (blank) clip.
+            """
+            pos = (seq[i].page, seq[i].y)
+            for j in range(i + 1, len(seq)):
+                if (seq[j].page, seq[j].y) > pos:
+                    return seq[j].page, seq[j].y
+            return stop_page, stop_y
+
+        def tight(i: int) -> tuple[int, float, int, float]:
+            ep, ey = next_boundary(i)
+            return band_from(i, ep, ey)
+
+        def whole_part(i: int) -> tuple[int, float, int, float]:
+            """A part label's full extent, absorbing its sub-parts: it runs to the
+            next part-level label, not to the next label of any kind."""
+            pos = (seq[i].page, seq[i].y)
+            for j in range(i + 1, len(seq)):
+                if seq[j].subpart is None and (seq[j].page, seq[j].y) > pos:
+                    return band_from(i, seq[j].page, seq[j].y)
+            return band_from(i, stop_page, stop_y)
+
+        i = next(
             (
                 j
-                for j in range(start, len(seq))
-                if (seq[j].subpart or seq[j].part) == want
+                for j, lb in enumerate(seq)
+                if lb.part == part.part and lb.subpart == part.subpart
             ),
             None,
         )
-        if found is None:
+        if i is not None:
+            bands[part.key] = tight(i)
             continue
-        cursor[part.question] = found + 1
-        label = seq[found]
-        if found + 1 < len(seq):
-            nxt: Label | None = seq[found + 1]
-        else:
-            ep, ey = q_end.get(
-                part.question, (label.page, _page_height(doc, label.page))
+
+        if part.subpart is not None:
+            # The MS answers this sub-part under its parent part, so pull the
+            # parent's full extent rather than dropping the clip.
+            j = next(
+                (
+                    j
+                    for j, lb in enumerate(seq)
+                    if lb.part == part.part and lb.subpart is None
+                ),
+                None,
             )
-            nxt = Label(
-                kind="question",
-                page=ep,
-                y=ey,
-                x=0.0,
-                text="",
-                question=part.question,
-            )
-        end_page, end_y = _part_end(doc, label, nxt)
-        bands[part.key] = (label.page, label.y, end_page, end_y)
+            if j is not None:
+                bands[part.key] = whole_part(j)
     return bands
 
 

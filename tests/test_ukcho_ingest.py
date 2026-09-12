@@ -1226,12 +1226,11 @@ def test_ms_labels_only_match_bare_labels() -> None:
         ])
     ])
     labels = X.find_ms_labels(doc)
-    kinds = [(lb.kind, lb.part or lb.subpart) for lb in labels]
-    assert kinds == [
-        ("question", None),
-        ("part", "a"),
-        ("subpart", "i"),   # indented => sub-part
-        ("subpart", "ii"),
+    assert [(lb.kind, lb.part, lb.subpart) for lb in labels] == [
+        ("question", None, None),
+        ("part", "a", None),
+        ("subpart", "a", "i"),   # indented => sub-part, and it knows its parent
+        ("subpart", "a", "ii"),
     ]
     assert labels[0].question == 1
 
@@ -1312,3 +1311,71 @@ def test_ms_question_heading_may_be_a_bare_number() -> None:
     doc = _FakeMsDoc([_FakePage([_line(42.3, 49.1, "6."), _line(44.1, 76.8, "This question is about iodination")])])
     labels = X.find_ms_labels(doc)
     assert labels[0].kind == "question" and labels[0].question == 6
+
+
+def test_band_covers_whole_part_when_ms_merges_its_subparts() -> None:
+    """The MS often answers (d)(i) and (d)(ii) under one (d).
+
+    Both must fall back to that single band, and — crucially — must not consume the
+    labels belonging to the *next* part. A cursor-based matcher did exactly that:
+    it ate (f)(i)/(f)(ii) to satisfy (d)(i) and lost every later part.
+    """
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(44.1, 49.0, "3."),
+            _line(75.2, 46.8, "(a)"),
+            _line(128.0, 46.8, "(b)"),
+            _line(371.1, 47.0, "(c)"),
+            _line(594.8, 46.8, "(d)"),      # answers (d)(i) and (d)(ii)
+        ]),
+        _FakePage([
+            _line(42.8, 46.8, "(e)"),
+            _line(148.2, 48.2, "(f)"),
+            _line(148.2, 80.2, "(i)"),
+            _line(216.9, 78.7, "(ii)"),
+        ]),
+    ])
+    order = [
+        ("a", None), ("b", None), ("c", None), ("d", "i"), ("d", "ii"),
+        ("e", None), ("f", "i"), ("f", "ii"),
+    ]
+    parts = [
+        XPart(question=3, part=p, subpart=s, page=0, y=0, text="", end_page=0, end_y=0)
+        for p, s in order
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+
+    assert set(bands) == {f"3{p}-{s}" if s else f"3{p}" for p, s in order}
+    # (d)(i) and (d)(ii) share the (d) region rather than borrowing (f)'s labels.
+    assert bands["3d-i"] == bands["3d-ii"]
+    assert bands["3d-i"][:2] == (0, 594.8)
+    # ...and that region is clamped at (d)'s own page, so it never becomes a sliver
+    # of the next page's header.
+    assert bands["3d-i"][2:] == (0, 800.0)
+    # (f)'s own sub-parts keep their own, distinct, undamaged bands.
+    assert bands["3f-i"] == (1, 148.2, 1, 216.9)
+    assert bands["3f-ii"][:2] == (1, 216.9)
+    # (e) is unaffected by the fallback that happened before it.
+    assert bands["3e"][:2] == (1, 42.8)
+
+
+def test_band_falls_back_only_to_the_same_part() -> None:
+    """A missing sub-part must not silently borrow a different part's answer."""
+    from chembank.ukcho_extract import Part as XPart
+
+    doc = _FakeMsDoc([
+        _FakePage([
+            _line(44.1, 49.0, "3."),
+            _line(75.2, 46.8, "(a)"),
+        ]),
+    ])
+    parts = [
+        XPart(question=3, part="a", subpart=None, page=0, y=0, text="", end_page=0, end_y=0),
+        # The MS never labels (b) at all, so (b)(i) has nothing honest to point at.
+        XPart(question=3, part="b", subpart="i", page=0, y=0, text="", end_page=0, end_y=0),
+    ]
+    bands = X.mark_scheme_bands(doc, parts)
+    assert bands["3a"][:2] == (0, 75.2)
+    assert "3b-i" not in bands

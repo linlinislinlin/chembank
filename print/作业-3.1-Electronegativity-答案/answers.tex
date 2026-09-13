@@ -1,9 +1,15 @@
-% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+% Full answers PDF: MCQ answers + worked explanations per option, then official MS clips.
+% Compiler: XeLaTeX.
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=18mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
+\usepackage[version=4]{mhchem}
 \usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{needspace}
 
 \setmainfont{Helvetica Neue}
 
@@ -17,36 +23,227 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.35em}
 
+% ---- helper: mark-scheme image block ----
 \newcommand{\msblock}[2]{%
   \par\vspace{0.8em}%
   {\normalsize\bfseries #1}\par\vspace{0.25em}%
   \noindent\includegraphics[width=\textwidth,keepaspectratio]{#2}\par
 }
 
+% ---- helper: one MCQ worked explanation ----
+% \mcq{<question>}{<correct letter>}{<source>}{<body>}
+\newcommand{\mcq}[4]{%
+  \par\needspace{5\baselineskip}\vspace{0.7em}%
+  {\normalsize\bfseries #1.\quad #2}%
+  \hfill{\footnotesize\color{gray}#3}\par\vspace{0.15em}%
+  {\small #4}\par
+}
+
+% ---- helper: a "distractor" line ----
+\newcommand{\why}[2]{\par\needspace{2.2\baselineskip}\vspace{0.1em}{\small\textbf{#1} #2}\par}
+
 \begin{document}
 
 \begin{center}
-{\large\bfseries 3.1 Electronegativity homework --- answers}
+{\large\bfseries 3.1 Electronegativity homework --- answers}\\[0.2em]
+{\small CIE 9701 AS Chemistry \quad·\quad 11 multiple-choice + 5 written marks}
 \end{center}
 
-{\normalsize\bfseries Section A --- Multiple choice}
-
+{\small\bfseries Do not issue this file to students.}
+\hrule
 \vspace{0.4em}
-A1 = A\\
-A2 = C\\
-A3 = C\\
-A4 = C\\
-A5 = B\\
-A6 = B\\
-A7 = D\\
-A8 = A\\
-A9 = C\\
-A10 = B\\
-A11 = C
+
+% =====================================================================
+\section*{Section A --- Multiple choice}
+% =====================================================================
+
+{\normalsize\bfseries Quick answers}
+
+\vspace{0.3em}
+{\small
+\begin{tabular}{@{}ll@{\hspace{2.6em}}ll@{\hspace{2.6em}}ll@{}}
+\toprule
+Q & Ans. & Q & Ans. & Q & Ans.\\
+\midrule
+A1 & \textbf{A} & A5 & \textbf{B} & A9 & \textbf{C}\\
+A2 & \textbf{C} & A6 & \textbf{B} & A10 & \textbf{B}\\
+A3 & \textbf{C} & A7 & \textbf{D} & A11 & \textbf{C}\\
+A4 & \textbf{C} & A8 & \textbf{A} & & \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.6em}
+{\normalsize\bfseries Worked explanations}
+
+\mcq{A1}{A}{2022 MJ Paper 12 Q19}{%
+Across Period 3 from Na to Si the nuclear charge rises while the outer electrons
+stay in the same shell, so the atomic radius \emph{decreases} and the
+electronegativity \emph{increases}. The correct graph must therefore slope
+downwards, with Si (highest electronegativity, smallest radius) at the top-left
+and Na (lowest electronegativity, largest radius) at the bottom-right.}
+
+\why{B:}{the elements are in the right order on the radius axis, but Al is placed
+above Si --- Si has the highest electronegativity of the four, so Si must be the
+highest point.}
+
+\why{C:}{shows electronegativity \emph{increasing} with atomic radius (Na at the
+top, Si at the bottom) --- the trend is the wrong way round.}
+
+\why{D:}{swaps Al and Si on the radius axis (Al appears to the left of Si), but
+the correct radius order is Si $<$ Al $<$ Mg $<$ Na.}
+
+\mcq{A2}{C}{2023 FM Paper 12 Q22}{%
+Use the two radii to identify the elements.
+V has a large atomic radius (0.186 nm) but a much smaller ionic radius
+(0.095 nm) --- it is a metal that has \emph{lost} its outer electron. This matches
+Na (Na 0.186 nm, \ce{Na+} 0.095 nm).
+Z has a small atomic radius (0.099 nm) but a \emph{larger} ionic radius
+(0.181 nm) --- it is a non-metal that has \emph{gained} an electron. This matches
+Cl (Cl 0.099 nm, \ce{Cl-} 0.181 nm). So V = Na and Z = Cl.}
+
+\why{A:}{\ce{Na+} has two shells (2,8) but \ce{Cl-} has three (2,8,8), so they do
+\emph{not} have the same number of full shells.}
+
+\why{B:}{Z is chlorine, which forms a \emph{negative} ion, \ce{Cl-}.}
+
+\why{C (correct):}{Cl is far more electronegative than Na (3.2 vs 0.9).}
+
+\why{D:}{Na has 1 outer electron and Cl has 7, so V has \emph{fewer} outer
+electrons than Z.}
+
+\mcq{A3}{C}{2022 FM Paper 12 Q18}{%
+Electronegativity \emph{increases} across Period 3 (nuclear charge increases,
+shielding stays roughly constant, radius falls). The oxides change from
+\emph{basic} (\ce{Na2O}, MgO) through \emph{amphoteric} (\ce{Al2O3}) to
+\emph{acidic} (\ce{SiO2}, \ce{P4O10}, \ce{SO3}, \ce{Cl2O7}). Only row C has both
+trends correct.}
+
+\why{A / B:}{both state that electronegativity \emph{decreases} across the
+period --- the wrong direction.}
+
+\why{D:}{has the correct electronegativity trend but the acid--base order
+reversed.}
+
+\mcq{A4}{C}{2023 MJ Paper 13 Q17}{%
+Astatine is below iodine in Group 17. Going down the group the atomic radius and
+the shielding increase, so the nucleus attracts the bonding electrons less and
+the electronegativity \emph{decreases}. The larger, more electron-rich molecule
+also has stronger van der Waals' forces between molecules, so astatine is
+\emph{less volatile} (higher boiling point) than iodine.}
+
+\why{A / B:}{both say astatine is \emph{more} electronegative --- wrong for a
+heavier halogen.}
+
+\why{D:}{correct lower electronegativity, but says astatine is \emph{more}
+volatile; volatility decreases down the group.}
+
+\mcq{A5}{B}{2025 MJ Paper 11 Q20}{%
+Electronegativity increases across Na $\rightarrow$ Mg $\rightarrow$ Al
+$\rightarrow$ Si. First ionisation energy also increases \emph{overall}, but not
+in atomic-number order: Mg (3s\textsuperscript{2}, a full subshell) has a
+\emph{higher} first ionisation energy than Al (3p\textsuperscript{1}, easier to
+remove). So the graph must show the points in the order
+Na $<$ Al $<$ Mg $<$ Si along the ionisation-energy axis, while the
+electronegativity order is Na $<$ Mg $<$ Al $<$ Si --- i.e.\ Mg lies above Al,
+and Si is both furthest right and highest.}
+
+\why{A:}{places Mg before Al on the ionisation-energy axis, giving Al a higher
+first ionisation energy than Mg --- this ignores the 3s\textsuperscript{2} /
+3p\textsuperscript{1} difference.}
+
+\why{C / D:}{show electronegativity \emph{decreasing} as ionisation energy
+increases; in fact the two trends rise together across the period.}
+
+\mcq{A6}{B}{2025 ON Paper 14 Q17}{%
+Electronegativity increases Mg $<$ Al $<$ Si $<$ P, so the points must appear in
+that order from left to right. The melting point depends on structure: Mg and Al
+are metals with similar melting points ($\approx$ 650--660\,\textdegree C); Si is
+a giant covalent (macromolecular) solid with a much higher melting point
+(1414\,\textdegree C); P exists as simple \ce{P4} molecules held by weak van der
+Waals' forces, so it melts at only 44\,\textdegree C. Graph B is the only one
+showing Si clearly the highest, Mg and Al close together and much lower, and P
+the lowest.}
+
+\why{A:}{puts Al above Si --- the melting point of Si is far higher than that of
+Al.}
+
+\why{C / D:}{place the elements in the wrong order on the electronegativity axis
+(P to the left of Si/Mg), reversing the Period 3 trend.}
+
+\mcq{A7}{D}{2022 MJ Paper 13 Q5}{%
+The difference in electronegativity is smallest for the pair of elements that are
+closest in electronegativity. Using Pauling values
+(K 0.8, Li 1.0, Br 3.0, F 4.0):
+$\Delta E_\mathrm{N}(\ce{KF}) \approx 3.2$,
+$\Delta E_\mathrm{N}(\ce{LiF}) \approx 3.0$,
+$\Delta E_\mathrm{N}(\ce{KBr}) \approx 2.1$,
+$\Delta E_\mathrm{N}(\ce{LiBr}) \approx 2.0$.
+Li and Br are the closest pair, so \ce{LiBr} has the smallest difference.}
+
+\why{A / C:}{fluorine is the most electronegative element, so both \ce{KF} and
+\ce{LiF} give large differences.}
+
+\why{B:}{\ce{KBr} has the same anion as D, but K is less electronegative than Li,
+so its difference is larger.}
+
+\mcq{A8}{A}{2023 MJ Paper 13 Q4}{%
+L has the \emph{highest} Pauling value of the seven elements Na--Cl, so L is
+chlorine. M has the \emph{lowest}, so M is sodium.
+(1) Chlorine exists as \ce{Cl2}, which contains a covalent Cl--Cl bond ---
+\textbf{true}.
+(2) Cl ($Z = 17$) has a higher atomic number than Na ($Z = 11$) ---
+\textbf{true}.
+(3) Sodium and chlorine form \ce{NaCl}, a giant ionic lattice --- \textbf{true}.
+All three statements are correct, so the answer is A.}
+
+\why{B / C / D:}{each option rejects at least one statement that is in fact
+correct --- the trap is assuming that an element cannot contain covalent bonds
+(it can, e.g.\ \ce{Cl2}), or that Na and Cl would bond covalently.}
+
+\mcq{A9}{C}{2022 FM Paper 12 Q7}{%
+Identify the elements from their electronegativity: X (1.0) = Na, Y (2.1) = H,
+Z (4.0) = F.
+\ce{Z2} = \ce{F2}: simple molecular, only weak van der Waals' forces ---
+\emph{lowest} melting point.
+\ce{YZ} = HF: simple molecular with hydrogen bonding --- higher than \ce{F2}, but
+still low.
+\ce{XZ} = NaF: giant ionic lattice with strong electrostatic forces ---
+\emph{highest} melting point.
+So increasing melting point is \ce{Z2} $<$ \ce{YZ} $<$ \ce{XZ}, which is row C.}
+
+\why{A / B:}{put the ionic compound \ce{XZ} at the lowest end --- ionic lattices
+have by far the strongest forces here.}
+
+\why{D:}{puts \ce{YZ} (HF) highest; hydrogen bonding between small molecules is
+much weaker than the electrostatic forces in an ionic lattice.}
+
+\mcq{A10}{B}{2021 MJ Paper 13 Q6}{%
+Ionic bonding requires the \emph{transfer} of electrons from a metal atom to a
+non-metal atom, i.e.\ two different elements. A single element contains only one
+type of atom and cannot form oppositely charged ions, so ionic bonding is
+\emph{never} found in elements.}
+
+\why{A:}{covalent --- \ce{H2}, \ce{Cl2}, diamond.}
+
+\why{C:}{metallic --- Na, Fe.}
+
+\why{D:}{van der Waals' forces --- between \ce{I2} molecules or noble-gas atoms.}
+
+\mcq{A11}{C}{2023 MJ Paper 12 Q19}{%
+(1) \textbf{True} --- the ionically bonded oxides \ce{Na2O} and MgO are basic and
+neutralise dilute hydrochloric acid.
+(2) \textbf{False} --- this is the trap. \ce{NaCl} does give a neutral solution,
+but \ce{MgCl2} gives an \emph{acidic} solution (the small, highly charged
+\ce{Mg^2+} ion polarises water), so not all metal chlorides are neutral.
+(3) \textbf{True} --- the two most electronegative elements of the set are Si and
+P, and \ce{SiCl4} and \ce{PCl3}/\ce{PCl5} are covalent.
+Correct statements: 1 and 3 $\rightarrow$ C.}
 
 \newpage
 
-{\normalsize\bfseries Section B --- Mark scheme clips}
+% =====================================================================
+\section*{Section B --- Mark scheme clips}
+% =====================================================================
 
 \msblock{B1(a)(i)  [1]}{cie-9701-2023-fm-p22-q1a-i-ms.png}
 

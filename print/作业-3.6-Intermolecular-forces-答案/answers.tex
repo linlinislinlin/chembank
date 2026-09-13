@@ -1,9 +1,15 @@
-%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+% Full answers PDF: MCQ answers + worked explanations per option, then official MS clips.
+% Compiler: XeLaTeX.
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=18mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
+\usepackage[version=4]{mhchem}
 \usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{needspace}
 
 \setmainfont{Helvetica Neue}
 
@@ -25,27 +31,156 @@
   \end{minipage}\par
 }
 
+\newcommand{\mcq}[4]{%
+  \par\needspace{5\baselineskip}\vspace{0.7em}%
+  {\normalsize\bfseries #1.\quad #2}%
+  \hfill{\footnotesize\color{gray}#3}\par\vspace{0.15em}%
+  {\small #4}\par
+}
+
+\newcommand{\why}[2]{\par\needspace{2.2\baselineskip}\vspace{0.1em}{\small\textbf{#1} #2}\par}
+
 \begin{document}
 
 \begin{center}
-{\large\bfseries 3.6 Intermolecular forces homework --- answers}
+{\large\bfseries 3.6 Intermolecular forces homework --- answers}\\[0.2em]
+{\small CIE 9701 AS Chemistry \quad·\quad 8 multiple-choice + 10 written marks}
 \end{center}
 
-{\normalsize\bfseries Section A --- Multiple choice}
-
+{\small\bfseries Do not issue this file to students.}
+\hrule
 \vspace{0.4em}
-A1 = C\\
-A2 = C\\
-A3 = B\\
-A4 = B\\
-A5 = B\\
-A6 = A\\
-A7 = B\\
-A8 = D
+
+\section*{Section A --- Multiple choice}
+
+{\normalsize\bfseries Quick answers}
+
+\vspace{0.3em}
+{\small
+\begin{tabular}{@{}ll@{\hspace{2.6em}}ll@{\hspace{2.6em}}ll@{}}
+\toprule
+Q & Ans. & Q & Ans. & Q & Ans.\\
+\midrule
+A1 & \textbf{C} & A4 & \textbf{B} & A7 & \textbf{B}\\
+A2 & \textbf{C} & A5 & \textbf{B} & A8 & \textbf{D}\\
+A3 & \textbf{B} & A6 & \textbf{A} & & \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.6em}
+{\normalsize\bfseries Worked explanations}
+
+\mcq{A1}{C}{2021 FM Paper 12 Q5}{%
+Temporary dipole--induced dipole forces (instantaneous dipole--induced dipole)
+are the \emph{only} intermolecular force in a substance whose molecules have
+\emph{no permanent dipole} and \emph{no H-bonding}. Octane, \ce{C8H18}, is a
+non-polar hydrocarbon, so this is true for octane.}
+
+\why{A:}{hydrogen chloride is a polar molecule, so it also has permanent
+dipole--permanent dipole attractions.}
+
+\why{B:}{methanol, \ce{CH3OH}, has an O--H group, so it shows hydrogen bonding.}
+
+\why{D:}{water has extensive hydrogen bonding.}
+
+\mcq{A2}{C}{2021 MJ Paper 13 Q5}{%
+Substance 1 has permanent dipole--dipole attractions $\rightarrow$ a polar
+molecule with no H-bonding: \ce{CH2Cl2} (polar C--Cl bonds; no O--H or N--H).
+Substance 2 has only weak forces between molecules $\rightarrow$ a non-polar
+molecule: \ce{CH4}.
+Substance 3 has hydrogen bonding $\rightarrow$ a molecule with an O--H group:
+\ce{CH3OH}.
+So substance 1 = \ce{CH2Cl2}, substance 2 = \ce{CH4}, substance 3 = \ce{CH3OH}.}
+
+\why{A / B / D:}{mis-match at least one substance --- e.g.\ \ce{Al2Cl6} is
+non-polar (it would give only weak forces, not permanent dipole--dipole), and
+\ce{H2O} in the ``substance 3'' column would leave \ce{CH3OH} unplaced.}
+
+\mcq{A3}{B}{2024 MJ Paper 11 Q8}{%
+Down Group 16 the hydrides \ce{H2S}, \ce{H2Se}, \ce{H2Te} show a steady increase
+in boiling point because the molecules get larger with more electrons, so the van
+der Waals' forces increase. Water breaks the trend because the O--H bond allows
+\emph{strong hydrogen bonding} between water molecules, which is much stronger
+than the van der Waals' forces in the other hydrides.}
+
+\why{A:}{shielding/nuclear charge does not explain a \emph{higher} boiling point
+anomaly of this size.}
+
+\why{C:}{the covalent O--H bonds are not broken during boiling; only
+intermolecular forces are overcome.}
+
+\why{D:}{smaller molecules have \emph{weaker}, not stronger, van der Waals'
+forces.}
+
+\mcq{A4}{B}{2024 MJ Paper 12 Q8}{%
+Identify the strongest intermolecular force in each compound:
+1 \ce{(CH3)3CH} (2-methylpropane) --- non-polar, only van der Waals' forces
+(lowest bp, $-$12\,\textdegree C).
+4 \ce{CH3CH2CH2CH3} (butane) --- also non-polar, slightly larger so slightly
+stronger van der Waals' forces ($-$0.5\,\textdegree C).
+3 \ce{CH3CH2CH2SH} (propane-1-thiol) --- weak permanent dipole--dipole
+(67\,\textdegree C).
+2 \ce{CH3CH2CH2OH} (propan-1-ol) --- hydrogen bonding (97\,\textdegree C).
+Increasing boiling point: $1 < 4 < 3 < 2$.}
+
+\why{A / C / D:}{each reverses part of the order --- e.g.\ placing the alcohol
+below the thiol, or the thiol below butane.}
+
+\mcq{A5}{B}{2021 ON Paper 12 Q6}{%
+Compare the overall dipole moments: \ce{CO2} is linear and symmetrical, so its
+bond dipoles cancel and the overall dipole is \emph{zero}. The other three all
+have a permanent dipole, and \ce{H2C=O} (methanal) has the largest --- the very
+polar \ce{C=O} group with no other polar bond to oppose it
+($\mu \approx 2.3$ D, larger than \ce{CH2Cl2} $\approx 1.6$ D and \ce{COCl2}
+$\approx 0.9$ D).}
+
+\why{A:}{\ce{CH2Cl2} is polar, but its dipole is smaller than that of \ce{H2C=O}.}
+
+\why{C:}{\ce{COCl2} is polar, but the two C--Cl dipoles partly oppose the C=O
+dipole, so its overall dipole is the smaller of the polar molecules here.}
+
+\why{D:}{\ce{CO2} is symmetrical, so it has \emph{no} overall dipole.}
+
+\mcq{A6}{A}{2021 ON Paper 11 Q33}{%
+All three statements are correct.
+(1) Ethylene glycol molecules insert into and disrupt the extensive
+\emph{hydrogen-bond network} of ice, so it melts below 0\,\textdegree C.
+(2) Ethylene glycol has two O--H groups, so its molecules hydrogen-bond to each
+other.
+(3) It also hydrogen-bonds to water molecules, so it dissolves in the meltwater.
+Statements 1, 2 and 3 are all correct.}
+
+\why{B / C / D:}{each rejects at least one correct statement. Statement 1 is the
+key one: de-icing works precisely because the glycol disrupts the H-bond network
+of ice.}
+
+\mcq{A7}{B}{2021 MJ Paper 12 Q3}{%
+Each compound has four carbon atoms:
+X = butan-1-ol (\ce{CH3CH2CH2CH2OH}) --- hydrogen bonding.
+Y = ethoxyethane (\ce{CH3CH2OCH2CH3}) --- permanent dipole--dipole (an ether, no
+O--H, so no H-bonding).
+Z = sodium butanoate (\ce{CH3CH2CH2COONa}) --- ionic bonding.
+The stronger the force broken on boiling, the higher the boiling point:
+Y (pd--pd) $<$ X (H-bond) $<$ Z (ionic). So lowest = Y, highest = Z.}
+
+\why{A / C / D:}{these rows put the compounds in the wrong order --- e.g.\
+placing the ionic compound Z below the alcohol, or the ether above the alcohol.}
+
+\mcq{A8}{D}{2025 MJ Paper 12 Q10}{%
+(1) \textbf{False} --- both $\Delta H_b$ (vaporisation) and $\Delta H_m$
+(melting) are \emph{endothermic}, so they are \emph{positive}, not negative.
+(2) \textbf{True} --- vaporisation breaks all the intermolecular forces, while
+melting only loosens the lattice, so $\Delta H_b > \Delta H_m$.
+(3) \textbf{True} --- ice and water are both held together by the same type of
+force, hydrogen bonding.
+Correct statements: 2 and 3 $\rightarrow$ D.}
+
+\why{A / B / C:}{all include statement 1, which is false because the enthalpy
+changes of melting and boiling are positive.}
 
 \newpage
 
-{\normalsize\bfseries Section B --- Mark scheme clips}
+\section*{Section B --- Mark scheme clips}
 
 \msblock{B1  [1]}{cie-9701-2023-mj-p22-q1b-iii-ms.png}
 

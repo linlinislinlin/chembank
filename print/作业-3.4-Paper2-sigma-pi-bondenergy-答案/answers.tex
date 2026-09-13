@@ -1,9 +1,15 @@
-%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+% Full answers PDF: MCQ answers + worked explanations per option, then official MS clips.
+% Compiler: XeLaTeX.
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=18mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
+\usepackage[version=4]{mhchem}
 \usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{needspace}
 
 \setmainfont{Helvetica Neue}
 
@@ -25,27 +31,160 @@
   \end{minipage}\par
 }
 
+\newcommand{\mcq}[4]{%
+  \par\needspace{5\baselineskip}\vspace{0.7em}%
+  {\normalsize\bfseries #1.\quad #2}%
+  \hfill{\footnotesize\color{gray}#3}\par\vspace{0.15em}%
+  {\small #4}\par
+}
+
+\newcommand{\why}[2]{\par\needspace{2.2\baselineskip}\vspace{0.1em}{\small\textbf{#1} #2}\par}
+
 \begin{document}
 
 \begin{center}
-{\large\bfseries 3.4 Paper 2 sigma/pi and bond energy homework --- answers}
+{\large\bfseries 3.4 Paper 2 $\sigma/\pi$ and bond energy homework --- answers}\\[0.2em]
+{\small CIE 9701 AS Chemistry \quad·\quad 8 multiple-choice + 12 written marks}
 \end{center}
 
-{\normalsize\bfseries Section A --- Multiple choice}
-
+{\small\bfseries Do not issue this file to students.}
+\hrule
 \vspace{0.4em}
-A1 = B\\
-A2 = A\\
-A3 = C\\
-A4 = C\\
-A5 = D\\
-A6 = B\\
-A7 = C\\
-A8 = B
+
+\section*{Section A --- Multiple choice}
+
+{\normalsize\bfseries Quick answers}
+
+\vspace{0.3em}
+{\small
+\begin{tabular}{@{}ll@{\hspace{2.6em}}ll@{\hspace{2.6em}}ll@{}}
+\toprule
+Q & Ans. & Q & Ans. & Q & Ans.\\
+\midrule
+A1 & \textbf{B} & A4 & \textbf{C} & A7 & \textbf{C}\\
+A2 & \textbf{A} & A5 & \textbf{D} & A8 & \textbf{B}\\
+A3 & \textbf{C} & A6 & \textbf{B} & & \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.6em}
+{\normalsize\bfseries Worked explanations}
+
+\mcq{A1}{B}{2025 ON Paper 12 Q5}{%
+In \ce{N2} each nitrogen atom is \emph{sp} hybridised (one \ce{2s} mixes with one
+\ce{2p}). A $\sigma$ bond is always formed by \emph{head-on} overlap, here
+\emph{sp}--\emph{sp} overlap. Each N uses one \emph{sp} orbital for the $\sigma$
+bond, one \emph{sp} orbital for its lone pair, and the two remaining \ce{2p}
+orbitals (at right angles) to form the two $\pi$ bonds. So the lone pair is in an
+\emph{sp} orbital.}
+
+\why{A / C:}{give the lone pair as being in a \ce{2p} orbital. After
+hybridisation the lone pair occupies the unused \emph{sp} orbital, not a pure
+\ce{2p} orbital.}
+
+\why{D:}{says the $\sigma$ bond is formed by \emph{s}--\emph{p} overlap. In
+\ce{N2} both atoms are \emph{sp} hybridised, so the overlap is
+\emph{sp}--\emph{sp}.}
+
+\mcq{A2}{A}{2025 FM Paper 12 Q16}{%
+Count the $\pi$ bonds from the multiple bonds:
+\ce{CO2} (\ce{O=C=O}) has \textbf{two} C=O double bonds $\rightarrow$ 2 $\pi$.
+\ce{HCN} (\ce{H-C#N}) has one \ce{C#N} triple bond $\rightarrow$ 2 $\pi$.
+Propene (\ce{CH3-CH=CH2}) has only one C=C $\rightarrow$ 1 $\pi$.
+So \ce{CO2} and \ce{HCN} are the two molecules with two $\pi$ bonds.}
+
+\why{B / C:}{both include propene, which has only one $\pi$ bond.}
+
+\why{D:}{omits \ce{CO2}, which also has two $\pi$ bonds.}
+
+\mcq{A3}{C}{2022 ON Paper 11 Q5}{%
+\ce{H-C#C-C(CH3)=CH(CH3)} --- count every single bond as one $\sigma$, and remember
+that each double/triple bond contributes only \textbf{one} $\sigma$:
+\ce{H-C} (1), \ce{C#C} (1 $\sigma$), \ce{C-C} (1), the C=C (1 $\sigma$),
+\ce{C-H} on the double-bonded CH (1), and the two methyl groups
+(\ce{CH3}: 1 C--C + 3 C--H each = 4 + 4). Total $= 1+1+1+1+1+4+4 = 13$.}
+
+\why{A / B:}{these miss some C--H $\sigma$ bonds (a $\sigma$ bond exists for
+every single line and for every C--H bond).}
+
+\why{D:}{16 counts the $\pi$ bonds as if they were $\sigma$ bonds --- the two
+$\pi$ bonds of the alkyne plus the one $\pi$ bond of the alkene must not be
+counted.}
+
+\mcq{A4}{C}{2024 MJ Paper 11 Q26}{%
+X is \ce{NC-CH=CH2}. Count the $\sigma$ bonds: the C--C bond (1), the $\sigma$
+bond inside \ce{C#N} (1), the $\sigma$ bond inside C=C (1), one C--H on the CH (1) and
+the two C--H bonds on the \ce{CH2} (2). Total $= 6$ $\sigma$ bonds.
+The \ce{C#N} carbon is \emph{sp}; the two C=C carbons are \emph{sp}\textsuperscript{2}. There is no
+\ce{CH3} group, so there are no \emph{sp}\textsuperscript{3} carbons. Row C.}
+
+\why{A / B:}{give a total of 4 $\sigma$ bonds --- the $\sigma$ bonds inside the
+\ce{C#N} and C=C are omitted.}
+
+\why{D:}{has the correct $\sigma$ count but wrongly includes \emph{sp}\textsuperscript{3} carbon;
+X has no saturated (four-single-bond) carbon atom.}
+
+\mcq{A5}{D}{2025 FM Paper 12 Q39}{%
+but-2-ene is \ce{CH3-CH=CH-CH3}. Only the two terminal \ce{CH3} carbons are
+\emph{sp}\textsuperscript{3} (the two C=C carbons are \emph{sp}\textsuperscript{2}). Each \emph{sp}\textsuperscript{3} carbon has
+\textbf{4} \emph{sp}\textsuperscript{3} hybrid orbitals, all used for bonding (3 C--H and 1 C--C),
+so the total is $2 \times 4 = 8$.}
+
+\why{A / B / C:}{these count \emph{sp}\textsuperscript{3} carbon atoms or the orbitals of only one
+carbon. The question asks for the total number of \emph{sp}\textsuperscript{3} orbitals.}
+
+\mcq{A6}{B}{2025 ON Paper 11 Q6}{%
+\ce{NH4CN} is made of \ce{NH4+} and \ce{CN-} ions.
+\ce{NH4+}: one of its four N--H bonds is a \emph{coordinate} bond (the lone pair
+on N in \ce{NH3} is donated to \ce{H+}); the other three are ordinary covalent
+bonds. So \textbf{1} coordinate bond.
+\ce{CN-}: the \ce{C#N} triple bond contains \textbf{2} $\pi$ bonds.
+Therefore 1 coordinate bond and 2 $\pi$ bonds.}
+
+\why{A / C:}{say there are 0 coordinate bonds --- but the \ce{NH4+} ion contains
+one dative bond.}
+
+\why{D:}{says 3 $\pi$ bonds; a \ce{C#N} triple bond has only two $\pi$ bonds (and one
+$\sigma$).}
+
+\mcq{A7}{C}{2023 ON Paper 12 Q5}{%
+In \ce{NH3} the nitrogen is \emph{sp}\textsuperscript{3} hybridised (3 bond pairs + 1 lone pair).
+When it donates its lone pair to \ce{H+} to form \ce{NH4+}, nitrogen is still
+surrounded by four electron pairs and is still \emph{sp}\textsuperscript{3}. The hybridisation
+therefore does \emph{not} change.}
+
+\why{A:}{\ce{NH4+} is a regular tetrahedral ion, so its dipole moment is
+\emph{zero}; \ce{NH3} has a significant dipole moment. The dipole moment
+decreases, not increases.}
+
+\why{B:}{the H--N--H bond angle \emph{increases} from about
+107\textdegree\ (\ce{NH3}) to 109.5\textdegree\ (\ce{NH4+}), because the lone pair
+is replaced by a bonding pair.}
+
+\why{D:}{there is no electron transfer from N to Cl. A \emph{proton} (\ce{H+}) is
+transferred from \ce{HCl} to \ce{NH3}; the lone pair on N is \emph{shared}, not
+transferred.}
+
+\mcq{A8}{B}{2022 MJ Paper 13 Q9}{%
+The average C--H bond energy in methane is defined as the enthalpy change when
+\textbf{1 mol of C--H bonds} is broken, averaged over the four (non-equivalent)
+bonds. Since methane has four C--H bonds, the equation must break 1 mol of C--H
+bonds in total, i.e.\ $\tfrac14$ mol of \ce{CH4} to give $\tfrac14$ mol of
+\ce{C(g)} and 1 mol of \ce{H(g)} --- all species \emph{gaseous} and the C--H bonds
+broken (atoms formed).}
+
+\why{A:}{this is the reverse process (bond \emph{formation}) and would give the
+negative of the bond energy.}
+
+\why{C:}{this is the \emph{total} atomisation of one mole of methane (breaking
+\emph{all four} C--H bonds), which is $4\times$ the average C--H bond energy.}
+
+\why{D:}{this breaks only the \emph{first} C--H bond (to give \ce{CH3} and H); it
+is not an average over all four bonds.}
 
 \newpage
 
-{\normalsize\bfseries Section B --- Mark scheme clips}
+\section*{Section B --- Mark scheme clips}
 
 \msblock{B1(a)(ii)  [4]}{cie-9701-2024-mj-p23-q1a-ii-ms.png}
 

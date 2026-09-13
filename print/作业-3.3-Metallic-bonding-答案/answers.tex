@@ -1,9 +1,15 @@
-%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+% Full answers PDF: MCQ answers + worked explanations per option, then official MS clips.
+% Compiler: XeLaTeX.
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=18mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
+\usepackage[version=4]{mhchem}
 \usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{needspace}
 
 \setmainfont{Helvetica Neue}
 
@@ -25,27 +31,153 @@
   \end{minipage}\par
 }
 
+\newcommand{\mcq}[4]{%
+  \par\needspace{5\baselineskip}\vspace{0.7em}%
+  {\normalsize\bfseries #1.\quad #2}%
+  \hfill{\footnotesize\color{gray}#3}\par\vspace{0.15em}%
+  {\small #4}\par
+}
+
+\newcommand{\why}[2]{\par\needspace{2.2\baselineskip}\vspace{0.1em}{\small\textbf{#1} #2}\par}
+
 \begin{document}
 
 \begin{center}
-{\large\bfseries 3.3 Metallic bonding homework --- answers}
+{\large\bfseries 3.3 Metallic bonding homework --- answers}\\[0.2em]
+{\small CIE 9701 AS Chemistry \quad·\quad 8 multiple-choice + 11 written marks}
 \end{center}
 
-{\normalsize\bfseries Section A --- Multiple choice}
-
+{\small\bfseries Do not issue this file to students.}
+\hrule
 \vspace{0.4em}
-A1 = A\\
-A2 = A\\
-A3 = A\\
-A4 = A\\
-A5 = A\\
-A6 = A\\
-A7 = B\\
-A8 = D
+
+\section*{Section A --- Multiple choice}
+
+{\normalsize\bfseries Quick answers}
+
+\vspace{0.3em}
+{\small
+\begin{tabular}{@{}ll@{\hspace{2.6em}}ll@{\hspace{2.6em}}ll@{}}
+\toprule
+Q & Ans. & Q & Ans. & Q & Ans.\\
+\midrule
+A1 & \textbf{A} & A4 & \textbf{A} & A7 & \textbf{B}\\
+A2 & \textbf{A} & A5 & \textbf{A} & A8 & \textbf{D}\\
+A3 & \textbf{A} & A6 & \textbf{A} & & \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.6em}
+{\normalsize\bfseries Worked explanations}
+
+\mcq{A1}{A}{2023 MJ Paper 11 Q2}{%
+Both calcium and barium are Group 2 metals with the same metallic structure, so
+the only difference that matters is the size of the cation. \ce{Ca^2+} is smaller
+than \ce{Ba^2+}, so the delocalised electrons are held closer to the \ce{Ca^2+}
+ions and the electrostatic attraction is stronger, giving calcium the higher
+melting point.}
+
+\why{B:}{metals do not have a ``partly giant molecular'' structure --- they have a
+giant \emph{metallic} lattice of cations in a sea of delocalised electrons.}
+
+\why{C:}{both Ca and Ba contribute the \emph{same} number (two) of delocalised
+electrons per atom; ionisation energy is not the factor here.}
+
+\why{D:}{there is no such repulsion --- the attraction between the cations and
+the delocalised electrons is what holds the lattice together.}
+
+\mcq{A2}{A}{2021 MJ Paper 13 Q36}{%
+All three statements are correct and together explain the rise in melting point
+from Na to Al. Going Na $\rightarrow$ Mg $\rightarrow$ Al:
+(1) the charge on the metal ion increases (\ce{Na+}, \ce{Mg^2+}, \ce{Al^3+});
+(2) the number of delocalised electrons per ion increases (1, 2, 3);
+(3) the ionic radius decreases.
+A higher charge, more delocalised electrons and a smaller radius all strengthen
+the metallic bonding, so the melting point rises.}
+
+\why{B / C:}{each drops one of the three correct statements.}
+
+\why{D:}{keeps only statement 1 --- the other two statements are also true.}
+
+\mcq{A3}{A}{2024 MJ Paper 12 Q6}{%
+Boron in \ce{BF3} has only \textbf{three} bond pairs and \textbf{no lone pair},
+so there are only 6 electrons in its outer shell --- an \emph{incomplete} octet.
+This is why \ce{BF3} is a good electron-pair acceptor (a Lewis acid).}
+
+\why{B:}{in \ce{CH3-} the carbon has 3 bond pairs \emph{and} one lone pair =
+8 outer electrons (complete octet).}
+
+\why{C:}{in \ce{F2O} the oxygen has 2 bond pairs and 2 lone pairs = 8 electrons.}
+
+\why{D:}{in \ce{H3O+} the oxygen has 3 bond pairs and 1 lone pair = 8 electrons.}
+
+\mcq{A4}{A}{2021 FM Paper 12 Q34}{%
+All three species have a vacant orbital that can accept a lone pair, so all three
+can form a coordinate (dative covalent) bond.
+\ce{BF3}: B has an empty 2p orbital.
+\ce{H+}: the hydrogen ion has an empty 1s orbital.
+\ce{CH3+}: the carbon has an empty 2p orbital (only 6 outer electrons).}
+
+\why{B / C / D:}{each option excludes at least one species that is in fact able
+to accept a lone pair. The trap is forgetting that \ce{H+} and \ce{CH3+}, not
+just \ce{BF3}, are electron-deficient.}
+
+\mcq{A5}{A}{2024 MJ Paper 11 Q5}{%
+In the \ce{Al2Cl6} dimer the two aluminium atoms are joined through two
+\emph{bridging} chlorine atoms. Each bridging Cl uses a lone pair to form a
+\emph{coordinate (dative covalent)} bond to one Al, and the Al--Cl bonds are
+covalent. So \ce{Al2Cl6} contains \textbf{covalent and coordinate} bonding only.}
+
+\why{B:}{``covalent only'' ignores the dative bonds to the bridging Cl atoms ---
+each Al is surrounded by 4 electron pairs, which needs the dative bonds.}
+
+\why{C / D:}{\ce{Al2Cl6} is a molecular (covalent) species; it is not ionic. (It
+is \ce{AlCl3} that behaves ionically in the solid state, not the \ce{Al2Cl6}
+dimer.)}
+
+\mcq{A6}{A}{2023 ON Paper 11 Q5}{%
+Aluminium chloride \emph{sublimes} to give a vapour of \textbf{\ce{Al2Cl6}
+dimer} molecules --- two Al centres bridged by two Cl atoms, with four terminal
+Cl atoms. Option A is the dimer.}
+
+\why{B / C:}{do not show the correct \ce{Al2Cl6} dimer arrangement (the vapour is
+not the simple \ce{AlCl3} monomer at this temperature).}
+
+\why{D:}{shows an ionic formulation, \ce{Al^3+(Cl-)3}. The vapour consists of
+covalent \ce{Al2Cl6} molecules, not separate ions.}
+
+\mcq{A7}{B}{2022 FM Paper 12 Q5}{%
+The correct dot-and-cross diagram must show each aluminium atom surrounded by
+\textbf{four} electron pairs (giving Al a complete octet) and must show the
+\emph{dative} bond: a bridging chlorine atom donates a lone pair to an aluminium
+atom. The key on the paper distinguishes the electrons that came from Al from
+those that came from Cl. Diagram B is the one that shows the \ce{Al2Cl6}
+structure with the bridging Cl atoms donating a lone pair, and the correct
+number of electron pairs around each Al.}
+
+\why{A:}{shows \ce{Al^3+} and \ce{Cl-} ions with the wrong electron bookkeeping
+--- \ce{Al2Cl6} is molecular and each Al still has four shared pairs.}
+
+\why{C / D:}{show the wrong arrangement of atoms / electron pairs (they do not
+reproduce the bridged \ce{Al2Cl6} structure with the dative pairs correctly
+marked).}
+
+\mcq{A8}{D}{2021 ON Paper 11 Q35}{%
+A chloride with \emph{both} covalent and coordinate bonding must be a molecular
+chloride that forms a bridged dimer.
+(1) \textbf{Al} --- forms \ce{Al2Cl6}, which has covalent bonds and dative bonds
+from the bridging Cl atoms. \textbf{Correct.}
+(2) Si --- forms \ce{SiCl4}, which has ordinary covalent bonds only (no dative
+bonding). \textbf{Wrong.}
+(3) Mg --- forms \ce{MgCl2}, which is ionic. \textbf{Wrong.}
+Only statement 1 is correct.}
+
+\why{A / B / C:}{all include Si or Mg, whose chlorides do not contain coordinate
+bonding.}
 
 \newpage
 
-{\normalsize\bfseries Section B --- Mark scheme clips}
+\section*{Section B --- Mark scheme clips}
 
 \msblock{B1(a)  [2]}{cie-9701-2025-fm-p22-q2a-ms.png}
 

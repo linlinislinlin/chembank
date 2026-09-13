@@ -1,9 +1,15 @@
-%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+% Full answers PDF: MCQ answers + worked explanations per option, then official MS clips.
+% Compiler: XeLaTeX.
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=18mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
+\usepackage[version=4]{mhchem}
 \usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{needspace}
 
 \setmainfont{Helvetica Neue}
 
@@ -25,26 +31,155 @@
   \end{minipage}\par
 }
 
+\newcommand{\mcq}[4]{%
+  \par\needspace{5\baselineskip}\vspace{0.7em}%
+  {\normalsize\bfseries #1.\quad #2}%
+  \hfill{\footnotesize\color{gray}#3}\par\vspace{0.15em}%
+  {\small #4}\par
+}
+
+\newcommand{\why}[2]{\par\needspace{2.2\baselineskip}\vspace{0.1em}{\small\textbf{#1} #2}\par}
+
 \begin{document}
 
 \begin{center}
-{\large\bfseries 3.2 Ionic bonding homework --- answers}
+{\large\bfseries 3.2 Ionic bonding homework --- answers}\\[0.2em]
+{\small CIE 9701 AS Chemistry \quad·\quad 7 multiple-choice + 10 written marks}
 \end{center}
 
-{\normalsize\bfseries Section A --- Multiple choice}
-
+{\small\bfseries Do not issue this file to students.}
+\hrule
 \vspace{0.4em}
-A1 = B\\
-A2 = C\\
-A3 = B\\
-A4 = C\\
-A5 = D\\
-A6 = B\\
-A7 = C
+
+\section*{Section A --- Multiple choice}
+
+{\normalsize\bfseries Quick answers}
+
+\vspace{0.3em}
+{\small
+\begin{tabular}{@{}ll@{\hspace{2.6em}}ll@{\hspace{2.6em}}ll@{}}
+\toprule
+Q & Ans. & Q & Ans. & Q & Ans.\\
+\midrule
+A1 & \textbf{B} & A4 & \textbf{C} & A7 & \textbf{C}\\
+A2 & \textbf{C} & A5 & \textbf{D} & & \\
+A3 & \textbf{B} & A6 & \textbf{B} & & \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.6em}
+{\normalsize\bfseries Worked explanations}
+
+\mcq{A1}{B}{2021 MJ Paper 13 Q6}{%
+Ionic bonding requires the \emph{transfer} of electrons from a metal atom to a
+non-metal atom --- two \emph{different} elements. An element contains only one
+type of atom, so it cannot produce oppositely charged ions; ionic bonding is
+therefore \emph{never} found in elements.}
+
+\why{A:}{covalent --- \ce{H2}, \ce{Cl2}, diamond (giant covalent).}
+
+\why{C:}{metallic --- Na, Fe, Cu.}
+
+\why{D:}{van der Waals' forces \emph{are} found in elements --- between
+\ce{I2} molecules or between noble-gas atoms.}
+
+\mcq{A2}{C}{2025 ON Paper 11 Q16}{%
+The radii identify the elements. A metal loses electrons, so its ionic radius is
+\emph{smaller} than its atomic radius; a non-metal gains electrons, so its ionic
+radius is \emph{larger}.
+X: 0.118 $\rightarrow$ 0.053 nm --- a metal cation, matches Al (Al 0.118,
+\ce{Al^3+} 0.054).
+Y: 0.099 $\rightarrow$ 0.180 nm --- a non-metal anion, matches Cl (Cl 0.099,
+\ce{Cl-} 0.181).
+Z: 0.160 $\rightarrow$ 0.072 nm --- a metal cation, matches Mg (Mg 0.160,
+\ce{Mg^2+} 0.072).
+So X = Al, Y = Cl and Z = Mg.}
+
+\why{A:}{X is aluminium, a metal that conducts electricity; Y is chlorine, a
+non-metal that does not. X has the \emph{higher} conductivity, not lower.}
+
+\why{B:}{Y is chlorine (a simple molecular gas, mp $-$101\,\textdegree C); X is
+aluminium (mp 660\,\textdegree C). Y has the \emph{much lower} melting point.}
+
+\why{C (correct):}{Y (Cl) and Z (Mg) are a non-metal and a metal, so they form
+the ionic compound \ce{MgCl2}.}
+
+\why{D:}{Z is magnesium, a metal --- it forms ions by \emph{losing} electrons,
+not gaining them.}
+
+\mcq{A3}{B}{2025 MJ Paper 11 Q8}{%
+The key on the paper defines the symbols: \textbf{Na} and \textbf{Cl} stand for
+the \emph{atoms}, while \textbf{+} and \textbf{--} stand for the \emph{ions}
+(\ce{Na+} and \ce{Cl-}). A sodium chloride crystal is a giant ionic lattice of
+\emph{ions} in a regular alternating arrangement, so the correct diagram is the
+one built from + and -- symbols (option B).}
+
+\why{A:}{labels the particles Na and Cl, i.e.\ \emph{atoms} (see the key). A
+sodium chloride lattice contains \ce{Na+} and \ce{Cl-} ions, not atoms.}
+
+\why{C / D:}{also use ion symbols, but the ions are not arranged in the correct
+regular alternating (rock-salt) lattice of sodium chloride --- e.g.\ the packing
+and relative positions of the two ions are wrong.}
+
+\mcq{A4}{C}{2023 MJ Paper 11 Q6}{%
+In the rock-salt structure each \ce{Na+} ion is surrounded by \textbf{6}
+\ce{Cl-} ions (octahedral), and each \ce{Cl-} ion is surrounded by \textbf{6}
+\ce{Na+} ions. The coordination numbers are therefore 6 and 6.}
+
+\why{A / B:}{give 4 for one of the ions. A coordination number of 4 would be a
+different structure (e.g.\ zinc blende), not NaCl.}
+
+\why{D:}{gives 8 for the sodium ions. 8:8 is the caesium chloride structure;
+\ce{Cs+} is much larger than \ce{Na+} so \ce{CsCl} packs differently.}
+
+\mcq{A5}{D}{2025 ON Paper 13 Q18}{%
+\ce{P4O10} is a simple molecular oxide: discrete \ce{P4O10} molecules held
+together by weak van der Waals' forces, so it has a simple structure.
+\ce{MgO}, \ce{Al2O3} and \ce{SiO2} all have \emph{giant} structures (giant ionic
+for MgO and \ce{Al2O3}, giant covalent/macromolecular for \ce{SiO2}).}
+
+\why{A:}{\ce{MgO} is a giant ionic lattice --- high melting point, conducts when
+molten.}
+
+\why{B:}{\ce{Al2O3} is a giant ionic lattice (with some covalent character).}
+
+\why{C:}{\ce{SiO2} is a giant covalent (macromolecular) solid --- this is the
+common trap, because it looks like a simple oxide of a non-metal but is
+macromolecular.}
+
+\mcq{A6}{B}{2025 MJ Paper 14 Q12}{%
+Sodium ethanoate, \ce{CH3COONa}, contains \emph{ionic} bonding (between the
+\ce{Na+} ion and the \ce{CH3COO-} ion) and \emph{covalent} bonding (the C--H,
+C--C, C--O and \ce{C=O} bonds inside the ethanoate ion). Neither of these is a
+coordinate (dative covalent) bond, so B is the answer.}
+
+\why{A:}{\ce{Al2Cl6} contains covalent bonds \emph{and} coordinate bonds (the
+Cl $\rightarrow$ Al dative bonds in the dimer), so it is excluded.}
+
+\why{C:}{\ce{MgCl2} is ionic only --- it has no covalent bonding.}
+
+\why{D:}{\ce{NH4Cl} contains ionic bonding plus covalent N--H bonds \emph{and} a
+coordinate bond in the \ce{NH4+} ion (the bond formed when the lone pair on N
+donates to \ce{H+}), so it is excluded.}
+
+\mcq{A7}{C}{2021 ON Paper 12 Q35}{%
+(1) \textbf{False} --- \ce{SiO2} is a giant covalent solid (mp about
+1710\,\textdegree C) while \ce{SiCl4} is simple molecular (mp
+$-$68\,\textdegree C); \ce{SiO2} has the much higher melting point.
+(2) \textbf{True} --- \ce{SiCl4} is hydrolysed by water (\ce{SiCl4 + 2H2O ->
+SiO2 + 4HCl}); \ce{NaCl} simply dissolves in water without reaction.
+(3) \textbf{True} --- \ce{SiCl4} is simple molecular (weak van der Waals'
+forces) so its melting point is far lower than that of \ce{NaCl}, a giant ionic
+lattice.
+Correct statements: 2 and 3 $\rightarrow$ C.}
+
+\why{A / B:}{both include statement 1, which is false.}
+
+\why{D:}{includes only statement 1 (false) and drops the two true statements.}
 
 \newpage
 
-{\normalsize\bfseries Section B --- Mark scheme clips}
+\section*{Section B --- Mark scheme clips}
 
 \msblock{B1(a)  [2]}{cie-9701-2022-on-p22-q1a-ms.png}
 

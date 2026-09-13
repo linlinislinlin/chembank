@@ -1,9 +1,15 @@
-%% Minimal answers PDF: MCQ letters + official MS clips. XeLaTeX.
+% Full answers PDF: MCQ answers + worked explanations per option, then official MS clips.
+% Compiler: XeLaTeX.
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=18mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
+\usepackage[version=4]{mhchem}
 \usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{needspace}
 
 \setmainfont{Helvetica Neue}
 
@@ -25,27 +31,153 @@
   \end{minipage}\par
 }
 
+\newcommand{\mcq}[4]{%
+  \par\needspace{5\baselineskip}\vspace{0.7em}%
+  {\normalsize\bfseries #1.\quad #2}%
+  \hfill{\footnotesize\color{gray}#3}\par\vspace{0.15em}%
+  {\small #4}\par
+}
+
+\newcommand{\why}[2]{\par\needspace{2.2\baselineskip}\vspace{0.1em}{\small\textbf{#1} #2}\par}
+
 \begin{document}
 
 \begin{center}
-{\large\bfseries 3.5 Shapes of molecules homework --- answers}
+{\large\bfseries 3.5 Shapes of molecules homework --- answers}\\[0.2em]
+{\small CIE 9701 AS Chemistry \quad·\quad 8 multiple-choice + 10 written marks}
 \end{center}
 
-{\normalsize\bfseries Section A --- Multiple choice}
-
+{\small\bfseries Do not issue this file to students.}
+\hrule
 \vspace{0.4em}
-A1 = A\\
-A2 = D\\
-A3 = C\\
-A4 = B\\
-A5 = B\\
-A6 = C\\
-A7 = B\\
-A8 = D
+
+\section*{Section A --- Multiple choice}
+
+{\normalsize\bfseries Quick answers}
+
+\vspace{0.3em}
+{\small
+\begin{tabular}{@{}ll@{\hspace{2.6em}}ll@{\hspace{2.6em}}ll@{}}
+\toprule
+Q & Ans. & Q & Ans. & Q & Ans.\\
+\midrule
+A1 & \textbf{A} & A4 & \textbf{B} & A7 & \textbf{B}\\
+A2 & \textbf{D} & A5 & \textbf{B} & A8 & \textbf{D}\\
+A3 & \textbf{C} & A6 & \textbf{C} & & \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.6em}
+{\normalsize\bfseries Worked explanations}
+
+\mcq{A1}{A}{2025 MJ Paper 12 Q7}{%
+The bond angles to use are \ce{H2O} 104.5\textdegree, \ce{NH3}
+107\textdegree\ and \ce{BF3} 120\textdegree. So the \emph{smallest} angle belongs
+to \ce{H2O} (two lone pairs on O squeeze the H--O--H angle most) and the
+\emph{largest} to \ce{BF3} (three bond pairs, no lone pair, 120\textdegree). Row
+A gives \ce{H2O} as smallest and \ce{BF3} as largest.}
+
+\why{B / C / D:}{each puts the species in the wrong order --- e.g.\ \ce{H2O} is
+never the largest angle, because its two lone pairs reduce the angle below the
+tetrahedral value.}
+
+\mcq{A2}{D}{2023 MJ Paper 13 Q5}{%
+\ce{NH3 + H+ -> NH4+}. In \ce{NH3}, nitrogen has 3 bond pairs \emph{and 1 lone
+pair} (pyramidal, angle about 107\textdegree). When the lone pair is used to bond
+to \ce{H+}, the nitrogen in \ce{NH4+} has \textbf{four bond pairs and no lone
+pair}. Four identical bond pairs give a \emph{tetrahedral} shape with bond angle
+\textbf{109.5\textdegree}. So the row ``tetrahedral, 109.5'' is correct.}
+
+\why{A / B:}{say the shape is pyramidal. \ce{NH4+} has no lone pair, so it is not
+pyramidal.}
+
+\why{C:}{gives the right shape but keeps the \ce{NH3} angle of
+107\textdegree; removing the lone pair opens the angle to 109.5\textdegree.}
+
+\mcq{A3}{C}{2024 MJ Paper 11 Q24}{%
+The ammonium ion, \ce{NH4+}, has four bonding pairs of electrons around nitrogen
+and no lone pair, so it is tetrahedral with a bond angle of
+\textbf{109.5\textdegree}.}
+
+\why{A:}{90\textdegree\ is an octahedral angle, not tetrahedral.}
+
+\why{B:}{107\textdegree\ is the angle in \ce{NH3} (one lone pair), not in
+\ce{NH4+}.}
+
+\why{D:}{120\textdegree\ is a trigonal planar angle (e.g.\ \ce{BF3}).}
+
+\mcq{A4}{B}{2025 MJ Paper 14 Q11}{%
+\ce{PF5} has five bonding pairs around phosphorus and \emph{no lone pair}, so it
+is trigonal bipyramidal. This makes statement B correct.}
+
+\why{A:}{not all F--P--F angles are 90\textdegree. The two axial F atoms make
+90\textdegree\ with the equatorial F atoms, but the equatorial F--P--F angles are
+120\textdegree.}
+
+\why{C:}{\ce{PF5} is symmetrical, so the bond dipoles cancel and the molecule has
+\emph{no} overall dipole moment.}
+
+\why{D:}{the shape is trigonal bipyramidal, not octahedral (octahedral is 6
+bond pairs, e.g.\ \ce{SF6}).}
+
+\mcq{A5}{B}{2021 MJ Paper 11 Q34}{%
+(1) \ce{C2H4} (ethene) --- the H--C--H angle is about 117\textdegree\ and the
+H--C=C angle about 121\textdegree, so \ce{C2H4} has angles close to
+120\textdegree. \textbf{Correct.}
+(2) \ce{PF5} --- trigonal bipyramidal, so the equatorial F--P--F angles are
+exactly 120\textdegree. \textbf{Correct.}
+(3) \ce{NCl3} --- nitrogen has 3 bond pairs and 1 lone pair, giving a pyramidal
+shape with angles of about 107\textdegree; it has no 120\textdegree\ angle.
+\textbf{Wrong.}
+So statements 1 and 2 only are correct.}
+
+\why{A:}{includes \ce{NCl3}, which has no 120\textdegree\ angle.}
+
+\why{C:}{drops \ce{C2H4}, which does have a 120\textdegree\ angle.}
+
+\why{D:}{keeps only statement 1 and loses the correct statement about
+\ce{PF5}.}
+
+\mcq{A6}{C}{2025 MJ Paper 14 Q3}{%
+Compare the smallest bond angle in each pair:
+A \ce{CH4} 109.5\textdegree\ vs \ce{SF6} 90\textdegree\ (smallest) --- 109.5 is
+\emph{not} smaller than 90.
+B \ce{CO2} 180\textdegree\ vs \ce{BF3} 120\textdegree --- 180 is not smaller
+than 120.
+C \ce{H2O} 104.5\textdegree\ vs \ce{H3O+} 107\textdegree\ --- 104.5 \emph{is}
+smaller than 107. \textbf{Correct.}
+D \ce{NH4+} 109.5\textdegree\ vs \ce{NH3} 107\textdegree --- 109.5 is not smaller
+than 107.}
+
+\why{A / B / D:}{in each case the first species has the larger (or equal) bond
+angle, so the required ``smaller in the first species'' condition fails.}
+
+\mcq{A7}{B}{2022 MJ Paper 13 Q6}{%
+In hydrazine, \ce{H2N-NH2}, each nitrogen atom has \textbf{3 bond pairs and 1 lone
+pair} (2 N--H bonds, 1 N--N bond, 1 lone pair). This is the same electron-pair
+arrangement as in \ce{NH3}, so the angle X is the pyramidal angle of about
+\textbf{107\textdegree}.}
+
+\why{A:}{90\textdegree\ would require octahedral electron-pair geometry.}
+
+\why{C:}{109.5\textdegree\ is the tetrahedral angle, which needs \emph{four} bond
+pairs and no lone pair --- not the case at nitrogen here.}
+
+\why{D:}{120\textdegree\ is trigonal planar (three bond pairs, no lone pair).}
+
+\mcq{A8}{D}{2024 MJ Paper 13 Q6}{%
+Borazole, \ce{N3B3H6}, is a six-membered ring of alternating N and B atoms ---
+the ``inorganic benzene''. Like benzene it is \textbf{planar}, and its
+delocalised $\pi$ system contains \textbf{6} $\pi$ electrons (the aromatic
+6-$\pi$-electron count).}
+
+\why{A / B:}{say borazole is non-planar; it is planar, like benzene.}
+
+\why{C:}{gives 3 $\pi$ electrons; borazole is aromatic with 6 $\pi$ electrons.}
 
 \newpage
 
-{\normalsize\bfseries Section B --- Mark scheme clips}
+\section*{Section B --- Mark scheme clips}
 
 \msblock{B1(a)(iii)  [1]}{cie-9701-2021-on-p21-q1a-iii-ms.png}
 

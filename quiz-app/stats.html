@@ -116,7 +116,7 @@
     <div class="card">
       <h2>学生作答情况（按提交时间排序，点击行展开每题对错）</h2>
       <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。点击某学生行可展开，查看该生在每道题的作答对错，并可清除该生的作答记录（用于让他重做）。Tester（老师预览）不在此列。</div>
-      <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow"></span></th><th class="sort-btn" id="stuTimeTh" title="点击切换排序">提交时间 <span id="stuTimeArrow">▾</span></th></tr></thead>
+      <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow"></span></th><th class="sort-btn" id="stuTimeTh" title="点击切换排序">提交时间 <span id="stuTimeArrow">▾</span></th><th>操作</th></tr></thead>
       <tbody id="stuRows"></tbody></table>
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
@@ -439,7 +439,36 @@ function renderStudentTable(rows, qs, submissions) {
       <td><div style="display:flex;align-items:center;gap:8px">
         <div class="bar"><i style="width:${accPct}%;background:var(--${color});height:100%;border-radius:5px"></i></div>
         <b class="${color}">${accPct}%</b></div></td>
-      <td class="muted">${esc(submittedAt)}</td>`;
+      <td class="muted">${esc(submittedAt)}</td>
+      <td class="opcell"></td>`;
+
+    // 清除按钮直接放在主行最后一列，不用展开就能看到。
+    if (student_id != null && currentAss) {
+      const clr = document.createElement("button");
+      clr.type = "button";
+      clr.className = "btn";
+      clr.style.whiteSpace = "nowrap";
+      clr.textContent = "清除本条";
+      clr.title = "清除 " + (stu?.name || "该生") + " 在本次作业的作答记录（可重做）";
+      clr.onclick = async (ev) => {
+        ev.stopPropagation();               // 不要触发展开/收起
+        const nm = stu?.name || "该生";
+        if (!confirm("确定清除 " + nm + " 在「" + (currentAss.title || "") + "」的作答记录？\n\n清除后该生可以重新做一遍；分数与正确率会从统计中移除。")) return;
+        clr.disabled = true;
+        clr.textContent = "清除中…";
+        try {
+          const r = await DB.clearStudentAttempt(currentAss.id, student_id, getToken(), false);
+          const d = (r && r.deleted) || {};
+          clr.textContent = "已清除 " + (d.answers || 0) + " 条";
+          setTimeout(() => selectAssignment(currentAss.id), 700);   // 刷新统计
+        } catch (e) {
+          clr.disabled = false;
+          clr.textContent = "清除失败";
+          alert("清除失败：" + (e && e.message ? e.message : e));
+        }
+      };
+      main.querySelector(".opcell").appendChild(clr);
+    }
 
     const det = document.createElement("tr");
     det.className = "stu-detail";
@@ -458,36 +487,7 @@ function renderStudentTable(rows, qs, submissions) {
         <span>学生：<b>${esc(stuAns)}</b> · 标准：<b>${esc(keyAns)}</b> · <b class="${cls}">${icon}</b></span>
       </div>`;
     }).join("");
-    det.innerHTML = `<td colspan="5"><div class="each-list">${items}</div></td>`;
-
-    // 老师操作：清除该生本次作答（用于误交、需要重做的情况）。
-    // 直接调用受教师口令保护的 clearAttempt，不需要在页面上再输一次口令。
-    if (student_id != null && currentAss) {
-      const act = document.createElement("div");
-      act.style.marginTop = "12px";
-      const clr = document.createElement("button");
-      clr.type = "button";
-      clr.className = "btn";
-      clr.textContent = "清除 " + (stu?.name || "该生") + " 的本次作答（可重做）";
-      clr.onclick = async (ev) => {
-        ev.stopPropagation();
-        const nm = stu?.name || "该生";
-        if (!confirm("确定清除 " + nm + " 在「" + (currentAss.title || "") + "」的作答记录？\n\n清除后该生可以重新做一遍；分数与正确率会从统计中移除。")) return;
-        clr.disabled = true;
-        clr.textContent = "清除中…";
-        try {
-          const r = await DB.clearStudentAttempt(currentAss.id, student_id, getToken(), false);
-          const d = (r && r.deleted) || {};
-          clr.textContent = "已清除（作答 " + (d.answers || 0) + " 条）";
-          setTimeout(() => selectAssignment(currentAss.id), 700);   // 刷新统计
-        } catch (e) {
-          clr.disabled = false;
-          clr.textContent = "清除失败：" + (e && e.message ? e.message : e);
-        }
-      };
-      act.appendChild(clr);
-      det.querySelector("td").appendChild(act);
-    }
+    det.innerHTML = `<td colspan="6"><div class="each-list">${items}</div></td>`;
 
     const toggle = () => {
       const opening = !main.classList.contains("open");

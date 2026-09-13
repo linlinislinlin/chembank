@@ -304,6 +304,86 @@ Deno.serve(async (req: Request) => {
       return json(200, { ok: true, cleared_students: ids.length });
     }
 
+    if (action === "clearAttempt") {
+      // 老师清除「某个学生在某份作业」的作答记录，让他能重做。
+      // 必须先给 teacher_token；支持 dry_run 预演（只报告将要删什么，不真删）。
+      // 安全约束：必须精确命中**一名**学生才允许删除，命中 0 名或多名都会返回候选列表。
+      const token = clean(body.teacher_token);
+      if (!TEACHER_TOKEN || !tokEq(token, TEACHER_TOKEN)) {
+        return json(401, { error: "unauthorized" });
+      }
+      const id = Number(body.assignment_id);
+      if (!id) return json(400, { error: "missing assignment_id" });
+      const dryRun = body.dry_run !== false; // 默认预演：不传 dry_run=false 绝不删
+      const studentId = body.student_id == null ? null : Number(body.student_id);
+      const needle = clean(body.student);
+
+      if (studentId == null && !needle) {
+        return json(400, { error: "provide student_id or student" });
+      }
+
+      let q = supabase.from("students").select("id, name, student_no, class_name");
+      if (studentId != null) {
+        q = q.eq("id", studentId);
+      } else {
+        // 按姓名或学号模糊匹配。去掉会破坏 PostgREST or= 语法的字符（逗号/括号/通配符）。
+        const safe = needle.replace(/[%_,()*\\]/g, "");
+        if (!safe) return json(400, { error: "student must contain letters or digits" });
+        const like = "%" + safe + "%";
+        q = q.or(`name.ilike.${like},student_no.ilike.${like}`);
+      }
+      const { data: matches, error: findErr } = await q;
+      if (findErr) return json(500, { error: findErr.message });
+
+      const found = matches ?? [];
+      if (found.length !== 1) {
+        return json(200, {
+          dry_run: dryRun,
+          matched: found.length,
+          candidates: found,
+          hint: found.length === 0
+            ? "no student matched — pass an exact student_id"
+            : "more than one student matched — pass student_id to disambiguate",
+        });
+      }
+
+      const stu = found[0];
+      const { count: nAnswers } = await supabase
+        .from("answers")
+        .select("id", { count: "exact", head: true })
+        .eq("assignment_id", id)
+        .eq("student_id", stu.id);
+      const { count: nSubs } = await supabase
+        .from("submissions")
+        .select("id", { count: "exact", head: true })
+        .eq("assignment_id", id)
+        .eq("student_id", stu.id);
+
+      if (dryRun) {
+        return json(200, {
+          dry_run: true,
+          student: stu,
+          assignment_id: id,
+          would_delete: { answers: nAnswers ?? 0, submissions: nSubs ?? 0 },
+          hint: "call again with dry_run=false to actually delete",
+        });
+      }
+
+      const { error: ansErr } = await supabase
+        .from("answers").delete().eq("assignment_id", id).eq("student_id", stu.id);
+      if (ansErr) return json(500, { error: ansErr.message });
+      const { error: subErr } = await supabase
+        .from("submissions").delete().eq("assignment_id", id).eq("student_id", stu.id);
+      if (subErr) return json(500, { error: subErr.message });
+
+      return json(200, {
+        dry_run: false,
+        student: stu,
+        assignment_id: id,
+        deleted: { answers: nAnswers ?? 0, submissions: nSubs ?? 0 },
+      });
+    }
+
     if (action === "take") {
       const id = Number(body.assignment_id);
       if (!id) return json(400, { error: "missing assignment_id" });

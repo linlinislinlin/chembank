@@ -77,6 +77,18 @@ window.HomeworkDB = (() => {
     });
   }
 
+  // 老师清除「某个学生在某份作业」的作答记录（让他重做）。
+  // dryRun=true 只预演（返回会删多少行），不传或 false 才真删。
+  async function clearStudentAttempt(assignmentId, studentId, teacherToken, dryRun) {
+    return callAssignment({
+      action: "clearAttempt",
+      assignment_id: assignmentId,
+      student_id: studentId,
+      dry_run: dryRun === true,
+      teacher_token: teacherToken || "",
+    });
+  }
+
   // 老师用 Tester 试跑后，清除自己在**这一份作业**下的记录，以便再走一遍学生流程。
   // 只影响 Tester 预览账号，不动任何真实学生数据（后端还会再校验一次口令）。
   async function resetTesterAttempt(assignmentId, teacherToken) {
@@ -142,6 +154,7 @@ window.HomeworkDB = (() => {
   return {
     ready, createAssignment, listAssignments, getAssignment, getAssignmentSnapshot,
     takeAssignment, submitAssignment, getSubmissionResult, readTeacherStats, resetTesterAttempt,
+    clearStudentAttempt,
   };
 })();
 

@@ -113,21 +113,22 @@
   <div id="overview" style="display:none">
     <div class="sum-cards" id="sumCards"></div>
     <div class="card">
-      <h2>学生作答情况（按正确率排序，点击行展开每题对错）</h2>
-      <div class="small-note">点击某学生行可展开，查看该生在每道题的作答对错。</div>
-      <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow">▾</span></th><th>提交时间</th></tr></thead>
+      <h2>学生作答情况（按提交时间排序，点击行展开每题对错）</h2>
+      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。点击某学生行可展开，查看该生在每道题的作答对错。</div>
+      <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow"></span></th><th class="sort-btn" id="stuTimeTh" title="点击切换排序">提交时间 <span id="stuTimeArrow">▾</span></th></tr></thead>
       <tbody id="stuRows"></tbody></table>
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
     <div class="card">
-      <h2>讲义题目分析（每题正确率，错得多的题建议重点讲）</h2>
-      <div class="small-note">按正确率从低到高排序，最常做错的题在最上方。</div>
-      <table><thead><tr><th>题目</th><th>答对人数</th><th>答错人数</th><th>正确率</th><th>标准答案</th><th>考点</th></tr></thead>
+      <h2>讲义题目分析（按题目顺序，每题正确率）</h2>
+      <div class="small-note">按讲义题目顺序（1、2、3…）排列，方便按顺序讲。简答题为纸质作答、未在网页输入答案，不计入正确率统计。</div>
+      <table><thead><tr><th>序号</th><th>题目</th><th>答对人数</th><th>答错人数</th><th>正确率</th><th>标准答案</th><th>考点</th></tr></thead>
       <tbody id="qRows"></tbody></table>
       <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
     </div>
     <div class="card">
       <h2>错题知识点分布（哪些考点大家最容易错）</h2>
+      <div class="small-note">仅统计选择题的错题（简答题为纸质作答，未在网页输入答案）。</div>
       <div id="topicDist"></div>
       <div class="empty" id="tEmpty" style="display:none">暂无数据</div>
     </div>
@@ -230,7 +231,7 @@ async function selectAssignment(id, pillEl) {
   }
 }
 
-let stuSort = { field:"acc", dir:-1 }; // 默认正确率降序
+let stuSort = { field:"time", dir:-1 }; // 默认按提交时间降序（最新在前）
 function stuKey(r){ return r.student_id ?? (r.students ? (r.students.student_no+"|"+r.students.name) : JSON.stringify(r.students)); }
 function qLabel(q){ return `${q.year||""} ${q.session||""} P${q.paper} Q${q.question}`.replace(/\s+/g," ").trim() || (q.id||""); }
 
@@ -293,7 +294,7 @@ function renderOverview(ass, qs, rows, submissions) {
 
   // 错题知识点分布
   const tEmpty = document.getElementById("tEmpty");
-  const wrongRows = rows.filter(r => r.correct === false);
+  const wrongRows = rows.filter(r => r.correct === false && (BYID.get(r.question_id)?.type !== "structured"));
   const topicCnt = new Map();
   wrongRows.forEach(r => {
     const q = BYID.get(r.question_id);
@@ -330,14 +331,35 @@ function renderStudentTable(rows, qs, submissions) {
       acc: sub ? Number(sub.accuracy||0)/100 : (s.n? s.ok/s.n : 0),
       score: sub ? `${sub.score} / ${sub.total_score}` : `${s.ok}/${s.n}`,
       submittedAt: sub && sub.submitted_at ? new Date(sub.submitted_at).toLocaleString() : "–",
+      ts: sub && sub.submitted_at ? Date.parse(sub.submitted_at) : null,
     };
   });
-  list.sort((a,b) => stuSort.dir * (a.acc - b.acc));
+  list.sort((a,b) => {
+    if (stuSort.field === "time") {
+      if (a.ts == null && b.ts == null) return 0;
+      if (a.ts == null) return 1;              // 未提交的排在最后
+      if (b.ts == null) return -1;
+      if (a.ts !== b.ts) return stuSort.dir * (a.ts - b.ts);
+    }
+    return stuSort.dir * (a.acc - b.acc);
+  });
 
   const st = document.getElementById("stuRows"); st.innerHTML = "";
   document.getElementById("stuEmpty").style.display = list.length ? "none" : "block";
-  document.getElementById("stuAccArrow").textContent = stuSort.dir < 0 ? "▾" : "▴";
-  document.getElementById("stuAccTh").onclick = () => { stuSort.dir *= -1; renderStudentTable(rows, qs, submissions); };
+  document.getElementById("stuAccArrow").textContent =
+    stuSort.field === "acc" ? (stuSort.dir < 0 ? "▾" : "▴") : "";
+  document.getElementById("stuTimeArrow").textContent =
+    stuSort.field === "time" ? (stuSort.dir < 0 ? "▾" : "▴") : "";
+  document.getElementById("stuAccTh").onclick = () => {
+    if (stuSort.field === "acc") stuSort.dir *= -1;
+    else stuSort = { field:"acc", dir:-1 };   // 切到正确率：默认从高到低
+    renderStudentTable(rows, qs, submissions);
+  };
+  document.getElementById("stuTimeTh").onclick = () => {
+    if (stuSort.field === "time") stuSort.dir *= -1;
+    else stuSort = { field:"time", dir:-1 };  // 切到时间：默认最新在前
+    renderStudentTable(rows, qs, submissions);
+  };
 
   list.forEach(({stu, acc, key, score, submittedAt}) => {
     const accPct = Math.round(acc*100);
@@ -387,40 +409,42 @@ function renderStudentTable(rows, qs, submissions) {
   });
 }
 
-// 讲义题目分析：每道题 正确率/答卷数/标准答案/考点，错得多的在前
+// 讲义题目分析：严格按讲义题目顺序（1、2、3…）列出，只有选择题计入正确率
 function renderHandoutTable(rows, qs, totalStudents) {
   const qt = document.getElementById("qRows"); qt.innerHTML = "";
   const qEmpty = document.getElementById("qEmpty");
-  const perQ = qs.map(q => {
-    const hits = rows.filter(r => r.question_id === q.id);
-    const ok = hits.filter(h => h.correct === true).length;
-    const wrong = hits.filter(h => h.correct === false).length;
-    return { q, answered:hits.length, ok, wrong };
-  });
-  perQ.sort((a,b) => {
-    const aa = a.answered ? a.ok/a.answered : 1; // 无人作答视为满分，排在最后
-    const bb = b.answered ? b.ok/b.answered : 1;
-    if(aa !== bb) return aa - bb;              // 正确率升序 → 最常做错的在前
-    return qs.indexOf(a.q) - qs.indexOf(b.q);  // 相同时按作业顺序
-  });
-  qEmpty.style.display = perQ.length ? "none" : "block";
+  qEmpty.style.display = qs.length ? "none" : "block";
 
-  perQ.forEach(({q, answered, ok, wrong}) => {
-    const acc = answered ? Math.round(ok/answered*100) : null;
-    const color = acc==null ? "" : (acc>=80?"green":acc>=50?"amber":"red");
+  qs.forEach((q, idx) => {
     const isStructured = q.type === "structured";
+    let okCell = '<span class="muted">–</span>';
+    let wrongCell = '<span class="muted">–</span>';
+    let accCell = '<span class="muted">纸质作答</span>';
     const ms = isStructured
       ? '<span class="muted">结构题 · 提交后看 MS</span>'
       : (q.ms_answer ? `<b class="green">${esc(q.ms_answer)}</b>` : '<span class="muted">–</span>');
-    const accCell = acc==null
-      ? '<span class="muted">–</span>'
-      : `<div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div><b class="${color}">${acc}%</b></div>`;
+
+    if (!isStructured) {
+      const hits = rows.filter(r => r.question_id === q.id);
+      const ok = hits.filter(h => h.correct === true).length;
+      const wrong = hits.filter(h => h.correct === false).length;
+      const answered = ok + wrong;
+      const acc = answered ? Math.round(ok/answered*100) : null;
+      const color = acc==null ? "" : (acc>=80?"green":acc>=50?"amber":"red");
+      okCell = `<b class="green">${ok}</b>`;
+      wrongCell = `<b class="red">${wrong}</b>`;
+      accCell = acc==null
+        ? '<span class="muted">–</span>'
+        : `<div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div><b class="${color}">${acc}%</b></div>`;
+    }
+
     const topic = (q.topics&&q.topics.length) ? q.topics.slice(0,2).map(esc).join("；") : '<span class="muted">–</span>';
 
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${esc(qLabel(q))}</td>
-      <td class="green">${ok}</td>
-      <td class="red">${wrong}</td>
+    tr.innerHTML = `<td><b>${idx+1}</b></td>
+      <td>${esc(qLabel(q))}${isStructured ? ' <span class="muted">简答</span>' : ""}</td>
+      <td>${okCell}</td>
+      <td>${wrongCell}</td>
       <td>${accCell}</td>
       <td>${ms}</td>
       <td>${topic}</td>`;

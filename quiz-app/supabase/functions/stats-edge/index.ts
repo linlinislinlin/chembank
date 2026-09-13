@@ -63,23 +63,56 @@ Deno.serve(async (req: Request) => {
     return new Response(JSON.stringify({ error: "missing assignment_id" }), { status: 400, headers: { ...cors, "content-type": "application/json" } });
   }
 
-  const { data: rows, error } = await supabase
-    .from("answers")
-    .select("*, students(name, student_no, class_name)")
-    .eq("assignment_id", assignmentId);
+  // ------------------------------------------------------------------
+  // 分页读取
+  // PostgREST 单次请求最多返回 1000 行（Supabase 默认 max-rows）。
+  // 一份作业的作答行数 = 学生数 × 题数，40 人 × 30 题 = 1200 行就已超限；
+  // 不分页会**静默丢行**（不报错），导致每题正确率与错题分布算错。
+  // 这里按主键 id 稳定排序后逐页取完，保证不重不漏。
+  // ------------------------------------------------------------------
+  const PAGE = 1000;
+
+  async function paginate<T>(
+    build: (from: number, to: number) => PromiseLike<{ data: unknown; error: { message: string } | null }>,
+  ): Promise<{ data: T[]; error: { message: string } | null }> {
+    const out: T[] = [];
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await build(from, from + PAGE - 1);
+      if (error) return { data: out, error };
+      const batch = (data as T[] | null) ?? [];
+      out.push(...batch);
+      if (batch.length < PAGE) break;
+      if (from > 500000) break; // 安全阀：极端情况下避免死循环
+    }
+    return { data: out, error: null };
+  }
+
+  const { data: rows, error } = await paginate<Record<string, unknown>>((from, to) =>
+    supabase
+      .from("answers")
+      .select("*, students(name, student_no, class_name)")
+      .eq("assignment_id", assignmentId)
+      .order("id", { ascending: true })
+      .range(from, to) as unknown as PromiseLike<{ data: unknown; error: { message: string } | null }>
+  );
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { ...cors, "content-type": "application/json" } });
   }
 
-  const { data: submissions, error: subErr } = await supabase
-    .from("submissions")
-    .select("student_id, submitted_at, score, total_score, accuracy")
-    .eq("assignment_id", assignmentId);
+  const { data: submissions, error: subErr } = await paginate<Record<string, unknown>>((from, to) =>
+    supabase
+      .from("submissions")
+      .select("student_id, submitted_at, score, total_score, accuracy")
+      .eq("assignment_id", assignmentId)
+      .order("id", { ascending: true })
+      .range(from, to) as unknown as PromiseLike<{ data: unknown; error: { message: string } | null }>
+  );
 
   return new Response(JSON.stringify({
     rows: rows ?? [],
     submissions: subErr ? [] : (submissions ?? []),
+    truncated: false,
   }), { status: 200, headers: { ...cors, "content-type": "application/json" } });
 });
 

@@ -79,8 +79,11 @@ window.HomeworkDB = (() => {
 
   async function listAssignments() {
     const c = ready(); if (!c) throw new Error("Cloud service is not configured");
+    // 列表页只拉元数据：不取 question_snapshot（每份作业的完整题面，体积大，
+    // 作业越攒越多会让统计页/布置页首屏越来越慢）。快照改由
+    // getAssignmentSnapshot() 在真正打开某一份作业时按需获取。
     let { data, error } = await c.from("assignments")
-      .select("id, title, question_ids, question_snapshot, created_at, due_at, instructions, status, programme")
+      .select("id, title, question_ids, created_at, due_at, instructions, status, programme")
       .order("created_at", { ascending: false });
     if (error) {
       const retry = await c.from("assignments")
@@ -90,6 +93,17 @@ window.HomeworkDB = (() => {
       return retry.data || [];
     }
     return data || [];
+  }
+
+  // 按需拉取单份作业的题面快照（列表页不再携带，避免整体变慢）。
+  async function getAssignmentSnapshot(id) {
+    const c = ready(); if (!c) throw new Error("Cloud service is not configured");
+    const { data, error } = await c.from("assignments")
+      .select("question_snapshot")
+      .eq("id", id)
+      .maybeSingle();
+    if (error) return [];
+    return (data && Array.isArray(data.question_snapshot)) ? data.question_snapshot : [];
   }
 
   async function getAssignment(id) {
@@ -116,7 +130,7 @@ window.HomeworkDB = (() => {
   }
 
   return {
-    ready, createAssignment, listAssignments, getAssignment,
+    ready, createAssignment, listAssignments, getAssignment, getAssignmentSnapshot,
     takeAssignment, submitAssignment, getSubmissionResult, readTeacherStats,
   };
 })();

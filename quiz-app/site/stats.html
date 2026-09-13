@@ -112,16 +112,17 @@
 
   <div id="overview" style="display:none">
     <div class="sum-cards" id="sumCards"></div>
+    <div class="small-note" id="testerNote" style="display:none;margin-top:10px"></div>
     <div class="card">
       <h2>学生作答情况（按提交时间排序，点击行展开每题对错）</h2>
-      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。点击某学生行可展开，查看该生在每道题的作答对错。</div>
+      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。点击某学生行可展开，查看该生在每道题的作答对错。Tester（老师预览）不在此列。</div>
       <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow"></span></th><th class="sort-btn" id="stuTimeTh" title="点击切换排序">提交时间 <span id="stuTimeArrow">▾</span></th></tr></thead>
       <tbody id="stuRows"></tbody></table>
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
     <div class="card">
       <h2>讲义题目分析（按题目顺序，每题正确率）</h2>
-      <div class="small-note">按讲义题目顺序（1、2、3…）排列，方便按顺序讲。简答题为纸质作答、未在网页输入答案，不计入正确率统计。</div>
+      <div class="small-note">按讲义题目顺序（1、2、3…）排列，方便按顺序讲。简答题为纸质作答、未在网页输入答案，不计入正确率统计；Tester（老师预览）的作答也不计入。</div>
       <table><thead><tr><th>序号</th><th>题目</th><th>答对人数</th><th>答错人数</th><th>正确率</th><th>标准答案</th><th>考点</th></tr></thead>
       <tbody id="qRows"></tbody></table>
       <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
@@ -221,7 +222,13 @@ async function selectAssignment(id, pillEl) {
     const pack = await DB.readTeacherStats(id, getToken());
     const rows = (pack && pack.rows) ? pack.rows : (Array.isArray(pack) ? pack : []);
     const submissions = (pack && pack.submissions) ? pack.submissions : [];
-    const snap = (ass.question_snapshot || []).length ? ass.question_snapshot : qs;
+    // 列表页已不再携带 question_snapshot（体积大），打开具体作业时按需补拉；
+    // 拉取失败不影响统计，退回用本地题库的题目元数据。
+    let snap = (ass.question_snapshot || []).length ? ass.question_snapshot : null;
+    if (!snap) {
+      try { snap = await DB.getAssignmentSnapshot(id); } catch (e) { snap = []; }
+    }
+    if (!snap || !snap.length) snap = qs;
     const bySnap = new Map((snap || []).map((q) => [q.id, q]));
     const merged = (ass.question_ids || []).map((qid) => Object.assign({}, bySnap.get(qid) || {}, BYID.get(qid) || {}, { id: qid }));
     hideStatsErr();
@@ -233,6 +240,9 @@ async function selectAssignment(id, pillEl) {
 
 let stuSort = { field:"time", dir:-1 }; // 默认按提交时间降序（最新在前）
 function stuKey(r){ return r.student_id ?? (r.students ? (r.students.student_no+"|"+r.students.name) : JSON.stringify(r.students)); }
+// Tester 是老师用来预览作业的账号（student_no=TESTER / class_name=T），
+// 它的作答属于试跑，不是真实学生数据 → 不计入任何班级统计。
+function isTesterRow(r){ const s = r && r.students; return !!s && (s.student_no === "TESTER" || s.class_name === "T"); }
 function qLabel(q){ return `${q.year||""} ${q.session||""} P${q.paper} Q${q.question}`.replace(/\s+/g," ").trim() || (q.id||""); }
 
 function showStatsErr(msg) {
@@ -272,29 +282,43 @@ function renderOverview(ass, qs, rows, submissions) {
     testerOpen.appendChild(document.createTextNode(" · 选 Tester 后输入教师口令"));
   }
 
-  const totalStudents = new Set(submissions.map(s => s.student_id).concat(rows.map(stuKey))).size;
-  const graded = rows.filter(r => r.correct === true || r.correct === false);
-  const correctCount = rows.filter(r => r.correct === true).length;
-  const avgAcc = submissions && submissions.length
-    ? Math.round(submissions.reduce((a,s)=>a+Number(s.accuracy||0),0) / submissions.length)
+  // 排除 Tester（老师预览账号）的作答：它不是真实学生数据。
+  const testerRows = rows.filter(isTesterRow);
+  const classRows = rows.filter(r => !isTesterRow(r));
+  const testerIds = new Set(testerRows.map(r => r.student_id));
+  const classSubs = submissions.filter(s => !testerIds.has(s.student_id));
+
+  const totalStudents = new Set(classSubs.map(s => s.student_id).concat(classRows.map(stuKey))).size;
+  const graded = classRows.filter(r => r.correct === true || r.correct === false);
+  const correctCount = classRows.filter(r => r.correct === true).length;
+  const avgAcc = classSubs && classSubs.length
+    ? Math.round(classSubs.reduce((a,s)=>a+Number(s.accuracy||0),0) / classSubs.length)
     : (graded.length ? Math.round(correctCount/graded.length*100) : null);
-  const avgScore = submissions && submissions.length
-    ? (submissions.reduce((a,s)=>a+Number(s.score||0),0) / submissions.length)
+  const avgScore = classSubs && classSubs.length
+    ? (classSubs.reduce((a,s)=>a+Number(s.score||0),0) / classSubs.length)
     : null;
+
+  const tNote = document.getElementById("testerNote");
+  if (tNote) {
+    tNote.style.display = testerRows.length ? "block" : "none";
+    tNote.textContent = testerRows.length
+      ? "已排除 Tester（老师预览）的 " + testerRows.length + " 条作答，不计入以下统计。"
+      : "";
+  }
 
   document.getElementById("sumCards").innerHTML = "";
   const mk = (v,k)=>{const d=document.createElement("div");d.className="sum";d.innerHTML=`<div class="v">${v}</div><div class="k">${k}</div>`;return d;};
   const sc = document.getElementById("sumCards");
-  sc.appendChild(mk(submissions.length || new Set(rows.map(stuKey)).size, "已提交学生"));
+  sc.appendChild(mk(classSubs.length || new Set(classRows.map(stuKey)).size, "已提交学生"));
   sc.appendChild(mk(avgScore==null ? "–" : (Math.round(avgScore*10)/10), "平均得分"));
   sc.appendChild(mk(avgAcc==null ? "–" : avgAcc+"%", "平均正确率"));
 
-  renderStudentTable(rows, qs, submissions || []);
-  renderHandoutTable(rows, qs, submissions.length || new Set(rows.map(stuKey)).size);
+  renderStudentTable(classRows, qs, classSubs || []);
+  renderHandoutTable(classRows, qs, classSubs.length || new Set(classRows.map(stuKey)).size);
 
   // 错题知识点分布
   const tEmpty = document.getElementById("tEmpty");
-  const wrongRows = rows.filter(r => r.correct === false && (BYID.get(r.question_id)?.type !== "structured"));
+  const wrongRows = classRows.filter(r => r.correct === false && (BYID.get(r.question_id)?.type !== "structured"));
   const topicCnt = new Map();
   wrongRows.forEach(r => {
     const q = BYID.get(r.question_id);

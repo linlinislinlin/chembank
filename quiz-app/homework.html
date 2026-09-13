@@ -96,7 +96,7 @@
 <script src="roster.js?v=20260910a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260913b"></script>
+<script src="supabase-client.js?v=20260913c"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -111,9 +111,27 @@ let nameValue = "";
 // 教师口令在当前标签页内记住：用 Tester 反复试跑时不用每次手打。
 // 只存 sessionStorage（关掉标签页即清），不落 localStorage、不进 URL、不写进源码。
 const TOKEN_KEY = "hw-teacher-token";
+const HANDOFF_KEY = "chembank-tester-handoff";
 function savedToken() { try { return sessionStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
 function saveToken(t) { try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
 function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+
+// 从统计页「用 Tester 打开学生页」跳转过来时，统计页会把口令短暂交接过来
+// （localStorage，2 分钟有效）。这里读走后**立即销毁**，再存进本标签页的
+// sessionStorage，这样 Tester 的口令框会自动填好，老师不必手打。
+function consumeTeacherHandoff() {
+  let raw = null;
+  try {
+    raw = localStorage.getItem(HANDOFF_KEY);
+    if (raw) localStorage.removeItem(HANDOFF_KEY);   // 一次性，先销毁再解析
+  } catch (e) { return; }
+  if (!raw) return;
+  try {
+    const h = JSON.parse(raw);
+    if (h && h.token && (!h.exp || Date.now() < h.exp)) saveToken(String(h.token));
+  } catch (e) {}
+}
+consumeTeacherHandoff();
 
 function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");

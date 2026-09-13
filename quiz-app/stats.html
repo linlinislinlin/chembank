@@ -141,7 +141,7 @@
 <script src="roster.js?v=20260910a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260913b"></script>
+<script src="supabase-client.js?v=20260913c"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
@@ -149,6 +149,10 @@ const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) 
 const BYID = new Map(ALL.map(q => [q.id, q]));
 STRUCTURED.forEach(q => BYID.set(q.id, q));
 const DB = window.HomeworkDB;
+
+// 与 homework.html 约定的「口令交接」键名：统计页点「用 Tester 打开学生页」时
+// 短暂写入 localStorage，学生页读走后立即销毁（2 分钟有效）。
+const TESTER_HANDOFF_KEY = "chembank-tester-handoff";
 
 let assignments = [];
 let trackFilter = "";
@@ -234,7 +238,17 @@ async function selectAssignment(id, pillEl) {
     hideStatsErr();
     renderOverview(ass, merged.length ? merged : snap, rows, submissions);
   } catch (e) {
-    showStatsErr("统计失败：" + (e && e.message ? e.message : e));
+    const msg = e && e.message ? e.message : String(e);
+    // 口令错误/失效：清掉缓存并退回登录框。否则错误口令会一直假装「已登录」
+    // （作业列表是公开可读的，不校验口令，很容易让人误以为登录成功）。
+    if (/口令|token|access/i.test(msg)) {
+      try { sessionStorage.removeItem("stats-token"); } catch (_) {}
+      __token = null;
+      showStatsErr("教师口令无效或已更改，正在返回登录框，请重新输入…");
+      setTimeout(() => location.reload(), 1400);
+      return;
+    }
+    showStatsErr("统计失败：" + msg);
   }
 }
 
@@ -278,8 +292,35 @@ function renderOverview(ass, qs, rows, submissions) {
     a.target = "_blank";
     a.rel = "noopener";
     a.textContent = "用 Tester 打开学生页";
+    // 口令交接：统计页已经持有口令，而老师往往并不记得它（登录框被 sessionStorage 跳过）。
+    // 点击时把口令短暂放进 localStorage（2 分钟有效，学生页读走后立即销毁），
+    // 学生页据此自动填入 Tester 的口令框，老师不必手打。
+    a.onclick = () => {
+      try {
+        localStorage.setItem(TESTER_HANDOFF_KEY, JSON.stringify({
+          token: __token || "",
+          exp: Date.now() + 120000,
+        }));
+      } catch (e) {}
+    };
     testerOpen.appendChild(a);
-    testerOpen.appendChild(document.createTextNode(" · 选 Tester 后输入教师口令"));
+    testerOpen.appendChild(document.createTextNode(" · 选 Tester：口令会自动带过去，直接 Start"));
+
+    const cp = document.createElement("button");
+    cp.type = "button";
+    cp.className = "btn";
+    cp.style.marginLeft = "10px";
+    cp.textContent = "复制教师口令";
+    cp.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(__token || "");
+        cp.textContent = "已复制 ✓";
+      } catch (e) {
+        cp.textContent = "复制失败，请手动查看";
+      }
+      setTimeout(() => { cp.textContent = "复制教师口令"; }, 1600);
+    };
+    testerOpen.appendChild(cp);
   }
 
   // 排除 Tester（老师预览账号）的作答：它不是真实学生数据。

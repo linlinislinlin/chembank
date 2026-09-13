@@ -96,7 +96,7 @@
 <script src="roster.js?v=20260910a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260913a"></script>
+<script src="supabase-client.js?v=20260913b"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -107,6 +107,13 @@ let identity = null;
 let track = "as";
 let classValue = "";
 let nameValue = "";
+
+// 教师口令在当前标签页内记住：用 Tester 反复试跑时不用每次手打。
+// 只存 sessionStorage（关掉标签页即清），不落 localStorage、不进 URL、不写进源码。
+const TOKEN_KEY = "hw-teacher-token";
+function savedToken() { try { return sessionStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
+function saveToken(t) { try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
+function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
 
 function currentTrack() {
   const q = new URLSearchParams(location.search).get("track");
@@ -226,8 +233,8 @@ function syncIdField() {
   box.type = tester ? "password" : "text";
   box.placeholder = tester ? "Teacher token" : "e.g. 1111";
   box.maxLength = tester ? 64 : 8;
-  box.value = "";
-  lab.textContent = tester ? "Teacher token" : "Last 4 digits of student number";
+  box.value = tester ? savedToken() : "";   // Tester：本标签页内自动带回上次口令
+  lab.textContent = tester ? "Teacher token（本标签页内记住）" : "Last 4 digits of student number";
 }
 
 function typedDigits() {
@@ -278,12 +285,21 @@ document.getElementById("startBtn").onclick = async () => {
       assignmentId: assignment.id, name, studentNo: no, className,
       teacherToken: identity.teacherToken,
     });
+    if (isTester) saveToken(typedNo);   // 口令已被后端接受 → 本标签页记住
     if (prev && prev.already_submitted) {
       if (prev.review === false) showLocked();
       else showResult(prev);
       return;
     }
-  } catch (e) { /* first attempt */ }
+  } catch (e) {
+    // Tester：口令错误要在这里就报出来，不能让人一路答到提交才发现。
+    if (isTester) {
+      clearToken();
+      err.textContent = "口令不对，或统计服务暂时不可用：" + (e && e.message ? e.message : e);
+      return;
+    }
+    /* 学生首次进入：忽略（可能是网络抖动） */
+  }
   document.getElementById("idCard").style.display = "none";
   renderQuiz();
 };
@@ -380,6 +396,29 @@ document.getElementById("submitBtn").onclick = async () => {
   }
 };
 
+function resetTesterBar() {
+  // 仅对 Tester（老师预览）显示：清掉本次试跑记录，重新走一遍学生流程。
+  if (!(identity && identity.testerOk)) return null;
+  const bar = document.createElement("div");
+  bar.style.marginTop = "16px";
+  const b = document.createElement("button");
+  b.className = "btn";
+  b.textContent = "清除本次试跑记录，重新走一遍学生流程";
+  b.onclick = async () => {
+    b.disabled = true;
+    b.textContent = "清除中…";
+    try {
+      await DB.resetTesterAttempt(assignment.id, identity.teacherToken);
+      location.reload();
+    } catch (e) {
+      b.disabled = false;
+      b.textContent = "清除失败，重试（" + (e && e.message ? e.message : e) + "）";
+    }
+  };
+  bar.appendChild(b);
+  return bar;
+}
+
 function showLocked() {
   document.getElementById("idCard").style.display = "none";
   document.getElementById("quizWrap").style.display = "none";
@@ -388,6 +427,8 @@ function showLocked() {
   document.getElementById("doneStats").innerHTML = "";
   document.getElementById("doneReview").innerHTML =
     '<p class="hint">This name has already handed in. Answers and the mark scheme appear only once, immediately after you submit your own work. They are not shown if someone later picks this name. Teachers can see scores on the stats page.</p>';
+  const bar = resetTesterBar();
+  if (bar) document.getElementById("doneReview").appendChild(bar);
 }
 
 function showResult(result) {
@@ -406,6 +447,9 @@ function showResult(result) {
   st.appendChild(mk(result.score + " / " + result.total_score, "Score"));
   st.appendChild(mk((result.accuracy ?? 0) + "%", "Accuracy"));
   st.appendChild(mk((result.items || []).length, "Questions"));
+
+  const tbar = resetTesterBar();
+  if (tbar) st.appendChild(tbar);
 
   const byId = new Map((result.items || []).map((it) => [it.question_id, it]));
   const qs = (result.assignment && result.assignment.questions) || assignment.questions || [];

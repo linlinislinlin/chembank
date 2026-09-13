@@ -270,6 +270,40 @@ Deno.serve(async (req: Request) => {
       return json(200, { assignment: ass });
     }
 
+    if (action === "resetTester") {
+      // 老师用 Tester 试跑后要能再走一遍学生流程（否则第二次打开会直接跳到结果页）。
+      // 只删 Tester（老师预览账号）在**这一份作业**下的记录，绝不触碰任何真实学生数据。
+      const token = clean(body.teacher_token);
+      if (!TEACHER_TOKEN || !tokEq(token, TEACHER_TOKEN)) {
+        return json(401, { error: "unauthorized" });
+      }
+      const id = Number(body.assignment_id);
+      if (!id) return json(400, { error: "missing assignment_id" });
+
+      const { data: testers, error: findErr } = await supabase
+        .from("students")
+        .select("id")
+        .or("student_no.eq.TESTER,name.eq.Tester");
+      if (findErr) return json(500, { error: findErr.message });
+
+      const ids = (testers ?? []).map((s) => s.id as number);
+      if (ids.length) {
+        const { error: ansErr } = await supabase
+          .from("answers")
+          .delete()
+          .eq("assignment_id", id)
+          .in("student_id", ids);
+        if (ansErr) return json(500, { error: ansErr.message });
+        const { error: subErr } = await supabase
+          .from("submissions")
+          .delete()
+          .eq("assignment_id", id)
+          .in("student_id", ids);
+        if (subErr) return json(500, { error: subErr.message });
+      }
+      return json(200, { ok: true, cleared_students: ids.length });
+    }
+
     if (action === "take") {
       const id = Number(body.assignment_id);
       if (!id) return json(400, { error: "missing assignment_id" });

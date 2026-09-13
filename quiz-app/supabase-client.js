@@ -77,6 +77,16 @@ window.HomeworkDB = (() => {
     });
   }
 
+  // 老师用 Tester 试跑后，清除自己在**这一份作业**下的记录，以便再走一遍学生流程。
+  // 只影响 Tester 预览账号，不动任何真实学生数据（后端还会再校验一次口令）。
+  async function resetTesterAttempt(assignmentId, teacherToken) {
+    return callAssignment({
+      action: "resetTester",
+      assignment_id: assignmentId,
+      teacher_token: teacherToken || "",
+    });
+  }
+
   async function listAssignments() {
     const c = ready(); if (!c) throw new Error("Cloud service is not configured");
     // 列表页只拉元数据：不取 question_snapshot（每份作业的完整题面，体积大，
@@ -131,7 +141,7 @@ window.HomeworkDB = (() => {
 
   return {
     ready, createAssignment, listAssignments, getAssignment, getAssignmentSnapshot,
-    takeAssignment, submitAssignment, getSubmissionResult, readTeacherStats,
+    takeAssignment, submitAssignment, getSubmissionResult, readTeacherStats, resetTesterAttempt,
   };
 })();
 

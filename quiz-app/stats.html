@@ -141,7 +141,7 @@
 <script src="roster.js?v=20260910a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js?v=20260906z"></script>
+<script src="supabase-client.js?v=20260913a"></script>
 <script>
 "use strict";
 const ALL = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.questions) || [];
@@ -225,7 +225,7 @@ async function selectAssignment(id, pillEl) {
     // 列表页已不再携带 question_snapshot（体积大），打开具体作业时按需补拉；
     // 拉取失败不影响统计，退回用本地题库的题目元数据。
     let snap = (ass.question_snapshot || []).length ? ass.question_snapshot : null;
-    if (!snap) {
+    if (!snap && typeof DB.getAssignmentSnapshot === "function") {
       try { snap = await DB.getAssignmentSnapshot(id); } catch (e) { snap = []; }
     }
     if (!snap || !snap.length) snap = qs;

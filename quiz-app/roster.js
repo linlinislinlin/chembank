@@ -61,8 +61,8 @@ window.AS_ROSTER = [
     "name": "Vava Yang",
     "name_zh": "杨兴赢",
     "student_no": "T20281140",
-    "class_name": "AS-C",
-    "class": "C"
+    "class_name": "AS-F",
+    "class": "F"
   },
   {
     "id": "T20280148",

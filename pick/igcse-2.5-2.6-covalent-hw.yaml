@@ -1,0 +1,27 @@
+# IGCSE 0620 homework: 2.5 Simple molecules and covalent bonds (+ 2.6 Giant covalent structures)
+# 选择题 9 + 简答题 6（14 分）= 23 分。Curated include_ids keep exam order.
+#
+#   .venv/bin/chembank select pick/igcse-2.5-2.6-covalent-hw.yaml -o build/igcse-2.5-2.6-covalent-hw.json
+#   .venv/bin/chembank assemble build/igcse-2.5-2.6-covalent-hw.json -o vault-igcse/handouts/作业-2.5-共价键.md --vault vault-igcse
+title: "IGCSE 化学作业 · 2.5 共价键与巨型共价结构"
+syllabus_codes: ["2.5", "2.6"]
+preserve_order: true
+include_ids:
+  # A 选择题 · 共价键的形成与电子共用（2.5）
+  - cie-0620-2023-mj-p21-q6      # 甲烷中单键的形成方式（原子对电子）
+  - cie-0620-2024-mj-p23-q5      # 哪个分子含双键（同种元素之间）
+  - cie-0620-2024-on-p21-q5      # 氮气与乙烯分子中共用电子数比较
+  - cie-0620-2024-on-p23-q5      # 关于甲烷的正确说法
+  - cie-0620-2024-fm-p22-q6      # 甲醛 C=O 键的成键方式
+  # A 选择题 · 简单分子性质 + 巨型共价结构（2.5 / 2.6）
+  - cie-0620-2023-on-p22-q6      # 哪种物质熔点最低（graphite/methanol/SiO2/NaCl）
+  - cie-0620-2023-mj-p22-q4      # 二氧化硅的结构最像哪一种物质
+  - cie-0620-2024-on-p22-q8      # 关于石墨结构的正确说法
+  - cie-0620-2024-on-p21-q7      # 金刚石与二氧化硅的性质及解释
+  # B 简答题 · 点叉图 + 结构性质解释（14 分）
+  - cie-0620-2022-mj-p42-q4c     # (3分) 完成 NCl3 的点叉图（外层电子）
+  - cie-0620-2024-on-p41-q4c     # (2分) 完成 O2 的点叉图（双键）
+  - cie-0620-2024-on-p42-q3a     # (2分) 用微粒间作用力解释共价氯化物熔点低
+  - cie-0620-2024-mj-p43-q3a-iv  # (3分) 从结构与成键解释石墨熔点远高于 CO
+  - cie-0620-2022-on-p42-q1d     # (2分) 描述石墨中原子的排列
+  - cie-0620-2021-on-p41-q3f     # (2分) 石墨适合做电极的两条性质

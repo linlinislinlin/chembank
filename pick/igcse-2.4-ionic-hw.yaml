@@ -3,7 +3,7 @@
 #
 #   chembank select pick/igcse-2.4-ionic-hw.yaml -o build/igcse-2.4-ionic-hw.json
 #   chembank assemble build/igcse-2.4-ionic-hw.json -o vault-igcse/handouts/作业-2.4-离子键.md --vault vault-igcse
-title: "IGCSE 化学作业 · 2.4 离子键与离子化合物命名"
+title: "IGCSE 2.4 Ions and ionic bonds"
 syllabus_codes: ["2.4", "3.1"]
 preserve_order: true
 include_ids:

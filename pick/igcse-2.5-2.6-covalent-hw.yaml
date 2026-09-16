@@ -3,7 +3,7 @@
 #
 #   .venv/bin/chembank select pick/igcse-2.5-2.6-covalent-hw.yaml -o build/igcse-2.5-2.6-covalent-hw.json
 #   .venv/bin/chembank assemble build/igcse-2.5-2.6-covalent-hw.json -o vault-igcse/handouts/作业-2.5-共价键.md --vault vault-igcse
-title: "IGCSE 化学作业 · 2.5 共价键与巨型共价结构"
+title: "IGCSE 2.5–2.6 Covalent bonding and giant covalent structures"
 syllabus_codes: ["2.5", "2.6"]
 preserve_order: true
 include_ids:

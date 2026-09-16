@@ -270,6 +270,27 @@ Deno.serve(async (req: Request) => {
       return json(200, { assignment: ass });
     }
 
+    if (action === "rename") {
+      // 只改作业标题（显示名），不动题目快照、标准答案和学生成绩。
+      const token = clean(body.teacher_token);
+      if (!TEACHER_TOKEN || !tokEq(token, TEACHER_TOKEN)) {
+        return json(401, { error: "unauthorized" });
+      }
+      const id = Number(body.assignment_id);
+      if (!id) return json(400, { error: "missing assignment_id" });
+      const title = clean(body.title);
+      if (!title) return json(400, { error: "missing title" });
+
+      const { data: renamed, error } = await supabase
+        .from("assignments")
+        .update({ title })
+        .eq("id", id)
+        .select("id, title, programme")
+        .single();
+      if (error || !renamed) return json(500, { error: error?.message || "update failed" });
+      return json(200, { assignment: renamed });
+    }
+
     if (action === "resetTester") {
       // 老师用 Tester 试跑后要能再走一遍学生流程（否则第二次打开会直接跳到结果页）。
       // 只删 Tester（老师预览账号）在**这一份作业**下的记录，绝不触碰任何真实学生数据。

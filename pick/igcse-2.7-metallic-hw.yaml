@@ -1,0 +1,37 @@
+# IGCSE 0620 homework: 2.7 Metallic bonding
+# 选择题 14 + 简答题 5（9 分）= 23 分。Curated include_ids keep exam order.
+#
+#   .venv/bin/chembank select pick/igcse-2.7-metallic-hw.yaml -o build/igcse-2.7-metallic-hw.json
+#   .venv/bin/chembank assemble build/igcse-2.7-metallic-hw.json -o vault-igcse/handouts/作业-2.7-金属键.md --vault vault-igcse
+#
+# 说明：2.7 在 0620 考纲中只有两个学习目标（2.7-S1 金属键的定义、2.7-S2 用结构解释金属性质），
+# 且均为 Supplement（Extended）。题库中 3–4 分简答题全部是同一道「describe the bonding」的
+# 不同年份版本；为满足「简答题不重复」的要求，本份作业把分值权重放在选择题上。
+#
+# 未沿用历次作业题目：与 2.1–2.3、2.4 ionic、2.5–2.6 covalent 三份作业零重合（见 dedup-audit.md）。
+title: "IGCSE 2.7 Metallic bonding"
+syllabus_codes: ["2.7"]
+preserve_order: true
+include_ids:
+  # ── A 选择题 · 金属键的结构与粒子（2.7-S1）──
+  - cie-0620-2022-on-p22-q7      # A1  金属结构中存在哪些粒子（正离子 + 自由电子）
+  - cie-0620-2023-mj-p22-q5      # A2  固体 P 导电时是哪种粒子在移动（只有电子）
+  - cie-0620-2025-on-p22-q9      # A3  钴的结构与成键类型（giant + metallic）
+  - cie-0620-2025-fm-p22-q8      # A4  金属晶格中的正、负粒子分别是什么
+  - cie-0620-2023-mj-p23-q8      # A5  哪一行正确描述金属结构并解释其性质
+  - cie-0620-2022-on-p21-q5      # A6  可延展且导电的单质属于哪种结构
+  - cie-0620-2022-mj-p21-q5      # A7  金属与离子化合物的相同点与不同点
+  # ── A 选择题 · 用结构与成键解释金属性质（2.7-S2）──
+  - cie-0620-2024-on-p22-q9      # A8  延展性与导电性分别由什么解释
+  - cie-0620-2022-fm-p22-q6      # A9  铜在室温下导电：离子还是电子在移动
+  - cie-0620-2021-on-p21-q4      # A10 金属固体为何导电
+  - cie-0620-2021-mj-p23-q6      # A11 金属为何可延展
+  - cie-0620-2024-on-p21-q8      # A12 金属结构中哪一点解释了延展性
+  - cie-0620-2025-on-p21-q7      # A13 固态镁为何是良导体
+  - cie-0620-2024-on-p22-q5      # A14 从描述中判断哪些物质是金属（Q 和 R）
+  # ── B 简答题 · 金属键定义与性质（9 分）──
+  - cie-0620-2022-on-p41-q2a     # B1 (4分) 命名并描述钾中的成键
+  - cie-0620-2025-mj-p43-q3a-ii  # B2 (2分) 命名被金属键结合在一起的两种粒子
+  - cie-0620-2024-mj-p41-q3b-i   # B3 (1分) 解释固态钠为何导电（附 Table 3.1）
+  - cie-0620-2021-on-p42-q5b-ii  # B4 (1分) 铁被锤打成型时粒子如何变化
+  - cie-0620-2021-on-p43-q2b-iv  # B5 (1分) 命名金属导线中负责导电的粒子

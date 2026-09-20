@@ -320,6 +320,7 @@ window.ChemBankPortal = {
     const g = this.homeworkGroup(title, track);
     const map = {
       "Chemical Bonding": "bonding",
+      "Stoichiometry": "stoich",
       "Atomic Structure": "atomic",
       "Energetics": "energetics",
       "States of matter": "states",
@@ -404,6 +405,15 @@ window.ChemBankPortal = {
         : ("IG " + String((a && a.id) || "x"));
     }
     const slug = this.topicSlug(title, track);
+    if (slug === "stoich") {
+      /* Stoichiometry homeworks carry no x.y code, so label them by their own
+         numbering: "...homework 3..." -> AS-stoich-3, the holiday one -> AS-stoich-holiday. */
+      const hw = title.match(/homework\s*(\d+)/i);
+      if (hw) return "AS-stoich-" + hw[1];
+      if (/holiday|国庆|假期/i.test(title)) return "AS-stoich-holiday";
+      const code = title.match(/(\d+\.\d+)/);
+      return "AS-stoich-" + (code ? code[1] : String((a && a.id) || "x"));
+    }
     const m = title.match(/(\d+\.\d+)/);
     const num = m ? m[1] : String((a && a.id) || "x");
     return "AS-" + slug + "-" + num;
@@ -411,9 +421,12 @@ window.ChemBankPortal = {
   homeworkGroup: function (title, track) {
     const t = title || "";
     if (track === "ig") return this.igGroupLabel(t);
+    /* Stoichiometry has its own folder — it must NOT be filed under bonding. */
+    if (/stoichiometr/i.test(t)) return "Stoichiometry";
     if (/^3\.\d/.test(t) || /electronegativity|ionic bonding|metallic bonding|sigma\s*\/\s*pi|shapes of molecules|intermolecular/i.test(t)) {
       return "Chemical Bonding";
     }
+    if (/^2\.\d/.test(t) || /mole\b|avogadro|empirical formula/i.test(t)) return "Stoichiometry";
     if (/^1\.\d/.test(t) || /atomic structure/i.test(t)) return "Atomic Structure";
     if (/^5\.\d/.test(t) || /enthalpy|energetics/i.test(t)) return "Energetics";
     return "Other";
@@ -424,7 +437,7 @@ window.ChemBankPortal = {
     const track = opts.track === "ig" ? "ig" : "as";
     const order = track === "ig"
       ? null
-      : ["Chemical Bonding", "Atomic Structure", "Energetics", "Other"];
+      : ["Chemical Bonding", "Stoichiometry", "Atomic Structure", "Energetics", "Other"];
     try {
       if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
       const all = await window.HomeworkDB.listAssignments();

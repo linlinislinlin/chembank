@@ -1,10 +1,14 @@
 // Supabase Edge Function: assignment
 //
 // 作业考试模式的唯一服务端入口。
-//   create — 教师口令；写入作业 + 公开题面快照 + 私有标准答案
-//   take   — 学生开卷；只返回题面（无 ms_answer / ms_img）
-//   submit — 学生交卷；服务端判 MCQ，写 answers + submissions，再按开关返回答案
-//   result — 已交过则返回上次成绩（不可改卷）
+//   create           — 教师口令；写入作业 + 公开题面快照 + 私有标准答案
+//   replaceQuestions — 教师口令；换掉已发布作业的整套题面与标准答案（作业 ID 不变）
+//   rename           — 教师口令；只改显示标题
+//   resetTester      — 教师口令；清掉 Tester 预览账号在这一份作业下的记录
+//   clearAttempt     — 教师口令；清掉某个真实学生在某份作业下的作答（支持 dry_run）
+//   take             — 学生开卷；只返回题面（无 ms_answer / ms_img）
+//   submit           — 学生交卷；服务端判 MCQ，写 answers + submissions，再按开关返回答案
+//   result           — 已交过则返回上次成绩（不可改卷）
 //
 // POST，content-type: text/plain，body 为 JSON 字符串（避免 CORS 预检）。
 //
@@ -289,6 +293,83 @@ Deno.serve(async (req: Request) => {
         .single();
       if (error || !renamed) return json(500, { error: error?.message || "update failed" });
       return json(200, { assignment: renamed });
+    }
+
+    if (action === "replaceQuestions") {
+      // 换掉已发布作业的整套题面：改 question_ids / question_snapshot，并重建标准答案。
+      // 作业 ID 不变，学生手上的链接和成绩归属都不受影响。
+      //
+      // ⚠️ 只在**没有真实学生交卷**时使用。若有学生已交卷，他们的答案按 question_id 记录，
+      //    换题后旧记录会与新的题面错位，成绩也会与题面不符。
+      const token = clean(body.teacher_token);
+      if (!TEACHER_TOKEN || !tokEq(token, TEACHER_TOKEN)) {
+        return json(401, { error: "unauthorized" });
+      }
+      const id = Number(body.assignment_id);
+      if (!id) return json(400, { error: "missing assignment_id" });
+      const questions = Array.isArray(body.questions) ? (body.questions as IncomingQ[]) : [];
+      if (!questions.length) return json(400, { error: "missing questions" });
+
+      // Safety net: once real students have submitted, their answers (keyed by
+      // question_id) would no longer line up with the new snapshot, and their
+      // recorded scores would describe a paper they never saw. Refuse by default.
+      // Tester preview rows don't count — resetTester exists for those.
+      const { data: testers } = await supabase
+        .from("students")
+        .select("id")
+        .or("student_no.eq.TESTER,name.eq.Tester");
+      const testerIds = new Set((testers ?? []).map((s) => Number(s.id)));
+      const { data: subs } = await supabase
+        .from("submissions")
+        .select("student_id")
+        .eq("assignment_id", id);
+      const realSubs = (subs ?? []).filter((s) => !testerIds.has(Number(s.student_id)));
+      if (realSubs.length && body.force !== true) {
+        return json(409, {
+          error:
+            `This assignment already has ${realSubs.length} student submission(s). ` +
+            "Replacing the questions would leave those records describing a different paper.",
+          student_submissions: realSubs.length,
+          hint: "Create a new assignment instead, or pass force=true if you are certain.",
+        });
+      }
+
+      // Keep (incoming, public) paired so the answer keys can never drift out of
+      // sync with the snapshot — unlike create(), which indexes two parallel arrays.
+      const pairs = questions
+        .map((q) => ({ q, pub: publicQuestion(q) }))
+        .filter((p) => p.pub.id);
+      if (!pairs.length) return json(400, { error: "no valid question ids" });
+      const pubs = pairs.map((p) => p.pub);
+
+      const { data: ass, error } = await supabase
+        .from("assignments")
+        .update({
+          question_ids: pubs.map((q) => q.id),
+          question_snapshot: pubs,
+        })
+        .eq("id", id)
+        .select("id, title, programme")
+        .single();
+      if (error || !ass) return json(500, { error: error?.message || "update failed" });
+
+      // Replace the private answer keys. Delete-then-insert (not upsert) so that
+      // keys belonging to questions we just removed cannot linger and be scored.
+      const { error: delErr } = await supabase
+        .from("assignment_answer_keys")
+        .delete()
+        .eq("assignment_id", id);
+      if (delErr) return json(500, { error: delErr.message });
+
+      const keys = pairs.map((p) => keyRow(id, p.q, p.pub));
+      const { error: keyErr } = await supabase.from("assignment_answer_keys").insert(keys);
+      if (keyErr) return json(500, { error: keyErr.message });
+
+      return json(200, {
+        assignment: ass,
+        questions: pubs.length,
+        answer_keys: keys.length,
+      });
     }
 
     if (action === "resetTester") {

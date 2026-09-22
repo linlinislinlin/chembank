@@ -2,14 +2,19 @@
 """把本地 Obsidian 讲义发布成一份在线作业（Supabase assignment Edge Function）。
 
 用法：
+    # 新建一份
     python3 quiz-app/publish_handout.py <讲义.md或slug> [--title 标题] [--due YYYY-MM-DD] [--programme ig|as]
+    # 看线上已有哪些作业（拿 id）
+    python3 quiz-app/publish_handout.py --list
+    # 换掉一份已有作业的整套题面（作业 ID 不变，学生链接和成绩归属不受影响）
+    python3 quiz-app/publish_handout.py <讲义.md或slug> --update <id> [--reset-tester]
 
 从讲义提取题目引用（按出现顺序去重）：
   - [[questions/<id>]]
   - vault / vault-structured / vault-igcse / vault-igcse-structured 的 *-paper.png
 
 再从 vault Markdown 组装题面快照，复制截图到 quiz-app/site/assets/，
-调用 assignment Edge Function 创建作业（含 programme）。
+调用 assignment Edge Function 创建/更新作业（含 programme）。
 """
 from __future__ import annotations
 
@@ -221,7 +226,8 @@ def list_assignments(cfg: dict) -> list[dict]:
     return data if isinstance(data, list) else []
 
 
-def create_assignment(cfg: dict, payload: dict) -> dict:
+def post_edge(cfg: dict, payload: dict) -> dict:
+    """POST 到 assignment Edge Function，返回解析后的 JSON（失败抛异常）。"""
     cmd = [
         "curl", "-s", "-w", "\n%{http_code}", "--max-time", "60",
         "-X", "POST",
@@ -236,24 +242,72 @@ def create_assignment(cfg: dict, payload: dict) -> dict:
         parsed = json.loads(raw) if raw.strip() else None
     except Exception:
         parsed = raw
-    if code != 200 or not isinstance(parsed, dict) or not parsed.get("assignment"):
-        raise RuntimeError(f"创建作业失败 (HTTP {code})：{parsed}")
+    if code != 200 or not isinstance(parsed, dict):
+        raise RuntimeError(f"接口调用失败 (HTTP {code})：{parsed}")
+    if parsed.get("error"):
+        raise RuntimeError(f"接口返回错误：{parsed['error']}")
+    return parsed
+
+
+def create_assignment(cfg: dict, payload: dict) -> dict:
+    parsed = post_edge(cfg, payload)
+    if not parsed.get("assignment"):
+        raise RuntimeError(f"创建作业失败：{parsed}")
     return parsed["assignment"]
 
 
+def replace_questions(cfg: dict, assignment_id: int, payload: dict) -> dict:
+    """换掉已发布作业的整套题面与标准答案，作业 ID 不变。"""
+    body = dict(payload)
+    body["action"] = "replaceQuestions"
+    body["assignment_id"] = assignment_id
+    return post_edge(cfg, body)
+
+
+def reset_tester(cfg: dict, assignment_id: int) -> dict:
+    """清掉 Tester 预览账号在这一份作业下的试跑记录（不碰真实学生）。"""
+    return post_edge(cfg, {
+        "action": "resetTester",
+        "teacher_token": cfg["token"],
+        "assignment_id": assignment_id,
+    })
+
+
 def main() -> int:
-    ap = argparse.ArgumentParser(description="发布讲义为在线作业")
-    ap.add_argument("handout", help="讲义 .md 路径或 slug")
+    ap = argparse.ArgumentParser(description="发布 / 更新讲义为在线作业")
+    ap.add_argument("handout", nargs="?", help="讲义 .md 路径或 slug（--list 时可省略）")
     ap.add_argument("--title", help="作业标题（默认用讲义标题）")
     ap.add_argument("--due", help="截止日期 YYYY-MM-DD")
     ap.add_argument("--programme", choices=["ig", "as"], help="课程：ig 或 as（默认识别）")
     ap.add_argument("--token", help="教师口令（默认读环境变量 CHEMBANK_TEACHER_TOKEN）")
     ap.add_argument("--instructions", help="作业说明文字（学生页顶部显示）")
-    ap.add_argument("--force", action="store_true", help="标题已存在时仍新建一份")
+    ap.add_argument("--force", action="store_true",
+                    help="新建时：标题已存在也照样新建一份；--update 时：已有学生交卷也强行换题")
+    ap.add_argument("--list", action="store_true", help="列出线上已有作业（id / 标题 / 课程）后退出")
+    ap.add_argument("--update", type=int, metavar="ASSIGNMENT_ID",
+                    help="更新这份已有作业的整套题面与标准答案（作业 ID 不变）")
+    ap.add_argument("--reset-tester", action="store_true",
+                    help="更新后顺手清掉 Tester 预览账号的试跑记录（只动 Tester，不碰真实学生）")
     args = ap.parse_args()
 
     if args.token:
         os.environ["CHEMBANK_TEACHER_TOKEN"] = args.token.strip()
+
+    cfg = load_config()
+
+    if args.list:
+        rows = list_assignments(cfg)
+        if not rows:
+            print("（没取到作业列表，检查网络 / config.js）")
+            return 1
+        print(f"{'id':>5}  {'programme':<9} {'status':<10} title")
+        for r in rows:
+            print(f"{str(r.get('id')):>5}  {str(r.get('programme') or '-'):<9} "
+                  f"{str(r.get('status') or '-'):<10} {r.get('title')}")
+        return 0
+
+    if not args.handout:
+        ap.error("缺少 handout 参数（或用 --list 列作业）")
 
     path = resolve_handout(args.handout)
     text = path.read_text(encoding="utf-8")
@@ -281,6 +335,30 @@ def main() -> int:
     cfg = load_config()
     if not cfg.get("token"):
         sys.exit("缺少教师口令：请用 --token 传入，或设置环境变量 CHEMBANK_TEACHER_TOKEN（新口令见交付说明）")
+
+    mcq_n = sum(1 for q in questions if q["type"] == "mcq")
+    st_n = len(questions) - mcq_n
+
+    # ---------------- update an existing assignment in place ----------------
+    if args.update:
+        ass = replace_questions(cfg, args.update, {
+            "teacher_token": cfg["token"],
+            "questions": questions,
+            "force": bool(args.force),
+        })
+        print(f"\n✅ 已更新作业题面（作业 ID 不变）：{ass.get('assignment', {}).get('title')}")
+        print(f"   作业 ID：{args.update}")
+        print(f"   题目数：{len(questions)}（MCQ {mcq_n} · 结构题 {st_n}）")
+        print(f"   标准答案重建：{ass.get('answer_keys')} 条")
+        if args.reset_tester:
+            r = reset_tester(cfg, args.update)
+            print(f"   Tester 试跑记录已清：{r.get('cleared_students')} 个账号")
+        portal = "ig.html" if programme == "ig" else "as.html"
+        print(f"   学生入口：{portal}")
+        print(f"   作业直链：homework.html?id={args.update}&track={programme}")
+        print(f"   统计：stats.html")
+        return 0
+
     if not args.force:
         for row in list_assignments(cfg):
             if (row.get("title") or "").strip() == title and row.get("status", "published") == "published":
@@ -288,6 +366,8 @@ def main() -> int:
                 print(f"   作业 ID：{row.get('id')}")
                 print(f"   学生入口：ig.html" if programme == "ig" else "   学生入口：as.html")
                 print(f"   作业直链：homework.html?id={row.get('id')}&track={programme}")
+                print("\n   要改这份作业的题目（保留 ID 和成绩归属），用：")
+                print(f"   python3 quiz-app/publish_handout.py {path} --update {row.get('id')}")
                 return 0
 
     due_at = args.due + "T23:59:00Z" if args.due else None
@@ -312,8 +392,6 @@ def main() -> int:
         "questions": questions,
         "programme": programme,
     })
-    mcq_n = sum(1 for q in questions if q["type"] == "mcq")
-    st_n = len(questions) - mcq_n
     print(f"\n✅ 已发布作业：{title}")
     print(f"   作业 ID：{ass.get('id')}")
     print(f"   课程：{programme}")

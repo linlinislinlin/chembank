@@ -41,6 +41,7 @@ HANDOUTS_DIRS = [
 QUESTION_DIRS = [
     REPO / "vault-igcse" / "questions",
     REPO / "vault-igcse-structured" / "questions",
+    REPO / "vault-igcse-practical" / "questions",
     REPO / "vault" / "questions",
     REPO / "vault-structured" / "questions",
     REPO / "questions",
@@ -49,6 +50,7 @@ QUESTION_DIRS = [
 ASSET_DIRS = [
     REPO / "vault-igcse" / "assets",
     REPO / "vault-igcse-structured" / "assets",
+    REPO / "vault-igcse-practical" / "assets",
     REPO / "vault" / "assets",
     REPO / "vault-structured" / "assets",
 ]

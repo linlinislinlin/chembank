@@ -10,8 +10,15 @@
   1. `.githooks/pre-commit` —— 拦截任何手动 `git commit`
   2. `quiz-app/deploy.sh`   —— 拦截一键部署
 
-设计原则：宁可误拦，不可漏放。万一确实需要提交，用
-`CHEMBANK_ALLOW_LOCAL_ONLY_COMMIT=1 git commit ...` 显式放行，并在提交信息里说明原因。
+设计原则
+--------
+- 只保密「**这次考试选了哪些题**」，不保密题库本身。
+  所以 `quiz-app/site/`（学生页 + 全部刷题题图）**有意公开、必须放行**；
+  被拦的是 `pick/`（选题单）、`print/`（试卷/答案）、`vault/*/handouts|assets|questions`
+  这类能反推出「选了哪些题」的本地源。
+- 宁可误拦，不可漏放；但不得挡住正常的网站发布（否则 deploy.sh 会卡死）。
+- 万一确实需要提交，用 `CHEMBANK_ALLOW_LOCAL_ONLY_COMMIT=1 git commit ...` 显式放行，
+  并在提交信息里说明原因。
 
 退出码：0 = 安全；1 = 命中受保护内容。
 """
@@ -22,6 +29,17 @@ import os
 import re
 import subprocess
 import sys
+
+# --------------------------------------------------------------------------
+# 规则 0：有意公开的内容 —— 必须放行
+#
+# `quiz-app/site/` 就是学生页（含全部刷题题图），公开是设计意图。
+# 保密的只是「这次考试选了哪些题」，而不是题库本身。
+# 若不放行，deploy.sh 一旦重新构建出新的 site/assets 图就会被卡住。
+# --------------------------------------------------------------------------
+PUBLIC_BY_DESIGN = (
+    "quiz-app/site/",
+)
 
 # --------------------------------------------------------------------------
 # 规则 1：这些目录属于“本地 only”，绝不进公开仓库
@@ -37,8 +55,8 @@ PROTECTED_DIRS = (
 )
 PROTECTED_SUBSTRINGS = (
     "/handouts/",       # 讲义（含题面 + 答案区）
-    "/assets/",         # 真题截图
-    "/questions/",      # 题目正文
+    "/assets/",         # 真题截图（vault 里的本地源）
+    "/questions/",      # 题目正文（vault 里的本地源）
 )
 
 # --------------------------------------------------------------------------
@@ -54,14 +72,23 @@ NAME_PATTERNS = [
 
 # --------------------------------------------------------------------------
 # 规则 3：内容签名 —— 即使换了无害文件名，也拦得住
+#
+# 只对**本次新增**的文件做内容扫描（已在 HEAD 里的文件视为当初已审核），
+# 否则 README/源码里合法提到组卷命令会被误拦。
 # --------------------------------------------------------------------------
 CONTENT_SIGNATURES = [
-    (re.compile(rb"include_ids\s*:"), "含选题清单 include_ids"),
+    # 同时覆盖 YAML 的 `include_ids:` 与 JSON 的 `"include_ids":`
+    (re.compile(rb"""include_ids[\s"']*:"""), "含选题清单 include_ids"),
     (re.compile(rb"chembank\s+assemble\b"), "含组卷命令 chembank assemble"),
     (re.compile(rb"chembank\s+select\b"), "含选题命令 chembank select"),
 ]
-# 只扫文本类后缀；.py 等代码文件会合法地提到这些词，故排除
-SCAN_EXTS = {".yaml", ".yml", ".json", ".md", ".tex", ".txt", ".csv", ".jsonl"}
+# 扫描后缀：不含 .py/.js/.html（代码会合法提到这些词），也不含 .md（文档同理）
+SCAN_EXTS = {".yaml", ".yml", ".json", ".tex", ".txt", ".csv", ".jsonl"}
+# 这些目录属已知合法内容，不做内容扫描
+CONTENT_SCAN_EXCLUDE = (
+    "src/", "tests/", "scripts/", "syllabus/", "schema/",
+    "fixtures/", "docs/", ".github/", ".cursor/",
+)
 MAX_SCAN_BYTES = 2_000_000
 
 
@@ -71,18 +98,27 @@ def repo_root() -> str:
     return (r.stdout or ".").strip() or "."
 
 
-def staged_files() -> list[str]:
-    """已暂存的新增/修改/改名文件（不含删除）。"""
+def staged_files() -> tuple[list[str], set[str]]:
+    """返回（本次暂存的 A/C/M/R 文件, 其中**新增**的文件集合）。"""
     r = subprocess.run(
         ["git", "-c", "core.quotepath=false", "diff", "--cached",
          "--name-only", "--diff-filter=ACMR", "-z"],
         capture_output=True, text=True,
     )
-    return [p for p in (r.stdout or "").split("\0") if p.strip()]
+    files = [p for p in (r.stdout or "").split("\0") if p.strip()]
+    a = subprocess.run(
+        ["git", "-c", "core.quotepath=false", "diff", "--cached",
+         "--name-only", "--diff-filter=A", "-z"],
+        capture_output=True, text=True,
+    )
+    added = {p for p in (a.stdout or "").split("\0") if p.strip()}
+    return files, added
 
 
 def check_path(path: str) -> list[str]:
     """按路径判断。"""
+    if path.startswith(PUBLIC_BY_DESIGN):
+        return []           # 网站产物：有意公开
     hits: list[str] = []
     low = "/" + path  # 便于统一做 “/handouts/” 之类的子串匹配
     for d in PROTECTED_DIRS:
@@ -101,7 +137,11 @@ def check_path(path: str) -> list[str]:
 
 
 def check_content(path: str) -> list[str]:
-    """按内容判断（仅文本类后缀，且有大小上限）。"""
+    """按内容判断（仅本次新增的文本类文件，且有大小上限）。"""
+    if path.startswith(PUBLIC_BY_DESIGN):
+        return []
+    if path.startswith(CONTENT_SCAN_EXCLUDE):
+        return []
     if os.path.splitext(path)[1].lower() not in SCAN_EXTS:
         return []
     try:
@@ -119,13 +159,16 @@ def main() -> int:
         return 0
 
     os.chdir(repo_root())
-    files = staged_files()
+    files, added = staged_files()
     if not files:
         return 0
 
     flagged: list[tuple[str, list[str]]] = []
     for f in files:
-        reasons = check_path(f) + check_content(f)
+        # 路径规则对所有暂存文件生效；内容规则只查本次新增的文件
+        reasons = check_path(f)
+        if f in added:
+            reasons += check_content(f)
         if reasons:
             flagged.append((f, reasons))
 

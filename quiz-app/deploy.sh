@@ -13,6 +13,16 @@ python3 quiz-app/build.py
 echo "==> 暂存所有改动 (含重新生成的 quiz-app/site)"
 git add -A
 
+# 出卷/选题内容属于「本地 only」，绝不能进公开仓库。
+# git add -A 会无差别收走一切未忽略的文件，所以提交前必须过一遍 guard。
+echo "==> 检查是否有出卷/选题内容被误暂存 (guard_local_only)"
+if ! python3 scripts/guard_local_only.py; then
+  echo
+  echo "❌ 已中止部署：上面的文件不应进入公开仓库（详见提示）。"
+  echo "   文件仍停留在暂存区，处理完再重新执行 ./quiz-app/deploy.sh 即可。"
+  exit 1
+fi
+
 # 生成一个有意义的 commit 信息
 MSG="更新题库：$(date +%Y-%m-%d\ %H:%M)"
 if git diff --cached --name-only | grep -q '^questions/'; then

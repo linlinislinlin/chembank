@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# 阻止「本地 only」的出卷/选题内容进入公开仓库。
+#
+# 启用方式（一次性，已由本次改动设置好）：
+#   git config core.hooksPath .githooks
+#
+# 逻辑见 scripts/guard_local_only.py。放行：CHEMBANK_ALLOW_LOCAL_ONLY_COMMIT=1
+
+root="$(git rev-parse --show-toplevel)" || exit 1
+exec "$root/scripts/guard_local_only.py"

@@ -80,10 +80,15 @@ build/
 # 作业排版产物（chemistry-homework-formatter 本地生成，含受版权保护的试卷图）
 print/
 
+# 选题单 / 组卷输入（本地 only）。
+# pick/*.yaml 里的 include_ids 就是「这次考试选了哪些题」——一旦进公开仓库，
+# 学生照单就能反推出整份试卷。务必保持忽略。
+pick/
+
 # Supabase CLI local state (do not commit)
 quiz-app/supabase/.temp/
 
-# ChemBank quiz web app — the generated site IS committed to the (private) repo
+# ChemBank quiz web app — the generated site IS committed to the (public) repo
 # so GitHub Actions can deploy it without needing the copyrighted source data
 # (which stays local / gitignored). Rebuild via quiz-app/build.py, then deploy.sh.
 # Do NOT re-ignore quiz-app/site/ — the deploy workflow uploads that folder.

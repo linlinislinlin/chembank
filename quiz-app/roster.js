@@ -323,6 +323,7 @@ window.ChemBankPortal = {
       "Stoichiometry": "stoich",
       "Atomic Structure": "atomic",
       "Energetics": "energetics",
+      "4 States of matter": "states",
       "States of matter": "states",
       "Atomic structure": "atomic",
       "Periodic table": "periodic",
@@ -427,6 +428,10 @@ window.ChemBankPortal = {
       return "Chemical Bonding";
     }
     if (/^2\.\d/.test(t) || /mole\b|avogadro|empirical formula/i.test(t)) return "Stoichiometry";
+    /* Topic 4 (states of matter / ideal gases) has its own folder. */
+    if (/^4\.\d/.test(t) || /states of matter|gaseous state|ideal gas|vapour pressure|kinetic theory/i.test(t)) {
+      return "4 States of matter";
+    }
     if (/^1\.\d/.test(t) || /atomic structure/i.test(t)) return "Atomic Structure";
     if (/^5\.\d/.test(t) || /enthalpy|energetics/i.test(t)) return "Energetics";
     return "Other";
@@ -437,7 +442,7 @@ window.ChemBankPortal = {
     const track = opts.track === "ig" ? "ig" : "as";
     const order = track === "ig"
       ? null
-      : ["Chemical Bonding", "Stoichiometry", "Atomic Structure", "Energetics", "Other"];
+      : ["4 States of matter", "Chemical Bonding", "Stoichiometry", "Atomic Structure", "Energetics", "Other"];
     try {
       if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
       const all = await window.HomeworkDB.listAssignments();

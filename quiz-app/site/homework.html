@@ -97,6 +97,7 @@
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js?v=20260913d"></script>
+<script src="question-hints.js?v=20261007a"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -358,6 +359,23 @@ function renderQuiz() {
       img.src = src;
       img.onerror = () => { img.style.display = "none"; };
       fig.appendChild(img);
+    }
+    const hintText = (window.QUESTION_HINTS || {})[q.id];
+    if (hintText) {
+      const hb = document.createElement("div");
+      hb.className = "qhint";
+      const tag = document.createElement("span");
+      tag.className = "qhint-tag";
+      tag.textContent = "Hint";
+      const body = document.createElement("span");
+      body.className = "qhint-body";
+      String(hintText).split("\n").forEach((line, k) => {
+        if (k) body.appendChild(document.createElement("br"));
+        body.appendChild(document.createTextNode(line));
+      });
+      hb.appendChild(tag);
+      hb.appendChild(body);
+      fig.after(hb);   // 放在题面图之后、选项之前
     }
     const tp = card.querySelector(".topics");
     (q.topics || []).slice(0, 3).forEach((t) => {

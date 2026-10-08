@@ -148,7 +148,7 @@ window.HomeworkDB = (() => {
       throw new Error("统计接口错误（HTTP " + resp.status + "）");
     }
     const data = await resp.json();
-    return { rows: data.rows || [], submissions: data.submissions || [] };
+    return { rows: data.rows || [], submissions: data.submissions || [], keys: data.keys || [] };
   }
 
   return {

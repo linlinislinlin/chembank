@@ -57,6 +57,7 @@
   tr.stu-detail { display:none; background:var(--bg-soft); }
   tr.stu-detail.open { display:table-row; }
   tr.stu-detail.open td { padding:12px 14px; }
+  .stu-who { font-size:15px; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--line); }
   .each-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; }
   .each-item { background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
   .each-q { color:var(--muted); }
@@ -148,14 +149,14 @@
     <div class="small-note" id="testerNote" style="display:none;margin-top:10px"></div>
     <div class="card">
       <h2>学生作答情况（按提交时间排序，点击行展开每题对错）</h2>
-      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。点击某学生行可展开，查看该生在每道题的作答对错，并可清除该生的作答记录（用于让他重做）。Tester（老师预览）不在此列。</div>
+      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。<b>学生姓名默认隐藏（显示为「学生 N」），点开某一行才会显示该生姓名和学号</b>，方便投屏给学生看。展开后可查看该生在每道题的作答对错，并可清除该生的作答记录（用于让他重做）。Tester（老师预览）不在此列。</div>
       <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow"></span></th><th class="sort-btn" id="stuTimeTh" title="点击切换排序">提交时间 <span id="stuTimeArrow">▾</span></th><th>操作</th></tr></thead>
       <tbody id="stuRows"></tbody></table>
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
     <div class="card">
       <h2>讲义题目分析（点击题目行展开看题面与答案）</h2>
-      <div class="small-note">点击任意一行即可展开查看该题的<b>题面</b>、<b>标准答案</b>（结构题显示 Mark Scheme 图）以及<b>答错学生名单</b>。可用下方按钮按错误率排序、只看难题。简答题为纸质作答、未在网页输入答案，不计入正确率统计；Tester（老师预览）的作答也不计入。</div>
+      <div class="small-note">点击任意一行即可展开查看该题的<b>题面</b>、<b>标准答案</b>（结构题显示 Mark Scheme 图）、<b>选项分布</b>和<b>错因诊断</b>（<b>不显示学生姓名</b>）。可用下方按钮按错误率排序、只看难题。简答题为纸质作答、未在网页输入答案，不计入正确率统计；Tester（老师预览）的作答也不计入。</div>
       <div class="q-toolbar" id="qToolbar">
         <span class="muted" style="font-size:12px">排序：</span>
         <span class="pill on" data-qsort="order" data-label="题目顺序">题目顺序</span>
@@ -283,6 +284,9 @@ async function selectAssignment(id, pillEl) {
     const pack = await DB.readTeacherStats(id, getToken());
     const rows = (pack && pack.rows) ? pack.rows : (Array.isArray(pack) ? pack : []);
     const submissions = (pack && pack.submissions) ? pack.submissions : [];
+    // 服务端私有答案键：IGCSE 等 track 不在本地题库里，标准答案只能靠它。
+    const keyRows = (pack && pack.keys) ? pack.keys : [];
+    const keyById = new Map(keyRows.map((k) => [k.question_id, k]));
     // 列表页已不再携带 question_snapshot（体积大），打开具体作业时按需补拉；
     // 拉取失败不影响统计，退回用本地题库的题目元数据。
     let snap = (ass.question_snapshot || []).length ? ass.question_snapshot : null;
@@ -291,7 +295,18 @@ async function selectAssignment(id, pillEl) {
     }
     if (!snap || !snap.length) snap = qs;
     const bySnap = new Map((snap || []).map((q) => [q.id, q]));
-    const merged = (ass.question_ids || []).map((qid) => Object.assign({}, bySnap.get(qid) || {}, BYID.get(qid) || {}, { id: qid }));
+    const merged = (ass.question_ids || []).map((qid) => {
+      const snapQ = bySnap.get(qid) || {};
+      const localQ = BYID.get(qid) || {};
+      const k = keyById.get(qid) || {};
+      const out = Object.assign({}, snapQ, localQ, { id: qid });
+      // 标准答案以服务端答案键为准（与阅卷答案一致）；本地题库查不到时也能显示。
+      if (k.ms_answer) out.ms_answer = k.ms_answer;
+      if (k.ms_img) out.ms_img = k.ms_img;
+      if (k.qtype) out.type = k.qtype;
+      if (out.marks == null && k.marks != null) out.marks = k.marks;
+      return out;
+    });
     hideStatsErr();
     renderOverview(ass, merged.length ? merged : snap, rows, submissions);
   } catch (e) {
@@ -499,15 +514,16 @@ function renderStudentTable(rows, qs, submissions) {
     renderStudentTable(rows, qs, submissions);
   };
 
-  list.forEach(({stu, acc, key, score, submittedAt, student_id}) => {
+  list.forEach(({stu, acc, key, score, submittedAt, student_id}, rowIdx) => {
     const accPct = Math.round(acc*100);
     const color = accPct>=80?"green":accPct>=50?"amber":"red";
     const main = document.createElement("tr");
     main.className = "stu-main";
     main.setAttribute("tabindex","0");
     main.setAttribute("aria-expanded","false");
-    main.innerHTML = `<td><span class="caret">▶</span> ${esc(stu?.name||"?")}</td>
-      <td>${esc(stu?.student_no||"–")}</td>
+    // 默认匿名：折叠时不显示姓名，点开才在明细里显示（方便投屏给学生看）。
+    main.innerHTML = `<td><span class="caret">▶</span> 学生 ${rowIdx + 1}</td>
+      <td class="muted">•••</td>
       <td>${esc(score)}</td>
       <td><div style="display:flex;align-items:center;gap:8px">
         <div class="bar"><i style="width:${accPct}%;background:var(--${color});height:100%;border-radius:5px"></i></div>
@@ -522,7 +538,7 @@ function renderStudentTable(rows, qs, submissions) {
       clr.className = "btn";
       clr.style.whiteSpace = "nowrap";
       clr.textContent = "清除本条";
-      clr.title = "清除 " + (stu?.name || "该生") + " 在本次作业的作答记录（可重做）";
+      clr.title = "清除该生本次作业的作答记录（可重做）";
       clr.onclick = async (ev) => {
         ev.stopPropagation();               // 不要触发展开/收起
         const nm = stu?.name || "该生";
@@ -560,7 +576,9 @@ function renderStudentTable(rows, qs, submissions) {
         <span>学生：<b>${esc(stuAns)}</b> · 标准：<b>${esc(keyAns)}</b> · <b class="${cls}">${icon}</b></span>
       </div>`;
     }).join("");
-    det.innerHTML = `<td colspan="6"><div class="each-list">${items}</div></td>`;
+    det.innerHTML = `<td colspan="6">
+      <div class="stu-who"><b>${esc(stu?.name || "?")}</b> <span class="muted">${esc(stu?.student_no || "–")}</span></div>
+      <div class="each-list">${items}</div></td>`;
 
     const toggle = () => {
       const opening = !main.classList.contains("open");
@@ -591,13 +609,6 @@ function renderHandoutTable(rows, qs, totalStudents) {
     const wrong = hits.filter(h => h.correct === false).length;
     const answered = ok + wrong;
     const acc = isStructured ? null : (answered ? Math.round(ok / answered * 100) : null);
-    const wrongList = hits.filter(h => h.correct === false)
-      .map(h => ({
-        name: (h.students && h.students.name) || "?",
-        no: (h.students && h.students.student_no) || "–",
-        chosen: h.chosen || "–",
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name, "zh"));
     // 选项分布：每个选项多少人选（仅计已判对错的作答；MCQ 才有意义）
     const dist = new Map();
     hits.forEach(h => {
@@ -607,7 +618,7 @@ function renderHandoutTable(rows, qs, totalStudents) {
     });
     // 字母顺序固定 A,B,C,D，再补上其它出现的选项
     const letterOrder = ["A", "B", "C", "D", ...([...dist.keys()].filter(k => !["A", "B", "C", "D"].includes(k)))];
-    return { q, idx, isStructured, ok, wrong, answered, acc, wrongList, dist, letterOrder };
+    return { q, idx, isStructured, ok, wrong, answered, acc, dist, letterOrder };
   });
 
   let shown = items;
@@ -677,7 +688,7 @@ function renderHandoutTable(rows, qs, totalStudents) {
 
 // 单题展开内容：左=题面图，右=标准答案 + 选项分布 + 答错名单（+ 可选题面文字）
 function questionDetailHTML(it) {
-  const { q, isStructured, ok, wrong, acc, wrongList, dist, letterOrder } = it;
+  const { q, isStructured, ok, wrong, acc, dist, letterOrder } = it;
   // 题面图
   const figs = isStructured
     ? (q.paper_img ? [q.paper_img] : [])
@@ -736,11 +747,16 @@ function questionDetailHTML(it) {
     distHtml = `<div class="optdist"><div class="small-note" style="margin:0 0 6px">选项分布（共 ${total} 人作答）：</div>${rows}</div>${diag}`;
   }
 
-  // 答错学生名单
+  // 答错名单：不显示学生姓名，只给出错答选项的分布（保护隐私，便于投屏）
   const wrongHtml = wrong
-    ? `<div class="q-wrong"><div class="small-note" style="margin:0 0 6px">答错学生（${wrong} 人，含所选答案）：</div>`
-      + wrongList.map(w => `<div class="wline"><span><b>${esc(w.name)}</b> <span class="muted">${esc(w.no)}</span></span><span>选 <b class="red">${esc(w.chosen)}</b></span></div>`).join("")
-      + "</div>"
+    ? (() => {
+        const correctLetter = (q.ms_answer || "").toUpperCase();
+        const parts = [...(dist || new Map()).entries()]
+          .filter(([L]) => L !== correctLetter)
+          .sort((a, b) => b[1] - a[1])
+          .map(([L, n]) => `<b class="red">${esc(L)}</b> ${n} 人`);
+        return `<div class="q-wrong"><div class="small-note" style="margin:0 0 6px">错答选项分布（共 ${wrong} 人答错）：</div><div class="wline" style="border:none">${parts.join("　·　")}</div></div>`;
+      })()
     : '<div class="small-note">没有学生答错此题。</div>';
 
   // 题面文字（自动提取，表格类题目排版较差，仅供参考，以上图为准）

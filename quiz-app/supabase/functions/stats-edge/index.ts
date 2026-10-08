@@ -109,9 +109,22 @@ Deno.serve(async (req: Request) => {
       .range(from, to) as unknown as PromiseLike<{ data: unknown; error: { message: string } | null }>
   );
 
+  // ------------------------------------------------------------------
+  // 标准答案键（每份作业一行/题，最多几十行，无需分页）。
+  // 背景：统计页以前靠浏览器里的本地题库反查 ms_answer / ms_img，
+  //       但 IGCSE 0620 等 track 并不在本地题库里 → 标准答案显示为「–」。
+  //       这里把服务端私有答案键一并下发（走口令校验，仅教师可见），
+  //       统计页即可对所有 track 正确显示标准答案，且与阅卷所用答案一致。
+  // ------------------------------------------------------------------
+  const { data: keys, error: keyErr } = await supabase
+    .from("assignment_answer_keys")
+    .select("question_id, qtype, ms_answer, ms_img, marks")
+    .eq("assignment_id", assignmentId);
+
   return new Response(JSON.stringify({
     rows: rows ?? [],
     submissions: subErr ? [] : (submissions ?? []),
+    keys: keyErr ? [] : (keys ?? []),
     truncated: false,
   }), { status: 200, headers: { ...cors, "content-type": "application/json" } });
 });

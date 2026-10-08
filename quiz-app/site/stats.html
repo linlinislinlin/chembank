@@ -60,6 +60,39 @@
   .each-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; }
   .each-item { background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
   .each-q { color:var(--muted); }
+  /* 题目钻取：点击题目行展开题面 + 答案 + 错答名单 */
+  .q-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 12px; }
+  .q-toolbar .pill { user-select:none; }
+  tr.q-main { cursor:pointer; }
+  tr.q-main:hover { background:var(--accent-soft); }
+  tr.q-main:focus { outline:1px solid var(--accent); outline-offset:-1px; }
+  tr.q-main .caret { display:inline-block; width:12px; color:var(--muted); font-size:10px; transition:transform .15s; }
+  tr.q-main.open .caret { transform:rotate(90deg); color:var(--accent); }
+  tr.q-detail { display:none; background:var(--bg-soft); }
+  tr.q-detail.open { display:table-row; }
+  tr.q-detail.open td { padding:14px 16px; }
+  .q-detail-head { font-size:13px; color:var(--muted); margin-bottom:12px; }
+  .q-review { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:18px; align-items:start; }
+  .q-review .qfig { margin:0 0 10px; }
+  .q-review .qfig img { max-height:56vh; }
+  .q-answer { font-size:15px; margin-bottom:12px; }
+  .q-wrong { font-size:13px; }
+  .q-wrong .wline { padding:5px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; }
+  .q-body-text { white-space:pre-wrap; font-size:12.5px; color:var(--muted); background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; max-height:220px; overflow:auto; margin-top:6px; }
+  /* 选项分布（每个选项多少人选） */
+  .optdist { margin:14px 0 4px; }
+  .opt-row { display:flex; align-items:center; gap:9px; margin:5px 0; font-size:13px; }
+  .opt-k { flex:0 0 auto; width:20px; height:20px; line-height:20px; text-align:center; border-radius:6px; background:var(--panel-2); border:1px solid var(--line); font-weight:700; font-size:12px; }
+  .opt-row.correct .opt-k { background:var(--green-soft); border-color:#A6F4C5; color:var(--green-deep); }
+  .opt-bar { flex:1 1 auto; height:9px; background:var(--panel-2); border-radius:5px; overflow:hidden; min-width:40px; }
+  .opt-bar i { display:block; height:100%; background:var(--red); border-radius:5px; }
+  .opt-row.correct .opt-bar i { background:var(--green); }
+  .opt-n { flex:0 0 auto; min-width:96px; text-align:right; color:var(--muted); }
+  .opt-n b { color:var(--text); }
+  .diag { margin:12px 0 2px; padding:9px 12px; border-radius:8px; font-size:13px; line-height:1.5; }
+  .diag.common { background:var(--red-soft); border:1px solid #F7C2C6; color:var(--red); }
+  .diag.minor { background:var(--amber-soft); border:1px solid #F5D9A0; color:#8a5a00; }
+  @media (max-width:720px) { .q-review { grid-template-columns:1fr; } }
   .sort-btn { cursor:pointer; user-select:none; }
   .sort-btn:hover { color:var(--text); }
   /* 教师口令门 */
@@ -121,8 +154,14 @@
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
     <div class="card">
-      <h2>讲义题目分析（按题目顺序，每题正确率）</h2>
-      <div class="small-note">按讲义题目顺序（1、2、3…）排列，方便按顺序讲。简答题为纸质作答、未在网页输入答案，不计入正确率统计；Tester（老师预览）的作答也不计入。</div>
+      <h2>讲义题目分析（点击题目行展开看题面与答案）</h2>
+      <div class="small-note">点击任意一行即可展开查看该题的<b>题面</b>、<b>标准答案</b>（结构题显示 Mark Scheme 图）以及<b>答错学生名单</b>。可用下方按钮按错误率排序、只看难题。简答题为纸质作答、未在网页输入答案，不计入正确率统计；Tester（老师预览）的作答也不计入。</div>
+      <div class="q-toolbar" id="qToolbar">
+        <span class="muted" style="font-size:12px">排序：</span>
+        <span class="pill on" data-qsort="order" data-label="题目顺序">题目顺序</span>
+        <span class="pill" data-qsort="acc" data-label="错误率从高到低">错误率从高到低</span>
+        <span class="pill" data-qhard="1">只看难题（正确率 &lt; 60%）</span>
+      </div>
       <table><thead><tr><th>序号</th><th>题目</th><th>答对人数</th><th>答错人数</th><th>正确率</th><th>标准答案</th><th>考点</th></tr></thead>
       <tbody id="qRows"></tbody></table>
       <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
@@ -212,6 +251,24 @@ document.getElementById("trackFilter").onclick = (e) => {
   renderPickList();
 };
 
+// 讲义题目分析的排序 / 只看难题 切换（事件委托，绑定一次即可）
+const qToolbarEl = document.getElementById("qToolbar");
+if (qToolbarEl) {
+  qToolbarEl.onclick = (e) => {
+    const el = e.target.closest("[data-qsort],[data-qhard]");
+    if (!el) return;
+    if (el.hasAttribute("data-qhard")) {
+      qOnlyHard = !qOnlyHard;
+    } else {
+      const f = el.getAttribute("data-qsort");
+      if (qSort.field === f) qSort.dir *= -1;   // 同一字段再点 → 反向
+      else qSort = { field: f, dir: 1 };         // 切字段：order 正序 / acc 从高到低（最差在前）
+    }
+    updateQToolbar();
+    if (lastHandout) renderHandoutTable(lastHandout.rows, lastHandout.qs, lastHandout.totalStudents);
+  };
+}
+
 let currentAss = null;
 async function selectAssignment(id, pillEl) {
   const ass = assignments.find(a => a.id === id);
@@ -253,6 +310,22 @@ async function selectAssignment(id, pillEl) {
 }
 
 let stuSort = { field:"time", dir:-1 }; // 默认按提交时间降序（最新在前）
+// 讲义题目分析：排序(order|acc)、是否只看难题、以及最近一次渲染的参数（供排序/筛选后重绘）
+let qSort = { field:"order", dir:1 };
+let qOnlyHard = false;
+let lastHandout = null;
+const Q_SORT_LABELS = { order:"题目顺序", acc:"错误率从高到低" };
+function updateQToolbar() {
+  const bar = document.getElementById("qToolbar");
+  if (!bar) return;
+  bar.querySelectorAll("[data-qsort]").forEach((x) => {
+    const f = x.getAttribute("data-qsort");
+    const on = f === qSort.field;
+    x.classList.toggle("on", on);
+    x.textContent = Q_SORT_LABELS[f] + (on ? (qSort.dir < 0 ? " ↑" : " ↓") : "");
+  });
+  bar.querySelectorAll("[data-qhard]").forEach((x) => x.classList.toggle("on", qOnlyHard));
+}
 function stuKey(r){ return r.student_id ?? (r.students ? (r.students.student_no+"|"+r.students.name) : JSON.stringify(r.students)); }
 // Tester 是老师用来预览作业的账号（student_no=TESTER / class_name=T），
 // 它的作答属于试跑，不是真实学生数据 → 不计入任何班级统计。
@@ -503,47 +576,190 @@ function renderStudentTable(rows, qs, submissions) {
   });
 }
 
-// 讲义题目分析：严格按讲义题目顺序（1、2、3…）列出，只有选择题计入正确率
+// 讲义题目分析：按讲义题目顺序（1、2、3…）列出，点击行展开题面 + 答案 + 错答名单
 function renderHandoutTable(rows, qs, totalStudents) {
+  lastHandout = { rows, qs, totalStudents };
+  updateQToolbar();
   const qt = document.getElementById("qRows"); qt.innerHTML = "";
   const qEmpty = document.getElementById("qEmpty");
-  qEmpty.style.display = qs.length ? "none" : "block";
 
-  qs.forEach((q, idx) => {
+  // 先算每题统计，供排序 / 筛选
+  const items = qs.map((q, idx) => {
     const isStructured = q.type === "structured";
-    let okCell = '<span class="muted">–</span>';
-    let wrongCell = '<span class="muted">–</span>';
-    let accCell = '<span class="muted">纸质作答</span>';
-    const ms = isStructured
-      ? '<span class="muted">结构题 · 提交后看 MS</span>'
-      : (q.ms_answer ? `<b class="green">${esc(q.ms_answer)}</b>` : '<span class="muted">–</span>');
+    const hits = rows.filter(r => r.question_id === q.id);
+    const ok = hits.filter(h => h.correct === true).length;
+    const wrong = hits.filter(h => h.correct === false).length;
+    const answered = ok + wrong;
+    const acc = isStructured ? null : (answered ? Math.round(ok / answered * 100) : null);
+    const wrongList = hits.filter(h => h.correct === false)
+      .map(h => ({
+        name: (h.students && h.students.name) || "?",
+        no: (h.students && h.students.student_no) || "–",
+        chosen: h.chosen || "–",
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name, "zh"));
+    // 选项分布：每个选项多少人选（仅计已判对错的作答；MCQ 才有意义）
+    const dist = new Map();
+    hits.forEach(h => {
+      if (h.correct !== true && h.correct !== false) return;
+      const c = (h.chosen || "–").toUpperCase();
+      dist.set(c, (dist.get(c) || 0) + 1);
+    });
+    // 字母顺序固定 A,B,C,D，再补上其它出现的选项
+    const letterOrder = ["A", "B", "C", "D", ...([...dist.keys()].filter(k => !["A", "B", "C", "D"].includes(k)))];
+    return { q, idx, isStructured, ok, wrong, answered, acc, wrongList, dist, letterOrder };
+  });
 
-    if (!isStructured) {
-      const hits = rows.filter(r => r.question_id === q.id);
-      const ok = hits.filter(h => h.correct === true).length;
-      const wrong = hits.filter(h => h.correct === false).length;
-      const answered = ok + wrong;
-      const acc = answered ? Math.round(ok/answered*100) : null;
-      const color = acc==null ? "" : (acc>=80?"green":acc>=50?"amber":"red");
-      okCell = `<b class="green">${ok}</b>`;
-      wrongCell = `<b class="red">${wrong}</b>`;
-      accCell = acc==null
+  let shown = items;
+  if (qOnlyHard) shown = shown.filter(it => it.acc != null && it.acc < 60);
+  shown = shown.slice();
+  if (qSort.field === "acc") {
+    // 正确率升序 = 错误率从高到低（最差在前）；null（简答）排最后
+    shown.sort((a, b) => {
+      const av = a.acc == null ? 101 : a.acc, bv = b.acc == null ? 101 : b.acc;
+      return qSort.dir * (av - bv) || (a.idx - b.idx);
+    });
+  } else if (qSort.dir < 0) {
+    shown.reverse();
+  }
+
+  qEmpty.style.display = shown.length ? "none" : "block";
+  qEmpty.textContent = shown.length ? "" : (qOnlyHard ? "没有正确率低于 60% 的题目。" : "暂无数据");
+
+  shown.forEach((it) => {
+    const { q, idx, isStructured, ok, wrong, acc } = it;
+    const color = acc == null ? "muted" : (acc >= 80 ? "green" : acc >= 50 ? "amber" : "red");
+    const accCell = isStructured
+      ? '<span class="muted">纸质作答</span>'
+      : (acc == null
         ? '<span class="muted">–</span>'
-        : `<div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div><b class="${color}">${acc}%</b></div>`;
-    }
+        : `<div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:${acc}%;background:var(--${color});height:100%;border-radius:5px"></i></div><b class="${color}">${acc}%</b></div>`);
+    const msCell = isStructured
+      ? (q.ms_img ? '<span class="muted">见展开 ↓</span>' : '<span class="muted">–</span>')
+      : (q.ms_answer ? `<b class="green">${esc(q.ms_answer)}</b>` : '<span class="muted">–</span>');
+    const topic = (q.topics && q.topics.length) ? q.topics.slice(0, 2).map(esc).join("；") : '<span class="muted">–</span>';
+    const numCell = isStructured
+      ? '<span class="muted">–</span>'
+      : `<b class="green">${ok}</b>`;
+    const wrongCell = isStructured
+      ? '<span class="muted">–</span>'
+      : `<b class="red">${wrong}</b>`;
 
-    const topic = (q.topics&&q.topics.length) ? q.topics.slice(0,2).map(esc).join("；") : '<span class="muted">–</span>';
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td><b>${idx+1}</b></td>
+    const main = document.createElement("tr");
+    main.className = "q-main";
+    main.setAttribute("tabindex", "0");
+    main.setAttribute("aria-expanded", "false");
+    main.innerHTML = `<td><span class="caret">▶</span> <b>${idx + 1}</b></td>
       <td>${esc(qLabel(q))}${isStructured ? ' <span class="muted">简答</span>' : ""}</td>
-      <td>${okCell}</td>
+      <td>${numCell}</td>
       <td>${wrongCell}</td>
       <td>${accCell}</td>
-      <td>${ms}</td>
+      <td>${msCell}</td>
       <td>${topic}</td>`;
-    qt.appendChild(tr);
+
+    const det = document.createElement("tr");
+    det.className = "q-detail";
+    det.innerHTML = `<td colspan="7">${questionDetailHTML(it)}</td>`;
+
+    const toggle = () => {
+      const opening = !main.classList.contains("open");
+      main.classList.toggle("open", opening);
+      det.classList.toggle("open", opening);
+      main.setAttribute("aria-expanded", String(opening));
+    };
+    main.onclick = toggle;
+    main.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } };
+
+    qt.appendChild(main);
+    qt.appendChild(det);
   });
+}
+
+// 单题展开内容：左=题面图，右=标准答案 + 选项分布 + 答错名单（+ 可选题面文字）
+function questionDetailHTML(it) {
+  const { q, isStructured, ok, wrong, acc, wrongList, dist, letterOrder } = it;
+  // 题面图
+  const figs = isStructured
+    ? (q.paper_img ? [q.paper_img] : [])
+    : (q.figures || []);
+  const figHtml = figs.length
+    ? figs.map(src => `<div class="qfig"><a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="题面" onerror="this.closest('.qfig').style.display='none'"></a></div>`).join("")
+    : '<div class="small-note">（这道题没有题面图片，见下方题面文字）</div>';
+
+  // 标准答案
+  let ansHtml;
+  if (isStructured) {
+    ansHtml = q.ms_img
+      ? `<div class="q-answer">标准答案（Mark Scheme）：</div><div class="qfig"><a href="${esc(q.ms_img)}" target="_blank" rel="noopener"><img src="${esc(q.ms_img)}" alt="Mark Scheme" onerror="this.closest('.qfig').style.display='none'"></a></div>`
+      : '<div class="q-answer muted">该题暂无 Mark Scheme 图。</div>';
+  } else {
+    ansHtml = q.ms_answer
+      ? `<div class="q-answer">标准答案：<b class="green" style="font-size:20px">${esc(q.ms_answer)}</b></div>`
+      : '<div class="q-answer muted">无标准答案记录。</div>';
+  }
+
+  // 选项分布 + 错因诊断（仅选择题）
+  let distHtml = "";
+  if (!isStructured && dist && dist.size) {
+    const total = [...dist.values()].reduce((a, b) => a + b, 0);
+    const correctLetter = (q.ms_answer || "").toUpperCase();
+    const rows = letterOrder
+      .filter(L => dist.has(L))
+      .map(L => {
+        const n = dist.get(L);
+        const pct = total ? Math.round(n / total * 100) : 0;
+        const isCorrect = L === correctLetter;
+        return `<div class="opt-row${isCorrect ? " correct" : ""}">
+          <span class="opt-k">${esc(L)}</span>
+          <div class="opt-bar"><i style="width:${pct}%"></i></div>
+          <span class="opt-n"><b>${n}</b> 人 · ${pct}%${isCorrect ? " <b class=\"green\">✓正确</b>" : ""}</span>
+        </div>`;
+      })
+      .join("");
+
+    // 错因判断：错答是否集中在某一个选项 → 普遍误区 or 个别疏忽
+    let diag = "";
+    if (wrong > 0) {
+      const wrongDist = [...dist.entries()].filter(([L]) => L !== correctLetter);
+      const topWrong = wrongDist.sort((a, b) => b[1] - a[1])[0];
+      const topN = topWrong ? topWrong[1] : 0;
+      const ratio = wrong ? topN / wrong : 0;
+      if (topN >= 2 && ratio >= 0.5) {
+        diag = `<div class="diag common">⚠️ <b>普遍误区</b>：${wrong} 个错答里有 <b>${topN}</b> 个选了 <b>${esc(topWrong[0])}</b> —— 多数人栽在同一个坑，值得当堂重点讲。</div>`;
+      } else if (wrong === 1) {
+        diag = `<div class="diag minor">🔸 <b>个别疏忽</b>：只有 1 人答错，属个人问题，不必全班讲。</div>`;
+      } else {
+        diag = `<div class="diag minor">🔸 <b>错答分散</b>：${wrong} 个错答分散在多个选项，没有集中的误区，多为粗心或个别知识漏洞。</div>`;
+      }
+    }
+
+    distHtml = `<div class="optdist"><div class="small-note" style="margin:0 0 6px">选项分布（共 ${total} 人作答）：</div>${rows}</div>${diag}`;
+  }
+
+  // 答错学生名单
+  const wrongHtml = wrong
+    ? `<div class="q-wrong"><div class="small-note" style="margin:0 0 6px">答错学生（${wrong} 人，含所选答案）：</div>`
+      + wrongList.map(w => `<div class="wline"><span><b>${esc(w.name)}</b> <span class="muted">${esc(w.no)}</span></span><span>选 <b class="red">${esc(w.chosen)}</b></span></div>`).join("")
+      + "</div>"
+    : '<div class="small-note">没有学生答错此题。</div>';
+
+  // 题面文字（自动提取，表格类题目排版较差，仅供参考，以上图为准）
+  const bodyClean = (q.body || "").replace(/\[图\][^\n]*\n?/g, "").trim();
+  const bodyText = (!isStructured && bodyClean)
+    ? `<details style="margin-top:12px"><summary class="muted" style="cursor:pointer;font-size:13px">题面文字（自动提取，仅供参考）</summary><div class="q-body-text">${esc(bodyClean)}</div></details>`
+    : "";
+
+  const stat = isStructured
+    ? '<div class="q-detail-head">简答题：纸质作答，不计入正确率。</div>'
+    : (acc == null
+      ? '<div class="q-detail-head">本题暂无学生作答记录。</div>'
+      : `<div class="q-detail-head">答对 ${ok} · 答错 ${wrong} · 正确率 <b class="${acc >= 80 ? "green" : acc >= 50 ? "amber" : "red"}">${acc}%</b></div>`);
+
+  return `${stat}
+    <div class="q-review">
+      <div>${figHtml}</div>
+      <div>${ansHtml}${distHtml}${wrongHtml}${bodyText}</div>
+    </div>`;
 }
 
 function esc(s){ const d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }

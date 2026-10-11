@@ -323,6 +323,7 @@ window.ChemBankPortal = {
       "Stoichiometry": "stoich",
       "Atomic Structure": "atomic",
       "Energetics": "energetics",
+      "5 Chemical energetics": "energetics",
       "4 States of matter": "states",
       "States of matter": "states",
       "Atomic structure": "atomic",
@@ -433,7 +434,7 @@ window.ChemBankPortal = {
       return "4 States of matter";
     }
     if (/^1\.\d/.test(t) || /atomic structure/i.test(t)) return "Atomic Structure";
-    if (/^5\.\d/.test(t) || /enthalpy|energetics/i.test(t)) return "Energetics";
+    if (/^5\.\d/.test(t) || /enthalpy|energetics/i.test(t)) return "5 Chemical energetics";
     return "Other";
   },
   renderHomeworkList: async function (opts) {
@@ -442,7 +443,7 @@ window.ChemBankPortal = {
     const track = opts.track === "ig" ? "ig" : "as";
     const order = track === "ig"
       ? null
-      : ["4 States of matter", "Chemical Bonding", "Stoichiometry", "Atomic Structure", "Energetics", "Other"];
+      : ["4 States of matter", "5 Chemical energetics", "Chemical Bonding", "Stoichiometry", "Atomic Structure", "Other"];
     try {
       if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
       const all = await window.HomeworkDB.listAssignments();

@@ -200,6 +200,71 @@ a:focus-visible {
 .top .navline a.on { color: var(--accent); font-weight: 650; }
 
 /* --------------------------------------------------------------------------
+   4b. TEACHER HEADER / NAV  (stats.html / assign.html 用 <header> + .nav)
+   --------------------------------------------------------------------------
+   原来当前页写的是 color:#fff（白字），压在 #F1F3F5 的浅色导航栏上
+   → 基本看不见（白字配浅底）。
+   现在改成「实心深色药丸 + 白字」，不依赖 --accent-soft —— 教师端主题的
+   --accent-soft(#EEF1F4) 与导航底色几乎同色，用它做高亮等于没高亮。
+   -------------------------------------------------------------------------- */
+header {
+  background: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: sticky;
+  top: 0;
+  z-index: 10;              /* 低于 .hwpick-menu(20)，下拉菜单不会被挡住 */
+  flex-wrap: wrap;
+}
+header h1 {
+  font-size: 17px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  color: var(--text);
+  white-space: nowrap;
+}
+header .nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;        /* 导航靠右，标题靠左 */
+}
+header .nav a {
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--ease), color var(--ease);
+}
+header .nav a:hover { background: var(--panel-2); color: var(--text); }
+header .nav a:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 2px; }
+/* 当前页：实心深色 + 白字，保证任何配色下都清晰 */
+header .nav a.on {
+  background: var(--accent-deep);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, .18);
+}
+header .nav a.on:hover { background: var(--accent-deep); color: #fff; filter: brightness(1.08); }
+@media (max-width: 640px) {
+  header { padding: 10px 14px; gap: 10px; }
+  header h1 { font-size: 16px; }
+  header .nav { margin-left: 0; }
+  header .nav a { padding: 6px 11px; font-size: 13px; }
+}
+
+/* --------------------------------------------------------------------------
    5. LAYOUT WRAPPERS
    -------------------------------------------------------------------------- */
 .wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 72px; }

@@ -12,10 +12,8 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
   a { color:var(--accent); }
-  header { background:var(--bg-soft); border-bottom:1px solid var(--line); padding:14px 22px; display:flex; align-items:center; gap:16px; }
-  header h1 { font-size:17px; margin:0; }
-  header .nav a { margin-right:18px; font-size:14px; color:var(--muted); text-decoration:none; }
-  header .nav a.on { color:#fff; font-weight:600; }
+  /* 导航样式统一在 theme.css 的「4b. TEACHER HEADER / NAV」里维护，
+     避免 stats.html / assign.html 各写一份、改一处漏一处。 */
   .wrap { max-width:1000px; margin:0 auto; padding:22px; }
   .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:18px; }
   .card h2 { font-size:15px; margin:0 0 12px; }

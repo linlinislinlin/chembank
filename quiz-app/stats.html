@@ -104,6 +104,25 @@
     padding:8px; text-align:center;
   }
   .q-sol .sol-img img { max-width:100%; height:auto; display:block; margin:0 auto; }
+
+  /* 每题展开后的「学生名单」：答对 / 答错（含所选选项）/ 未提交 */
+  .who { margin-top:14px; padding-top:10px; border-top:1px dashed var(--line); }
+  .who-line { font-size:13px; line-height:2; margin:2px 0; }
+  .who-line .who-k { display:inline-block; min-width:82px; font-weight:700; margin-right:4px; }
+  .who-line.right .who-k { color:var(--green-deep); }
+  .who-line.wrong .who-k { color:var(--red); }
+  .who-line.missing .who-k { color:var(--muted); }
+  .who-grp { display:inline-block; margin-right:14px; }
+  .who-grp > b { margin-right:4px; }
+  .nm { display:inline-block; margin:1px 5px 1px 0; padding:1px 8px; border-radius:7px; background:var(--bg-soft); border:1px solid var(--line); cursor:default; }
+  .nm.ok { background:var(--green-soft); border-color:#A6F4C5; color:var(--green-deep); }
+  .nm.bad { background:var(--red-soft); border-color:#F7C2C6; color:var(--red); }
+  .nm.none { color:var(--muted); }
+
+  /* 班级筛选（作业本身不带班级字段，由老师在这里选） */
+  .clsline { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .clsline .lab { font-size:13px; color:var(--muted); }
+
   @media (max-width:720px) { .q-review { grid-template-columns:1fr; } }
   .sort-btn { cursor:pointer; user-select:none; }
   .sort-btn:hover { color:var(--text); }
@@ -140,7 +159,8 @@
 
 <div class="wrap" id="mainWrap" style="display:none">
   <div class="card">
-    <h2>选择作业</h2>
+      <h2>选择作业</h2>
+      <div class="small-note" style="margin:0 0 8px">先选作业，再用「班级范围」圈定本次要统计的班级 —— <b>「未提交」名单就是按这里选的班级，拿名册比对出来的</b>（作业本身不带班级信息）。</div>
     <div class="pick" id="trackFilter" style="margin-bottom:10px">
       <span class="pill on" data-track="">全部</span>
       <span class="pill" data-track="as">AS 9701</span>
@@ -149,6 +169,12 @@
     <div class="hwpick" id="hwPick">
       <button type="button" class="hwpick-btn" id="hwPickBtn"><span class="lab">选择作业…</span><span class="chev">▼</span></button>
       <div class="hwpick-menu" id="pickList"><span class="empty" style="padding:0">加载中…</span></div>
+    </div>
+    <!-- 班级筛选：作业不带班级字段，一份作业发给整个 track，
+         「谁没交」必须知道目标班级，所以在这里由老师圈定范围。 -->
+    <div class="clsline" id="clsLine" style="display:none">
+      <span class="lab">班级范围</span>
+      <div class="pick" id="classFilter"></div>
     </div>
     <p class="small-note" id="testerOpen" style="display:none;margin:12px 0 0"></p>
   </div>
@@ -160,14 +186,14 @@
     <div class="small-note" id="testerNote" style="display:none;margin-top:10px"></div>
     <div class="card">
       <h2>学生作答情况（按提交时间排序，点击行展开每题对错）</h2>
-      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。<b>学生姓名默认隐藏（显示为「学生 N」），点开某一行才会显示该生姓名和学号</b>，方便投屏给学生看。展开后可查看该生在每道题的作答对错，并可清除该生的作答记录（用于让他重做）。Tester（老师预览）不在此列。</div>
+      <div class="small-note">默认按提交时间从新到旧排序；点击「正确率」表头可改为按正确率排序。<b>学生姓名默认隐藏（显示为「学生 N」），点开某一行才会显示该生姓名和学号</b>，方便投屏给学生看。展开后可查看该生在每道题的作答对错，并可清除该生的作答记录（用于让他重做）。<b>还没交的同学也会列在表末，标为「未提交」</b>（可在上方「班级范围」里切换班级，未交名单随之收窄）。Tester（老师预览）不在此列。</div>
       <table><thead><tr><th>姓名</th><th>学号</th><th>得分</th><th class="sort-btn" id="stuAccTh" title="点击切换排序">正确率 <span id="stuAccArrow"></span></th><th class="sort-btn" id="stuTimeTh" title="点击切换排序">提交时间 <span id="stuTimeArrow">▾</span></th><th>操作</th></tr></thead>
       <tbody id="stuRows"></tbody></table>
       <div class="empty" id="stuEmpty" style="display:none">还没有学生作答</div>
     </div>
     <div class="card">
       <h2>讲义题目分析（点击题目行展开看题面与答案）</h2>
-      <div class="small-note">点击任意一行即可展开查看该题的<b>题面</b>、<b>标准答案</b>（结构题显示 Mark Scheme 图）、<b>选项分布</b>和<b>错因诊断</b>（<b>不显示学生姓名</b>）。可用下方按钮按错误率排序、只看难题。简答题为纸质作答、未在网页输入答案，不计入正确率统计；Tester（老师预览）的作答也不计入。</div>
+      <div class="small-note">点击任意一行即可展开查看该题的<b>题面</b>、<b>标准答案</b>（结构题显示 Mark Scheme 图）、<b>选项分布</b>、<b>错因诊断</b>，以及<b>点名名单</b>（谁答对、谁答错并附所选选项、谁还没交）。可用下方按钮按错误率排序、只看难题。简答题为纸质作答、未在网页输入答案，不计入正确率统计（只列未提交名单）；Tester（老师预览）的作答也不计入。</div>
       <div class="q-toolbar" id="qToolbar">
         <span class="muted" style="font-size:12px">排序：</span>
         <span class="pill on" data-qsort="order" data-label="题目顺序">题目顺序</span>
@@ -208,6 +234,10 @@ const TESTER_HANDOFF_KEY = "chembank-tester-handoff";
 
 let assignments = [];
 let trackFilter = "";
+// 班级筛选（""=全部）。作业表没有班级字段，只能靠名册圈定「应该交」的范围。
+let scopeClass = "";
+// 最近一次 renderOverview 的入参，供切换班级时原地重绘（不重新联网拉数据）。
+let lastOverview = null;
 async function loadAssignments() {
   try {
     assignments = await DB.listAssignments();
@@ -278,7 +308,7 @@ if (qToolbarEl) {
       else qSort = { field: f, dir: 1 };         // 切字段：order 正序 / acc 从高到低（最差在前）
     }
     updateQToolbar();
-    if (lastHandout) renderHandoutTable(lastHandout.rows, lastHandout.qs, lastHandout.totalStudents);
+    if (lastHandout) renderHandoutTable(lastHandout.rows, lastHandout.qs, lastHandout.notYet);
   };
 }
 
@@ -372,6 +402,40 @@ function hideStatsErr() {
   if (el) { el.style.display = "none"; el.textContent = ""; }
 }
 
+function renderClassFilter(rosterAll) {
+  const wrap = document.getElementById("classFilter");
+  const line = document.getElementById("clsLine");
+  if (!wrap || !line) return;
+  // 用名册里出现过的 class_name 建选项（"AS-C" / "AS-F" / "IGCSE-Qingyun"…）
+  const classes = [];
+  rosterAll.forEach(s => { if (s.class_name && classes.indexOf(s.class_name) < 0) classes.push(s.class_name); });
+  classes.sort();
+  // 只有一个班时没有筛选的意义；同时把跨 track 残留的旧选择清掉。
+  if (scopeClass && classes.indexOf(scopeClass) < 0) scopeClass = "";
+  if (classes.length < 2) { line.style.display = "none"; return; }
+  line.style.display = "flex";
+  const mk = (val, label) => {
+    const b = document.createElement("span");
+    b.className = "pill" + (scopeClass === val ? " on" : "");
+    b.setAttribute("data-class", val);
+    b.textContent = label;
+    return b;
+  };
+  wrap.innerHTML = "";
+  wrap.appendChild(mk("", "全部班级 · " + rosterAll.length + "人"));
+  classes.forEach(c => {
+    const n = rosterAll.filter(s => s.class_name === c).length;
+    wrap.appendChild(mk(c, c + " · " + n + "人"));
+  });
+  wrap.onclick = (e) => {
+    const pill = e.target.closest(".pill");
+    if (!pill) return;
+    scopeClass = pill.getAttribute("data-class") || "";
+    // 数据已经全在手里，直接原地重绘，省一次网络请求。
+    if (lastOverview) renderOverview(lastOverview.ass, lastOverview.qs, lastOverview.rows, lastOverview.submissions);
+  };
+}
+
 function renderOverview(ass, qs, rows, submissions) {
   rows = rows || [];
   submissions = submissions || [];
@@ -425,11 +489,31 @@ function renderOverview(ass, qs, rows, submissions) {
 
   // 排除 Tester（老师预览账号）的作答：它不是真实学生数据。
   const testerRows = rows.filter(isTesterRow);
-  const classRows = rows.filter(r => !isTesterRow(r));
+  const allClassRows = rows.filter(r => !isTesterRow(r));
   const testerIds = new Set(testerRows.map(r => r.student_id));
-  const classSubs = submissions.filter(s => !testerIds.has(s.student_id));
 
-  const totalStudents = new Set(classSubs.map(s => s.student_id).concat(classRows.map(stuKey))).size;
+  // ------------------------------------------------------------------
+  // 班级范围 + 未提交名单
+  // 名册里的 class_name（如 "AS-C"）与 students 表存的值完全一致 ——
+  // 学生页提交时直接把名册条目的 class_name 传给了后端，所以两边能精确对表。
+  // ------------------------------------------------------------------
+  lastOverview = { ass, qs, rows, submissions };
+  const ovTrack = window.ChemBankPortal.trackOf(ass);
+  const rosterAll = (window.ChemBankPortal.roster(ovTrack) || [])
+    .filter(s => s.class !== "T" && s.student_no !== "TESTER");
+  renderClassFilter(rosterAll);            // 可能把已失效的 scopeClass 重置为 ""
+  const inScope = (cn) => !scopeClass || cn === scopeClass;
+
+  // 作答行按班级收窄；同时记下 student_id → 班级，供下面把 submissions 一并收窄。
+  const clsById = new Map();
+  allClassRows.forEach(r => { if (r.student_id != null && r.students) clsById.set(r.student_id, r.students.class_name); });
+  const classRows = scopeClass ? allClassRows.filter(r => r.students && inScope(r.students.class_name)) : allClassRows;
+  const classSubs = submissions.filter(s => !testerIds.has(s.student_id) && inScope(clsById.get(s.student_id)));
+
+  // 未提交名单 = 名册范围内、却一条作答记录都没有的学生。
+  const submitterNos = new Set(classRows.map(r => r.students && r.students.student_no).filter(Boolean));
+  const rosterScope = scopeClass ? rosterAll.filter(s => s.class_name === scopeClass) : rosterAll;
+  const notYet = rosterScope.filter(s => !submitterNos.has(s.student_no));
   const graded = classRows.filter(r => r.correct === true || r.correct === false);
   const correctCount = classRows.filter(r => r.correct === true).length;
   const avgAcc = classSubs && classSubs.length
@@ -454,8 +538,8 @@ function renderOverview(ass, qs, rows, submissions) {
   sc.appendChild(mk(avgScore==null ? "–" : (Math.round(avgScore*10)/10), "平均得分"));
   sc.appendChild(mk(avgAcc==null ? "–" : avgAcc+"%", "平均正确率"));
 
-  renderStudentTable(classRows, qs, classSubs || []);
-  renderHandoutTable(classRows, qs, classSubs.length || new Set(classRows.map(stuKey)).size);
+  renderStudentTable(classRows, qs, classSubs || [], notYet);
+  renderHandoutTable(classRows, qs, notYet);
 
   // 错题知识点分布
   const tEmpty = document.getElementById("tEmpty");
@@ -477,7 +561,7 @@ function renderOverview(ass, qs, rows, submissions) {
 }
 
 // 学生作答情况：一行一名学生，按正确率排序；点击展开每题对错
-function renderStudentTable(rows, qs, submissions) {
+function renderStudentTable(rows, qs, submissions, notYet) {
   const subByStu = new Map((submissions || []).map(s => [s.student_id, s]));
   const byStu = new Map();
   const ansMapByStu = new Map();
@@ -498,6 +582,15 @@ function renderStudentTable(rows, qs, submissions) {
       submittedAt: sub && sub.submitted_at ? new Date(sub.submitted_at).toLocaleString() : "–",
       ts: sub && sub.submitted_at ? Date.parse(sub.submitted_at) : null,
     };
+  });
+  // 未提交的学生：名册里有、却一条作答记录都没有 → 也作为一类列出来，
+  // 否则表格里根本看不到他们（他们没有任何作答行）。miss 行没有成绩，不参与匿名编号。
+  (notYet || []).forEach(s => {
+    list.push({
+      stu: { name: s.name, student_no: s.student_no, class_name: s.class_name },
+      key: "miss|" + s.student_no, student_id: null, n: 0, ok: 0, acc: 0,
+      score: "–", submittedAt: "–", ts: null, missing: true,
+    });
   });
   list.sort((a,b) => {
     if (stuSort.field === "time") {
@@ -526,7 +619,7 @@ function renderStudentTable(rows, qs, submissions) {
     renderStudentTable(rows, qs, submissions);
   };
 
-  list.forEach(({stu, acc, key, score, submittedAt, student_id}, rowIdx) => {
+  list.forEach(({stu, acc, key, score, submittedAt, student_id, missing}, rowIdx) => {
     const accPct = Math.round(acc*100);
     const color = accPct>=80?"green":accPct>=50?"amber":"red";
     const main = document.createElement("tr");
@@ -534,12 +627,18 @@ function renderStudentTable(rows, qs, submissions) {
     main.setAttribute("tabindex","0");
     main.setAttribute("aria-expanded","false");
     // 默认匿名：折叠时不显示姓名，点开才在明细里显示（方便投屏给学生看）。
-    main.innerHTML = `<td><span class="caret">▶</span> 学生 ${rowIdx + 1}</td>
-      <td class="muted">•••</td>
-      <td>${esc(score)}</td>
-      <td><div style="display:flex;align-items:center;gap:8px">
+    // 「未提交」行没有成绩，但沿用同样的折叠规则，保持一致。
+    const nameCell = missing ? '<span class="nm none">未提交</span>' : "学生 " + (rowIdx + 1);
+    const scoreCell = missing ? '<span class="muted">–</span>' : esc(score);
+    const accCell = missing
+      ? '<span class="muted">–</span>'
+      : `<div style="display:flex;align-items:center;gap:8px">
         <div class="bar"><i style="width:${accPct}%;background:var(--${color});height:100%;border-radius:5px"></i></div>
-        <b class="${color}">${accPct}%</b></div></td>
+        <b class="${color}">${accPct}%</b></div>`;
+    main.innerHTML = `<td><span class="caret">▶</span> ${nameCell}</td>
+      <td class="muted">•••</td>
+      <td>${scoreCell}</td>
+      <td>${accCell}</td>
       <td class="muted">${esc(submittedAt)}</td>
       <td class="opcell"></td>`;
 
@@ -590,7 +689,7 @@ function renderStudentTable(rows, qs, submissions) {
     }).join("");
     det.innerHTML = `<td colspan="6">
       <div class="stu-who"><b>${esc(stu?.name || "?")}</b> <span class="muted">${esc(stu?.student_no || "–")}</span></div>
-      <div class="each-list">${items}</div></td>`;
+      ${missing ? '<div class="small-note" style="margin:6px 0 0">该生尚未提交本次作业（没有任何作答记录）。</div>' : `<div class="each-list">${items}</div>`}</td>`;
 
     const toggle = () => {
       const opening = !main.classList.contains("open");
@@ -607,8 +706,8 @@ function renderStudentTable(rows, qs, submissions) {
 }
 
 // 讲义题目分析：按讲义题目顺序（1、2、3…）列出，点击行展开题面 + 答案 + 错答名单
-function renderHandoutTable(rows, qs, totalStudents) {
-  lastHandout = { rows, qs, totalStudents };
+function renderHandoutTable(rows, qs, notYet) {
+  lastHandout = { rows, qs, notYet };
   updateQToolbar();
   const qt = document.getElementById("qRows"); qt.innerHTML = "";
   const qEmpty = document.getElementById("qEmpty");
@@ -630,7 +729,12 @@ function renderHandoutTable(rows, qs, totalStudents) {
     });
     // 字母顺序固定 A,B,C,D，再补上其它出现的选项
     const letterOrder = ["A", "B", "C", "D", ...([...dist.keys()].filter(k => !["A", "B", "C", "D"].includes(k)))];
-    return { q, idx, isStructured, ok, wrong, answered, acc, dist, letterOrder };
+    // 点名名单：谁答对、谁答错（含所选选项）。学生在 DB 里的 class_name 与名册一致，
+    // 所以这里只取 name / student_no 用于展示。
+    const rightNames = hits.filter(h => h.correct === true).map(h => h.students || {});
+    const wrongNames = hits.filter(h => h.correct === false)
+      .map(h => Object.assign({}, h.students || {}, { chosen: (h.chosen || "–").toUpperCase() }));
+    return { q, idx, isStructured, ok, wrong, answered, acc, dist, letterOrder, rightNames, wrongNames };
   });
 
   let shown = items;
@@ -759,17 +863,36 @@ function questionDetailHTML(it) {
     distHtml = `<div class="optdist"><div class="small-note" style="margin:0 0 6px">选项分布（共 ${total} 人作答）：</div>${rows}</div>${diag}`;
   }
 
-  // 答错名单：不显示学生姓名，只给出错答选项的分布（保护隐私，便于投屏）
-  const wrongHtml = wrong
-    ? (() => {
-        const correctLetter = (q.ms_answer || "").toUpperCase();
-        const parts = [...(dist || new Map()).entries()]
-          .filter(([L]) => L !== correctLetter)
-          .sort((a, b) => b[1] - a[1])
-          .map(([L, n]) => `<b class="red">${esc(L)}</b> ${n} 人`);
-        return `<div class="q-wrong"><div class="small-note" style="margin:0 0 6px">错答选项分布（共 ${wrong} 人答错）：</div><div class="wline" style="border:none">${parts.join("　·　")}</div></div>`;
-      })()
-    : '<div class="small-note">没有学生答错此题。</div>';
+  // 学生名单：答对 / 答错（按所选选项分组）/ 未提交。
+  // 教师点开即可点名核对；未提交名单对这题的每一行都相同（它属于整份作业，不属于某道题）。
+  const chip = (s, cls) => `<span class="nm ${cls}" title="${esc(s.student_no || "")}">${esc(s.name || "?")}</span>`;
+  const NONE = '<span class="muted">无</span>';
+  const rightNames = it.rightNames || [];
+  const wrongNames = it.wrongNames || [];
+  const notYet = (lastHandout && lastHandout.notYet) || [];
+
+  const rightLine = `<div class="who-line right"><span class="who-k">答对 ${rightNames.length} 人</span>`
+    + (rightNames.length ? rightNames.map(s => chip(s, "ok")).join("") : NONE) + "</div>";
+
+  const wg = new Map();
+  wrongNames.forEach(s => { if (!wg.has(s.chosen)) wg.set(s.chosen, []); wg.get(s.chosen).push(s); });
+  const wrongLine = `<div class="who-line wrong"><span class="who-k">答错 ${wrongNames.length} 人</span>`
+    + (wrongNames.length
+      ? [...wg.entries()].sort((a, b) => b[1].length - a[1].length)
+        .map(([L, arr]) => `<span class="who-grp"><b class="red">选 ${esc(L)}</b>${arr.map(s => chip(s, "bad")).join("")}</span>`)
+        .join("")
+      : NONE)
+    + "</div>";
+
+  const notYetLine = `<div class="who-line missing"><span class="who-k">未提交 ${notYet.length} 人</span>`
+    + (notYet.length ? notYet.map(s => chip(s, "none")).join("") : '<span class="muted">全班都交了 🎉</span>') + "</div>";
+
+  const whoHtml = `<div class="who">
+      <div class="small-note" style="margin:0 0 4px">${isStructured ? "简答题：纸质作答，只列未提交名单" : "学生名单（答对 / 答错所选选项 / 未提交）"}</div>
+      ${isStructured ? "" : rightLine}
+      ${isStructured ? "" : wrongLine}
+      ${notYetLine}
+    </div>`;
 
   // 题面文字（自动提取，表格类题目排版较差，仅供参考，以上图为准）
   const bodyClean = (q.body || "").replace(/\[图\][^\n]*\n?/g, "").trim();
@@ -803,7 +926,7 @@ function questionDetailHTML(it) {
   return `${stat}
     <div class="q-review">
       <div>${figHtml}</div>
-      <div>${ansHtml}${distHtml}${wrongHtml}${bodyText}</div>
+      <div>${ansHtml}${distHtml}${whoHtml}${bodyText}</div>
     </div>${solHtml}`;
 }
 

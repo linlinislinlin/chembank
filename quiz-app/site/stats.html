@@ -93,6 +93,17 @@
   .diag { margin:12px 0 2px; padding:9px 12px; border-radius:8px; font-size:13px; line-height:1.5; }
   .diag.common { background:var(--red-soft); border:1px solid #F7C2C6; color:var(--red); }
   .diag.minor { background:var(--amber-soft); border:1px solid #F5D9A0; color:#8a5a00; }
+  /* 解题思路（评讲用）：整幅渲染好的详解图，点击可放大 */
+  .q-sol { margin-top:16px; }
+  .q-sol .sol-head { display:flex; align-items:baseline; gap:10px; margin-bottom:8px; }
+  .q-sol .sol-head b { font-size:14px; }
+  .q-sol .sol-head a { font-size:12px; color:var(--accent-deep); text-decoration:none; }
+  .q-sol .sol-head a:hover { text-decoration:underline; }
+  .q-sol .sol-img {
+    border:1px solid var(--line); border-radius:9px; background:#fff;
+    padding:8px; text-align:center;
+  }
+  .q-sol .sol-img img { max-width:100%; height:auto; display:block; margin:0 auto; }
   @media (max-width:720px) { .q-review { grid-template-columns:1fr; } }
   .sort-btn { cursor:pointer; user-select:none; }
   .sort-btn:hover { color:var(--text); }
@@ -178,6 +189,7 @@
 
 <script src="data.js?v=20260906z"></script>
 <script src="structured-data.js?v=20260906z"></script>
+<script src="question-solutions.js?v=20261012a"></script>
 <script src="roster.js?v=20261005a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -771,11 +783,28 @@ function questionDetailHTML(it) {
       ? '<div class="q-detail-head">本题暂无学生作答记录。</div>'
       : `<div class="q-detail-head">答对 ${ok} · 答错 ${wrong} · 正确率 <b class="${acc >= 80 ? "green" : acc >= 50 ? "amber" : "red"}">${acc}%</b></div>`);
 
+  // 解题思路：我生成的逐题详解图（含计算过程）。整幅宽度渲染，评讲/投屏时字够大。
+  const sol = (window.QUESTION_SOLUTIONS || {})[q.id];
+  const solHtml = sol && sol.img
+    ? `<div class="q-sol">
+      <div class="sol-head">
+        <b>解题思路</b>
+        <span class="muted" style="font-size:12px">${esc(sol.ref || "")}</span>
+        <a href="${esc(sol.img)}" target="_blank" rel="noopener">在新标签打开大图 ↗</a>
+      </div>
+      <div class="sol-img">
+        <a href="${esc(sol.img)}" target="_blank" rel="noopener">
+          <img src="${esc(sol.img)}" alt="解题思路" onerror="this.closest('.q-sol').style.display='none'">
+        </a>
+      </div>
+    </div>`
+    : "";
+
   return `${stat}
     <div class="q-review">
       <div>${figHtml}</div>
       <div>${ansHtml}${distHtml}${wrongHtml}${bodyText}</div>
-    </div>`;
+    </div>${solHtml}`;
 }
 
 function esc(s){ const d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }

@@ -472,14 +472,19 @@ const STRUCTURED = (window.STRUCTURED_DATA && window.STRUCTURED_DATA.questions) 
 const BYID = new Map(ALL.map(q => [q.id, q]));
 STRUCTURED.forEach(q => BYID.set(q.id, q));
 
+// Questions from these years are held back from free practice (reserved for exams).
+// BYID above is intentionally unfiltered so old progress records still resolve.
+const HIDDEN_YEARS = new Set(["2024", "2025"]);
+const available = (q) => !HIDDEN_YEARS.has(String(q && q.year));
+
 const SYLLABUS = (window.CHEMBANK_DATA && window.CHEMBANK_DATA.syllabus) || [];
 const PDB = window.PracticeDB;                // progress/records backend (may be null if not configured)
 const Portal = window.ChemBankPortal;
 const SUP = window.SUPABASE_CONFIG || {};
 
 const pool = {
-  mcq:    ALL,
-  st:     STRUCTURED,
+  mcq:    ALL.filter(available),
+  st:     STRUCTURED.filter(available),
   type:   "all",
   paper:  "all",
   limit:  10,
@@ -554,7 +559,7 @@ function filteredPool() {
 // Number of MCQ questions whose codes touch this syllabus node's subtree.
 function countQuestions(node) {
   const set = new Set(collectCodes(node));
-  return ALL.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
+  return pool.mcq.filter(q => Array.isArray(q.codes) && q.codes.some(c => set.has(c))).length;
 }
 
 function shuffle(arr) {

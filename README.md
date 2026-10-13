@@ -41,6 +41,30 @@ examples/                 # 样例题
 `chembank ingest` / `export-vault` / `audit` 按题号**自动选库**（可用 `--vault` 覆盖）。  
 `vault-structured/syllabus` 与 `vault-practical/syllabus` → 符号链接到 `vault/syllabus`（共享 LO hubs）。
 
+### 本地旧题库（Legacy，2016–2020）
+
+**2016–2020 的 9701 卷会自动路由到独立 legacy 目录，不进网页。** 这样学生在线刷的是 2021+ 的新题，老师从 legacy 库出考试题，学生不会刷到一模一样的题。
+
+| 试卷 | 例 | Obsidian vault | 双写 Markdown |
+|------|-----|----------------|---------------|
+| Paper **1x** MCQ（旧） | `9701_s16_qp_12.pdf` | `vault-legacy/` | `questions-legacy/` |
+| Paper **2x** 结构题（旧） | `9701_s16_qp_21.pdf` | `vault-legacy-structured/` | `questions-legacy-structured/` |
+
+- 路由依据：`year < 2021` 且 `syllabus_code == 9701` → legacy（`registry.py: is_legacy_year`）。
+- `quiz-app/build.py` **不读** legacy 目录，所以旧题永远不会上线网页。
+- 录入旧卷走同一套流水线，无需额外参数：
+
+```bash
+source .venv/bin/activate
+# 放入 raw/papers/9701_s16_qp_12.pdf + 9701_s16_ms_12.pdf 后：
+chembank ingest s16 12          # → draft/9701_s16_qp_12，自动路由 vault-legacy/
+# 打标（chembank-syllabus-tag skill）后：
+chembank ingest s16 12 --export # → questions-legacy/ + vault-legacy/
+chembank audit s16:12           # → 自动检查 vault-legacy/
+```
+
+- 考试出题：用 `chembank select`（从 `draft/` 读题，天然包含 legacy）+ `chembank assemble` 排版；`assemble` 会自动在 legacy vault 里找题图。也可在 `pick/*.yaml` 里用 `year_min`/`year_max` 限定到旧年份。
+
 ## 批量导入：加一卷新题（推荐路径）
 
 ### 1. 按约定命名放入 PDF

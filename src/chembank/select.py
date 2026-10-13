@@ -307,7 +307,12 @@ def select_questions(
         paper = d.get("paper")
         try:
             syl = str(d.get("syllabus_code") or "9701")
-            vault = default_vault_for_paper(paper, syl).name if paper is not None else None
+            year = d.get("year")
+            vault = (
+                default_vault_for_paper(paper, syl, year=year).name
+                if paper is not None
+                else None
+            )
         except (TypeError, ValueError):
             vault = None
         d["_vault"] = vault

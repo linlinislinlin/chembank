@@ -71,6 +71,80 @@ def normalize_chars(text: str) -> str:
     return text.translate(CHAR_FIXES)
 
 
+_IDENTITY_H_SHIFT = 29
+
+
+def decode_identity_h(text: str) -> str:
+    """Decode the re-encoded Identity-H body font used by some CIE variant PDFs.
+
+    The regular body font of these PDFs maps each ASCII glyph code *down* by 29
+    ("Paper" → "3DSHU", "Which" → ":KLFK", "3+" → "\\x16\\x0e"). Spaces are
+    inserted by the text layer (0x20) and must be left untouched. Only the
+    shifted window 0x03–0x5d is translated; non-ASCII glyphs (chemistry symbols,
+    sub/superscript markers) pass through unchanged.
+    """
+    out: list[str] = []
+    for ch in text:
+        o = ord(ch)
+        if 0x03 <= o <= 0x5D and o != 0x20:
+            out.append(chr(o + _IDENTITY_H_SHIFT))
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+def is_identity_h_shifted(text: str) -> bool:
+    """True when `text` carries the Identity-H +29 shift.
+
+    Shifted digits 0–9 encode as C0 controls 0x13–0x1c, which never appear in
+    normal body text. This cleanly distinguishes the re-encoded variant fonts
+    (e.g. 9701_s26_qp_14) from ordinary "Arial" body text (2019 papers, other
+    2026 variants), which share the exact same font name but are unshifted.
+    """
+    return any(0x13 <= ord(ch) <= 0x1C for ch in text)
+
+
+def page_text_decoded(page: Any, *, clip=None) -> str:
+    """Plain text for a page (or clip) with Identity-H shift decoded per span.
+
+    The plain ``page.get_text("text")`` mixes spans from the shifted "Arial"
+    body font and the unshifted bold/italic fonts, so a whole-page decode would
+    corrupt the bold text. Walk the dict instead and only decode spans whose
+    font is exactly "Arial".
+    """
+    data = page.get_text("dict", clip=clip) if clip is not None else page.get_text("dict")
+    # Detect the Identity-H shift across the WHOLE page, not just the clip.
+    # A clip may hold only letter text (no digits); shifted digits read as C0
+    # controls (0x13–0x1c) and are the only reliable marker, so a letters-only
+    # clip would otherwise escape decoding (e.g. 9701_s26_qp_14 Q8/Q35/Q37).
+    detection_data = data if clip is None else page.get_text("dict")
+    arial_spans = [
+        (span.get("text") or "")
+        for block in detection_data.get("blocks", [])
+        if block.get("type") == 0
+        for line in block.get("lines", [])
+        for span in line.get("spans", [])
+        if (span.get("font") or "") == "Arial"
+    ]
+    decode_shifted = any(is_identity_h_shifted(t) for t in arial_spans)
+    lines: list[str] = []
+    for block in data.get("blocks", []):
+        if block.get("type") != 0:
+            continue
+        for line in block.get("lines", []):
+            parts: list[str] = []
+            for span in line.get("spans", []):
+                font = span.get("font") or ""
+                text = span.get("text") or ""
+                if decode_shifted and font == "Arial":
+                    text = decode_identity_h(text)
+                parts.append(normalize_chars(text))
+            line_text = "".join(parts)
+            if line_text.strip():
+                lines.append(line_text)
+    return "\n".join(lines)
+
+
 def _to_sub(s: str) -> str:
     return s.translate(_SUB)
 
@@ -89,12 +163,39 @@ def text_tokens_from_page(page: Any) -> list[Token]:
     """Build tokens from text dict; fold small spans into sub/superscripts."""
     data = page.get_text("dict")
     raw: list[tuple[float, float, float, float, str, float]] = []
+    # Some CIE variant PDFs re-encode the plain body font "Arial" with ASCII
+    # shifted down by 29 (e.g. 9701_s26_qp_14: "Which" → ":KLFK"). Only the
+    # exact "Arial" font is affected; bold/italic and subset fonts are fine.
+    # Detect the shift per page (shifted digits read as C0 controls) so the
+    # ordinary unshifted "Arial" used by 2019 and other variants is untouched.
+    arial_spans = [
+        (span.get("text") or "")
+        for block in data.get("blocks", [])
+        if block.get("type") == 0
+        for line in block.get("lines", [])
+        for span in line.get("spans", [])
+        if (span.get("font") or "") == "Arial"
+    ]
+    decode_shifted = any(is_identity_h_shifted(t) for t in arial_spans)
     for block in data.get("blocks", []):
         if block.get("type") != 0:
             continue
         for line in block.get("lines", []):
             for span in line.get("spans", []):
-                text = normalize_chars(span.get("text") or "")
+                font = span.get("font") or ""
+                # 2026 CIE anti-copy watermarks: microprint (AllAndNone2) decodes
+                # to Latin-1/Latin-Extended garble or C0 controls; the vertical
+                # "DO NOT WRITE IN THIS MARGIN" strip uses AllAndNone at size 8.
+                if font == "AllAndNone2":
+                    continue
+                if font == "AllAndNone" and "DO NOT WRITE" in (
+                    span.get("text") or ""
+                ).upper():
+                    continue
+                text = span.get("text") or ""
+                if decode_shifted and font == "Arial":
+                    text = decode_identity_h(text)
+                text = normalize_chars(text)
                 if text == "":
                     continue
                 x0, y0, x1, y1 = span["bbox"]

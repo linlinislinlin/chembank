@@ -33,7 +33,7 @@ PART_START_RE = re.compile(
 )
 
 MS_PART_HEAD_RE = re.compile(
-    r"(?m)^(?P<label>\d{1,2}\([a-z]\)(?:\([ivx]+\))?)\s*$",
+    r"(?m)^(?P<label>\d{1,2}\([a-z]\)(?:\([ivx]+\))?)(?=\s|$)",
     re.IGNORECASE,
 )
 

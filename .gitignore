@@ -33,6 +33,14 @@ questions-practical/**
 !questions-practical/.gitkeep
 !questions-practical/README.md
 
+# Legacy (pre-2021) 9701 papers — local-only exam bank, never served to students
+questions-legacy/**
+!questions-legacy/.gitkeep
+questions-legacy-structured/**
+!questions-legacy-structured/.gitkeep
+questions-legacy-practical/**
+!questions-legacy-practical/.gitkeep
+
 # Local Obsidian vault — keep only the (open-source) syllabus taxonomy.
 # Ignore question bodies / mark-scheme screenshots / papers / handouts,
 # which are copyrighted past-paper content and duplicated in quiz-app/site.
@@ -69,6 +77,40 @@ vault-structured/papers/**
 !vault-structured/papers/.gitkeep
 vault-structured/queries/**
 vault-structured/题库首页.md
+
+# Legacy (pre-2021) 9701 vaults — local-only exam bank (never web-served)
+vault-legacy/.obsidian/
+vault-legacy/assets/**
+vault-legacy/questions/**
+!vault-legacy/questions/.gitkeep
+vault-legacy/papers/**
+vault-legacy/handouts/**
+vault-legacy/queries/**
+vault-legacy/Home.md
+vault-legacy/题库首页.md
+vault-legacy/*.canvas
+
+vault-legacy-structured/.obsidian/
+vault-legacy-structured/questions/**
+!vault-legacy-structured/questions/.gitkeep
+vault-legacy-structured/assets/**
+!vault-legacy-structured/assets/.gitkeep
+vault-legacy-structured/papers/**
+!vault-legacy-structured/papers/.gitkeep
+vault-legacy-structured/queries/**
+vault-legacy-structured/题库首页.md
+
+vault-legacy-practical/.obsidian/
+vault-legacy-practical/questions/**
+vault-legacy-practical/assets/**
+vault-legacy-practical/papers/**
+vault-legacy-practical/queries/**
+vault-legacy-practical/题库首页.md
+
+# Legacy syllabus hub notes reference legacy question IDs — keep local too.
+vault-legacy/syllabus/**
+vault-legacy-structured/syllabus/**
+vault-legacy-practical/syllabus/**
 
 # Editor / tooling
 .idea/

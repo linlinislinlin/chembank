@@ -164,13 +164,17 @@ def _cmd_ms_key(args: argparse.Namespace) -> int:
 
 
 def _resolve_vault_arg(
-    args: argparse.Namespace, *, paper: int | str | None, syllabus_code: str = "9701"
+    args: argparse.Namespace,
+    *,
+    paper: int | str | None,
+    syllabus_code: str = "9701",
+    year: int | str | None = None,
 ) -> Path:
     """Use explicit --vault, else auto-detect from paper number + syllabus."""
     if getattr(args, "vault", None):
         return Path(args.vault)
     if paper is not None:
-        return default_vault_for_paper(paper, syllabus_code)
+        return default_vault_for_paper(paper, syllabus_code, year=year)
     return Path("vault")
 
 
@@ -179,6 +183,7 @@ def _resolve_export_md_arg(
     *,
     paper: int | str | None,
     syllabus_code: str = "9701",
+    year: int | str | None = None,
 ) -> Path | None:
     if getattr(args, "export_md", None) is not None:
         raw = args.export_md
@@ -186,7 +191,7 @@ def _resolve_export_md_arg(
             return None
         return Path(raw)
     if paper is not None:
-        return default_questions_dir_for_paper(paper, syllabus_code)
+        return default_questions_dir_for_paper(paper, syllabus_code, year=year)
     return Path("questions")
 
 
@@ -215,8 +220,9 @@ def _cmd_export_vault(args: argparse.Namespace) -> int:
     ref = _ref_from_qp_or_draft(qp, draft)
     paper = None if ref is None else ref.paper
     syl = "9701" if ref is None else ref.syllabus_code
-    vault = _resolve_vault_arg(args, paper=paper, syllabus_code=syl)
-    export_md = _resolve_export_md_arg(args, paper=paper, syllabus_code=syl)
+    year = None if ref is None else ref.year
+    vault = _resolve_vault_arg(args, paper=paper, syllabus_code=syl, year=year)
+    export_md = _resolve_export_md_arg(args, paper=paper, syllabus_code=syl, year=year)
     kind = paper_kind(paper, syl) if paper is not None else "unknown"
     result = export_paper_to_vault(
         qp_pdf=qp,
@@ -432,11 +438,13 @@ def _cmd_audit(args: argparse.Namespace) -> int:
                 vault = Path("vault")
                 qdir: Path | None = Path("questions")
             else:
-                vault = default_vault_for_paper(pref.paper, pref.syllabus_code)
+                vault = default_vault_for_paper(pref.paper, pref.syllabus_code, year=pref.year)
                 qdir = (
                     Path(args.export_md)
                     if args.export_md is not None
-                    else default_questions_dir_for_paper(pref.paper, pref.syllabus_code)
+                    else default_questions_dir_for_paper(
+                        pref.paper, pref.syllabus_code, year=pref.year
+                    )
                 )
             groups.setdefault((vault, qdir), []).append(str(token))
         result = AuditResult()
@@ -462,16 +470,19 @@ def _cmd_audit(args: argparse.Namespace) -> int:
         return 1 if result.failed else 0
 
     paper = None
+    year = None
     if refs:
         try:
-            paper = parse_paper_ref(str(refs[0])).paper
+            pref0 = parse_paper_ref(str(refs[0]))
+            paper = pref0.paper
+            year = pref0.year
         except ValueError:
             paper = None
-    vault = _resolve_vault_arg(args, paper=paper)
+    vault = _resolve_vault_arg(args, paper=paper, year=year)
     if args.export_md is not None:
         questions_dir: Path | None = Path(args.export_md)
     elif paper is not None:
-        questions_dir = default_questions_dir_for_paper(paper)
+        questions_dir = default_questions_dir_for_paper(paper, year=year)
     else:
         questions_dir = Path("questions")
     result = audit_papers(

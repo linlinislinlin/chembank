@@ -90,6 +90,32 @@ _STEM_STOP = {
     "give",
     "state",
     "question",
+    # CIE header / footer boilerplate — must not be treated as distinctive stem
+    # words. 2026 papers carry "Cambridge University Press & Assessment" in the
+    # footer and "Cambridge International AS & A Level / CHEMISTRY / Paper N
+    # Structured Questions" in the header; a question with no shared stem (just
+    # its number) would otherwise false-positive `missing_shared_stem`.
+    "cambridge",
+    "university",
+    "press",
+    "assessment",
+    "international",
+    "level",
+    "chemistry",
+    "sciences",
+    "syllabus",
+    "paper",
+    "structured",
+    "questions",
+    "booklet",
+    "data",
+    # "Turn over" page footer — appears at every page break and would otherwise
+    # be read as a Q4-style question with no shared stem (false positive).
+    "turn",
+    "over",
+    "page",
+    "margin",
+    "write",
 }
 _PREAMBLE_STOP = {
     "which",

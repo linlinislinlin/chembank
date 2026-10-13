@@ -51,13 +51,16 @@ FOOTER_NOISE = re.compile(
     r"©\s*UCLES.*"
     r"|9701/\d+/[A-Z]/J/\d+.*"
     r"|(?:9701|0620)/\d{1,2}/[A-Z]/[A-Z]/\d{2}.*"
-    r"|\[Turn over\]"
+    r"|\[?Turn over\]?"              # CIE footer (bracket may be dropped in 2026 OCR)
     r"|Page \d+ of \d+"
     r"|Permission to reproduce\b.*"
     r"|Every\s*reasonable effort has been made\b.*"
     r"|To avoid the issue of disclosure\b.*"
     r"|Cambridge Assessment International Education is part of\b.*"
     r"|Cambridge Assessment is the brand name\b.*"
+    r"|©\s*C.*"                       # 2026 footer: © Cambridge University Press & Assessment ...
+    r"|\*\s*\d{10,}\s*\*.*"          # 2026 page barcode: * 0000800000002 *
+    r"|DFD"                          # 2026 Cambridge anti-copy token
     r"|BLANK PAGE"
     r"|\d+_9701_\d+_\d+_[\d.]+©.*"  # house-style: 11_9701_13_2023_1.10© UCLES
     r")\s*$",
@@ -210,6 +213,13 @@ def _is_plausible_main(
     body = re.sub(r"^\d{1,2}\s*[.)]?\s*", "", line).strip()
     if not body:
         return True
+    # Front-page title / instruction boilerplate carrying a leading digit
+    # (e.g. "1 Paper 2 AS Level Structured Questions…",
+    #       "2 You must answer on the question paper") — never a question.
+    if re.match(r"^Paper\s*\d*\s*(?:AS|A)\s*Level", body, re.I):
+        return False
+    if re.match(r"^You\s+must\s+answer", body, re.I):
+        return False
     # Front-matter words ("Information", "Instructions"…) only indicate boilerplate
     # when they are short fragments, not a full question stem. A real MCQ stem can
     # legitimately begin with these words (e.g. "Information about two substances…").

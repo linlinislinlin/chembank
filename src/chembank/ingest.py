@@ -101,12 +101,12 @@ def maybe_export(
     if not tagged.is_dir() or not any(tagged.glob("q*.json")):
         return None
     vault_dir = Path(vault) if vault is not None else default_vault_for_paper(
-        ref.paper, ref.syllabus_code
+        ref.paper, ref.syllabus_code, year=ref.year
     )
     questions = (
         Path(export_md)
         if export_md is not None
-        else default_questions_dir_for_paper(ref.paper, ref.syllabus_code)
+        else default_questions_dir_for_paper(ref.paper, ref.syllabus_code, year=ref.year)
     )
     return export_paper_to_vault(
         qp_pdf=Path(ref.qp),
@@ -141,12 +141,12 @@ def ingest_paper(
     result = IngestResult(paper_id=ref.id, draft_dir=ref.draft)
     kind = paper_kind(ref.paper, ref.syllabus_code)
     vault_dir = Path(vault) if vault is not None else default_vault_for_paper(
-        ref.paper, ref.syllabus_code
+        ref.paper, ref.syllabus_code, year=ref.year
     )
     questions_dir = (
         Path(export_md)
         if export_md is not None
-        else default_questions_dir_for_paper(ref.paper, ref.syllabus_code)
+        else default_questions_dir_for_paper(ref.paper, ref.syllabus_code, year=ref.year)
     )
     result.messages.append(
         f"kind={kind} vault={vault_dir} export_md={questions_dir}"

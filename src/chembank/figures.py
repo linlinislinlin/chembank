@@ -322,7 +322,8 @@ def _clip_text(page: Any, region: FigureRegion) -> str:
     from chembank.symbols import normalize_chars
 
     clip = fitz.Rect(region.x0, region.y0, region.x1, region.y1) & page.rect
-    plain = normalize_chars(page.get_text("text", clip=clip) or "")
+    from chembank.symbols import page_text_decoded
+    plain = page_text_decoded(page, clip=clip)
     # CIE 2023+ Paper 1: left-margin bold qnums are often missing from
     # get_text("text"/"words") clips even though dict still has the span.
     # Prepend the leftmost digit-only span near the top of the band when needed.
@@ -394,7 +395,8 @@ _STATEMENT_COMBO_RE = re.compile(
     r"In which (?:ions|molecules|compounds)|"
     # Note: do NOT match bare "Which reagents…" / "Which statement is correct?"
     # (ordinary MCQ). Statement-combo keys use "Which statements are correct".
-    r"Which (?:oxides|reactions|changes|pairs|mixtures|alcohols)\b|"
+    r"Which (?:oxides|reactions|changes|pairs|mixtures|alcohols|compounds|"
+    r"substances|bonds)\b|"
     r"Which statements?\s+are\s+correct\b)",
     re.I,
 )

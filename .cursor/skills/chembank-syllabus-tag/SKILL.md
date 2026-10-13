@@ -119,6 +119,7 @@ ChemBank 导出验收:
 | **整题截图（必有）** | `vault/assets/<id>-qN-paper.png` |
 | 焦点配图 | `vault/assets/<id>-qN.png` |
 | 输出 | `questions/<id>.md` 与 `vault/questions/<id>.md` |
+| **旧题输出（2016–2020，本地 only）** | `questions-legacy/<id>.md` 与 `vault-legacy/questions/<id>.md`（`year<2021` 自动路由，不进网页） |
 | 核心模块 | `src/chembank/{chem_format,figures,export_md,export_vault,examiner_report,symbols,split}.py` |
 
 ## Batch ingest new paper（与 CLI 对齐）

@@ -157,7 +157,6 @@
   <h1>📊 作业统计</h1>
   <div class="nav">
     <a href="stats.html" class="on">查看统计</a>
-    <a href="index.html">刷题库</a>
     <a href="home.html">学生首页</a>
     <a href="assign.html">布置作业</a>
   </div>
@@ -220,12 +219,6 @@
       <table><thead><tr><th>序号</th><th>题目</th><th>答对人数</th><th>答错人数</th><th>正确率</th><th>标准答案</th><th>考点</th></tr></thead>
       <tbody id="qRows"></tbody></table>
       <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
-    </div>
-    <div class="card">
-      <h2>错题知识点分布（哪些考点大家最容易错）</h2>
-      <div class="small-note">仅统计选择题的错题（简答题为纸质作答，未在网页输入答案）。</div>
-      <div id="topicDist"></div>
-      <div class="empty" id="tEmpty" style="display:none">暂无数据</div>
     </div>
   </div>
 </div>
@@ -557,24 +550,6 @@ function renderOverview(ass, qs, rows, submissions) {
 
   renderStudentTable(classRows, qs, classSubs || [], notYet);
   renderHandoutTable(classRows, qs, notYet);
-
-  // 错题知识点分布
-  const tEmpty = document.getElementById("tEmpty");
-  const wrongRows = classRows.filter(r => r.correct === false && (BYID.get(r.question_id)?.type !== "structured"));
-  const topicCnt = new Map();
-  wrongRows.forEach(r => {
-    const q = BYID.get(r.question_id);
-    (q?.topics||[]).forEach(t => topicCnt.set(t, (topicCnt.get(t)||0)+1));
-  });
-  const td = document.getElementById("topicDist");
-  td.innerHTML = "";
-  tEmpty.style.display = topicCnt.size ? "none" : "block";
-  [...topicCnt.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15).forEach(([t,c]) => {
-    const d = document.createElement("div");
-    d.className = "topic-row";
-    d.innerHTML = `<span>${esc(t)}</span><b class="red">${c} 次做错</b>`;
-    td.appendChild(d);
-  });
 }
 
 // 学生作答情况：一行一名学生，按正确率排序；点击展开每题对错

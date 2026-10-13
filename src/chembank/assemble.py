@@ -51,6 +51,9 @@ KNOWN_VAULTS = (
     "vault-igcse",
     "vault-igcse-structured",
     "vault-igcse-practical",
+    "vault-legacy",
+    "vault-legacy-structured",
+    "vault-legacy-practical",
 )
 
 TEMPLATE = "tiles"

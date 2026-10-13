@@ -142,6 +142,7 @@ ChemBank 结构题导出验收:
 | **QP 截图** | `vault-structured/assets/<id>-paper.png` |
 | **MS 截图** | `vault-structured/assets/<id>-ms.png` |
 | 输出 | `questions-structured/<id>.md` + `vault-structured/questions/<id>.md` |
+| **旧题输出（2016–2020，本地 only）** | `questions-legacy-structured/<id>.md` + `vault-legacy-structured/questions/<id>.md`（`year<2021` 自动路由，不进网页） |
 | MCQ / 实验库（勿写入） | `vault/` · `vault-practical/` |
 
 ## 批量导入

@@ -27,6 +27,22 @@ DEFAULT_QUESTIONS_IGCSE_MCQ = Path("questions-igcse")
 DEFAULT_QUESTIONS_IGCSE_STRUCTURED = Path("questions-igcse-structured")
 DEFAULT_QUESTIONS_IGCSE_PRACTICAL = Path("questions-igcse-practical")
 
+# Local-only 9701 papers → directories the quiz web app (``quiz-app/build.py``)
+# never reads, so the generated site never serves them. The teacher sets exams
+# from these, so students can't have practised the exact items online.
+# Two ranges stay local-only:
+#   • legacy:  year < LEGACY_YEAR_CUTOFF           (pre-2021 papers)
+#   • future:  year >= LOCAL_ONLY_FUTURE_CUTOFF    (2026-and-later, not yet public)
+# Years in between (2021–2025) keep going to the live (web-served) vaults.
+LEGACY_YEAR_CUTOFF = 2021
+LOCAL_ONLY_FUTURE_CUTOFF = 2026
+DEFAULT_VAULT_LEGACY_MCQ = Path("vault-legacy")
+DEFAULT_VAULT_LEGACY_STRUCTURED = Path("vault-legacy-structured")
+DEFAULT_VAULT_LEGACY_PRACTICAL = Path("vault-legacy-practical")
+DEFAULT_QUESTIONS_LEGACY_MCQ = Path("questions-legacy")
+DEFAULT_QUESTIONS_LEGACY_STRUCTURED = Path("questions-legacy-structured")
+DEFAULT_QUESTIONS_LEGACY_PRACTICAL = Path("questions-legacy-practical")
+
 # CIE season letter in filenames: s=June(MJ), w=Nov(ON), m=March(FM)
 _SESSION_FROM_SEASON = {"s": "MJ", "w": "ON", "m": "FM"}
 _SEASON_FROM_SESSION = {"MJ": "s", "ON": "w", "FM": "m"}
@@ -157,10 +173,31 @@ def paper_kind(paper: int | str, syllabus_code: str = "9701") -> str:
     return "structured"
 
 
+def is_local_only_year(
+    year: int | str | None, syllabus_code: str = "9701"
+) -> bool:
+    """True when a 9701 paper must stay local-only (never web-served).
+
+    Covers both legacy (pre-2021) and future (2026-and-later) papers. The quiz
+    web app (``quiz-app/build.py``) never reads the local-only vaults, so these
+    papers can be used to set exams without students having practised the exact
+    items online.
+    """
+    if str(syllabus_code) != "9701":
+        return False
+    try:
+        y = int(year)
+    except (TypeError, ValueError):
+        return False
+    return y < LEGACY_YEAR_CUTOFF or y >= LOCAL_ONLY_FUTURE_CUTOFF
+
+
 def default_vault_for_paper(
-    paper: int | str, syllabus_code: str = "9701"
+    paper: int | str,
+    syllabus_code: str = "9701",
+    year: int | str | None = None,
 ) -> Path:
-    """Obsidian vault root for this paper number + syllabus."""
+    """Obsidian vault root for this paper number + syllabus (local-only-aware)."""
     kind = paper_kind(paper, syllabus_code)
     if str(syllabus_code) == "0620":
         if kind == "mcq":
@@ -168,6 +205,12 @@ def default_vault_for_paper(
         if kind == "practical":
             return DEFAULT_VAULT_IGCSE_PRACTICAL
         return DEFAULT_VAULT_IGCSE_STRUCTURED
+    if is_local_only_year(year, syllabus_code):
+        if kind == "mcq":
+            return DEFAULT_VAULT_LEGACY_MCQ
+        if kind == "practical":
+            return DEFAULT_VAULT_LEGACY_PRACTICAL
+        return DEFAULT_VAULT_LEGACY_STRUCTURED
     if kind == "mcq":
         return DEFAULT_VAULT_MCQ
     if kind == "practical":
@@ -176,7 +219,9 @@ def default_vault_for_paper(
 
 
 def default_questions_dir_for_paper(
-    paper: int | str, syllabus_code: str = "9701"
+    paper: int | str,
+    syllabus_code: str = "9701",
+    year: int | str | None = None,
 ) -> Path:
     """Canonical Markdown dual-write dir for this paper number + syllabus."""
     kind = paper_kind(paper, syllabus_code)
@@ -186,6 +231,12 @@ def default_questions_dir_for_paper(
         if kind == "practical":
             return DEFAULT_QUESTIONS_IGCSE_PRACTICAL
         return DEFAULT_QUESTIONS_IGCSE_STRUCTURED
+    if is_local_only_year(year, syllabus_code):
+        if kind == "mcq":
+            return DEFAULT_QUESTIONS_LEGACY_MCQ
+        if kind == "practical":
+            return DEFAULT_QUESTIONS_LEGACY_PRACTICAL
+        return DEFAULT_QUESTIONS_LEGACY_STRUCTURED
     if kind == "mcq":
         return DEFAULT_QUESTIONS_MCQ
     if kind == "practical":
@@ -454,7 +505,7 @@ def infer_status(draft_dir: Path, *, paper: PaperRef | None = None) -> str:
     if paper is not None:
         sess = {"MJ": "mj", "ON": "on", "FM": "fm"}.get(paper.session.upper(), paper.session.lower())
         pattern = f"cie-{paper.syllabus_code}-{paper.year}-{sess}-p{paper.paper}-q*.md"
-        vault = default_vault_for_paper(paper.paper, paper.syllabus_code)
+        vault = default_vault_for_paper(paper.paper, paper.syllabus_code, year=paper.year)
         if list((vault / "questions").glob(pattern)):
             return "exported"
         # Legacy: some early exports may still sit under vault/ only

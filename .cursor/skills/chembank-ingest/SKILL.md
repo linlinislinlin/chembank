@@ -34,7 +34,14 @@ One skill for the full ingest loop (MCQ / structured / practical). **Code** does
 | Obsidian vault (MCQ) | `vault/` |
 | Obsidian vault (structured) | `vault-structured/`（`syllabus/` → 链到 `vault/syllabus`） |
 | Obsidian vault (practical) | `vault-practical/`（`syllabus/` → 链到 `vault/syllabus`） |
+| **Legacy MCQ（2016–2020，本地 only）** | `vault-legacy/` + `questions-legacy/` |
+| **Legacy 结构题（2016–2020，本地 only）** | `vault-legacy-structured/` + `questions-legacy-structured/` |
 | Example frontmatter | `examples/cie-9701-2021-mj-p11-q1.md` |
+
+> **Legacy 旧题（2016–2020）自动路由**：`year < 2021` 且 `syllabus_code == 9701` 的卷，
+> `ingest` / `export-vault` / `audit` 会自动写到 `vault-legacy*` / `questions-legacy*`，
+> **永不进网页**（`quiz-app/build.py` 不读这些目录）。录入命令不变：
+> `chembank ingest s16 12 --export`。考试出题用 `chembank select`（读 `draft/`，天然含 legacy）+ `assemble`（会自动在 legacy vault 找题图）。
 
 ## Handout / 组卷（select + assemble）
 

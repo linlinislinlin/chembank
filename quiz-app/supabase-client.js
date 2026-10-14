@@ -14,6 +14,24 @@ window.HomeworkDB = (() => {
     return client;
   }
 
+  // 网络抖动（Safari 对失败的 fetch 报 "Load failed"）时自动重试，最多 3 次，
+  // 指数退避。只重试真正的网络错误；认证/业务错误立即抛出、不重试。
+  async function withRetry(fn, attempts = 3, baseDelay = 400) {
+    let lastErr;
+    for (let i = 0; i < attempts; i++) {
+      try {
+        return await fn();
+      } catch (e) {
+        lastErr = e;
+        const msg = String((e && e.message) || e || "");
+        const isNetwork = /load failed|failed to fetch|networkerror|network request failed|fetch failed|network/i.test(msg);
+        if (!isNetwork || i === attempts - 1) throw e;
+        await new Promise((r) => setTimeout(r, baseDelay * Math.pow(2, i)));
+      }
+    }
+    throw lastErr;
+  }
+
   function assignmentUrl() {
     const url = (cfg.assignmentEdgeUrl || "").replace(/\/+$/, "");
     if (!url) throw new Error("Homework service is not configured");
@@ -21,17 +39,19 @@ window.HomeworkDB = (() => {
   }
 
   async function callAssignment(payload) {
-    const resp = await fetch(assignmentUrl(), {
-      method: "POST",
-      headers: { "content-type": "text/plain" },
-      body: JSON.stringify(payload),
+    return withRetry(async () => {
+      const resp = await fetch(assignmentUrl(), {
+        method: "POST",
+        headers: { "content-type": "text/plain" },
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 401 || resp.status === 403) {
+        throw new Error(data.error || "Wrong teacher token or no access");
+      }
+      if (!resp.ok) throw new Error(data.error || ("Homework service error (HTTP " + resp.status + ")"));
+      return data;
     });
-    const data = await resp.json().catch(() => ({}));
-    if (resp.status === 401 || resp.status === 403) {
-      throw new Error(data.error || "Wrong teacher token or no access");
-    }
-    if (!resp.ok) throw new Error(data.error || ("Homework service error (HTTP " + resp.status + ")"));
-    return data;
   }
 
   async function createAssignment(input, teacherToken) {
@@ -104,17 +124,19 @@ window.HomeworkDB = (() => {
     // 列表页只拉元数据：不取 question_snapshot（每份作业的完整题面，体积大，
     // 作业越攒越多会让统计页/布置页首屏越来越慢）。快照改由
     // getAssignmentSnapshot() 在真正打开某一份作业时按需获取。
-    let { data, error } = await c.from("assignments")
-      .select("id, title, question_ids, created_at, due_at, instructions, status, programme")
-      .order("created_at", { ascending: false });
-    if (error) {
-      const retry = await c.from("assignments")
-        .select("id, title, question_ids, created_at, due_at")
+    return withRetry(async () => {
+      let { data, error } = await c.from("assignments")
+        .select("id, title, question_ids, created_at, due_at, instructions, status, programme")
         .order("created_at", { ascending: false });
-      if (retry.error) throw retry.error;
-      return retry.data || [];
-    }
-    return data || [];
+      if (error) {
+        const retry = await c.from("assignments")
+          .select("id, title, question_ids, created_at, due_at")
+          .order("created_at", { ascending: false });
+        if (retry.error) throw retry.error;
+        return retry.data || [];
+      }
+      return data || [];
+    });
   }
 
   // 按需拉取单份作业的题面快照（列表页不再携带，避免整体变慢）。

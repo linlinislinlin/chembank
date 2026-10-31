@@ -46,6 +46,7 @@ QUESTION_DIRS = [
     REPO / "vault-structured" / "questions",
     REPO / "questions",
     REPO / "questions-structured",
+    REPO / "questions-legacy",
 ]
 ASSET_DIRS = [
     REPO / "vault-igcse" / "assets",
@@ -53,6 +54,7 @@ ASSET_DIRS = [
     REPO / "vault-igcse-practical" / "assets",
     REPO / "vault" / "assets",
     REPO / "vault-structured" / "assets",
+    REPO / "vault-legacy" / "assets",
 ]
 
 MCQ_LINK_RE = re.compile(r"\[\[questions/([A-Za-z0-9\-]+)\]\]", re.IGNORECASE)

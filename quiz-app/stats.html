@@ -77,6 +77,10 @@
   .q-review .qfig { margin:0 0 10px; }
   .q-review .qfig img { max-height:56vh; }
   .q-answer { font-size:15px; margin-bottom:12px; }
+  /* 做题解析（文字，评讲用）：与标准答案同区，白底浅灰卡片，可快速回忆做题过程 */
+  .q-worked { margin:2px 0 14px; padding:10px 12px; background:var(--panel-2); border:1px solid var(--line); border-radius:9px; }
+  .q-worked .worked-head { font-weight:700; font-size:13.5px; color:var(--accent-deep); margin-bottom:6px; }
+  .q-worked .worked-body { font-size:13.5px; line-height:1.65; white-space:pre-wrap; color:var(--text); }
   .q-wrong { font-size:13px; }
   .q-wrong .wline { padding:5px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; }
   .q-body-text { white-space:pre-wrap; font-size:12.5px; color:var(--muted); background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; max-height:220px; overflow:auto; margin-top:6px; }
@@ -228,6 +232,7 @@
 <script src="data.js?v=20260906z"></script>
 <script src="structured-data.js?v=20260906z"></script>
 <script src="question-solutions.js?v=20261012a"></script>
+<script src="question-worked-solutions.js?v=20261108b"></script>
 <script src="roster.js?v=20261108a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -906,6 +911,15 @@ function questionDetailHTML(it) {
       ? '<div class="q-detail-head">本题暂无学生作答记录。</div>'
       : `<div class="q-detail-head">答对 ${ok} · 答错 ${wrong} · 正确率 <b class="${acc >= 80 ? "green" : acc >= 50 ? "amber" : "red"}">${acc}%</b></div>`);
 
+  // 做题解析（文字，评讲用）：与学生页同源，点开题面即可快速回忆做题过程。
+  const worked = (window.QUESTION_WORKED || {})[q.id];
+  const workedHtml = worked && worked.solution
+    ? `<div class="q-worked">
+      <div class="worked-head">📖 做题解析（Worked solution）</div>
+      <div class="worked-body">${esc(worked.solution)}</div>
+    </div>`
+    : "";
+
   // 解题思路：我生成的逐题详解图（含计算过程）。整幅宽度渲染，评讲/投屏时字够大。
   const sol = (window.QUESTION_SOLUTIONS || {})[q.id];
   const solHtml = sol && sol.img
@@ -926,7 +940,7 @@ function questionDetailHTML(it) {
   return `${stat}
     <div class="q-review">
       <div>${figHtml}</div>
-      <div>${ansHtml}${distHtml}${whoHtml}${bodyText}</div>
+      <div>${ansHtml}${workedHtml}${distHtml}${whoHtml}${bodyText}</div>
     </div>${solHtml}`;
 }
 

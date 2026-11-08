@@ -328,6 +328,9 @@ window.ChemBankPortal = {
       "States of matter": "states",
       "Atomic structure": "atomic",
       "Periodic table": "periodic",
+      "6 Redox": "redox",
+      "7 Equilibria": "equilibria",
+      "8 Reaction kinetics": "kinetics",
       "Homework": "hw",
       "Other": "other",
     };
@@ -407,14 +410,13 @@ window.ChemBankPortal = {
         : ("IG " + String((a && a.id) || "x"));
     }
     const slug = this.topicSlug(title, track);
-    if (slug === "stoich") {
-      /* Stoichiometry homeworks carry no x.y code, so label them by their own
-         numbering: "...homework 3..." -> AS-stoich-3, the holiday one -> AS-stoich-holiday. */
+    /* Units split across several homeworks (Stoichiometry, Equilibria, Reaction
+       kinetics) are labelled by their own numbering: "...homework 3..." -> AS-<slug>-3,
+       and the Stoichiometry holiday pack -> AS-stoich-holiday. */
+    if (slug === "stoich" || slug === "equilibria" || slug === "kinetics") {
       const hw = title.match(/homework\s*(\d+)/i);
-      if (hw) return "AS-stoich-" + hw[1];
-      if (/holiday|国庆|假期/i.test(title)) return "AS-stoich-holiday";
-      const code = title.match(/(\d+\.\d+)/);
-      return "AS-stoich-" + (code ? code[1] : String((a && a.id) || "x"));
+      if (hw) return "AS-" + slug + "-" + hw[1];
+      if (slug === "stoich" && /holiday|国庆|假期/i.test(title)) return "AS-stoich-holiday";
     }
     const m = title.match(/(\d+\.\d+)/);
     const num = m ? m[1] : String((a && a.id) || "x");
@@ -435,6 +437,9 @@ window.ChemBankPortal = {
     }
     if (/^1\.\d/.test(t) || /atomic structure/i.test(t)) return "Atomic Structure";
     if (/^5\.\d/.test(t) || /enthalpy|energetics/i.test(t)) return "5 Chemical energetics";
+    if (/^6\.\d/.test(t) || /redox|oxidation number|electron transfer/i.test(t)) return "6 Redox";
+    if (/^7\.\d/.test(t) || /equilibri|le chatelier|\bK[cp]\b|br[øoö]nsted/i.test(t)) return "7 Equilibria";
+    if (/^8\.\d/.test(t) || /reaction kinetic|rate of reaction|catalyst|boltzmann|activation energy/i.test(t)) return "8 Reaction kinetics";
     return "Other";
   },
   renderHomeworkList: async function (opts) {
@@ -443,7 +448,7 @@ window.ChemBankPortal = {
     const track = opts.track === "ig" ? "ig" : "as";
     const order = track === "ig"
       ? null
-      : ["4 States of matter", "5 Chemical energetics", "Chemical Bonding", "Stoichiometry", "Atomic Structure", "Other"];
+      : ["4 States of matter", "5 Chemical energetics", "6 Redox", "7 Equilibria", "8 Reaction kinetics", "Chemical Bonding", "Stoichiometry", "Atomic Structure", "Other"];
     try {
       if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
       const all = await window.HomeworkDB.listAssignments();

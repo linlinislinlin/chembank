@@ -53,7 +53,12 @@
     </div>
     <label id="idNoLabel">Last 4 digits of student number</label>
     <input class="input" id="istudentNo" placeholder="e.g. 1111" autocomplete="off" maxlength="8" />
+    <label class="remember" style="display:flex;align-items:center;gap:8px;margin-top:12px;cursor:pointer;font-size:14px">
+      <input type="checkbox" id="idRemember" style="width:auto;flex:0 0 auto" />
+      <span>Remember me on this device</span>
+    </label>
     <button class="btn block" id="startBtn" style="margin-top:18px">Start →</button>
+    <button class="btn ghost" id="switchBtn" style="display:none;margin-top:8px">Not you? Switch account</button>
     <div class="err" id="idErr"></div>
   </div>
 
@@ -93,7 +98,7 @@
   </div>
 </div>
 
-<script src="roster.js?v=20261107a"></script>
+<script src="roster.js?v=20261108a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js?v=20260913d"></script>
@@ -113,9 +118,13 @@ let nameValue = "";
 // 只存 sessionStorage（关掉标签页即清），不落 localStorage、不进 URL、不写进源码。
 const TOKEN_KEY = "hw-teacher-token";
 const HANDOFF_KEY = "chembank-tester-handoff";
+const IDENTITY_KEY = "hw-remember-identity";
 function savedToken() { try { return sessionStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
 function saveToken(t) { try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
 function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+function savedIdentity() { try { return JSON.parse(localStorage.getItem(IDENTITY_KEY) || "null"); } catch (e) { return null; } }
+function saveIdentityLocal(s) { try { localStorage.setItem(IDENTITY_KEY, JSON.stringify(s)); } catch (e) {} }
+function clearIdentityLocal() { try { localStorage.removeItem(IDENTITY_KEY); } catch (e) {} }
 
 // 从统计页「用 Tester 打开学生页」跳转过来时，统计页会把口令短暂交接过来
 // （localStorage，2 分钟有效）。这里读走后**立即销毁**，再存进本标签页的
@@ -208,6 +217,7 @@ async function init() {
     document.getElementById("idCard").style.display = "block";
     fillRoster();
     syncIdField();
+    restoreRememberedIdentity();
   } catch (e) {
     showErr(e.message);
   }
@@ -256,6 +266,26 @@ function syncIdField() {
   lab.textContent = tester ? "Teacher token（本标签页内记住）" : "Last 4 digits of student number";
 }
 
+// 「记住我」：上次勾选并登录过的身份，自动填好名字+学号，学生点一下 Start 即可。
+function restoreRememberedIdentity() {
+  const s = savedIdentity();
+  if (!s || !s.studentNo) return;
+  const stu = Portal.roster(track).find((x) => x.student_no === s.studentNo && x.name === s.name);
+  if (!stu) { clearIdentityLocal(); return; }
+  classValue = stu.class || "";
+  nameValue = stu.student_no;
+  fillClassOptions();
+  fillRoster();
+  syncIdField();
+  if (stu.class !== "T" && stu.student_no !== "TESTER") {
+    document.getElementById("istudentNo").value = String(stu.student_no).slice(-4);
+  }
+  const cb = document.getElementById("idRemember");
+  if (cb) cb.checked = true;
+  const sw = document.getElementById("switchBtn");
+  if (sw) sw.style.display = "inline-block";
+}
+
 function typedDigits() {
   return document.getElementById("istudentNo").value.replace(/\s+/g, "");
 }
@@ -280,6 +310,19 @@ document.getElementById("inameBtn").onclick = (e) => {
 };
 document.addEventListener("click", closePicks);
 
+document.getElementById("switchBtn").onclick = () => {
+  clearIdentityLocal();
+  classValue = "";
+  nameValue = "";
+  document.getElementById("istudentNo").value = "";
+  const cb = document.getElementById("idRemember");
+  if (cb) cb.checked = false;
+  document.getElementById("switchBtn").style.display = "none";
+  fillClassOptions();
+  fillRoster();
+  syncIdField();
+};
+
 document.getElementById("startBtn").onclick = async () => {
   const err = document.getElementById("idErr");
   const typedNo = typedDigits();
@@ -299,6 +342,12 @@ document.getElementById("startBtn").onclick = async () => {
   const no = stu.student_no;
   const className = stu.class_name;
   identity = { name, studentNo: no, className, testerOk, teacherToken: testerOk ? typedNo : "" };
+  const remember = !!(document.getElementById("idRemember") && document.getElementById("idRemember").checked);
+  if (remember && !isTester) {
+    saveIdentityLocal({ name, studentNo: no, className });
+  } else {
+    clearIdentityLocal();
+  }
   try {
     const prev = await DB.getSubmissionResult({
       assignmentId: assignment.id, name, studentNo: no, className,

@@ -386,6 +386,10 @@
           <input class="input" id="idNo" placeholder="e.g. 1111" autocomplete="off" maxlength="8" />
           <button class="btn ghost" id="idSave">Save identity</button>
         </div>
+        <label class="remember" style="display:flex;align-items:center;gap:8px;margin-top:12px;cursor:pointer;font-size:14px">
+          <input type="checkbox" id="idRemember" style="width:auto;flex:0 0 auto" />
+          <span>Remember me on this device (auto sign-in next time)</span>
+        </label>
         <div class="idbadge" id="idBadge"></div>
         <div id="recPanel" style="display:none;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
           <div class="flabel">My progress</div>
@@ -459,7 +463,7 @@
 
 <script src="data.js?v=20260906at"></script>
 <script src="structured-data.js?v=20260906at"></script>
-<script src="roster.js?v=20261107a"></script>
+<script src="roster.js?v=20261108a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js?v=20260913d"></script>
@@ -503,6 +507,7 @@ const settled = new Set();       // node codes expanded by default (sections)
 const LS_STORE = "pr-store-v3";
 const LS_IDENTITY = "pr-identity";
 const LS_STUDENT_ID = "pr-student-id";
+const LS_REMEMBER = "pr-remember-me";
 function loadStore() { try { return JSON.parse(localStorage.getItem(LS_STORE)) || {}; } catch (e) { return {}; } }
 function saveStore(store) { try { localStorage.setItem(LS_STORE, JSON.stringify(store)); } catch (e) {} }
 let __store = loadStore();
@@ -1132,25 +1137,45 @@ function currentStudentKey() {
 const SS_SESSION = "pr-tab-session";
 function persistSession() {
   if (__identity) {
-    sessionStorage.setItem(SS_SESSION, JSON.stringify({
+    const payload = JSON.stringify({
       name: __identity.name,
       no: __identity.no,
       cloudId: __cloudId || "",
-    }));
+    });
+    sessionStorage.setItem(SS_SESSION, payload);
+    if (__rememberMe) {
+      localStorage.setItem(LS_REMEMBER, payload);
+    } else {
+      localStorage.removeItem(LS_REMEMBER);
+    }
   } else {
     sessionStorage.removeItem(SS_SESSION);
+    localStorage.removeItem(LS_REMEMBER);
   }
 }
 function restoreSession() {
+  let s = null;
   try {
-    const s = JSON.parse(sessionStorage.getItem(SS_SESSION) || "null");
+    s = JSON.parse(localStorage.getItem(LS_REMEMBER) || "null");
+    if (s) __rememberMe = true;
+  } catch (e) {}
+  if (!s) {
+    try { s = JSON.parse(sessionStorage.getItem(SS_SESSION) || "null"); } catch (e) {}
+  }
+  try {
     if (!s || !s.name || !s.no) return;
     const stu = allRoster().find((x) => x.student_no === s.no && x.name === s.name);
-    if (!stu) return;
+    if (!stu) {
+      if (__rememberMe) localStorage.removeItem(LS_REMEMBER);
+      __rememberMe = false;
+      return;
+    }
     __identity = { name: s.name, no: s.no };
     __cloudId = s.cloudId || null;
     classValue = stu.class || "";
     nameValue = stu.student_no;
+    const cb = document.getElementById("idRemember");
+    if (cb) cb.checked = __rememberMe;
   } catch (e) {}
 }
 
@@ -1274,6 +1299,7 @@ let nameValue = "";
 
 let __identity = null;
 let __sessionRecs = {};
+let __rememberMe = false;
 
 function identityLabel(i) { return i ? i.name : "Guest"; }
 
@@ -1362,6 +1388,9 @@ function signOutIdentity() {
   __identity = null;
   __sessionRecs = {};
   __cloudId = null;
+  __rememberMe = false;
+  const cb = document.getElementById("idRemember");
+  if (cb) cb.checked = false;
   localStorage.removeItem(LS_IDENTITY);
   localStorage.removeItem(LS_STUDENT_ID);
   persistSession();
@@ -1416,6 +1445,7 @@ async function saveIdentity() {
     return;
   }
   __identity = { name: stu.name, no: stu.student_no };
+  __rememberMe = !!(document.getElementById("idRemember") && document.getElementById("idRemember").checked);
   __sessionRecs = {};
   localStorage.removeItem(LS_IDENTITY);
   if (PDB) {

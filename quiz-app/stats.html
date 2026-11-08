@@ -226,7 +226,7 @@
 <script src="data.js?v=20260906z"></script>
 <script src="structured-data.js?v=20260906z"></script>
 <script src="question-solutions.js?v=20261012a"></script>
-<script src="roster.js?v=20261107a"></script>
+<script src="roster.js?v=20261108a"></script>
 <script src="config.js?v=20260906c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js?v=20260913d"></script>
@@ -462,7 +462,7 @@ function renderOverview(ass, qs, rows, submissions) {
     testerOpen.style.display = "block";
     testerOpen.innerHTML = "";
     const a = document.createElement("a");
-    a.href = "homework.html?id=" + encodeURIComponent(ass.id) + "&track=" + encodeURIComponent(track);
+    a.href = "homework.html?id=" + encodeURIComponent(ass.id) + "&track=" + encodeURIComponent(track) + "&v=20261108a";
     a.target = "_blank";
     a.rel = "noopener";
     a.textContent = "用 Tester 打开学生页";

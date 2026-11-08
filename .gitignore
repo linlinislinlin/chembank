@@ -194,3 +194,9 @@ draft/ukcho/**
 # Tag snapshots (chembank ukcho snapshot): the tagging work with all past-paper
 # content stripped, so it is safe to commit even though the vault is not.
 !fixtures/ukcho-tags/
+
+# 教师口令（本地密钥，绝不进公开仓库）
+.chembank-token
+
+# 发布清单 = 「这次布置哪些题」，与 pick/ 同等敏感，本地 only
+publish/

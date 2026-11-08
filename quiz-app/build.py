@@ -604,6 +604,20 @@ def main() -> int:
         if src.exists():
             shutil.copy2(src, SITE_DIR / src.name)
 
+    # 食堂菜单是一个自包含的静态页（单个 index.html + menu.json），
+    # 由 tools/build-web/publish.js 从菜单项目同步到 quiz-app/canteen/。
+    # 它不是 build.py 生成的，所以这里整目录拷过去；否则每次部署都会被漏掉，
+    # 站上的菜单会一直停在上周。
+    canteen_src = INDEX_SRC.parent / "canteen"
+    if canteen_src.is_dir():
+        canteen_dst = SITE_DIR / "canteen"
+        if canteen_dst.exists():
+            shutil.rmtree(canteen_dst)
+        shutil.copytree(canteen_src, canteen_dst)
+        print(f"OK: canteen menu copied ({len(list(canteen_dst.iterdir()))} files).")
+    else:
+        print("WARN: quiz-app/canteen/ 不存在，站上将没有食堂菜单页。")
+
     print(
         f"OK: {len(questions)} MCQ questions, {copied} MCQ assets, "
         f"{len(tree)} top-level syllabus nodes."

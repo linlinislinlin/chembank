@@ -1,0 +1,4500 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-11-08T11:01:41.956Z",
+  "weeks": [
+    {
+      "schemaVersion": "1.0",
+      "school": "清澜山学校",
+      "canteen": "学校餐厅",
+      "weekStart": "2026-11-09",
+      "weekEnd": "2026-11-15",
+      "source": {
+        "type": "wechat",
+        "url": "https://mp.weixin.qq.com/s/Xk96xrQ9XXg7KMEBRRDUKg",
+        "importedAt": "2026-11-08T19:00:55"
+      },
+      "days": [
+        {
+          "date": "2026-11-09",
+          "weekday": "Monday",
+          "weekdayZh": "周一",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "叉烧包",
+                  "nameEn": "Steamed BBQ Pork Bun"
+                },
+                {
+                  "name": "山水豆腐",
+                  "nameEn": "Steamed Tofu with Soy Sauce"
+                },
+                {
+                  "name": "红枣发糕",
+                  "nameEn": "Red Date Cake"
+                },
+                {
+                  "name": "蚝油生菜",
+                  "nameEn": "Stir-fried Lettuce"
+                },
+                {
+                  "name": "杂粮粥",
+                  "nameEn": "Mixed Grains Congee"
+                },
+                {
+                  "name": "木耳肉片汤面/米粉",
+                  "nameEn": "Fungus and Pork with Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "海苔面包",
+                  "nameEn": "Seaweed Bread"
+                },
+                {
+                  "name": "水煮蛋",
+                  "nameEn": "Boiled Egg"
+                },
+                {
+                  "name": "鸡肉早餐肠",
+                  "nameEn": "Chicken Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "魔芋焖鸭",
+                  "nameEn": "Braised Duck with Konjac"
+                },
+                {
+                  "name": "黄豆红烧肉",
+                  "nameEn": "Braised Pork with Soybean"
+                },
+                {
+                  "name": "肉沫煮南瓜",
+                  "nameEn": "Minced Pork with Pumpkin"
+                },
+                {
+                  "name": "芝麻三丝炒菠菜",
+                  "nameEn": "Stir-fried Spinach with Sesame and Shredded Vegetabl"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "category": "G1 年级",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                },
+                {
+                  "name": "柚子",
+                  "category": "G1 年级",
+                  "nameEn": "Pomelo"
+                },
+                {
+                  "name": "新西兰美食风味烤鸡蔬菜",
+                  "nameEn": "New Zealand-style Roast Chicken with Vegetables"
+                },
+                {
+                  "name": "面包",
+                  "nameEn": "Bread"
+                },
+                {
+                  "name": "捞起杏鲍菇",
+                  "nameEn": "Tossed King Oyster Mushroom"
+                },
+                {
+                  "name": "清炒包菜",
+                  "nameEn": "Stir-fried Cabbage"
+                },
+                {
+                  "name": "库马拉红薯汤",
+                  "nameEn": "Kimara Soup"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉",
+                  "nameEn": "Noodles with Tomatoes and Eggs in Soup"
+                },
+                {
+                  "name": "重庆小面",
+                  "nameEn": "Chongqing Spicy Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "蒸布丁配卡仕达酱",
+                  "nameEn": "Steamed Pudding with Custard"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "橄榄茄汁烤龙利鱼柳",
+                  "nameEn": "Grilled Fish Fillet with Tomato Sauce and Olive Oil"
+                },
+                {
+                  "name": "罗勒叶酱通心粉",
+                  "nameEn": "Macaroni with Basil"
+                },
+                {
+                  "name": "蒜香西葫芦",
+                  "nameEn": "Garlic Zucchini"
+                },
+                {
+                  "name": "孜然肉粒",
+                  "nameEn": "Cumin Spicy Diced"
+                },
+                {
+                  "name": "销肉",
+                  "nameEn": "Crispy Pork"
+                },
+                {
+                  "name": "佛手瓜红枣蒸鸡",
+                  "nameEn": "Steamed Chicken with Red Dates and Chayote"
+                },
+                {
+                  "name": "攸县香干小炒肉",
+                  "nameEn": "Sauteed Pork with Youxian Dried Tofu"
+                },
+                {
+                  "name": "西芹兰豆焖木耳",
+                  "nameEn": "Sauteed Celery, Snow Peas & Woo"
+                },
+                {
+                  "name": "香芋淮山炸丸子",
+                  "nameEn": "Deep-Fried Taro & Yam Balls"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "芥菜咸蛋汤",
+                  "nameEn": "Salted Egg Soup with Mustard Greens"
+                },
+                {
+                  "name": "肉松面包",
+                  "nameEn": "Pork Floss Bread"
+                },
+                {
+                  "name": "京酱肉丝汤面/米粉",
+                  "nameEn": "Soup Noodle with Beijing Sauce and Shredded Pork"
+                },
+                {
+                  "name": "哈密瓜",
+                  "nameEn": "Hami Melon"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "都乐香蕉",
+                  "nameEn": "Dole Banana"
+                },
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                },
+                {
+                  "name": "巧克力麻薯",
+                  "nameEn": "Chocolate Mochi"
+                },
+                {
+                  "name": "蔓越莓软欧包",
+                  "nameEn": "Cranberry Soft Bread"
+                },
+                {
+                  "name": "卡士酸奶",
+                  "nameEn": "Classy Kiss Yogurt"
+                },
+                {
+                  "name": "生菜高汤煮水饺/云吞",
+                  "nameEn": "Dumplings / Wontons in Lettuce Broth"
+                },
+                {
+                  "name": "芝麻脆底包/豆沙包",
+                  "nameEn": "Sesame-Crust Bun/ Steamed Red Bean Paste Bun"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": "Tuesday",
+          "weekdayZh": "周二",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "手工菜肉包",
+                  "nameEn": "Vegetable and Meat Bun"
+                },
+                {
+                  "name": "芝麻球",
+                  "nameEn": "Sesame Balls"
+                },
+                {
+                  "name": "玉米段",
+                  "nameEn": "Steamed Corn"
+                },
+                {
+                  "name": "剁椒炒豆芽",
+                  "nameEn": "Stir-fried Bean Sprouts with Chopped Chili"
+                },
+                {
+                  "name": "皮蛋瘦肉粥",
+                  "nameEn": "Preserved Egg and Lean Pork Congee"
+                },
+                {
+                  "name": "三丝炒米粉",
+                  "nameEn": "Fried Rice Noodles with Shredded Pork and Vegetables"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "肉松蛋糕",
+                  "nameEn": "Pork Floss Cake"
+                },
+                {
+                  "name": "茶叶蛋",
+                  "nameEn": "Tea Egg"
+                },
+                {
+                  "name": "营养麦片",
+                  "nameEn": "Breakfast Cereal"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "客家盐焗鸡",
+                  "nameEn": "Salty Baked Chicken in HHakka Style"
+                },
+                {
+                  "name": "番茄烩牛肉",
+                  "nameEn": "Braised Beef with Potato"
+                },
+                {
+                  "name": "炸薯条",
+                  "nameEn": "Deep-Fried Potato Chips"
+                },
+                {
+                  "name": "豉油蒸水蛋",
+                  "nameEn": "Steamed Eggs"
+                },
+                {
+                  "name": "清炒油麦菜",
+                  "nameEn": "Stir-fried Leaf Lettuce"
+                },
+                {
+                  "name": "果汁",
+                  "category": "G1 年级",
+                  "nameEn": "Juice"
+                },
+                {
+                  "name": "橙子",
+                  "nameEn": "Orange"
+                },
+                {
+                  "name": "英国美食英式炸鱼",
+                  "nameEn": "British-style Fish and Chips"
+                },
+                {
+                  "name": "烤洋葱",
+                  "nameEn": "Roasted Onion"
+                },
+                {
+                  "name": "红烧茄子",
+                  "nameEn": "Braised Eggplant"
+                },
+                {
+                  "name": "红萝卜韭黄炒干张",
+                  "nameEn": "Stir-fried Soybean Curd Sheet with Carrot and C"
+                },
+                {
+                  "name": "豌豆火腿汤",
+                  "nameEn": "Pea and Ham Soup"
+                },
+                {
+                  "name": "越南鲜牛肉檬粉",
+                  "nameEn": "Vietnamese Beef Rice Noodles"
+                },
+                {
+                  "name": "咖喱鱼蛋面/米粉",
+                  "nameEn": "Curry Fish Ball Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "维多利亚蛋糕",
+                  "nameEn": "Victoria Sponge Cake"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "茄汁小酥肉",
+                  "nameEn": "Crispy Pork in Tomato Sauce"
+                },
+                {
+                  "name": "洋葱杂菜粒炒饭",
+                  "nameEn": "Fried Rice Onion and Mixed Vegetable"
+                },
+                {
+                  "name": "炒杂菜",
+                  "nameEn": "Sauteed Vegetables"
+                },
+                {
+                  "name": "土豆焖牛肉",
+                  "nameEn": "Braised Beef with Potato"
+                },
+                {
+                  "name": "酸梅鸭",
+                  "nameEn": "Roasted Duck in Sour Plum Sauce"
+                },
+                {
+                  "name": "西兰花炒肉片",
+                  "nameEn": "Stir-Fried Sliced Pork with Broccoli"
+                },
+                {
+                  "name": "金针菇烧豆泡",
+                  "nameEn": "Braised Enoki & Fried Tofu Puffs"
+                },
+                {
+                  "name": "干煸豆角",
+                  "nameEn": "Fried Green Beans"
+                },
+                {
+                  "name": "蒜蓉芥菜",
+                  "nameEn": "Sauteed Mustard Greens"
+                },
+                {
+                  "name": "菠菜瘦肉汤",
+                  "nameEn": "Spinach and Lean Pork Soup"
+                },
+                {
+                  "name": "椰蓉条",
+                  "nameEn": "Coconut Strips"
+                },
+                {
+                  "name": "油泼面",
+                  "nameEn": "Oil-Splashed Noodles"
+                },
+                {
+                  "name": "豆本豆奶",
+                  "nameEn": "Soy Milk"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            }
+          }
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": "Wednesday",
+          "weekdayZh": "周三",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "糯米鸡",
+                  "nameEn": "Sticky Rice in Lotus Leaf"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "烤南瓜",
+                  "nameEn": "Roasted Pumpkin"
+                },
+                {
+                  "name": "醋溜大白菜",
+                  "nameEn": "Sour and Spicy Chinese cabbage"
+                },
+                {
+                  "name": "小米粥",
+                  "nameEn": "Millet Congee"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉",
+                  "nameEn": "Noodles with Tomatoes and Eggs in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "紫薯面包",
+                  "nameEn": "Purple Potato Bread"
+                },
+                {
+                  "name": "豉油煎蛋",
+                  "nameEn": "Fried Egg with Soya Sauce"
+                },
+                {
+                  "name": "肠仔包",
+                  "nameEn": "Sausage Bread"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "酸菜鱼（不辣）",
+                  "category": "G1 年级",
+                  "nameEn": "Fish with Pickled Cabbage (not spicy)"
+                },
+                {
+                  "name": "台式卤肉配卤蛋",
+                  "nameEn": "Braised Pork & Eggs with Soy Sauce in Taiwan Stule"
+                },
+                {
+                  "name": "咖喱饭",
+                  "nameEn": "Curry Rice"
+                },
+                {
+                  "name": "碧绿炒土豆丝",
+                  "nameEn": "Celery and Shredded Potatoes"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "卡士酸奶",
+                  "nameEn": "Classy Kiss Yogurt"
+                },
+                {
+                  "name": "蜜瓜",
+                  "category": "G1 年级",
+                  "nameEn": "Honeydew Melon"
+                },
+                {
+                  "name": "印度美食印度烤泻咖喱",
+                  "nameEn": "Indian Chicken Tikka Masala"
+                },
+                {
+                  "name": "咖喱杂菜",
+                  "nameEn": "Curry Mixed Vegetables"
+                },
+                {
+                  "name": "酸菜鱼",
+                  "nameEn": "Fish with Pickled Vegetable"
+                },
+                {
+                  "name": "圆椒炒鸭片",
+                  "nameEn": "Stir-Fried Duck Breast with Broccoli"
+                },
+                {
+                  "name": "孜然捞汁豆腐",
+                  "nameEn": "Cumin Tossed Tofu"
+                },
+                {
+                  "name": "印度红豆汤",
+                  "nameEn": "Lentil Soup"
+                },
+                {
+                  "name": "秀珍菇瘦肉面/米粉",
+                  "nameEn": "Mushroom pork Noodles/Rice Noodles"
+                },
+                {
+                  "name": "经典牛肉面/米粉",
+                  "nameEn": "Classic Beef Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "咖喱角",
+                  "nameEn": "Samosa"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "普罗旺斯炖牛肉",
+                  "nameEn": "Provencal Beef Stew"
+                },
+                {
+                  "name": "蘑菇焗意粉",
+                  "nameEn": "Spaghetti with Mushrooms"
+                },
+                {
+                  "name": "黑椒扒时蔬",
+                  "nameEn": "Grilled Seasonal Vegetables with Black Pepper"
+                },
+                {
+                  "name": "姜葱鸡",
+                  "nameEn": "Chicken with Ginger"
+                },
+                {
+                  "name": "青蒜尖椒回锅肉",
+                  "nameEn": "Twice Cooked Pork with Chili and Garlic"
+                },
+                {
+                  "name": "海苔蒸水蛋",
+                  "nameEn": "Steamed Eggs with Seaweed"
+                },
+                {
+                  "name": "反沙红薯",
+                  "nameEn": "Creamy Baked Sweet Potato"
+                },
+                {
+                  "name": "番茄腐竹煲",
+                  "nameEn": "Tomato and Bean Curd Stick Casserole"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "板栗红豆糖水",
+                  "nameEn": "Sweet Soup"
+                },
+                {
+                  "name": "菠萝蛋糕",
+                  "nameEn": "Pineapple Cake"
+                },
+                {
+                  "name": "肥牛卷骨汤冒菜",
+                  "nameEn": "Bone Broth Hot Pot with Beef Roll"
+                },
+                {
+                  "name": "苹果",
+                  "nameEn": "Apple"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "黑松露火腿苏打饼干",
+                  "nameEn": "Truffle-Ham Soda Crackers"
+                },
+                {
+                  "name": "酸菜肉丝面/桂林米粉",
+                  "nameEn": "Sauerkraut and Shredded Pork Noodles / Guilin Rice Noodles"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": "Thursday",
+          "weekdayZh": "周四",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "莲蓉包",
+                  "nameEn": "Steamed Lotus Paste Bun"
+                },
+                {
+                  "name": "盐水三豆",
+                  "nameEn": "Boiled Green Soybeans in Salty Water"
+                },
+                {
+                  "name": "烤红薯",
+                  "nameEn": "Roasted Sweet Potatoes"
+                },
+                {
+                  "name": "白灼西兰花",
+                  "nameEn": "Blanched Broccoli"
+                },
+                {
+                  "name": "鲜淮山鸡肉粥",
+                  "nameEn": "Chicken Congee and Yam"
+                },
+                {
+                  "name": "青菜瘦肉汤面/米粉",
+                  "nameEn": "Vegetable & Pork with Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "红豆蛋糕",
+                  "nameEn": "Red Bean Cake"
+                },
+                {
+                  "name": "卤水蛋",
+                  "nameEn": "Marinated Egg"
+                },
+                {
+                  "name": "香甜蛋挞",
+                  "nameEn": "Sweet Egg Tart"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "塔吉锅炖肉丸",
+                  "nameEn": "Kefta Tagine"
+                },
+                {
+                  "name": "可乐烧鸡翅",
+                  "nameEn": "Coca-Cola Braised Chicken Wings"
+                },
+                {
+                  "name": "东北大丰收",
+                  "nameEn": "Braised Pork Ribs with Mixed Vegetables"
+                },
+                {
+                  "name": "胡萝卜炒佛手瓜",
+                  "nameEn": "Stir-fried Carrots and Chayote"
+                },
+                {
+                  "name": "清炒奶白菜",
+                  "category": "G1 年级",
+                  "nameEn": "Stir-Fried Pak Choi"
+                },
+                {
+                  "name": "低糖益力多",
+                  "category": "G1 年级",
+                  "nameEn": "Low-Sugar Yakult"
+                },
+                {
+                  "name": "都乐香蕉",
+                  "nameEn": "Dole Banana"
+                },
+                {
+                  "name": "面包",
+                  "nameEn": "Bread"
+                },
+                {
+                  "name": "菜花炒番茄",
+                  "nameEn": "Fried Cauliflower with Tomatoes"
+                },
+                {
+                  "name": "白灼大虾",
+                  "nameEn": "Poached Prawns"
+                },
+                {
+                  "name": "椒盐鹰嘴豆",
+                  "nameEn": "Salt & Pepper Roasted Chickpeas"
+                },
+                {
+                  "name": "蒜蓉芥菜",
+                  "nameEn": "Sauteed Mustard Greens"
+                },
+                {
+                  "name": "哈里拉汤",
+                  "nameEn": "Harira Soup"
+                },
+                {
+                  "name": "三杯鸭盖浇面/米粉",
+                  "nameEn": "Soy Sauce Duck Noodles/Rice Noodles"
+                },
+                {
+                  "name": "青椒鸡蛋面/米粉",
+                  "nameEn": "Pepper and Eggs Noodle/ Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "炸甜甜圈",
+                  "nameEn": "Fried Doughnuts"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "香草烤猪柳",
+                  "nameEn": "Roasted Pork Fillet with Herbs"
+                },
+                {
+                  "name": "卡真土豆角",
+                  "nameEn": "Baked Cajun Potatoes"
+                },
+                {
+                  "name": "烤茄瓜",
+                  "nameEn": "Roast Eggplant"
+                },
+                {
+                  "name": "板栗焖鸭",
+                  "nameEn": "Braised Duck with Chestnuts"
+                },
+                {
+                  "name": "干锅鱼块",
+                  "nameEn": "Dry Pot Fish Cuhes"
+                },
+                {
+                  "name": "茶树菇炒鸡柳",
+                  "nameEn": "Stir-fried Chicken Fillet with Tea Tree Mushroom"
+                },
+                {
+                  "name": "红烧豆腐",
+                  "nameEn": "Braised Tofu"
+                },
+                {
+                  "name": "水煮南瓜",
+                  "nameEn": "Boiled Pumpkin"
+                },
+                {
+                  "name": "上汤奶白菜",
+                  "nameEn": "Pak Choi in Supreme Soup"
+                },
+                {
+                  "name": "枸杞猪肝汤",
+                  "nameEn": "Pork Liver Soup with Goji Berries"
+                },
+                {
+                  "name": "香脆芝麻饼",
+                  "nameEn": "Crispy Sesame Biscuits"
+                },
+                {
+                  "name": "金针菇肉丝面/米线",
+                  "nameEn": "Rice Noodles With Mushrooms & Chicken"
+                },
+                {
+                  "name": "果汁",
+                  "nameEn": "Juice"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "青皮橘",
+                  "nameEn": "Green Tangerine"
+                },
+                {
+                  "name": "原味可颂",
+                  "nameEn": "Butter Croissant"
+                },
+                {
+                  "name": "番茄瘦肉汤",
+                  "nameEn": "Lean Pork and Tomato Soup"
+                },
+                {
+                  "name": "香葱肉丝炒河粉/豉油皇炒面",
+                  "nameEn": "Fried Rice Noodles with Scallion & Shredded Pork / Soy Sauce Stir-Fried Noodles"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": "Friday",
+          "weekdayZh": "周五",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "扬州富春猪肉包",
+                  "nameEn": "Pork Buns in Fuchun， Yangzhou Sty"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "马蹄糕",
+                  "nameEn": "Water Chestnut Pudding"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "藜麦粥",
+                  "nameEn": "Quinoa Congee"
+                },
+                {
+                  "name": "肉酱蒸猪肠粉",
+                  "nameEn": "Steamed Rice Noodle Rolls with Meat Sauce"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "牛油面包",
+                  "nameEn": "Butter Bread"
+                },
+                {
+                  "name": "奄列蛋",
+                  "nameEn": "Omelette"
+                },
+                {
+                  "name": "猪肉早餐肠",
+                  "nameEn": "Pork Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "水煮牛肉（不辣）",
+                  "category": "G1 年级",
+                  "nameEn": "Sliced Beef （Non-Spicy）"
+                },
+                {
+                  "name": "白萝卜焖鸭",
+                  "nameEn": "Braised Duck with White Radish"
+                },
+                {
+                  "name": "番茄炒蛋",
+                  "nameEn": "Scrambled Eggs with Tomatoes"
+                },
+                {
+                  "name": "家常豆腐",
+                  "nameEn": "Home-Style Tofu"
+                },
+                {
+                  "name": "盐水菜心",
+                  "nameEn": "Poached Choy Sum in Salted Water"
+                },
+                {
+                  "name": "豆本豆奶",
+                  "category": "G1 年级",
+                  "nameEn": "Soy Milk"
+                },
+                {
+                  "name": "番石榴",
+                  "category": "G1 年级",
+                  "nameEn": "Guava"
+                },
+                {
+                  "name": "美国美食美式炸鸡",
+                  "nameEn": "American Fried Chicken"
+                },
+                {
+                  "name": "奶酪通心粉",
+                  "nameEn": "Mac and Cheese"
+                },
+                {
+                  "name": "烤时蔬",
+                  "nameEn": "Roasted Seasonal Vegetable"
+                },
+                {
+                  "name": "水煮牛肉",
+                  "nameEn": "Sliced Beef in Hot Chili"
+                },
+                {
+                  "name": "红枣百合蒸南瓜",
+                  "nameEn": "Steamed Pumpkin with Red Dates and Lily Bulb"
+                },
+                {
+                  "name": "番茄汤",
+                  "nameEn": "Tomato Soup"
+                },
+                {
+                  "name": "红烧鸡块面/米线",
+                  "nameEn": "Braised Chicken Noodles/ Rice Noodles"
+                },
+                {
+                  "name": "担担面",
+                  "nameEn": "Dan Dan Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "轻芝士蛋糕",
+                  "nameEn": "Light Cheesecake"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                },
+                {
+                  "name": "柠檬茶",
+                  "nameEn": "Lemon Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "泰式咖喱虾",
+                  "nameEn": "Curry Shrimp in Thai Style"
+                },
+                {
+                  "name": "蒜香法棍",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "烤时蔬",
+                  "nameEn": "Roasted Seasonal Vegetable"
+                },
+                {
+                  "name": "东坡肉",
+                  "nameEn": "Braised Dongpo Pork"
+                },
+                {
+                  "name": "辣子鸡",
+                  "nameEn": "Fried Spicy Chicken in Hunan Style"
+                },
+                {
+                  "name": "猪肉炖粉条",
+                  "nameEn": "Braised Pork with Sweet Potato Noodles"
+                },
+                {
+                  "name": "白灼秋葵",
+                  "nameEn": "Poached Okra"
+                },
+                {
+                  "name": "萝卜豆腐丸子",
+                  "nameEn": "Radish and Tofu Balls"
+                },
+                {
+                  "name": "蒜蓉白菜",
+                  "nameEn": "Garlic Cabbage"
+                },
+                {
+                  "name": "冬瓜肉片汤",
+                  "nameEn": "Sliced Pork Soup with Winter Meion"
+                },
+                {
+                  "name": "杂粮提子包",
+                  "nameEn": "Grains Raisin Bread"
+                },
+                {
+                  "name": "刀削面",
+                  "nameEn": "Sliced Noodles"
+                },
+                {
+                  "name": "香梨",
+                  "nameEn": "Pear"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "果汁",
+                  "nameEn": "Juice"
+                },
+                {
+                  "name": "奥利奥巧克力蛋糕",
+                  "nameEn": "Chocolate cake"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-15",
+          "weekday": "Sunday",
+          "weekdayZh": "周日",
+          "meals": {
+            "breakfast": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            },
+            "lunch": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "奥尔良烤鸡",
+                  "nameEn": "Orleans Roast Chicken"
+                },
+                {
+                  "name": "烤迷你土豆",
+                  "nameEn": "Baked Mini Potato"
+                },
+                {
+                  "name": "清炒双色甘蓝",
+                  "nameEn": "Stir-fried Two-Colour Cabbage"
+                },
+                {
+                  "name": "咖喱猪颈肉",
+                  "nameEn": "Curry Pork Neck"
+                },
+                {
+                  "name": "糖醋鱼柳",
+                  "nameEn": "Sweet and Sour Fish Fillet"
+                },
+                {
+                  "name": "肉沫茄子煲",
+                  "nameEn": "Minced Pork with Eggplant Pot"
+                },
+                {
+                  "name": "包菜水晶粉",
+                  "nameEn": "Stir-Fried Cabbage with Sweet Potato Noodles"
+                },
+                {
+                  "name": "鱼香素三丝",
+                  "nameEn": "Yu-Shang Mixed Vegetable Stri"
+                },
+                {
+                  "name": "蒜茸小白菜",
+                  "nameEn": "Bok Choy with Minced Garlic"
+                },
+                {
+                  "name": "红枣雪耳糖水",
+                  "nameEn": "Snow-Fungus Sweet Soup with Red Dates"
+                },
+                {
+                  "name": "戚风蛋糕",
+                  "nameEn": "Chiffon Cake"
+                },
+                {
+                  "name": "榨菜肉丝汤面/米粉",
+                  "nameEn": "Pickled Mustard & Shredded Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "橙子",
+                  "nameEn": "Orange"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "有机纯牛奶",
+                  "nameEn": "Organic Milk"
+                },
+                {
+                  "name": "烧麦/肉松小贝",
+                  "nameEn": "Steamed Shaomai / Pork Floss Cake"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        }
+      ],
+      "createdAt": 1794135655856,
+      "updatedAt": 1794135655856
+    },
+    {
+      "schemaVersion": "1.0",
+      "school": "清澜山学校",
+      "canteen": "学校餐厅",
+      "weekStart": "2026-11-02",
+      "weekEnd": "2026-11-08",
+      "source": {
+        "type": "wechat",
+        "url": "https://mp.weixin.qq.com/s/Wd0HwDdP0C7ceFyY2DYImA",
+        "importedAt": "2026-11-08T11:47:53"
+      },
+      "days": [
+        {
+          "date": "2026-11-02",
+          "weekday": "Monday",
+          "weekdayZh": "周一",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "嵊州小笼包",
+                  "nameEn": "Xiaolongbao (Steamed Soup Buns)"
+                },
+                {
+                  "name": "盐水黄豆",
+                  "nameEn": "Salted Soybeans"
+                },
+                {
+                  "name": "玉米棒",
+                  "nameEn": "Steamed Corn on the Cob"
+                },
+                {
+                  "name": "尖椒炒莴笋丝",
+                  "nameEn": "Stir-fried Lettuce Stem with Green Chili"
+                },
+                {
+                  "name": "紫米粥",
+                  "nameEn": "Purple Rice Congee"
+                },
+                {
+                  "name": "榨菜肉丝汤面/米粉",
+                  "nameEn": "Pickled Mustard & Shredded Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "玫瑰豆沙包",
+                  "nameEn": "Rose and Red Bean Paste Bun"
+                },
+                {
+                  "name": "水煮蛋",
+                  "nameEn": "Boiled Egg"
+                },
+                {
+                  "name": "鸡肉早餐肠",
+                  "nameEn": "Chicken Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "萝卜牛腩",
+                  "nameEn": "Braised Beef Brisket with Radish"
+                },
+                {
+                  "name": "泰式咖喱鸡",
+                  "category": "G1 年级",
+                  "nameEn": "Thai-style Chicken Curry"
+                },
+                {
+                  "name": "番茄炒蛋",
+                  "nameEn": "Scrambled Eggs with Tomatoes"
+                },
+                {
+                  "name": "雪菜炒千张（不辣）",
+                  "category": "G1 年级",
+                  "nameEn": "Stir-fried Dried Bean Curd with Peppers and Sauerkraut"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "category": "G1 年级",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                },
+                {
+                  "name": "苹果",
+                  "category": "G1 年级",
+                  "nameEn": "Apple"
+                },
+                {
+                  "name": "越式慢烤鱼块",
+                  "nameEn": "Vietnamese-style Slow-roasted Fish Fillet"
+                },
+                {
+                  "name": "芽菜炒河粉",
+                  "nameEn": "Stir-fried Rice Noodles with Bean Sprouts"
+                },
+                {
+                  "name": "清炒双色甘蓝",
+                  "nameEn": "Stir-fried Two-Colour Cabbage"
+                },
+                {
+                  "name": "泰式咖喱鸡配面包",
+                  "nameEn": "Thai Chicken Curry with Bread"
+                },
+                {
+                  "name": "话梅焖红腰豆",
+                  "nameEn": "Braised Red Kidney Beans with Plum"
+                },
+                {
+                  "name": "尖椒雪菜炒千张",
+                  "nameEn": "Stir-fried Dried Bean Curd with Peppers and Sauerkraut"
+                },
+                {
+                  "name": "蒜茸芥菜",
+                  "nameEn": "Sautéed Mustard Greens"
+                },
+                {
+                  "name": "苹果雪耳猪骨汤",
+                  "nameEn": "Apple and Snow Fungus Pork Bone Soup"
+                },
+                {
+                  "name": "香菇鸡肉面/米粉",
+                  "nameEn": "Mushroom and Chicken Noodles/Rice Noodles"
+                },
+                {
+                  "name": "炸酱面/米粉",
+                  "nameEn": "Noodles/Rice Noodles with Fried Bean Sauce"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "香肠芝士披萨",
+                  "nameEn": "Sausage & Cheese Pizza"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "法式烩牛肉",
+                  "nameEn": "French Braised Beef"
+                },
+                {
+                  "name": "蘑菇番茄意面",
+                  "nameEn": "Pasta with Mushroom and Tomato"
+                },
+                {
+                  "name": "清炒胡萝卜条",
+                  "nameEn": "Stir-fried Carrot Sticks"
+                },
+                {
+                  "name": "南乳烤鸭腿",
+                  "nameEn": "Roast Duck Legs with Fermented Bean Curd"
+                },
+                {
+                  "name": "水果咕噜肉",
+                  "nameEn": "Sweet and Sour Pork with Fruit"
+                },
+                {
+                  "name": "尖椒西芹炒鲜鱿",
+                  "nameEn": "Stir-fried Fresh Squid with Hot Peppers and Celery"
+                },
+                {
+                  "name": "蚝油香菇",
+                  "nameEn": "Stir-fried Shiitake Mushroom"
+                },
+                {
+                  "name": "香葱嫩豆腐",
+                  "nameEn": "Tofu with Scallions"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "冬瓜鸡蛋汤",
+                  "nameEn": "Winter Melon and Egg Soup"
+                },
+                {
+                  "name": "燕麦软欧包",
+                  "nameEn": "Oat Sourdough Bread"
+                },
+                {
+                  "name": "三鲜面/米粉",
+                  "nameEn": "Three-Delicacy Noodles/Rice Noodles"
+                },
+                {
+                  "name": "青皮橘",
+                  "nameEn": "Green Tangerine"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "青皮桔",
+                  "nameEn": "Green Tangerine"
+                },
+                {
+                  "name": "原味麻薯",
+                  "nameEn": "Plain Mochi"
+                },
+                {
+                  "name": "酸菜鸡肉面/米粉",
+                  "nameEn": "Pickled Cabbage and Chicken Noodles/Rice Noodles"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": "Tuesday",
+          "weekdayZh": "周二",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "流沙包",
+                  "nameEn": "Steamed Custard Bun"
+                },
+                {
+                  "name": "糯香烧麦",
+                  "nameEn": "Steamed Glutinous Rice Shaomai"
+                },
+                {
+                  "name": "烤南瓜",
+                  "nameEn": "Roasted Pumpkin"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "生滚生菜牛肉粥",
+                  "nameEn": "Beef and Lettuce Congee"
+                },
+                {
+                  "name": "火腿菜心粒炒饭",
+                  "nameEn": "Fried Rice with Ham and Diced Choy Sum"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "香妃蛋糕",
+                  "nameEn": "Coconut Cake"
+                },
+                {
+                  "name": "茶叶蛋",
+                  "nameEn": "Tea Egg"
+                },
+                {
+                  "name": "营养麦片",
+                  "nameEn": "Breakfast Cereal"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "东莞碌鹅",
+                  "nameEn": "Dongguan Braised Goose"
+                },
+                {
+                  "name": "酸汤肥牛",
+                  "nameEn": "Poached Beef in Sour Stock"
+                },
+                {
+                  "name": "西兰花炒瘦肉",
+                  "nameEn": "Stir-fried Broccoli with Lean Pork"
+                },
+                {
+                  "name": "醋溜土豆丝",
+                  "nameEn": "Spicy Sour Shredded Potatoes"
+                },
+                {
+                  "name": "蒜茸奶白菜",
+                  "category": "G1 年级",
+                  "nameEn": "Poached Baby Cabbage in Clear Soup"
+                },
+                {
+                  "name": "豆本豆奶",
+                  "category": "G1 年级",
+                  "nameEn": "Soy Milk"
+                },
+                {
+                  "name": "番石榴",
+                  "nameEn": "Guava"
+                },
+                {
+                  "name": "酱烤猪梅肉",
+                  "nameEn": "Roasted Pork Shoulder"
+                },
+                {
+                  "name": "黄油土豆",
+                  "nameEn": "Butter Potatoes"
+                },
+                {
+                  "name": "扒时蔬",
+                  "nameEn": "Grilled Seasonal Vegetables with Herbs"
+                },
+                {
+                  "name": "麻婆豆腐",
+                  "nameEn": "Mapo Tofu"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "陈皮红豆糖水",
+                  "nameEn": "Red Bean Sweet Soup with Tangerine Peel"
+                },
+                {
+                  "name": "鲜味猪杂粉/面",
+                  "nameEn": "Pork Offal Rice Noodles / Noodles in Soup"
+                },
+                {
+                  "name": "萝卜牛腩面/米粉",
+                  "nameEn": "White Radish & Essence of Beef Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "清甜椰汁点心",
+                  "nameEn": "Coconut Milk Dessert"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "泰式烤鱼",
+                  "nameEn": "Thai-Style Grilled Fish Fillet"
+                },
+                {
+                  "name": "香草焗迷你土豆",
+                  "nameEn": "Baked Mini Potato with Herb"
+                },
+                {
+                  "name": "田园烩蔬菜",
+                  "nameEn": "French Rustic Braised Vegetables"
+                },
+                {
+                  "name": "小鸡炖蘑菇",
+                  "nameEn": "Chicken Stewed with Mushrooms"
+                },
+                {
+                  "name": "梅菜蒸肉饼",
+                  "nameEn": "Steamed Minced Pork with Preserved Vegetable"
+                },
+                {
+                  "name": "韭黄炒蛋",
+                  "nameEn": "Scrambled Egg with Chives"
+                },
+                {
+                  "name": "酸脆藕片",
+                  "nameEn": "Stir-fried Crispy Lotus Root"
+                },
+                {
+                  "name": "地三鲜",
+                  "nameEn": "Stir-fried Eggplant, Pepper and Potato"
+                },
+                {
+                  "name": "蒜茸奶白菜",
+                  "nameEn": "Poached Baby Cabbage in Clear Soup"
+                },
+                {
+                  "name": "丝瓜肉片汤",
+                  "nameEn": "Sponge Gourd and Sliced Pork Soup"
+                },
+                {
+                  "name": "肉松蛋糕",
+                  "nameEn": "Pork Floss Cake"
+                },
+                {
+                  "name": "油泼面",
+                  "nameEn": "Oil-Splashed Noodles"
+                },
+                {
+                  "name": "果汁",
+                  "nameEn": "Juice"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                },
+                {
+                  "name": "莓果农夫包",
+                  "nameEn": "Berry Ploughman's Bread"
+                },
+                {
+                  "name": "维他奶",
+                  "nameEn": "Vitasoy Soy Milk"
+                },
+                {
+                  "name": "菜肉包/墨西哥餐包",
+                  "nameEn": "Steamed Pork Bun / Bolillo"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": "Wednesday",
+          "weekdayZh": "周三",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "蒸饺",
+                  "nameEn": "Steamed Dumplings"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "山水豆腐",
+                  "nameEn": "Steamed Tofu with Soy Sauce"
+                },
+                {
+                  "name": "醋香包菜",
+                  "nameEn": "Poached Cabbage in Vinegar Sauce"
+                },
+                {
+                  "name": "燕麦粥",
+                  "nameEn": "Oatmeal Porridge"
+                },
+                {
+                  "name": "菌菇瘦肉汤面/粉",
+                  "nameEn": "Mushroom and Lean Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "提子面包",
+                  "nameEn": "Raisins Buns"
+                },
+                {
+                  "name": "豉油煎蛋",
+                  "nameEn": "Fried Egg with Soya Sauce"
+                },
+                {
+                  "name": "肠仔包",
+                  "nameEn": "Sausage Bread"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "韩式炸鸡",
+                  "nameEn": "Fried Chicken Nuggets in Korean Style"
+                },
+                {
+                  "name": "闽南红烧肉",
+                  "nameEn": "Southern Fujian Braised Pork"
+                },
+                {
+                  "name": "海苔蒸水蛋",
+                  "nameEn": "Steamed Eggs with Seaweed"
+                },
+                {
+                  "name": "荷塘月色",
+                  "nameEn": "Stir-fried Lotus Root, Black Fungus and Snow Peas"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "卡士酸奶",
+                  "nameEn": "Classy Kiss Yogurt"
+                },
+                {
+                  "name": "杨桃",
+                  "category": "G1 年级",
+                  "nameEn": "Star Fruit"
+                },
+                {
+                  "name": "泡菜炒饭",
+                  "nameEn": "Kimchi Fried Rice"
+                },
+                {
+                  "name": "双色花菜",
+                  "nameEn": "Broccoli and Cauliflower"
+                },
+                {
+                  "name": "白灼大虾",
+                  "nameEn": "Poached Prawns"
+                },
+                {
+                  "name": "干锅千页豆腐",
+                  "nameEn": "Griddle-cooked Qianye Tofu"
+                },
+                {
+                  "name": "花生节瓜煲大骨",
+                  "nameEn": "Pork Bone Soup with Peanuts and Fuzzy Melon"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉",
+                  "nameEn": "Tomato & Egg Noodles/Rice Noodles"
+                },
+                {
+                  "name": "酸椒黄豆猪脚面/米粉",
+                  "nameEn": "Pork Trotter Noodles/Rice Noodles with Sour Chili and Soybeans"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "荞麦软欧包",
+                  "nameEn": "Buckwheat Sourdough Bread"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "芝士焗猪扒",
+                  "nameEn": "Cheese Baked Pork Chop"
+                },
+                {
+                  "name": "芝士恰巴塔",
+                  "nameEn": "Cheese Ciabatta"
+                },
+                {
+                  "name": "烤洋葱",
+                  "nameEn": "Roasted Onion"
+                },
+                {
+                  "name": "柱候酱焖牛腩",
+                  "nameEn": "Braised Beef Brisket with Zhuhou Sauce"
+                },
+                {
+                  "name": "红烧鱼",
+                  "nameEn": "Braised Fish"
+                },
+                {
+                  "name": "尖椒炒瘦肉",
+                  "nameEn": "Stir-fried Lean Pork with Green Chili"
+                },
+                {
+                  "name": "咖喱杂菜",
+                  "nameEn": "Curry Mixed Vegetables"
+                },
+                {
+                  "name": "罗汉斋",
+                  "nameEn": "Stir-Fried Mixed Vegetables"
+                },
+                {
+                  "name": "盐水菜心",
+                  "nameEn": "Poached Choy Sum in Salted Water"
+                },
+                {
+                  "name": "红枣雪梨银耳糖水",
+                  "nameEn": "Snow Fungus Sweet Soup with Red Date and Pear"
+                },
+                {
+                  "name": "绿豆饼",
+                  "nameEn": "Mung Bean Cake"
+                },
+                {
+                  "name": "重庆小面",
+                  "nameEn": "Chongqing Spicy Noodles"
+                },
+                {
+                  "name": "贡梨",
+                  "nameEn": "Ya Pear"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "果汁",
+                  "nameEn": "Juice"
+                },
+                {
+                  "name": "丹夫巧克力薄脆",
+                  "nameEn": "Danfu Chocolate Cracker"
+                },
+                {
+                  "name": "娃娃菜高汤煮水饺/云吞",
+                  "nameEn": "Dumplings / Wontons in Baby Cabbage Broth"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": "Thursday",
+          "weekdayZh": "周四",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "糯米鸡",
+                  "nameEn": "Sticky Rice in Lotus Leaf"
+                },
+                {
+                  "name": "玉米粒",
+                  "nameEn": "Steamed Corn Kernels"
+                },
+                {
+                  "name": "烤红薯",
+                  "nameEn": "Roasted Sweet Potatoes"
+                },
+                {
+                  "name": "盐水西兰花",
+                  "nameEn": "Poached Broccoli in Salted Water"
+                },
+                {
+                  "name": "皮蛋瘦肉粥",
+                  "nameEn": "Preserved Egg and Lean Pork Congee"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉",
+                  "nameEn": "Noodles with Tomatoes and Eggs in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "果酱蛋糕",
+                  "nameEn": "Jam Cake"
+                },
+                {
+                  "name": "卤水蛋",
+                  "nameEn": "Marinated Egg"
+                },
+                {
+                  "name": "猪肉早餐肠",
+                  "nameEn": "Pork Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "西西里肉丸",
+                  "nameEn": "Sicilian-Style Beef Meatballs"
+                },
+                {
+                  "name": "酸菜鱼（不辣）",
+                  "category": "G1 年级",
+                  "nameEn": "Fish with Pickled Cabbage (not spicy)"
+                },
+                {
+                  "name": "莴笋炒瘦肉",
+                  "nameEn": "Stir-Fried Sliced Pork with Celtuce"
+                },
+                {
+                  "name": "红烧南瓜",
+                  "nameEn": "Braised Pumpkin"
+                },
+                {
+                  "name": "清炒油麦菜",
+                  "nameEn": "Stir-fried Leaf Lettuce"
+                },
+                {
+                  "name": "果汁",
+                  "category": "G1 年级",
+                  "nameEn": "Juice"
+                },
+                {
+                  "name": "蜜桔",
+                  "nameEn": "Tangerine"
+                },
+                {
+                  "name": "香草焗迷你土豆",
+                  "nameEn": "Baked Mini Potato with Herb"
+                },
+                {
+                  "name": "烤小番茄",
+                  "nameEn": "Roasted Cherry Tomatoes"
+                },
+                {
+                  "name": "沙姜鸡",
+                  "nameEn": "Galangal Chicken"
+                },
+                {
+                  "name": "酸菜鱼",
+                  "nameEn": "Fish with Pickled Vegetable"
+                },
+                {
+                  "name": "芥菜捞腐竹",
+                  "nameEn": "Mustard Greens with Bean Curd Sticks"
+                },
+                {
+                  "name": "清补凉鸡汤",
+                  "nameEn": "Ching Bo Leung Chicken Soup"
+                },
+                {
+                  "name": "咖喱鱼蛋面/米粉",
+                  "nameEn": "Curry Fish Ball Noodles/Rice Noodles"
+                },
+                {
+                  "name": "红烧肉面/米粉",
+                  "nameEn": "Braised Pork Noodles/ Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "水果布丁",
+                  "nameEn": "Fruit Pudding"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "香茅鸡",
+                  "nameEn": "Lemongrass Chicken"
+                },
+                {
+                  "name": "罗勒炒通心粉",
+                  "nameEn": "Fusilli with Basil"
+                },
+                {
+                  "name": "清炒意大利小瓜",
+                  "nameEn": "Stir-Fried Shredded Zucchini"
+                },
+                {
+                  "name": "香芋扣肉",
+                  "nameEn": "Braised Pork Belly with Taro"
+                },
+                {
+                  "name": "土豆干锅鸭",
+                  "nameEn": "Griddle Cooked Duck Cantonese Style"
+                },
+                {
+                  "name": "菜花炒牛肉",
+                  "nameEn": "Stir-Fried Beef and Cauliflower"
+                },
+                {
+                  "name": "金蒜粉丝蒸娃娃菜",
+                  "nameEn": "Steamed Baby Cabbage with Fried Garlic and Vermicelli"
+                },
+                {
+                  "name": "菠菜炒豆皮",
+                  "nameEn": "Stir-fried Spinach with Bean Curd Skin"
+                },
+                {
+                  "name": "蚝油生菜",
+                  "nameEn": "Stir-fried Lettuce"
+                },
+                {
+                  "name": "金针菇肉丝汤",
+                  "nameEn": "Enoki Mushroom and Shredded Pork Soup"
+                },
+                {
+                  "name": "原味蛋糕",
+                  "nameEn": "Plain Sponge Cake"
+                },
+                {
+                  "name": "金汤肥牛面/米粉",
+                  "nameEn": "Sliced Beef Noodles/Rice Noodles in Golden Broth"
+                },
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "都乐香蕉",
+                  "nameEn": "Dole Banana"
+                },
+                {
+                  "name": "原味红豆包",
+                  "nameEn": "Original Red Bean Bun"
+                },
+                {
+                  "name": "白菜鸡蛋汤",
+                  "nameEn": "Cabbage Soup with Egg"
+                },
+                {
+                  "name": "香葱韭菜肉丝炒桂林粉/玉米鸡蛋炒饭",
+                  "nameEn": "Fried Guilin Rice Noodles with Scallion and Pork / Fried Rice with Corn and Egg"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": "Friday",
+          "weekdayZh": "周五",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "豆沙包",
+                  "nameEn": "Red Bean Bun"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "烤土豆",
+                  "nameEn": "Baked Potato"
+                },
+                {
+                  "name": "豉油皇淋生菜",
+                  "nameEn": "Lettuce with Soy Sauce"
+                },
+                {
+                  "name": "玉米糁糯米粥",
+                  "nameEn": "Sticky Rice Congee with Corn"
+                },
+                {
+                  "name": "广式肉酱陈村粉",
+                  "nameEn": "Steamed Chencun Rice Noodles with Meat Sauce"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "椰蓉餐包",
+                  "nameEn": "Coconut Bread"
+                },
+                {
+                  "name": "奄列蛋",
+                  "nameEn": "Omelette"
+                },
+                {
+                  "name": "煎火腿片",
+                  "nameEn": "Pan-fried Sliced Ham"
+                },
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Milk"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "莲藕炖排骨",
+                  "nameEn": "Lotus Root and Pork Rib Soup"
+                },
+                {
+                  "name": "奥尔良烤鸡",
+                  "nameEn": "Orleans Roast Chicken"
+                },
+                {
+                  "name": "茄汁意大面",
+                  "nameEn": "Spaghetti in Tomato Sauce"
+                },
+                {
+                  "name": "佛手瓜炒牛肉",
+                  "nameEn": "Sauteed Beef with Chayote"
+                },
+                {
+                  "name": "盐水菜心",
+                  "category": "G1 年级",
+                  "nameEn": "Poached Choy Sum in Salted Water"
+                },
+                {
+                  "name": "益力多",
+                  "category": "G1 年级",
+                  "nameEn": "Yakult"
+                },
+                {
+                  "name": "蜜瓜",
+                  "category": "G1 年级",
+                  "nameEn": "Honeydew Melon"
+                },
+                {
+                  "name": "橄榄油炒青瓜",
+                  "nameEn": "Stir-fried Cucumber with Olive Oil"
+                },
+                {
+                  "name": "姜母鸭",
+                  "nameEn": "Ginger Duck"
+                },
+                {
+                  "name": "粉蒸肉",
+                  "nameEn": "Steamed Pork with Rice Flour"
+                },
+                {
+                  "name": "大白菜炖粉条",
+                  "nameEn": "Cabbage Stewed with Vermicelli"
+                },
+                {
+                  "name": "罗勒叶炒菌菇",
+                  "nameEn": "Sauteed Mushrooms with Basil"
+                },
+                {
+                  "name": "蒜茸奶白菜",
+                  "nameEn": "Poached Baby Cabbage in Clear Soup"
+                },
+                {
+                  "name": "粉葛胡萝卜煲猪骨",
+                  "nameEn": "Kudzu Root and Carrot Soup with Pork Bones"
+                },
+                {
+                  "name": "冒菜",
+                  "nameEn": "Maocai (Spicy Sichuan Stew)"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "抹茶蛋糕",
+                  "nameEn": "Matcha Cake"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                },
+                {
+                  "name": "大麦奶茶",
+                  "nameEn": "Barley Milk Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "泰式烤猪柳",
+                  "nameEn": "Thai Roast Pork Fillet"
+                },
+                {
+                  "name": "泰式炒饭",
+                  "nameEn": "Thai-style Fried Rice"
+                },
+                {
+                  "name": "炒杂菜",
+                  "nameEn": "Sauteed Vegetables"
+                },
+                {
+                  "name": "糖醋鱼",
+                  "nameEn": "Sweet Sour Fish"
+                },
+                {
+                  "name": "藤椒水煮牛肉",
+                  "nameEn": "Sliced Beef in Hot Chili Oil"
+                },
+                {
+                  "name": "虾仁玉米蒸蛋",
+                  "nameEn": "Steamed Egg with Corn and Shrimp"
+                },
+                {
+                  "name": "莴笋炒木耳",
+                  "nameEn": "Stir-fried Fungus and Asparagus Lettuce"
+                },
+                {
+                  "name": "海鲜菇煮豆腐",
+                  "nameEn": "Braised Tofu with Seafood Mushrooms"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "菠菜瘦肉汤",
+                  "nameEn": "Spinach and Lean Pork Soup"
+                },
+                {
+                  "name": "南瓜餐包",
+                  "nameEn": "Pumpkin Bread Roll"
+                },
+                {
+                  "name": "手擀面",
+                  "nameEn": "Hand-Rolled Noodles"
+                },
+                {
+                  "name": "橙子",
+                  "nameEn": "Orange"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "豆本豆奶",
+                  "nameEn": "Soy Milk"
+                },
+                {
+                  "name": "巧克力甜甜圈",
+                  "nameEn": "Chocolate Doughnut"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        },
+        {
+          "date": "2026-11-08",
+          "weekday": "Sunday",
+          "weekdayZh": "周日",
+          "meals": {
+            "breakfast": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            },
+            "lunch": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "西西里奶酪焗鸡腿",
+                  "nameEn": "Sicilian Baked Chicken Thigh with Cheese"
+                },
+                {
+                  "name": "卡真土豆",
+                  "nameEn": "Cajun Potato"
+                },
+                {
+                  "name": "烤时蔬",
+                  "nameEn": "Roasted Seasonal Vegetable"
+                },
+                {
+                  "name": "黄豆红烧肉",
+                  "nameEn": "Braised Pork with Soybean"
+                },
+                {
+                  "name": "三杯鸭",
+                  "nameEn": "Braised Duck with Three Sauces"
+                },
+                {
+                  "name": "海苔蒸水蛋",
+                  "nameEn": "Steamed Eggs with Seaweed"
+                },
+                {
+                  "name": "红烧茄子",
+                  "nameEn": "Braised Eggplant"
+                },
+                {
+                  "name": "素炒三丝",
+                  "nameEn": "Stir-fried Shredded Carrots, Lettuce and Black Fungus"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "板栗番薯糖水",
+                  "nameEn": "Chestnut and Sweet Potato Sweet Soup"
+                },
+                {
+                  "name": "蔓越莓餐包",
+                  "nameEn": "Cranberry Bread Roll"
+                },
+                {
+                  "name": "臊子面",
+                  "nameEn": "Noodles with Minced Pork Sauce"
+                },
+                {
+                  "name": "杨桃",
+                  "nameEn": "Star Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "有机纯牛奶",
+                  "nameEn": "Organic Milk"
+                },
+                {
+                  "name": "蒸饺/红丝绒蛋糕卷",
+                  "nameEn": "Steamed Dumplings / Red Velvet Cake Roll"
+                }
+              ],
+              "featured": [],
+              "status": "complete"
+            }
+          }
+        }
+      ],
+      "createdAt": 1794109673566,
+      "updatedAt": 1794109673566
+    },
+    {
+      "schemaVersion": "1.0",
+      "school": "清澜山学校 Tsinglan School",
+      "canteen": "索迪斯清澜餐厅",
+      "weekStart": "2026-09-21",
+      "weekEnd": "2026-09-24",
+      "source": {
+        "type": "wechat",
+        "url": "https://mp.weixin.qq.com/s/gMqIQgN0J53qBO39uXO6NQ"
+      },
+      "days": [
+        {
+          "date": "2026-09-21",
+          "weekday": "Monday",
+          "weekdayZh": "周一",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "叉烧包",
+                  "nameEn": "Steamed BBQ Pork Bun"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "烤红薯",
+                  "nameEn": "Roasted Sweet Potatoes"
+                },
+                {
+                  "name": "盐水西兰花",
+                  "nameEn": "Poached Broccoli in Salted Water"
+                },
+                {
+                  "name": "南瓜小米粥",
+                  "nameEn": "Pumpkin & Millet Congee"
+                },
+                {
+                  "name": "榨菜肉丝汤面/米粉",
+                  "nameEn": "Pickled Mustard & Shredded Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "薯饼",
+                  "nameEn": "Hash Browns"
+                },
+                {
+                  "name": "水煮蛋",
+                  "nameEn": "Boiled Egg"
+                },
+                {
+                  "name": "鸡肉早餐肠",
+                  "nameEn": "Chicken Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "盐水西兰花",
+                  "nameEn": "Poached Broccoli in Salted Water"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "西西里奶酪焗鸡腿",
+                  "nameEn": "Sicilian Baked Chicken Thigh with Cheese"
+                },
+                {
+                  "name": "土豆牛腩",
+                  "nameEn": "Braised Beef Brisket with Potatoes"
+                },
+                {
+                  "name": "肉沫煮冬瓜",
+                  "nameEn": "Braised Winter Melon with Minced Pork"
+                },
+                {
+                  "name": "菌菇炖老豆腐",
+                  "nameEn": "Stewed Old Tofu with Mixed Mushrooms"
+                },
+                {
+                  "name": "蒜茸奶白菜",
+                  "nameEn": "Poached Baby Cabbage in Clear Soup"
+                },
+                {
+                  "name": "椰子水",
+                  "nameEn": "Coconut Water"
+                },
+                {
+                  "name": "蜜桔",
+                  "nameEn": "Tangerine"
+                },
+                {
+                  "name": "卡真薯角",
+                  "nameEn": "Cajun Potato Wedges"
+                },
+                {
+                  "name": "清炒甘蓝",
+                  "nameEn": "Stir-fried Cabbage"
+                },
+                {
+                  "name": "白灼大虾",
+                  "nameEn": "Poached Prawns"
+                },
+                {
+                  "name": "红烧茄子",
+                  "nameEn": "Braised Eggplant"
+                },
+                {
+                  "name": "蒜茸春菜",
+                  "nameEn": "Sautéed Green Vegetables"
+                },
+                {
+                  "name": "红豆沙糖水",
+                  "nameEn": "Red Bean Sweet Soup"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉"
+                },
+                {
+                  "name": "酸菜红烧肉面/粉",
+                  "nameEn": "Rice Noodles with Minced Pork and Pickled Vegetable in Soup"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "香肠芝士披萨",
+                  "nameEn": "Sausage & Cheese Pizza"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "肉沫煮冬瓜",
+                  "nameEn": "Braised Winter Melon with Minced Pork"
+                },
+                {
+                  "name": "红豆沙糖水",
+                  "nameEn": "Red Bean Sweet Soup"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "茄汁巴沙鱼柳",
+                  "nameEn": "Pan-Fried Basa Fillet in Tomato Sauce"
+                },
+                {
+                  "name": "香草意粉",
+                  "nameEn": "Spaghetti with Herbs"
+                },
+                {
+                  "name": "清炒胡萝卜条",
+                  "nameEn": "Stir-fried Carrot Sticks"
+                },
+                {
+                  "name": "沙姜鸡",
+                  "nameEn": "Galangal Chicken"
+                },
+                {
+                  "name": "毛氏红烧肉",
+                  "nameEn": "Mao-Style Braised Pork"
+                },
+                {
+                  "name": "干煸豆角肉沫",
+                  "nameEn": "Dry-fried Green Beans with Minced Pork"
+                },
+                {
+                  "name": "金蒜粉丝蒸娃娃菜",
+                  "nameEn": "Steamed Baby Cabbage with Fried Garlic and Vermicelli"
+                },
+                {
+                  "name": "蚝油香菇",
+                  "nameEn": "Stir-fried Shiitake Mushroom"
+                },
+                {
+                  "name": "蒜蓉奶白菜",
+                  "nameEn": "Garlic Baby Cabbage"
+                },
+                {
+                  "name": "冬瓜鸡蛋汤",
+                  "nameEn": "Winter Melon and Egg Soup"
+                },
+                {
+                  "name": "香葱肉松卷",
+                  "nameEn": "Scallion and Pork Floss Roll"
+                },
+                {
+                  "name": "油泼面",
+                  "nameEn": "Oil-Splashed Noodles"
+                },
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "蚝油香菇",
+                  "nameEn": "Stir-fried Shiitake Mushroom"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "豆本豆奶",
+                  "nameEn": "Soy Milk"
+                },
+                {
+                  "name": "巧克力麻薯",
+                  "nameEn": "Chocolate Mochi"
+                },
+                {
+                  "name": "香菇鸡肉面/米粉",
+                  "nameEn": "Mushroom and Chicken Noodles/Rice Noodles"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": "Tuesday",
+          "weekdayZh": "周二",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "糯香烧麦",
+                  "nameEn": "Steamed Glutinous Rice Shaomai"
+                },
+                {
+                  "name": "绿豆饼",
+                  "nameEn": "Mung Bean Cake"
+                },
+                {
+                  "name": "烤南瓜",
+                  "nameEn": "Roasted Pumpkin"
+                },
+                {
+                  "name": "尖椒炒豆芽",
+                  "nameEn": "Stir-fried Bean Sprouts with Shredded Peppers"
+                },
+                {
+                  "name": "生菜姜丝牛肉粥",
+                  "nameEn": "Beef Congee with Lettuce and Ginger"
+                },
+                {
+                  "name": "香葱火腿炒饭",
+                  "nameEn": "Fried Rice with Scallion and Ham"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "蔓越莓黄油蛋糕",
+                  "nameEn": "Cranberry Butter Cake"
+                },
+                {
+                  "name": "茶叶蛋",
+                  "nameEn": "Tea Egg"
+                },
+                {
+                  "name": "营养麦片",
+                  "nameEn": "Breakfast Cereal"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "卤水鸡翅根",
+                  "nameEn": "Marinated Chicken Wing"
+                },
+                {
+                  "name": "香葱蒸鱼块",
+                  "nameEn": "Steamed Fish Cubes with Scallion"
+                },
+                {
+                  "name": "牛油意大利粉",
+                  "nameEn": "Butter Spaghetti"
+                },
+                {
+                  "name": "番茄炒蛋",
+                  "nameEn": "Scrambled Eggs with Tomatoes"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "卡士酸奶",
+                  "nameEn": "Classy Kiss Yogurt"
+                },
+                {
+                  "name": "杨桃",
+                  "nameEn": "Star Fruit"
+                },
+                {
+                  "name": "黑椒汁烩猪扒",
+                  "nameEn": "Pan-Fried Pork Chop with Black Pepper Sauce"
+                },
+                {
+                  "name": "扒时蔬",
+                  "nameEn": "Grilled Seasonal Vegetables with Herbs"
+                },
+                {
+                  "name": "泉州芥菜香菇煲",
+                  "nameEn": "Braised Mustard Greens and Shiitake Mushroom Casserole"
+                },
+                {
+                  "name": "玉米红腰豆",
+                  "nameEn": "Corn and Red Kidney Beans"
+                },
+                {
+                  "name": "干锅包菜",
+                  "nameEn": "Dry-Pot Shredded Cabbage"
+                },
+                {
+                  "name": "节瓜花生龙骨汤",
+                  "nameEn": "Hairy Gourd and Peanut Soup with Pork Bone"
+                },
+                {
+                  "name": "平菇肉片面/米粉",
+                  "nameEn": "Mushroom & Pork Noodles/Rice Noodles"
+                },
+                {
+                  "name": "沙嗲牛肉面/米粉",
+                  "nameEn": "Satay Beef Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "菠菜蜜豆面包",
+                  "nameEn": "Spinach and Red Bean Bread"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "香葱蒸鱼块",
+                  "nameEn": "Steamed Fish Cubes with Scallion"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "盐酥鸡",
+                  "nameEn": "Salted Crispy Chicken"
+                },
+                {
+                  "name": "蘑菇烩饭",
+                  "nameEn": "Mushroom Risotto"
+                },
+                {
+                  "name": "烤西葫芦",
+                  "nameEn": "Grilled Zucchini"
+                },
+                {
+                  "name": "梅菜蒸五花肉",
+                  "nameEn": "Steamed Pork Belly with Preserved Vegetable"
+                },
+                {
+                  "name": "姜葱炒鸭肉",
+                  "nameEn": "Stir-fried Duck with Ginger and Scallion"
+                },
+                {
+                  "name": "芽菜炒肉丝",
+                  "nameEn": "Stir-fried Shredded Pork with Bean Sprouts"
+                },
+                {
+                  "name": "平菇煮豆卜",
+                  "nameEn": "Braised Tofu Puffs with Oyster Mushroom"
+                },
+                {
+                  "name": "醋溜藕片",
+                  "nameEn": "Stir-fried Lotus Root with Fermented Bean Curd"
+                },
+                {
+                  "name": "蒜茸上海青",
+                  "nameEn": "Pak Choy with Minced Garlic"
+                },
+                {
+                  "name": "丝瓜肉片汤",
+                  "nameEn": "Sponge Gourd and Sliced Pork Soup"
+                },
+                {
+                  "name": "巧克力豆沙包",
+                  "nameEn": "Chocolate Bean Paste Bun"
+                },
+                {
+                  "name": "冬阴功汤面",
+                  "nameEn": "Tom Yum Kung Noodles"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "醋溜藕片",
+                  "nameEn": "Stir-fried Lotus Root with Fermented Bean Curd"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "都乐香蕉",
+                  "nameEn": "Dole Banana"
+                },
+                {
+                  "name": "火腿软欧包",
+                  "nameEn": "Ham Soft European Bun"
+                },
+                {
+                  "name": "有机纯牛奶",
+                  "nameEn": "Organic Milk"
+                },
+                {
+                  "name": "玛芬/老面肉包",
+                  "nameEn": "Muffin / Old-Fashioned Meat Bun"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "火腿软欧包",
+                  "nameEn": "Ham Soft European Bun"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": "Wednesday",
+          "weekdayZh": "周三",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "流沙包",
+                  "nameEn": "Steamed Custard Bun"
+                },
+                {
+                  "name": "葱油饼",
+                  "nameEn": "Scallion Pancake"
+                },
+                {
+                  "name": "桂花糕",
+                  "nameEn": "Osmanthus Cake"
+                },
+                {
+                  "name": "老醋包菜",
+                  "nameEn": "Cabbage in Aged Vinegar"
+                },
+                {
+                  "name": "枸杞山药粥",
+                  "nameEn": "Goji Berry and Chinese Yam Congee"
+                },
+                {
+                  "name": "白菜瘦肉汤面/米粉",
+                  "nameEn": "Vegetable & Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "提子面包",
+                  "nameEn": "Raisins Buns"
+                },
+                {
+                  "name": "豉油煎蛋",
+                  "nameEn": "Fried Egg with Soya Sauce"
+                },
+                {
+                  "name": "猪肉早餐肠",
+                  "nameEn": "Pork Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "鹌鹑蛋板栗红烧肉",
+                  "nameEn": "Braised Pork Belly with Quail Eggs and Chestnuts"
+                },
+                {
+                  "name": "葱油鸡",
+                  "nameEn": "Scallion Oil Chicken"
+                },
+                {
+                  "name": "玉米猪肉饺",
+                  "nameEn": "Corn and Pork Dumplings"
+                },
+                {
+                  "name": "红枣百合蒸南瓜",
+                  "nameEn": "Steamed Pumpkin with Red Dates and Lily Bulb"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "果汁",
+                  "nameEn": "Juice"
+                },
+                {
+                  "name": "西瓜",
+                  "nameEn": "Watermelon"
+                },
+                {
+                  "name": "巴东牛肉",
+                  "nameEn": "Beef Rendang"
+                },
+                {
+                  "name": "黄油土豆",
+                  "nameEn": "Butter Potatoes"
+                },
+                {
+                  "name": "烤小番茄",
+                  "nameEn": "Roasted Cherry Tomatoes"
+                },
+                {
+                  "name": "干锅豆腐",
+                  "nameEn": "Dry-Pot Cumin Tofu"
+                },
+                {
+                  "name": "浓藕大骨汤",
+                  "nameEn": "Lotus Root and Pork Bone Soup"
+                },
+                {
+                  "name": "咖喱鱼蛋面/米粉",
+                  "nameEn": "Curry Fish Ball Noodles/Rice Noodles"
+                },
+                {
+                  "name": "浓香紫苏焖鸭面/米粉",
+                  "nameEn": "Braised Duck with Perilla Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "秋梨糕",
+                  "nameEn": "Autumn Pear Cake"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "泰式烤猪颈肉",
+                  "nameEn": "Thai Roast Pork Neck"
+                },
+                {
+                  "name": "杂菜炒河粉",
+                  "nameEn": "Fried Rice Noodles with Vegetables"
+                },
+                {
+                  "name": "牛油西兰花",
+                  "nameEn": "Butter Broccoli"
+                },
+                {
+                  "name": "佛手瓜红枣蒸鸡",
+                  "nameEn": "Steamed Chicken with Red Dates and Chayote"
+                },
+                {
+                  "name": "酸菜鱼",
+                  "nameEn": "Fish with Pickled Vegetable"
+                },
+                {
+                  "name": "海苔蒸水蛋",
+                  "nameEn": "Steamed Eggs with Seaweed"
+                },
+                {
+                  "name": "蒜苗炒攸县香干",
+                  "nameEn": "Stir-fried Dried Tofu with Garlic Sprouts"
+                },
+                {
+                  "name": "拔丝地瓜",
+                  "nameEn": "Candied Sweet Potatoes"
+                },
+                {
+                  "name": "盐水菜心",
+                  "nameEn": "Poached Choy Sum in Salted Water"
+                },
+                {
+                  "name": "金针菇肉丝汤",
+                  "nameEn": "Enoki Mushroom and Shredded Pork Soup"
+                },
+                {
+                  "name": "芝麻薄脆",
+                  "nameEn": "Crispy Sesame Biscuits"
+                },
+                {
+                  "name": "肥牛卷骨汤冒菜",
+                  "nameEn": "Bone Broth Hot Pot with Beef Roll"
+                },
+                {
+                  "name": "橙子"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "佛手瓜红枣蒸鸡",
+                  "nameEn": "Steamed Chicken with Red Dates and Chayote"
+                },
+                {
+                  "name": "肥牛卷骨汤冒菜",
+                  "nameEn": "Bone Broth Hot Pot with Beef Roll"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "纯牛奶",
+                  "nameEn": "Pure Milk"
+                },
+                {
+                  "name": "南瓜蛋糕",
+                  "nameEn": "Pumpkin Cake"
+                },
+                {
+                  "name": "生菜丝鸡肉粥",
+                  "nameEn": "Chicken Congee with Shredded Lettuce"
+                },
+                {
+                  "name": "菜心粒炒饭/三丝炒面",
+                  "nameEn": "Fried Rice with Chopped Choy Sum / Fried Noodles with Shredded Pork"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-24",
+          "weekday": "Thursday",
+          "weekdayZh": "周四",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "糯米鸡",
+                  "nameEn": "Sticky Rice in Lotus Leaf"
+                },
+                {
+                  "name": "双色馒头",
+                  "nameEn": "Steamed White and Chocolate Bun"
+                },
+                {
+                  "name": "蒸玉米",
+                  "nameEn": "Steamed Corn"
+                },
+                {
+                  "name": "香辣土豆丝",
+                  "nameEn": "Spicy Shredded Potatoes"
+                },
+                {
+                  "name": "皮蛋瘦肉粥",
+                  "nameEn": "Preserved Egg and Lean Pork Congee"
+                },
+                {
+                  "name": "肉酱蒸猪肠粉",
+                  "nameEn": "Steamed Rice Noodle Rolls with Meat Sauce"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "菠菜蛋卷",
+                  "nameEn": "Spinach Egg Roll"
+                },
+                {
+                  "name": "奄列蛋",
+                  "nameEn": "Omelette"
+                },
+                {
+                  "name": "香甜蛋挞",
+                  "nameEn": "Sweet Egg Tart"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "桂花鸭",
+                  "nameEn": "Osmanthus Duck"
+                },
+                {
+                  "name": "孜然牛肉",
+                  "nameEn": "Stir-Fried Beef with Cumin"
+                },
+                {
+                  "name": "炸薯条",
+                  "nameEn": "Deep-Fried Potato Chips"
+                },
+                {
+                  "name": "香葱蒸水蛋",
+                  "nameEn": "Steamed Egg with Scallion"
+                },
+                {
+                  "name": "清炒油麦菜",
+                  "nameEn": "Stir-fried Leaf Lettuce"
+                },
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                },
+                {
+                  "name": "香蕉",
+                  "nameEn": "Banana"
+                },
+                {
+                  "name": "芝士恰巴塔香肠包",
+                  "nameEn": "Ciabatta Sausage Bun with Cheese"
+                },
+                {
+                  "name": "双色花菜",
+                  "nameEn": "Broccoli and Cauliflower"
+                },
+                {
+                  "name": "时蔬焗鹰嘴豆",
+                  "nameEn": "Baked Chickpeas with Tomato Sauce"
+                },
+                {
+                  "name": "清炒佛手瓜",
+                  "nameEn": "Stir-fried Chayote"
+                },
+                {
+                  "name": "红萝卜玉米煲大骨",
+                  "nameEn": "Pork Bone Soup with Carrot and Corn"
+                },
+                {
+                  "name": "土豆焖肉米线/面",
+                  "nameEn": "Shredded Chicken & Potato Noodles/Rice Noodles"
+                },
+                {
+                  "name": "重庆小面",
+                  "nameEn": "Chongqing Spicy Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "盐水花生",
+                  "nameEn": "Salted Peanuts"
+                },
+                {
+                  "name": "盐水毛豆",
+                  "nameEn": "Salted Edamame"
+                },
+                {
+                  "name": "柚子",
+                  "nameEn": "Pomelo"
+                },
+                {
+                  "name": "青皮桔",
+                  "nameEn": "Green Tangerine"
+                },
+                {
+                  "name": "栗子蓉面包",
+                  "nameEn": "Chestnut Paste Bread"
+                },
+                {
+                  "name": "鲜肉月饼",
+                  "nameEn": "Fresh Meat Mooncake"
+                },
+                {
+                  "name": "蔬果",
+                  "nameEn": "Vegetables & Fruit"
+                },
+                {
+                  "name": "快乐气泡水",
+                  "nameEn": "Sparkling Water"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "红枣百合蒸南瓜",
+                  "nameEn": "Steamed Pumpkin with Red Dates and Lily Bulb"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "香茅鸡",
+                  "nameEn": "Lemongrass Chicken"
+                },
+                {
+                  "name": "越式炒饭",
+                  "nameEn": "Vietnamese Fried Rice"
+                },
+                {
+                  "name": "烤茄瓜",
+                  "nameEn": "Roast Eggplant"
+                },
+                {
+                  "name": "尖椒回锅肉",
+                  "nameEn": "Twice-Cooked Pork with Chili"
+                },
+                {
+                  "name": "肉沫老南瓜",
+                  "nameEn": "Braised Pumpkin with Minced Pork"
+                },
+                {
+                  "name": "素炒三丝",
+                  "nameEn": "Stir-fried Shredded Carrots, Lettuce and Black Fungus"
+                },
+                {
+                  "name": "话梅焖红腰豆",
+                  "nameEn": "Braised Red Kidney Beans with Plum"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "番茄蛋花汤",
+                  "nameEn": "Tomato & Egg Soup"
+                },
+                {
+                  "name": "菠萝蛋糕",
+                  "nameEn": "Pineapple Cake"
+                },
+                {
+                  "name": "卡士酸奶",
+                  "nameEn": "Classy Kiss Yogurt"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "素炒三丝",
+                  "nameEn": "Stir-fried Shredded Carrots, Lettuce and Black Fungus"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "温氏酸奶",
+                  "nameEn": "Wensdi Yogurt"
+                },
+                {
+                  "name": "肉松华夫饼",
+                  "nameEn": "Pork Floss Waffle"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            }
+          },
+          "confidence": 0.95
+        }
+      ],
+      "createdAt": 1794135656271,
+      "updatedAt": 1794135656271
+    },
+    {
+      "schemaVersion": "1.0",
+      "school": "清澜山学校 Tsinglan School",
+      "canteen": "索迪斯清澜餐厅",
+      "weekStart": "2026-09-14",
+      "weekEnd": "2026-09-18",
+      "source": {
+        "type": "manual"
+      },
+      "days": [
+        {
+          "date": "2026-09-14",
+          "weekday": "Monday",
+          "weekdayZh": "周一",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "南瓜小米粥",
+                  "nameEn": "Pumpkin & Millet Congee"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "菜肉包",
+                  "nameEn": "Vegetable and Meat Bun"
+                },
+                {
+                  "name": "蒸玉米",
+                  "nameEn": "Steamed Corn"
+                },
+                {
+                  "name": "白灼卷心菜",
+                  "nameEn": "Poached Cabbage"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "莲蓉面包",
+                  "nameEn": "Lotus Seed Paste Bread"
+                },
+                {
+                  "name": "水煮蛋",
+                  "nameEn": "Boiled Egg"
+                },
+                {
+                  "name": "鸡肉早餐肠",
+                  "nameEn": "Chicken Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "南瓜小米粥",
+                  "nameEn": "Pumpkin & Millet Congee"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "椰子鸡",
+                  "nameEn": "Coconut Chicken"
+                },
+                {
+                  "name": "越式慢炖鱼块",
+                  "nameEn": "Vietnamese Braised Fish"
+                },
+                {
+                  "name": "红烧牛腩",
+                  "nameEn": "Braised Beef Brisket"
+                },
+                {
+                  "name": "佛手瓜炒肉片",
+                  "nameEn": "Stir-fried Lean Pork with Chayote"
+                },
+                {
+                  "name": "炒河粉配豆芽",
+                  "nameEn": "Fried Rice Noodles with Bean Sprouts"
+                },
+                {
+                  "name": "炒双色卷心菜",
+                  "nameEn": "Stir-fried Two-Colour Cabbage"
+                },
+                {
+                  "name": "炒丝瓜",
+                  "nameEn": "Stir-fried Sponge Gourd"
+                },
+                {
+                  "name": "白灼生菜",
+                  "nameEn": "Poached Lettuce"
+                },
+                {
+                  "name": "清炒青菜",
+                  "nameEn": "Stir-fried Green Vegetables"
+                },
+                {
+                  "name": "虫草花排骨汤",
+                  "nameEn": "Pork Rib Soup with Cordyceps Flower"
+                },
+                {
+                  "name": "咖喱鱼蛋面/米粉",
+                  "nameEn": "Curry Fish Ball Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "番茄芝士披萨",
+                  "nameEn": "Tomato & Cheese Pizza"
+                },
+                {
+                  "name": "时令蔬果",
+                  "nameEn": "Seasonal Vegetables & Fruit"
+                },
+                {
+                  "name": "酸奶",
+                  "nameEn": "Yogurt"
+                },
+                {
+                  "name": "梨",
+                  "nameEn": "Pear"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "椰子鸡",
+                  "nameEn": "Coconut Chicken"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "黑椒烤鸭腿",
+                  "nameEn": "Black Pepper Roast Duck Leg"
+                },
+                {
+                  "name": "红烧猪肋排",
+                  "nameEn": "Braised Pork Ribs"
+                },
+                {
+                  "name": "美极大虾",
+                  "nameEn": "Prawns in Maggi Sauce"
+                },
+                {
+                  "name": "手撕鸡",
+                  "nameEn": "Hand-Shredded Chicken"
+                },
+                {
+                  "name": "杏鲍菇炒肉",
+                  "nameEn": "Stir-fried Pork with King Oyster Mushroom"
+                },
+                {
+                  "name": "蘑菇烩饭",
+                  "nameEn": "Mushroom Risotto"
+                },
+                {
+                  "name": "面包棍",
+                  "nameEn": "Bread Stick"
+                },
+                {
+                  "name": "炒胡萝卜",
+                  "nameEn": "Stir-fried Carrots"
+                },
+                {
+                  "name": "蒸蛋",
+                  "nameEn": "Steamed Egg"
+                },
+                {
+                  "name": "炒生菜",
+                  "nameEn": "Stir-fried Lettuce"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "美极大虾",
+                  "nameEn": "Prawns in Maggi Sauce"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.85
+            },
+            "snack": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": "Tuesday",
+          "weekdayZh": "周二",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "营养麦片",
+                  "nameEn": "Breakfast Cereal"
+                },
+                {
+                  "name": "酸菜肉包",
+                  "nameEn": "Sauerkraut and Pork Bun"
+                },
+                {
+                  "name": "春卷",
+                  "nameEn": "Deep-fried Spring Rolls"
+                },
+                {
+                  "name": "烤红薯",
+                  "nameEn": "Roasted Sweet Potatoes"
+                },
+                {
+                  "name": "玉米猪肉粥",
+                  "nameEn": "Corn and Pork Congee"
+                },
+                {
+                  "name": "白菜",
+                  "nameEn": "Chinese Cabbage"
+                },
+                {
+                  "name": "豉油皇炒面",
+                  "nameEn": "Soy Sauce Fried Noodles"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "印度薄饼",
+                  "nameEn": "Indian Flatbread"
+                },
+                {
+                  "name": "卤水蛋",
+                  "nameEn": "Marinated Egg"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "营养麦片",
+                  "nameEn": "Breakfast Cereal"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "黄油鸡腿",
+                  "nameEn": "Butter Chicken Leg"
+                },
+                {
+                  "name": "魔芋烧鸭",
+                  "nameEn": "Braised Duck with Konjac"
+                },
+                {
+                  "name": "番茄炒蛋",
+                  "nameEn": "Scrambled Eggs with Tomatoes"
+                },
+                {
+                  "name": "蒜香炒豆干",
+                  "nameEn": "Stir-fried Dried Tofu with Garlic"
+                },
+                {
+                  "name": "清炒杭白菜",
+                  "nameEn": "Stir-fried Chinese Cabbage"
+                },
+                {
+                  "name": "黄油烤小土豆",
+                  "nameEn": "Butter-Roasted Baby Potatoes"
+                },
+                {
+                  "name": "香草烤时蔬",
+                  "nameEn": "Herb-Roasted Seasonal Vegetables"
+                },
+                {
+                  "name": "牛肉饭",
+                  "nameEn": "Beef Rice"
+                },
+                {
+                  "name": "炒土豆茄子",
+                  "nameEn": "Stir-fried Potato and Eggplant"
+                },
+                {
+                  "name": "虫草花排骨汤",
+                  "nameEn": "Pork Rib Soup with Cordyceps Flower"
+                },
+                {
+                  "name": "红烧鸡面/米粉",
+                  "nameEn": "Braised Chicken Noodles/Rice Noodles"
+                },
+                {
+                  "name": "炒米粉",
+                  "nameEn": "Fried Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "椰子布丁",
+                  "nameEn": "Coconut Pudding"
+                },
+                {
+                  "name": "时令蔬果",
+                  "nameEn": "Seasonal Vegetables & Fruit"
+                },
+                {
+                  "name": "番石榴",
+                  "nameEn": "Guava"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "芥菜腐竹煲",
+                  "nameEn": "Mustard Greens and Bean Curd Stick Casserole"
+                },
+                {
+                  "name": "泰式青咖喱鸭腿",
+                  "nameEn": "Thai Green Curry Duck Leg"
+                },
+                {
+                  "name": "米粉蒸五花肉",
+                  "nameEn": "Steamed Pork Belly with Rice Flour"
+                },
+                {
+                  "name": "花菜炒鸡",
+                  "nameEn": "Stir-fried Chicken with Cauliflower"
+                },
+                {
+                  "name": "蘑菇烩饭",
+                  "nameEn": "Mushroom Risotto"
+                },
+                {
+                  "name": "糖炒栗子",
+                  "nameEn": "Candied Chestnuts"
+                },
+                {
+                  "name": "炒时蔬",
+                  "nameEn": "Stir-fried Seasonal Vegetables"
+                },
+                {
+                  "name": "白菜炒南瓜",
+                  "nameEn": "Stir-fried Cabbage with Pumpkin"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "芥菜腐竹煲",
+                  "nameEn": "Mustard Greens and Bean Curd Stick Casserole"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.85
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "蔓越莓黄油蛋糕",
+                  "nameEn": "Cranberry Butter Cake"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "蔓越莓黄油蛋糕",
+                  "nameEn": "Cranberry Butter Cake"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.8
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": "Wednesday",
+          "weekdayZh": "周三",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "山水豆腐花",
+                  "nameEn": "Silken Tofu Pudding"
+                },
+                {
+                  "name": "流沙包",
+                  "nameEn": "Steamed Custard Bun"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "黄金糕",
+                  "nameEn": "Golden Cake"
+                },
+                {
+                  "name": "红枣粥",
+                  "nameEn": "Red Date Congee"
+                },
+                {
+                  "name": "雪菜肉丝汤面/米粉",
+                  "nameEn": "Pickled Cabbage & Shredded Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "豆沙面包",
+                  "nameEn": "Red Bean Paste Bread"
+                },
+                {
+                  "name": "煎蛋",
+                  "nameEn": "Fried Egg"
+                },
+                {
+                  "name": "猪肉早餐肠",
+                  "nameEn": "Pork Breakfast Sausage"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "山水豆腐花",
+                  "nameEn": "Silken Tofu Pudding"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "陈皮百合红豆沙",
+                  "nameEn": "Red Bean Soup with Preserved Orange Peel and Lily Bulb"
+                },
+                {
+                  "name": "美式烧猪肋排",
+                  "nameEn": "American-Style Roast Pork Ribs"
+                },
+                {
+                  "name": "海南文昌鸡",
+                  "nameEn": "Hainan Wenchang Chicken"
+                },
+                {
+                  "name": "芹菜炒鸡",
+                  "nameEn": "Stir-fried Chicken with Celery"
+                },
+                {
+                  "name": "咖喱千页豆腐",
+                  "nameEn": "Curry Thousand-Layer Tofu"
+                },
+                {
+                  "name": "剁椒蒸鱼",
+                  "nameEn": "Steamed Fish with Chopped Chili"
+                },
+                {
+                  "name": "白菜",
+                  "nameEn": "Chinese Cabbage"
+                },
+                {
+                  "name": "番茄意面",
+                  "nameEn": "Tomato Spaghetti"
+                },
+                {
+                  "name": "盐水西兰花",
+                  "nameEn": "Poached Broccoli in Salted Water"
+                },
+                {
+                  "name": "粉丝炒包菜",
+                  "nameEn": "Stir-fried Cabbage with Vermicelli"
+                },
+                {
+                  "name": "鱼香肉丝",
+                  "nameEn": "Yu-Xiang Shredded Pork"
+                },
+                {
+                  "name": "经典牛肉面/米粉",
+                  "nameEn": "Classic Beef Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "巧克力蛋糕",
+                  "nameEn": "Chocolate Cake"
+                },
+                {
+                  "name": "时令蔬果",
+                  "nameEn": "Seasonal Vegetables & Fruit"
+                },
+                {
+                  "name": "豆浆",
+                  "nameEn": "Soybean Milk"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "茶树菇炒鸡柳",
+                  "nameEn": "Stir-fried Chicken Fillet with Tea Tree Mushroom"
+                },
+                {
+                  "name": "陈皮百合红豆沙",
+                  "nameEn": "Red Bean Soup with Preserved Orange Peel and Lily Bulb"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "海苔蒸水蛋",
+                  "nameEn": "Steamed Eggs with Seaweed"
+                },
+                {
+                  "name": "西西里烤鸡腿",
+                  "nameEn": "Sicilian Baked Chicken Thigh"
+                },
+                {
+                  "name": "芋头五花肉",
+                  "nameEn": "Pork Belly with Taro"
+                },
+                {
+                  "name": "三酱烧鸭",
+                  "nameEn": "Roast Duck with Three Sauces"
+                },
+                {
+                  "name": "红烧茄子"
+                },
+                {
+                  "name": "炒时蔬",
+                  "nameEn": "Stir-fried Seasonal Vegetables"
+                },
+                {
+                  "name": "胡萝卜青菜",
+                  "nameEn": "Carrot and Green Vegetables"
+                },
+                {
+                  "name": "蒜蓉白菜",
+                  "nameEn": "Garlic Cabbage"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "海苔蒸水蛋",
+                  "nameEn": "Steamed Eggs with Seaweed"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.85
+            },
+            "snack": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": "Thursday",
+          "weekdayZh": "周四",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "云吞面",
+                  "nameEn": "Wonton Noodles"
+                },
+                {
+                  "name": "菜肉包",
+                  "nameEn": "Vegetable and Meat Bun"
+                },
+                {
+                  "name": "芝麻球",
+                  "nameEn": "Sesame Balls"
+                },
+                {
+                  "name": "烤土豆",
+                  "nameEn": "Baked Potato"
+                },
+                {
+                  "name": "白灼生菜",
+                  "nameEn": "Poached Lettuce"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "法包",
+                  "nameEn": "Baguette"
+                },
+                {
+                  "name": "蔓越莓黄油蛋糕",
+                  "nameEn": "Cranberry Butter Cake"
+                },
+                {
+                  "name": "茶叶蛋",
+                  "nameEn": "Tea Egg"
+                },
+                {
+                  "name": "香肠面包",
+                  "nameEn": "Sausage Bread"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "云吞面",
+                  "nameEn": "Wonton Noodles"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "蚝油冬瓜",
+                  "nameEn": "Winter Melon with Oyster Sauce"
+                },
+                {
+                  "name": "咸烤鸡腿",
+                  "nameEn": "Salted Roast Chicken Leg"
+                },
+                {
+                  "name": "回锅肉片",
+                  "nameEn": "Twice-Cooked Pork Slices"
+                },
+                {
+                  "name": "白菜烧豆腐",
+                  "nameEn": "Braised Tofu with Cabbage"
+                },
+                {
+                  "name": "白灼卷心菜",
+                  "nameEn": "Poached Cabbage"
+                },
+                {
+                  "name": "西班牙海鲜饭",
+                  "nameEn": "Spanish Seafood Paella"
+                },
+                {
+                  "name": "烤樱桃番茄",
+                  "nameEn": "Roasted Cherry Tomatoes"
+                },
+                {
+                  "name": "辣椒圈虾",
+                  "nameEn": "Prawns with Chili Rings"
+                },
+                {
+                  "name": "猪骨白萝卜汤",
+                  "nameEn": "Pork Bone and White Radish Soup"
+                },
+                {
+                  "name": "番茄鸡蛋汤面/米粉"
+                },
+                {
+                  "name": "酸辣粉",
+                  "nameEn": "Hot & Sour Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "水果布丁",
+                  "nameEn": "Fruit Pudding"
+                },
+                {
+                  "name": "时令蔬果",
+                  "nameEn": "Seasonal Vegetables & Fruit"
+                },
+                {
+                  "name": "西瓜",
+                  "nameEn": "Watermelon"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "蚝油冬瓜",
+                  "nameEn": "Winter Melon with Oyster Sauce"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "椰蓉条",
+                  "nameEn": "Coconut Strips"
+                },
+                {
+                  "name": "黑椒猪排",
+                  "nameEn": "Black Pepper Pork Chop"
+                },
+                {
+                  "name": "炒鱿鱼",
+                  "nameEn": "Stir-fried Squid"
+                },
+                {
+                  "name": "生菜炒肉片",
+                  "nameEn": "Stir-fried Pork Slices with Lettuce"
+                },
+                {
+                  "name": "腐乳炒莲藕",
+                  "nameEn": "Stir-fried Lotus Root with Fermented Bean Curd"
+                },
+                {
+                  "name": "黑椒意面",
+                  "nameEn": "Black Pepper Spaghetti"
+                },
+                {
+                  "name": "香草番茄",
+                  "nameEn": "Herbed Tomatoes"
+                },
+                {
+                  "name": "白菜清汤",
+                  "nameEn": "Clear Cabbage Soup"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "椰蓉条",
+                  "nameEn": "Coconut Strips"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.85
+            },
+            "snack": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": "Friday",
+          "weekdayZh": "周五",
+          "meals": {
+            "breakfast": {
+              "items": [
+                {
+                  "name": "糯米鸡",
+                  "nameEn": "Sticky Rice in Lotus Leaf"
+                },
+                {
+                  "name": "油条",
+                  "nameEn": "Deep-Fried Dough Stick"
+                },
+                {
+                  "name": "全麦馒头",
+                  "nameEn": "Whole-Wheat Bun"
+                },
+                {
+                  "name": "绿豆粥",
+                  "nameEn": "Mung Bean Congee"
+                },
+                {
+                  "name": "蒸陈村粉配肉酱",
+                  "nameEn": "Steamed Chencun Rice Noodles with Meat Sauce"
+                },
+                {
+                  "name": "低糖豆浆",
+                  "nameEn": "Low-Sugar Soybean Milk"
+                },
+                {
+                  "name": "吐司篮配果酱",
+                  "nameEn": "Toast with Jam"
+                },
+                {
+                  "name": "葱香面包",
+                  "nameEn": "Scallion Bread"
+                },
+                {
+                  "name": "西式蛋卷",
+                  "nameEn": "Western Omelette Roll"
+                },
+                {
+                  "name": "鸡肉香肠",
+                  "nameEn": "Chicken Sausage"
+                },
+                {
+                  "name": "纯牛奶"
+                },
+                {
+                  "name": "红茶",
+                  "nameEn": "Black Tea"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "lunch": {
+              "items": [
+                {
+                  "name": "香橙烤鸭胸",
+                  "nameEn": "Roasted Duck Breast with Orange"
+                },
+                {
+                  "name": "闽南红烧肉",
+                  "nameEn": "Southern Fujian Braised Pork"
+                },
+                {
+                  "name": "可乐烧鸡翅",
+                  "nameEn": "Coca-Cola Braised Chicken Wings"
+                },
+                {
+                  "name": "虾仁蒸蛋",
+                  "nameEn": "Steamed Egg with Shrimp"
+                },
+                {
+                  "name": "白灼芥蓝",
+                  "nameEn": "Poached Chinese Kale"
+                },
+                {
+                  "name": "芝士烤土豆泥",
+                  "nameEn": "Baked Mashed Potato with Cheese"
+                },
+                {
+                  "name": "烤洋葱",
+                  "nameEn": "Roasted Onion"
+                },
+                {
+                  "name": "家常豆腐",
+                  "nameEn": "Home-Style Tofu"
+                },
+                {
+                  "name": "白灼秋葵",
+                  "nameEn": "Poached Okra"
+                },
+                {
+                  "name": "猪骨红枣冬瓜汤",
+                  "nameEn": "Pork Bone Soup with Red Dates and Winter Melon"
+                },
+                {
+                  "name": "无锡排骨面/米粉",
+                  "nameEn": "Wuxi Braised Pork Rib Noodles/Rice Noodles"
+                },
+                {
+                  "name": "羊肉卷酸辣汤/米粉",
+                  "nameEn": "Hot & Sour Soup with Lamb Roll Noodles/Rice Noodles"
+                },
+                {
+                  "name": "粗粮饭/馒头",
+                  "nameEn": "Coarse Grain Rice / Steamed Bun"
+                },
+                {
+                  "name": "绿茶蛋糕",
+                  "nameEn": "Green Tea Cake"
+                },
+                {
+                  "name": "时令蔬果",
+                  "nameEn": "Seasonal Vegetables & Fruit"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "香橙烤鸭胸",
+                  "nameEn": "Roasted Duck Breast with Orange"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.95
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "荷塘月色",
+                  "nameEn": "Stir-fried Lotus Root, Black Fungus and Snow Peas"
+                },
+                {
+                  "name": "番茄汁烤鱼",
+                  "nameEn": "Baked Fish in Tomato Sauce"
+                },
+                {
+                  "name": "潮式豆腐泡",
+                  "nameEn": "Chaozhou-Style Tofu Puffs"
+                },
+                {
+                  "name": "小炒西葫芦",
+                  "nameEn": "Stir-fried Zucchini"
+                },
+                {
+                  "name": "黑木耳莲藕雪豆",
+                  "nameEn": "Black Fungus, Lotus Root and Snow Peas"
+                },
+                {
+                  "name": "糖红薯",
+                  "nameEn": "Candied Sweet Potato"
+                },
+                {
+                  "name": "意大利面",
+                  "nameEn": "Pasta"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "荷塘月色",
+                  "nameEn": "Stir-fried Lotus Root, Black Fungus and Snow Peas"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.8
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "绿茶佛饼",
+                  "nameEn": "Green Tea Buddha Biscuit"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "绿茶佛饼",
+                  "nameEn": "Green Tea Buddha Biscuit"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.8
+            }
+          },
+          "confidence": 0.95
+        },
+        {
+          "date": "2026-09-20",
+          "weekday": "Sunday",
+          "weekdayZh": "周日",
+          "meals": {
+            "breakfast": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            },
+            "lunch": {
+              "items": [],
+              "featured": [],
+              "status": "not_listed"
+            },
+            "dinner": {
+              "items": [
+                {
+                  "name": "普罗旺斯炖牛肉",
+                  "nameEn": "Provencal Beef Stew"
+                },
+                {
+                  "name": "香草土豆角",
+                  "nameEn": "Baked Cajun Potato Wedges"
+                },
+                {
+                  "name": "扒时蔬",
+                  "nameEn": "Grilled Seasonal Vegetables with Herbs"
+                },
+                {
+                  "name": "姜母鸭",
+                  "nameEn": "Ginger Duck"
+                },
+                {
+                  "name": "红烧鱼块",
+                  "nameEn": "Braised Fish Cubes"
+                },
+                {
+                  "name": "宫保鸡丁",
+                  "nameEn": "Kung Pao Chicken"
+                },
+                {
+                  "name": "香菇扒节瓜",
+                  "nameEn": "Grilled Mushroom with Chieh-Qua"
+                },
+                {
+                  "name": "豆芽炒千张",
+                  "nameEn": "Stir-fried Bean Sprouts with Tofu Skin"
+                },
+                {
+                  "name": "蒜蓉白菜"
+                },
+                {
+                  "name": "红枣冬瓜煲龙骨",
+                  "nameEn": "Pork Bone Soup with Red Dates and Winter Melon"
+                },
+                {
+                  "name": "原味红豆包",
+                  "nameEn": "Original Red Bean Bun"
+                },
+                {
+                  "name": "雪菜肉丝面/米线",
+                  "nameEn": "Pickled Cabbage & Shredded Pork Noodles/Rice Noodles in Soup"
+                },
+                {
+                  "name": "番石榴",
+                  "nameEn": "Guava"
+                }
+              ],
+              "featured": [],
+              "status": "complete",
+              "confidence": 0.8
+            },
+            "snack": {
+              "items": [
+                {
+                  "name": "低糖益力多",
+                  "nameEn": "Low-Sugar Yakult"
+                },
+                {
+                  "name": "烧麦/肉松小贝",
+                  "nameEn": "Steamed Shaomai / Pork Floss Cake"
+                }
+              ],
+              "featured": [
+                {
+                  "name": "烧麦/肉松小贝",
+                  "nameEn": "Steamed Shaomai / Pork Floss Cake"
+                }
+              ],
+              "status": "complete",
+              "confidence": 0.8
+            }
+          },
+          "confidence": 0.95
+        }
+      ],
+      "createdAt": 1794135656271,
+      "updatedAt": 1794135656271
+    }
+  ]
+}

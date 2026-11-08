@@ -218,6 +218,21 @@ h1:has(.brand-mark) { display: flex; align-items: center; gap: 9px; }
 .top .navline a:hover { color: var(--accent); }
 .top .navline a.on { color: var(--accent); font-weight: 650; }
 
+/* 食堂入口：导航栏只放一个碗的图标，不放中文。
+   中英混排会打断 Practice / Switch course 的节奏，而且图标本身够认。 */
+.top .navline .nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 9px;
+  color: var(--amber);
+  transition: background 180ms ease, color 180ms ease;
+}
+.top .navline .nav-icon svg { width: 20px; height: 20px; }
+.top .navline .nav-icon:hover { background: var(--amber-soft); color: #B54708; }
+
 /* --------------------------------------------------------------------------
    4b. TEACHER HEADER / NAV  (stats.html / assign.html 用 <header> + .nav)
    --------------------------------------------------------------------------
@@ -752,6 +767,67 @@ button.ghost2:hover { color: var(--accent-deep); }
 @media (max-width: 900px) {
   .course-cards { grid-template-columns: 1fr; gap: 14px; }
   .course-card { padding: 22px 20px 18px; }
+}
+
+/* 食堂入口：不属于任何一门课，所以单独一行放在课程卡片下面。
+   用暖色跟三门课的冷色系区分开，一眼能看出「这是另一类东西」。 */
+.extra-card {
+  --card-accent: var(--amber);
+  --card-accent-deep: #B54708;
+  --card-soft: var(--amber-soft);
+  --card-border: #FEDF89;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 18px 22px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+  transition: transform 180ms cubic-bezier(.2, .7, .3, 1),
+              border-color 180ms ease,
+              box-shadow 180ms ease;
+}
+.extra-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--card-border);
+  box-shadow: 0 2px 4px rgba(16, 24, 40, .04),
+              0 16px 32px -12px rgba(16, 24, 40, .14);
+}
+.extra-card:focus-visible { outline: 2px solid var(--card-border); outline-offset: 3px; }
+
+.extra-card .icon {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--card-soft);
+  color: var(--card-accent);
+  border: 1px solid var(--card-border);
+}
+.extra-card .icon svg { width: 21px; height: 21px; }
+
+.extra-card .body { flex: 1; min-width: 0; }
+.extra-card h3 { font-size: 17px; margin: 0 0 3px; font-weight: 700; letter-spacing: -.01em; }
+.extra-card p { margin: 0; color: var(--muted); font-size: 13.5px; }
+
+.extra-card .cta {
+  flex: 0 0 auto;
+  padding: 10px 20px;
+  font-size: 14px;
+  background: var(--card-accent);
+}
+.extra-card:hover .cta { background: var(--card-accent-deep); }
+
+@media (max-width: 640px) {
+  .extra-card { flex-wrap: wrap; padding: 16px 18px; }
+  .extra-card .body { flex: 1 1 100%; order: 2; }
+  .extra-card .cta { order: 3; margin-left: auto; }
 }
 
 /* --------------------------------------------------------------------------

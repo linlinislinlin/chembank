@@ -25,6 +25,12 @@
 教师口令从本地文件 .chembank-token 读取（已在 .gitignore 中，绝不进 git）。
 题目题面数据从构建产物 site/data.js（MCQ）与 site/structured-data.js（结构化）读取，
 保证与网页上学生看到的题面完全一致。
+
+发布前会做「做题解析」硬校验（发布即配答案 + 答案一致性检查）：
+  · 每道选择题必须在 quiz-app/question-worked-solutions.json 里有做题解析；
+  · 解析里的 answer 必须与题库 mark scheme 的 ms_answer 完全一致；
+  · 任何一道缺失或不匹配 → 阻止发布并列出，确保给学生的答案正确。
+简答题（structured）靠 mark scheme 图本身即解析，不做文字解析校验。
 """
 
 from __future__ import annotations
@@ -40,6 +46,7 @@ TOKEN_FILE = ROOT / ".chembank-token"
 EDGE_URL = "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/assignment"
 DATA_JS = ROOT / "quiz-app" / "site" / "data.js"
 STRUCT_JS = ROOT / "quiz-app" / "site" / "structured-data.js"
+WORKED_JSON = ROOT / "quiz-app" / "question-worked-solutions.json"
 
 
 def load_token() -> str:
@@ -74,6 +81,40 @@ def build_question_lookup() -> dict[str, dict]:
         q2["type"] = "structured"
         lookup[q["id"]] = q2
     return lookup
+
+
+def load_worked() -> dict[str, dict]:
+    """读取做题解析（question-worked-solutions.json），id -> {answer, solution}。"""
+    if not WORKED_JSON.exists():
+        return {}
+    return json.loads(WORKED_JSON.read_text(encoding="utf-8"))
+
+
+def verify_worked_solutions(questions: list[dict], worked: dict[str, dict]) -> list[str]:
+    """校验每道选择题都配了做题解析、且解析答案与 mark scheme 答案一致。
+
+    返回错误列表（空 = 全部通过）。简答题（structured）靠 mark scheme 图，
+    本身即解析，无需文字解析，跳过。
+    """
+    errors: list[str] = []
+    for q in questions:
+        qid = q["id"]
+        if q.get("type") == "structured":
+            continue
+        ms = (q.get("ms_answer") or "").strip().upper()
+        if not ms:
+            errors.append(f"{qid}: 题库缺失 mark scheme 答案（ms_answer 为空）")
+            continue
+        w = worked.get(qid)
+        if not w:
+            errors.append(f"{qid}: 缺少做题解析（question-worked-solutions.json 无此题）")
+            continue
+        ans = (w.get("answer") or "").strip().upper()
+        if not ans:
+            errors.append(f"{qid}: 做题解析缺少 answer 字段")
+        elif ans != ms:
+            errors.append(f"{qid}: 解析答案 {ans!r} ≠ mark scheme 答案 {ms!r}")
+    return errors
 
 
 def to_incoming(q: dict) -> dict:
@@ -145,6 +186,19 @@ def main() -> int:
     print("题目顺序：")
     for i, q in enumerate(questions, 1):
         print(f"  {i:2d}. {q['id']}  ({q['type']}, {q['marks']} 分)")
+
+    # ── 发布前硬校验：做题解析配齐 + 解析答案与 mark scheme 一致 ──
+    # 确保给学生的答案是「我做的解析答案 == 题目本身标准答案」。
+    worked = load_worked()
+    worked_errors = verify_worked_solutions(questions, worked)
+    if worked_errors:
+        print("\n✗ 做题解析校验未通过，已阻止发布（避免把错误答案发给学生）：")
+        for e in worked_errors:
+            print(f"  - {e}")
+        print("   请先补齐/修正 question-worked-solutions.json，再重新发布。")
+        return 1
+    mcq_n = sum(1 for q in questions if q.get("type") != "structured")
+    print(f"\n✓ 做题解析校验通过：{mcq_n} 道选择题均已配解析，且答案与 mark scheme 一致。")
 
     if args.dry_run:
         print("\n[--dry-run] 未真正发布。")

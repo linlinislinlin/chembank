@@ -103,6 +103,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js?v=20260913d"></script>
 <script src="question-hints.js?v=20261007a"></script>
+<script src="question-worked-solutions.js?v=20261108a"></script>
 <script>
 "use strict";
 const DB = window.HomeworkDB;
@@ -565,6 +566,21 @@ function showResult(result) {
       ms.style.display = "block";
       ms.innerHTML = `<img src="${esc(it.ms_img)}" alt="Mark scheme">`;
       card.appendChild(ms);
+    }
+    const worked = (window.QUESTION_WORKED || {})[q.id];
+    if (worked && worked.solution) {
+      const ws = document.createElement("details");
+      ws.className = "worked";
+      ws.style.marginTop = "12px";
+      ws.style.border = "1px solid var(--line, #e3e3e3)";
+      ws.style.borderRadius = "8px";
+      ws.style.padding = "10px 12px";
+      ws.style.background = "var(--soft, #f7f7f8)";
+      const sol = String(worked.solution).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      ws.innerHTML =
+        `<summary style="cursor:pointer;font-weight:600;font-size:14px;color:var(--accent-deep, #8a2d3b)">📖 Worked solution (做题解析)</summary>` +
+        `<div style="margin-top:8px;font-size:14px;line-height:1.65;white-space:pre-line">${sol}</div>`;
+      card.appendChild(ws);
     }
     review.appendChild(card);
   });

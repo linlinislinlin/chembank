@@ -500,7 +500,7 @@ window.ChemBankPortal = {
           const n = (a.question_ids || []).length;
           const link = document.createElement("a");
           link.className = "hw-item";
-          link.href = "homework.html?id=" + a.id + "&track=" + track + "&v=20261108a";
+          link.href = "homework.html?id=" + a.id + "&track=" + track + "&v=20261108b";
           link.innerHTML = "<b></b><div class=\"meta\"></div>";
           link.querySelector("b").textContent = window.ChemBankPortal.shortCode(a);
           link.querySelector(".meta").textContent = (a.title || "") + (n ? " · " + n + " questions" : "");

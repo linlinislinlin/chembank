@@ -316,7 +316,7 @@ $("createBtn").onclick = async () => {
     }, __token);
     const base = location.origin + location.pathname.replace("assign.html","");
     const portal = programme === "ig" ? "ig.html" : "as.html";
-    const link = base + "homework.html?id=" + ass.id + "&track=" + programme + "&v=20261108a";
+    const link = base + "homework.html?id=" + ass.id + "&track=" + programme + "&v=20261108b";
     $("linkBox").textContent = "学生入口：" + base + portal + "\n作业直链：" + link;
     $("linkCard").style.display = "block";
     msg.className = "msg ok"; msg.textContent = "作业已创建！ID=" + ass.id;

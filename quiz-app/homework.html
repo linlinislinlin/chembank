@@ -272,12 +272,16 @@ function restoreRememberedIdentity() {
   if (!s || !s.studentNo) return;
   const stu = Portal.roster(track).find((x) => x.student_no === s.studentNo && x.name === s.name);
   if (!stu) { clearIdentityLocal(); return; }
+  const tester = stu.class === "T" || stu.student_no === "TESTER";
   classValue = stu.class || "";
   nameValue = stu.student_no;
   fillClassOptions();
   fillRoster();
   syncIdField();
-  if (stu.class !== "T" && stu.student_no !== "TESTER") {
+  if (tester) {
+    // tester 自动带回上次记住的口令（否则每次手打，体验就跟学生不一致了）
+    if (s.teacherToken) document.getElementById("istudentNo").value = s.teacherToken;
+  } else {
     document.getElementById("istudentNo").value = String(stu.student_no).slice(-4);
   }
   const cb = document.getElementById("idRemember");
@@ -312,6 +316,7 @@ document.addEventListener("click", closePicks);
 
 document.getElementById("switchBtn").onclick = () => {
   clearIdentityLocal();
+  clearToken();   // 一并清掉本标签页记住的 tester 口令
   classValue = "";
   nameValue = "";
   document.getElementById("istudentNo").value = "";
@@ -343,8 +348,9 @@ document.getElementById("startBtn").onclick = async () => {
   const className = stu.class_name;
   identity = { name, studentNo: no, className, testerOk, teacherToken: testerOk ? typedNo : "" };
   const remember = !!(document.getElementById("idRemember") && document.getElementById("idRemember").checked);
-  if (remember && !isTester) {
-    saveIdentityLocal({ name, studentNo: no, className });
+  if (remember) {
+    // tester 也走和学生一样的「记住我」：连 teacher token 一起存，下次自动带出。
+    saveIdentityLocal({ name, studentNo: no, className, teacherToken: isTester ? typedNo : "" });
   } else {
     clearIdentityLocal();
   }

@@ -192,6 +192,25 @@ a:focus-visible {
   letter-spacing: -.2px;
   color: var(--text);
 }
+/* 品牌图标：手绘烧瓶 mark，取代原来的 emoji 🧪
+   1. 用 SVG 保证任何尺寸/任何系统渲染一致（emoji 由操作系统决定外观和配色）
+   2. 1.7 的线宽是照 Inter 700 的笔画重量校准的，图标和字重同一套体系
+   3. 只吃 --accent 系变量，所以每个课程主题自动换色 */
+.brand-mark {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  vertical-align: -5px;
+}
+.brand-mark svg { width: 15px; height: 15px; display: block; }
+h1:has(> .brand-mark),
+h1:has(.brand-mark) { display: flex; align-items: center; gap: 9px; }
 .top h1 .brand-flask { color: var(--accent); }
 .top .meta { font-size: 13px; color: var(--muted); }
 .top .navline { display: flex; gap: 16px; margin-left: auto; font-size: 14.5px; font-weight: 500; flex-wrap: wrap; }

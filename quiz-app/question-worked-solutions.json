@@ -26,5 +26,29 @@
   "cie-9701-2024-fm-p12-q14": {
     "answer": "D",
     "solution": "H₂(g) + I₂(g) ⇌ 2HI(g), with inert argon added at constant volume and constant temperature.\nArgon does not react, and at constant volume its addition does not change the moles (or the concentrations) of H₂, I₂ and HI. Each partial pressure depends only on its own moles and the volume, so the partial pressure of HI is unchanged.\nThe rate of the forward reaction depends on the concentrations of H₂ and I₂, which are unchanged.\n(There are equal gas moles on both sides, 2 ⇌ 2, so the position of equilibrium does not shift anyway.)\n→ rate unaffected, partial pressure of HI unaffected = D"
+  },
+  "cie-9701-2019-on-p11-q10": {
+    "answer": "C",
+    "solution": "Dynamic equilibrium means the forward and reverse reactions keep happening at equal, non-zero rates.\nAt the start there is only X and Y (no Z), so the forward rate is high and the reverse rate is zero.\nAs Z builds up, the forward rate falls (X and Y are used up) and the reverse rate rises (more Z to decompose).\nAt equilibrium the two rates become equal, so the two curves meet on a horizontal line above zero.\n→ graph C (forward rate falls, reverse rate rises, they meet) = C"
+  },
+  "cie-9701-2019-mj-p13-q10": {
+    "answer": "A",
+    "solution": "Two facts are given:\n1. Yield of Z is LOWER at HIGHER temperature → the forward reaction is exothermic (ΔH is negative).\n2. Yield of Z is LOWER at LOWER pressure → increasing the pressure favours Z, so the product side has FEWER gas moles than the reactant side.\nOnly A, X(g) + Y(g) ⇌ Z(g) with ΔH negative, fits both: it is exothermic AND goes from 2 moles of gas to 1 mole of gas (high pressure favours the product).\n→ A"
+  },
+  "cie-9701-2019-on-p12-q10": {
+    "answer": "C",
+    "solution": "2SO₃(g) ⇌ 2SO₂(g) + O₂(g). Increasing the pressure compresses the gases, so the concentration of every gas rises and BOTH the forward and reverse rates increase (the rate of reaction increases).\nFor the position of equilibrium: the left side has 2 gas moles and the right side has 3 gas moles. Higher pressure favours the side with fewer gas moles, so the equilibrium shifts LEFT.\n→ rate increases, equilibrium moves left = C"
+  },
+  "cie-9701-qls-eq-mcq-01": {
+    "answer": "D",
+    "solution": "2SO₂(g) + O₂(g) ⇌ 2SO₃(g) is exothermic.\n1. Increasing the pressure: 3 gas moles on the left → 2 on the right, so higher pressure shifts the equilibrium RIGHT. ✓\n2. Increasing the temperature: the forward reaction is exothermic, so heating shifts the equilibrium LEFT (away from products). ✗\n3. Using twice as much catalyst: a catalyst only speeds up reaching equilibrium, it does NOT move the position of equilibrium. ✗\n→ only 1 is correct = D"
+  },
+  "cie-9701-qls-eq-mcq-02": {
+    "answer": "B",
+    "solution": "The Contact process (SO₂ + ½O₂ ⇌ SO₃) is exothermic.\nIncreasing the temperature: for an exothermic reaction, raising the temperature shifts the equilibrium LEFT, so the equilibrium yield of SO₃ DECREASES.\nAdding a vanadium(V) oxide catalyst: a catalyst speeds up the forward and reverse reactions equally but does not change the position of equilibrium, so the equilibrium yield is UNCHANGED.\n→ yield decreases with higher temperature, unchanged with catalyst = B"
+  },
+  "cie-9701-qls-eq-struct-contact": {
+    "answer": "",
+    "solution": "a(i) A catalyst increases the rate of a reaction without being used up. It does this by providing an alternative reaction pathway with a LOWER activation energy, so a larger fraction of collisions are successful.\n\n(b) ΔH = bonds broken − bonds formed.\nBonds broken: 2 SO₂ each have 2 S=O bonds → 4 × 534 = 2136 kJ, plus O=O = 496 kJ. Total = 2632 kJ.\nBonds formed: 2 SO₃ each have 3 S=O bonds → 6 × (S=O in SO₃).\nΔH = 2632 − 6x = −196 → 6x = 2828 → x = 471.3 kJ mol⁻¹.\nS=O bond energy in SO₃ = 471 kJ mol⁻¹.\n\n(c) Read the energy labels from the reaction pathway diagram: ΔH for the overall reaction is the difference between product and reactant energy levels; the uncatalysed activation energy is the height of the higher barrier from the reactants; the catalysed activation energy for the reverse (decomposition) step is the height from the products up to the lower barrier.\n\n(d)(i) Increasing temperature INCREASES the rate of production of SO₃: more particles have energy ≥ the activation energy and collisions are more frequent.\n(d)(ii) Increasing temperature DECREASES the yield of SO₃: the reaction is exothermic, so the equilibrium shifts left (towards the reactants).\n\n(e) H₂S₂O₇ + H₂O → 2H₂SO₄\n\n(e)(i) SO₂: S is the central atom; draw one S=O double bond as 4 shared electrons and the other S–O as a dative bond, with lone pairs on the oxygen atoms (outer electrons only).\n(e)(ii) A strong Brønsted–Lowry acid is one that is fully ionised (fully dissociates / donates its proton completely) in aqueous solution.\n(e)(iii) H₂SO₄(l) + H₂O(l) → HSO₄⁻(aq) + H₃O⁺(aq)"
   }
 }

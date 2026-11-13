@@ -171,8 +171,14 @@ def render_tiles(
     pick: dict[str, Any],
     vault_root: str | Path,
     out_path: str | Path,
+    *,
+    skip_syllabus: bool = False,
 ) -> Path:
-    """Build the tile-grid Markdown note and write it to ``out_path``."""
+    """Build the tile-grid Markdown note and write it to ``out_path``.
+
+    ``skip_syllabus`` drops the 考纲范围 block; exam papers (as opposed to
+    homework handouts) don't want a syllabus scope printed above the questions.
+    """
     vault_root = Path(vault_root)
     out_path = Path(out_path)
     questions = list(pick.get("questions") or [])
@@ -219,7 +225,8 @@ def render_tiles(
         out_path.write_text("\n".join(lines), encoding="utf-8")
         return out_path
 
-    lines.extend(_syllabus_section(syllabus_codes, rules, questions=questions))
+    if not skip_syllabus:
+        lines.extend(_syllabus_section(syllabus_codes, rules, questions=questions))
     lines.append("")
 
     # Group questions by primary learning outcome. The flat, re-ordered list is
@@ -287,12 +294,27 @@ def _collect_syllabus_codes(questions: list[dict[str, Any]]) -> list[str]:
     return codes
 
 
+_MARKS_BRACKET_RE = re.compile(r"\[(\d+)\]")
+
+
+def _qmarks(question: dict[str, Any]) -> int:
+    """Mark count: ``marks`` when int, else the bracketed ``[N]`` in ``body``,
+    else ``1`` (mirrors ``chembank.exam.question_marks``)."""
+    m = question.get("marks")
+    if isinstance(m, int) and not isinstance(m, bool):
+        return m
+    body = question.get("body")
+    if isinstance(body, str):
+        hits = _MARKS_BRACKET_RE.findall(body)
+        if hits:
+            return int(hits[-1])
+    return 1
+
+
 def _total_marks(questions: list[dict[str, Any]]) -> int:
     total = 0
     for q in questions:
-        m = q.get("marks")
-        if isinstance(m, int):
-            total += m
+        total += _qmarks(q)
     return total
 
 
@@ -336,9 +358,8 @@ def _tile_caption(seq: int, question: dict[str, Any]) -> str:
     original = question.get("question")
     if original is not None and str(original).strip():
         bits.append(f"Q{original}")
-    marks = question.get("marks")
-    if isinstance(marks, int):
-        bits.append(f"{marks} 分")
+    marks = _qmarks(question)
+    bits.append(f"{marks} 分")
     return " · ".join(bits)
 
 

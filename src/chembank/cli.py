@@ -32,6 +32,8 @@ from chembank.registry import (
 )
 from chembank.select import load_rules, select_questions, write_pick
 from chembank.assemble import render_tiles
+from chembank.print import print_pick
+from chembank.exam import build_exam_papers
 from chembank.split import parse_mcq_mark_scheme, write_split_output
 from chembank.syllabus import (
     DEFAULT_SYLLABUS,
@@ -585,8 +587,14 @@ def _cmd_select(args: argparse.Namespace) -> int:
     picked = select_questions(rules, docs_dir=docs_dir)
     wrote = write_pick(rules, picked, Path(args.output), docs_dir=docs_dir)
     print(f"Selected {len(picked)} question(s) -> {wrote}")
-    if rules.get("count") and len(picked) < rules["count"]:
+    if rules.get("pool"):
+        pool_hint = f"  候选池 {len(picked)} 题"
+        if rules.get("final_count"):
+            pool_hint += f"（目标 {rules['final_count']} 题）"
+        print(pool_hint)
+    elif rules.get("count") and len(picked) < rules["count"]:
         print(f"  (target was {rules['count']}; only {len(picked)} matched)")
+    print("  → 确认题目：`chembank serve --open`（勾选后导出 -confirmed.json）")
     return 0
 
 
@@ -615,6 +623,114 @@ def _cmd_serve(args: argparse.Namespace) -> int:
         vault=args.vault,
         host=args.host,
     )
+    return 0
+
+
+def _cmd_exam(args: argparse.Namespace) -> int:
+    """Assemble a formal A/B unit exam.
+
+    Phase 1 (default) — select questions (no human confirmation needed), render +
+                       compile the screenshot-version A/B PDFs, and write 题单 /
+                       candidate pool / selection / confirmed picks + 组卷 Markdown
+                       (exam-<A|B>.md).
+    Phase 2 (--render) — only needed after an optional manual edit: re-render A/B
+                       from the confirmed picks (paper-A/B-confirmed.json) and
+                       re-export 组卷 Markdown.
+
+    Full pipeline: 出卷(截图，选完即定稿) → chemistry-exam-formatter 吃
+    exam-<A|B>.md 转录 + 排版(12pt) → 三层校对.
+    """
+    from chembank.exam import (
+        build_exam_papers,
+        load_confirmed_split,
+    )
+
+    rules = load_rules(args.rules_yaml)
+    slug = str(rules.get("title") or Path(args.rules_yaml).stem).replace(" ", "-").lower()
+    out_dir = Path(args.out_dir) if args.out_dir else Path("print") / f"{slug}-exam"
+    previous_codes = (
+        [c.strip() for c in args.previous_codes.split(",") if c.strip()]
+        if args.previous_codes
+        else None
+    )
+
+    def _print_paths(result: dict) -> None:
+        for paper in ("A", "B"):
+            paths = result[paper]
+            print(f"[Paper {paper}] {paths['questions']} questions")
+            print(f"  PDF       -> {paths['pdf']}")
+            print(f"  TeX       -> {paths['tex']}")
+            print(f"  verify    -> {paths['verify']}")
+            print(f"  题单       -> {paths['index']}")
+            print(f"  定稿清单   -> {paths['confirmed']}")
+            print(f"  组卷 MD    -> {paths['markdown']}")
+        print(f"候选池   -> {result['backup']}")
+        print(f"选题清单 -> {result['selection']}")
+
+    # ---- Phase 2: 定稿后重渲染（重新导出组卷 Markdown → exam-formatter）----
+    if args.render:
+        render_a = args.render_a or out_dir / "paper-A-confirmed.json"
+        render_b = args.render_b or out_dir / "paper-B-confirmed.json"
+        if not Path(render_a).is_file() or not Path(render_b).is_file():
+            raise SystemExit(
+                "--render needs paper-A/B-confirmed.json in the out dir "
+                "(run the Phase 1 select first), or pass --render-a/--render-b "
+                "pointing at the confirmed pick JSONs."
+            )
+        split = load_confirmed_split(render_a, render_b)
+        result = build_exam_papers(
+            rules,
+            docs_dir=args.docs,
+            out_dir=out_dir,
+            title=args.title,
+            duration=args.duration,
+            split=split,
+        )
+        _print_paths(result)
+        print("\nPhase 2 完成。组卷 Markdown 已导出（exam-<A|B>.md）。")
+        print("下一步：chemistry-exam-formatter 吃 exam-<A|B>.md 转录 + 排版(12pt)。")
+        print("然后做两层自动校对：verify-*.md 文本 diff + 视觉并排。")
+        return 0
+
+    # ---- Phase 1: 出卷（截图版）→ 题单/候选池/清单/定稿清单/组卷 Markdown ----
+    result = build_exam_papers(
+        rules,
+        docs_dir=args.docs,
+        out_dir=out_dir,
+        title=args.title,
+        duration=args.duration,
+        previous_codes=previous_codes,
+        previous_ratio=args.previous_ratio,
+    )
+    _print_paths(result)
+    print("\nPhase 1 完成（Section A/B 均为截图版草稿，选完即定稿，无需人工勾选）。下一步：")
+    print("  1) 组卷 Markdown 已导出 exam-<A|B>.md，交给 chemistry-exam-formatter 转录 + 排版(12pt)")
+    print("  2) 两层自动校对（verify-*.md 文本 diff + 视觉并排）")
+    print("  （可选：如需改题，口述「改第 N 题」后跑 --render 重新导出组卷 Markdown）")
+    return 0
+
+
+def _cmd_print(args: argparse.Namespace) -> int:
+    """Render a pick JSON (select or -confirmed.json) into print-ready PDFs."""
+    import json
+
+    from chembank.print import load_explanations
+
+    pick_path = Path(args.pick_json)
+    pick = json.loads(pick_path.read_text(encoding="utf-8"))
+    vault_root = _resolve_vault_arg(args, paper=None)
+    slug = str(pick.get("slug") or Path(args.pick_json).stem)
+    out_dir = Path(args.out_dir) if args.out_dir else Path("print") / slug
+    results = print_pick(
+        pick,
+        vault_root=vault_root,
+        out_dir=out_dir,
+        explanations=load_explanations(args.explanations),
+        with_marking=not args.student_only,
+        title=args.title,
+    )
+    for kind, path in results.items():
+        print(f"Wrote {kind} PDF -> {path}")
     return 0
 
 
@@ -1093,6 +1209,86 @@ def build_parser() -> argparse.ArgumentParser:
         help="Auto-open the browser on startup",
     )
     srv.set_defaults(func=_cmd_serve)
+
+    prt = sub.add_parser(
+        "print",
+        help="Render a pick JSON (select or -confirmed.json) into print-ready PDFs",
+    )
+    prt.add_argument("pick_json", help="Pick JSON (select output or -confirmed.json)")
+    prt.add_argument(
+        "--out-dir",
+        default=None,
+        help="Output directory (default: print/<slug>)",
+    )
+    prt.add_argument(
+        "--vault",
+        default="vault",
+        help="Vault root for asset resolution (default: vault)",
+    )
+    prt.add_argument(
+        "--student-only",
+        action="store_true",
+        help="Only emit the student PDF (skip the marking-scheme version)",
+    )
+    prt.add_argument(
+        "--title",
+        default=None,
+        help="Override the PDF title (default: 'Homework <number>' from the "
+        "pick's syllabus codes, e.g. 'Homework 5.2')",
+    )
+    prt.add_argument(
+        "--explanations",
+        default=None,
+        help="Optional JSON mapping question_id -> English explanation text "
+        "(agent-generated for questions lacking examiner notes)",
+    )
+    prt.set_defaults(func=_cmd_print)
+
+    exam = sub.add_parser(
+        "exam",
+        help="Assemble a formal A/B unit exam (transcribe -> LaTeX -> compile -> verify)",
+    )
+    exam.add_argument("rules_yaml", help="Selection rules YAML (e.g. pick/exam-3-bonding.yaml)")
+    exam.add_argument("--docs", default="draft", help="Question corpus root (default: draft)")
+    exam.add_argument(
+        "--out-dir",
+        default=None,
+        help="Output directory (default: print/<slug>-exam)",
+    )
+    exam.add_argument("--title", default=None, help="Override the exam title")
+    exam.add_argument("--duration", default="40 MINUTES", help="Exam duration shown on the cover")
+    exam.add_argument(
+        "--previous-codes",
+        default=None,
+        help="Comma-separated syllabus codes for earlier units (e.g. '1,2') to draw "
+        "hard review questions from, capped at --previous-ratio",
+    )
+    exam.add_argument(
+        "--previous-ratio",
+        type=float,
+        default=0.10,
+        help="Max fraction of questions from earlier units (default 0.10 = 10%%)",
+    )
+    exam.add_argument(
+        "--render",
+        action="store_true",
+        help="Phase 2: re-render A/B PDFs and re-export 组卷 Markdown from "
+        "confirmed picks (defaults to paper-A/B-confirmed.json in --out-dir; "
+        "override with --render-a/--render-b).",
+    )
+    exam.add_argument(
+        "--render-a",
+        default=None,
+        help="Confirmed pick JSON for Paper A (Phase 2 --render; default "
+        "<out-dir>/paper-A-confirmed.json)",
+    )
+    exam.add_argument(
+        "--render-b",
+        default=None,
+        help="Confirmed pick JSON for Paper B (Phase 2 --render; default "
+        "<out-dir>/paper-B-confirmed.json)",
+    )
+    exam.set_defaults(func=_cmd_exam)
 
     er = sub.add_parser(
         "er-extract",

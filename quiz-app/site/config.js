@@ -31,4 +31,9 @@ window.SUPABASE_CONFIG = {
   // 部署见 quiz-app/practice-logs.sql 与 supabase/functions/practice-log/。
   // 留空表示尚未部署：practice 页会降级为"仅本地(localStorage)记录"，读写同步上不去但仍可用。
   practiceEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/practice-log",
+
+  // ---- 学生讨论区（comments）配置 ----
+  // 评论/点赞/回复走 Edge Function comments（service_role 写库，anon 不直接碰表）。
+  // 留空表示尚未部署，practice 页的讨论区会显示"未配置"。
+  commentsEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/comments",
 };

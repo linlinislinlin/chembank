@@ -127,6 +127,15 @@ print/
 # 学生照单就能反推出整份试卷。务必保持忽略。
 pick/
 
+# 考试 / 试卷生成相关（本地 only · 泄题风险）
+# pick/ 与 print/ 已覆盖「选题单 + 生成出来的试卷 PDF」；这里再补考试生成的
+# 代码、素材、脚本与 skill，保证它们也绝不进公开仓库、且不会卡住 deploy.sh。
+assets/exam/
+src/chembank/exam.py
+tests/test_exam.py
+scripts/_ex_ig_exam.py
+.cursor/skills/chembank-exam/
+
 # Supabase CLI local state (do not commit)
 quiz-app/supabase/.temp/
 

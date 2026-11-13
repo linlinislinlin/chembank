@@ -225,3 +225,50 @@ window.PracticeDB = (() => {
 
   return { resolveStudent, readHistory, recordPractice };
 })();
+
+// ---- 学生讨论区（comments）封装 ----
+// 评论/点赞/回复走 Edge Function comments。身份用姓名+学号（与 practice-log 一致）。
+window.CommentDB = (() => {
+  const cfg = window.SUPABASE_CONFIG || {};
+
+  async function callEdge(payload) {
+    const url = (cfg.commentsEdgeUrl || "").replace(/\/+$/, "");
+    if (!url) throw new Error("Comments service is not configured");
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "text/plain" },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (resp.status === 401 || resp.status === 403) throw new Error(data.error || "no access");
+    if (!resp.ok) throw new Error(data.error || ("Comments service error (HTTP " + resp.status + ")"));
+    return data;
+  }
+
+  function ident(identity) {
+    return identity ? { name: identity.name, student_no: identity.no } : {};
+  }
+
+  async function list(questionId, identity) {
+    const d = await callEdge(Object.assign({ action: "list", question_id: questionId }, ident(identity)));
+    return d.comments || [];
+  }
+
+  async function post(questionId, identity, body, parentId) {
+    const d = await callEdge(Object.assign(
+      { action: "post", question_id: questionId, body, parent_id: parentId ?? null },
+      ident(identity)
+    ));
+    return d.comment;
+  }
+
+  async function like(commentId, identity, want) {
+    return callEdge(Object.assign({ action: "like", comment_id: commentId, like: want }, ident(identity)));
+  }
+
+  async function remove(commentId, teacherToken) {
+    return callEdge({ action: "delete", comment_id: commentId, teacher_token: teacherToken });
+  }
+
+  return { list, post, like, remove };
+})();

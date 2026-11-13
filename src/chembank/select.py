@@ -50,6 +50,15 @@ PICK_FIELDS = [
     "source_ms",
     "page_qp",
     "page_ms",
+    # Marking-scheme raw material (explanations for the answer-key PDF).
+    "examiner_notes",
+    "examiner_band",
+    "facility",
+    "percent_correct",
+    "common_errors",
+    "misconceptions",
+    "command_words",
+    "mark_scheme",
 ]
 
 
@@ -95,7 +104,7 @@ def load_rules(path: str | Path) -> dict[str, Any]:
             raise RuleError(f"Rules file {path}: `syllabus_codes` must be a non-empty list")
         rules["syllabus_codes"] = [str(c).strip() for c in codes if str(c).strip()]
 
-    for key in ("year_min", "year_max", "max_marks", "difficulty_min", "difficulty_max", "count"):
+    for key in ("year_min", "year_max", "max_marks", "difficulty_min", "difficulty_max", "count", "final_count"):
         value = rules.get(key)
         if value is None:
             continue
@@ -122,6 +131,9 @@ def load_rules(path: str | Path) -> dict[str, Any]:
         if not isinstance(rules["shuffle"], bool):
             raise RuleError(f"Rules file {path}: `shuffle` must be a boolean")
 
+    if "pool" in rules and not isinstance(rules["pool"], bool):
+        raise RuleError(f"Rules file {path}: `pool` must be a boolean")
+
     include_ids = rules.get("include_ids")
     if include_ids is not None:
         if not isinstance(include_ids, list) or not include_ids:
@@ -142,6 +154,8 @@ def load_rules(path: str | Path) -> dict[str, Any]:
     rules.setdefault("question_type", None)
     rules.setdefault("count", None)
     rules.setdefault("preserve_order", False)
+    rules.setdefault("pool", False)
+    rules.setdefault("final_count", None)
     return rules
 
 
@@ -359,6 +373,8 @@ def write_pick(
         "slug": _slugify(str(rules.get("title") or "handout")),
         "title": rules.get("title"),
         "question_count": len(questions),
+        "pool": bool(rules.get("pool")),
+        "target_count": rules.get("final_count"),
         "questions": [
             to_pick_entry(q, source="draft") for q in questions
         ],

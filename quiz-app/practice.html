@@ -288,6 +288,54 @@
   .run-stats { display:flex; gap:18px; align-items:center; }
   .run-stat { font-size:15px; color:var(--muted); }
   .run-stat b { color:var(--text); font-size:18px; }
+
+  /* Discussion (comments / likes / replies) */
+  .disc { margin-top:18px; border-top:1px solid var(--line); padding-top:14px; }
+  .disc-toggle {
+    display:flex; align-items:center; gap:8px; width:100%;
+    background:transparent; border:none; color:var(--muted);
+    font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;
+    padding:6px 0; text-align:left; transition:color var(--ease);
+  }
+  .disc-toggle:hover { color:var(--text); }
+  .disc-toggle .disc-ico { font-size:16px; }
+  .disc-toggle .disc-count { color:var(--muted); font-weight:500; }
+  .disc-toggle .disc-chev { margin-left:auto; font-size:12px; color:var(--muted); }
+  .disc-body { margin-top:8px; }
+  .disc-list { display:flex; flex-direction:column; gap:10px; }
+  .disc-empty { color:var(--muted); font-size:14px; padding:4px 0 8px; }
+  .disc-item { background:var(--bg-soft); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .disc-head { display:flex; align-items:baseline; gap:8px; margin-bottom:4px; }
+  .disc-who { font-size:13px; font-weight:700; color:var(--accent-deep); }
+  .disc-time { font-size:12px; color:var(--muted); }
+  .disc-text { font-size:15px; line-height:1.5; word-break:break-word; white-space:pre-wrap; }
+  .disc-meta { display:flex; align-items:center; gap:12px; margin-top:8px; }
+  .disc-like, .disc-reply {
+    display:inline-flex; align-items:center; gap:4px;
+    background:transparent; border:none; color:var(--muted); font-size:13px;
+    font-weight:600; cursor:pointer; font-family:inherit; padding:2px 4px; border-radius:6px;
+    transition:color var(--ease), background var(--ease);
+  }
+  .disc-like:hover, .disc-reply:hover { color:var(--accent); background:var(--accent-soft); }
+  .disc-like.on { color:var(--accent-deep); }
+  .disc-like:disabled, .disc-post:disabled { opacity:.55; cursor:not-allowed; }
+  .disc-replies { margin-top:10px; padding-left:12px; border-left:2px solid var(--line); display:flex; flex-direction:column; gap:8px; }
+  .disc-item.reply-item { background:var(--panel); }
+  .disc-composer { display:flex; gap:8px; margin-top:12px; }
+  .disc-composer.reply { margin-top:10px; }
+  .disc-input {
+    flex:1; resize:none; background:var(--panel); border:1px solid var(--line); color:var(--text);
+    border-radius:9px; padding:10px 12px; font-size:15px; font-family:inherit; min-height:42px;
+    transition:border-color var(--ease);
+  }
+  .disc-input:focus { outline:none; border-color:var(--accent); }
+  .disc-post {
+    background:var(--accent); color:#fff; border:none; border-radius:9px; padding:0 16px;
+    font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; flex:0 0 auto;
+    transition:background var(--ease);
+  }
+  .disc-post:hover { background:var(--accent-deep); }
+  .disc-login-hint { color:var(--muted); font-size:14px; padding:4px 0; }
 </style>
 </head>
 <body>
@@ -420,6 +468,7 @@
       <button class="btn green" id="restartBtn">Re-run</button>
     </div>
     <div class="run-stats" id="runStats"></div>
+    <div id="discRoot"></div>
   </div>
 
   <div class="card" id="stackCard" style="display:none">
@@ -899,6 +948,7 @@ function renderQ() {
 
   renderControls(res);
   renderRunStats();
+  mountDiscussion(document.getElementById("discRoot"), q.id);
 }
 
 function sourceLabel(q) {
@@ -1081,6 +1131,10 @@ function renderStack() {
       }
       card.appendChild(fb);
     }
+    const disc = document.createElement("div");
+    disc.className = "disc-mount";
+    card.appendChild(disc);
+    mountDiscussion(disc, q.id);
     box.appendChild(card);
   });
 }
@@ -1223,6 +1277,213 @@ function renderRunStats() {
     `<span class="run-stat">Answered <b>${done}</b></span>` +
     `<span class="run-stat">Correct <b>${ok}</b></span>` +
     `<span class="run-stat">Remaining <b>${left}</b></span>`;
+}
+
+// ---------- Discussion (comments / likes / replies) ----------
+// 每道题卡片底部挂一个可折叠讨论区。首次展开时才拉取评论（懒加载）。
+function mountDiscussion(container, qid) {
+  container.innerHTML = "";
+  const CDB = window.CommentDB;
+
+  const wrap = document.createElement("div");
+  wrap.className = "disc";
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "disc-toggle";
+  toggle.innerHTML =
+    '<span class="disc-ico">💬</span><span class="disc-lab">Discussion</span>' +
+    '<span class="disc-count"></span><span class="disc-chev">▸</span>';
+
+  const body = document.createElement("div");
+  body.className = "disc-body";
+  body.style.display = "none";
+
+  wrap.appendChild(toggle);
+  wrap.appendChild(body);
+  container.appendChild(wrap);
+
+  let loaded = false;
+  let comments = [];
+  const countEl = toggle.querySelector(".disc-count");
+
+  async function load() {
+    if (loaded) return;
+    loaded = true;
+    try { comments = CDB ? await CDB.list(qid, __identity) : []; }
+    catch (e) { comments = []; }
+    countEl.textContent = comments.length ? "(" + comments.length + ")" : "";
+    render();
+  }
+
+  toggle.addEventListener("click", () => {
+    const open = body.style.display !== "none";
+    if (open) {
+      body.style.display = "none";
+      toggle.classList.remove("open");
+      toggle.querySelector(".disc-chev").textContent = "▸";
+    } else {
+      body.style.display = "block";
+      toggle.classList.add("open");
+      toggle.querySelector(".disc-chev").textContent = "▾";
+      load();
+    }
+  });
+
+  function relTime(iso) {
+    const t = Date.parse(iso) || Date.now();
+    const s = Math.max(0, Math.floor((Date.now() - t) / 1000));
+    if (s < 60) return "just now";
+    if (s < 3600) return Math.floor(s / 60) + "m ago";
+    if (s < 86400) return Math.floor(s / 3600) + "h ago";
+    if (s < 7 * 86400) return Math.floor(s / 86400) + "d ago";
+    return new Date(t).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  }
+
+  function render() {
+    body.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "disc-list";
+    const tops = comments.filter((c) => c.parent_id == null);
+    if (!tops.length) {
+      const e = document.createElement("div");
+      e.className = "disc-empty";
+      e.textContent = "No discussion yet — ask a question about this one.";
+      list.appendChild(e);
+    } else {
+      tops.forEach((c) => list.appendChild(renderComment(c)));
+    }
+    body.appendChild(list);
+    body.appendChild(renderComposer(null));
+  }
+
+  function likeBtnFor(c) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "disc-like" + (c.liked_by_me ? " on" : "");
+    b.innerHTML = "👍 <span>" + c.likes + "</span>";
+    b.onclick = async () => {
+      if (!__identity) { flashLogin(); return; }
+      if (!CDB) return;
+      b.disabled = true;
+      try {
+        const r = await CDB.like(c.id, __identity, !c.liked_by_me);
+        c.likes = r.likes; c.liked_by_me = r.liked_by_me;
+        b.classList.toggle("on", c.liked_by_me);
+        b.innerHTML = "👍 <span>" + c.likes + "</span>";
+      } catch (e) {}
+      b.disabled = false;
+    };
+    return b;
+  }
+
+  function renderComment(c) {
+    const item = document.createElement("div");
+    item.className = "disc-item";
+
+    const head = document.createElement("div");
+    head.className = "disc-head";
+    head.innerHTML =
+      '<span class="disc-who">' + escHtml(c.student_no) + '</span>' +
+      '<span class="disc-time">' + relTime(c.created_at) + '</span>';
+
+    const text = document.createElement("div");
+    text.className = "disc-text";
+    text.textContent = c.body;
+
+    const meta = document.createElement("div");
+    meta.className = "disc-meta";
+    meta.appendChild(likeBtnFor(c));
+    const replyBtn = document.createElement("button");
+    replyBtn.type = "button";
+    replyBtn.className = "disc-reply";
+    replyBtn.textContent = "Reply";
+    replyBtn.onclick = () => {
+      if (!__identity) { flashLogin(); return; }
+      const existing = Array.from(item.children).find((el) =>
+        el.classList.contains("disc-composer") && el.classList.contains("reply"));
+      if (existing) { existing.remove(); return; }
+      const composer = renderComposer(c.id);
+      composer.classList.add("reply");
+      item.appendChild(composer);
+      composer.querySelector(".disc-input").focus();
+    };
+    meta.appendChild(replyBtn);
+
+    item.appendChild(head);
+    item.appendChild(text);
+    item.appendChild(meta);
+
+    const replies = comments.filter((r) => r.parent_id === c.id);
+    if (replies.length) {
+      const repWrap = document.createElement("div");
+      repWrap.className = "disc-replies";
+      replies.forEach((r) => {
+        const ri = document.createElement("div");
+        ri.className = "disc-item reply-item";
+        const rh = document.createElement("div");
+        rh.className = "disc-head";
+        rh.innerHTML =
+          '<span class="disc-who">' + escHtml(r.student_no) + '</span>' +
+          '<span class="disc-time">' + relTime(r.created_at) + '</span>';
+        const rt = document.createElement("div");
+        rt.className = "disc-text";
+        rt.textContent = r.body;
+        const rm = document.createElement("div");
+        rm.className = "disc-meta";
+        rm.appendChild(likeBtnFor(r));
+        ri.appendChild(rh); ri.appendChild(rt); ri.appendChild(rm);
+        repWrap.appendChild(ri);
+      });
+      item.appendChild(repWrap);
+    }
+    return item;
+  }
+
+  function renderComposer(parentId) {
+    const composer = document.createElement("div");
+    composer.className = "disc-composer";
+    if (__identity) {
+      const ta = document.createElement("textarea");
+      ta.className = "disc-input";
+      ta.rows = 2;
+      ta.placeholder = parentId ? "Write a reply…" : "Ask or share a note…";
+      const post = document.createElement("button");
+      post.type = "button";
+      post.className = "disc-post";
+      post.textContent = "Post";
+      post.onclick = async () => {
+        const v = ta.value.trim();
+        if (!v) return;
+        if (!CDB) return;
+        post.disabled = true; post.textContent = "Posting…";
+        try {
+          const nc = await CDB.post(qid, __identity, v, parentId);
+          comments.push(nc);
+          render();
+        } catch (e) {
+          post.disabled = false; post.textContent = "Post";
+          ta.focus();
+        }
+      };
+      composer.appendChild(ta);
+      composer.appendChild(post);
+    } else {
+      const hint = document.createElement("div");
+      hint.className = "disc-login-hint";
+      hint.textContent = "Sign in at the top of the page to post or like.";
+      composer.appendChild(hint);
+    }
+    return composer;
+  }
+
+  function flashLogin() {
+    const el = document.getElementById("idBadge");
+    if (el) {
+      el.textContent = "Select your name and confirm your student number to comment.";
+      setTimeout(() => { if (typeof renderIdentityBadge === "function") renderIdentityBadge(); }, 2200);
+    }
+  }
 }
 
 function showDone() {

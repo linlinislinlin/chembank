@@ -197,6 +197,40 @@ def test_write_and_load_pick_roundtrip(tmp_path: Path):
         assert key in q
 
 
+def test_load_rules_pool_fields(tmp_path: Path):
+    y = tmp_path / "pool.yaml"
+    y.write_text(
+        'title: "x"\nsyllabus_codes: ["5.1"]\ncount: 30\nfinal_count: 20\npool: true\n',
+        encoding="utf-8",
+    )
+    rules = load_rules(y)
+    assert rules["pool"] is True
+    assert rules["final_count"] == 20
+    assert rules["count"] == 30
+
+
+def test_load_rules_pool_must_be_bool(tmp_path: Path):
+    y = tmp_path / "pool_bad.yaml"
+    y.write_text('title: "x"\npool: "yes"\n', encoding="utf-8")
+    try:
+        load_rules(y)
+    except RuleError as e:
+        assert "pool" in str(e)
+    else:
+        raise AssertionError("expected RuleError")
+
+
+def test_write_pick_carries_pool_and_target(tmp_path: Path):
+    rules = _rules(count=30, final_count=20, pool=True)
+    picked = select_questions(rules, docs_dir=DOCS)
+    out = write_pick(rules, picked, tmp_path / "pick.json", docs_dir=DOCS)
+    data = load_pick(out)
+    assert data["pool"] is True
+    assert data["target_count"] == 20
+    # Rules dict inside the payload also keeps final_count for consumers.
+    assert data["rules"]["final_count"] == 20
+
+
 def test_include_ids_preserves_author_order():
     """A curated include_ids list is returned in that order, ignoring sort."""
     ids = [

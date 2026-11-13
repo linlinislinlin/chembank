@@ -46,6 +46,9 @@ HANDOUTS_DIR = "vault/handouts"
 
 # Suffix appended to a pruned handout so the original is never overwritten.
 PRUNED_SUFFIX = "-pruned.md"
+# Suffix for the confirmed pick JSON written beside the source pick file.
+# This is the bridge artifact that the next stage (print/assemble) consumes.
+CONFIRMED_SUFFIX = "-confirmed.json"
 
 
 # --------------------------------------------------------------------------- #
@@ -200,6 +203,7 @@ def pick_payload(pick: dict[str, Any], vault_root: Path) -> dict[str, Any]:
         "title": str(pick.get("title") or (pick.get("rules") or {}).get("title") or "Handout"),
         "slug": str(pick.get("slug") or ""),
         "question_count": len(questions),
+        "target_count": pick.get("target_count") or (pick.get("rules") or {}).get("final_count"),
         "questions": cards,
     }
 
@@ -241,6 +245,22 @@ def prune_pick(
     suffix = str(out_dir / f"{new_pick['slug']}{PRUNED_SUFFIX}")
     render_tiles(new_pick, vault_root=vault_root, out_path=suffix)
     return new_pick, Path(suffix)
+
+
+def write_confirmed(pick: dict[str, Any], pick_path: str | Path) -> Path:
+    """Write the confirmed (pruned) pick JSON beside the source pick file.
+
+    The confirmed JSON carries the same schema as ``chembank select`` output
+    (rules + the kept questions), so it can feed the next stage directly
+    (assemble / print) without re-selecting. Returns the written path.
+    """
+    pick_path = Path(pick_path)
+    slug = str(pick.get("slug") or "handout")
+    confirmed = pick_path.parent / f"{slug}{CONFIRMED_SUFFIX}"
+    confirmed.write_text(
+        json.dumps(pick, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return confirmed
 
 
 def parse_keep(csv: str | None) -> set[int]:
@@ -406,6 +426,7 @@ class SelectorHandler(BaseHTTPRequestHandler):
             new_pick, out_path = prune_pick(
                 pick, keep, vault_root=self.vault_root, out_dir=self.out_dir
             )
+            confirmed_path = write_confirmed(new_pick, pick_path)
         except OSError as e:
             self._send_json(500, {"ok": False, "error": f"export failed: {e}"})
             return
@@ -414,6 +435,7 @@ class SelectorHandler(BaseHTTPRequestHandler):
             {
                 "ok": True,
                 "out_path": str(out_path),
+                "confirmed_path": str(confirmed_path),
                 "question_count": new_pick["question_count"],
                 "slug": new_pick["slug"],
             },
@@ -522,7 +544,10 @@ const $ = (id) => document.getElementById(id);
 function countKept(){ return KEPT.size; }
 function renderCount(){
   const total = payload ? payload.question_count : 0;
-  $("count").textContent = `保留 ${countKept()} / 共 ${total} 题`;
+  const target = payload && payload.target_count ? payload.target_count : null;
+  let txt = `保留 ${countKept()} / 共 ${total} 题`;
+  if(target){ txt += ` · 目标 ${target} 题`; }
+  $("count").textContent = txt;
   $("title").textContent = payload ? payload.title : "加载中…";
 }
 
@@ -615,8 +640,9 @@ $("btn-export").addEventListener("click", async ()=>{
     const r = await fetch(`/api/export?file=${encodeURIComponent(FILE)}&keep=${keep}`);
     const data = await r.json();
     if(data.ok){
-      showMsg(`已生成新讲义（${data.question_count} 题）：${data.out_path}`
-        + `　请在桌面打开 Obsidian 题库，刷新后即可在 vault/handouts 中看到。`);
+      showMsg(`已保留 ${data.question_count} 题。`
+        + `讲义：${data.out_path}　定稿清单：${data.confirmed_path}`
+        + `　讲义在 Obsidian 刷新可见；定稿清单供下一步排版/打印使用。`);
     } else {
       showMsg(data.error||"导出失败","error");
     }
@@ -634,6 +660,8 @@ __all__ = [
     "DEFAULT_HOST",
     "DEFAULT_PORT",
     "PRUNED_SUFFIX",
+    "CONFIRMED_SUFFIX",
+    "write_confirmed",
     "SelectorHandler",
     "build_server",
     "serve",

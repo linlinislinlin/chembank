@@ -304,7 +304,7 @@ def question_y_ranges_on_page(page: Any) -> dict[str, tuple[float, float]]:
 
 
 _FOOTER_WORD_RE = re.compile(
-    r"UCLES|Turn\s*over|(?:9701|0620)/\d+|Permission|copyright|Acknowledgements|"
+    r"UCLES|Turn\s*over|9701|0620|Permission|copyright|Acknowledgements|"
     r"BLANK|www\.cambridge",
     re.I,
 )
@@ -622,7 +622,7 @@ def _content_bottom_y(
             continue
         if wx1 < x0 or wx0 > x1:
             continue
-        if _COPYRIGHT_START_RE.match(word):
+        if _COPYRIGHT_START_RE.match(word) or _FOOTER_WORD_RE.search(word):
             trailer_y = wy0 if trailer_y is None else min(trailer_y, wy0)
     hard_cap = trailer_y - 4.0 if trailer_y is not None else y1
 
@@ -1682,7 +1682,13 @@ def _structured_band_span(
             x0=40.0,
             y0=max(0.0, start_y),
             x1=float(page.rect.x1) - 32.0,
-            y1=float(page.rect.y1) - 36.0,
+            y1=_content_bottom_y(
+                page,
+                y0=max(0.0, start_y),
+                y1=float(page.rect.y1) - 36.0,
+                x0=40.0,
+                x1=float(page.rect.x1) - 32.0,
+            ),
         )
     )
     for j in range(start_page + 1, end_page):
@@ -1693,7 +1699,13 @@ def _structured_band_span(
                 x0=40.0,
                 y0=_STRUCTURED_PAGE_TOP,
                 x1=float(mid.rect.x1) - 32.0,
-                y1=float(mid.rect.y1) - 36.0,
+                y1=_content_bottom_y(
+                    mid,
+                    y0=_STRUCTURED_PAGE_TOP,
+                    y1=float(mid.rect.y1) - 36.0,
+                    x0=40.0,
+                    x1=float(mid.rect.x1) - 32.0,
+                ),
             )
         )
     # Last page: honour end_y exactly; omit near-empty top bands that would
@@ -1706,7 +1718,13 @@ def _structured_band_span(
                 x0=40.0,
                 y0=_STRUCTURED_PAGE_TOP,
                 x1=float(last.rect.x1) - 32.0,
-                y1=min(float(last.rect.y1) - 20.0, end_y),
+                y1=_content_bottom_y(
+                    last,
+                    y0=_STRUCTURED_PAGE_TOP,
+                    y1=min(float(last.rect.y1) - 20.0, end_y),
+                    x0=40.0,
+                    x1=float(last.rect.x1) - 32.0,
+                ),
             )
         )
     return bands
@@ -1919,6 +1937,7 @@ def structured_part_paper_clips(qp_pdf: Path) -> dict[str, PaperClip]:
             return len(doc) - 1, float(doc[-1].rect.y1) - 40.0
 
         out: dict[str, PaperClip] = {}
+        seen_parent_stem: set[str] = set()
         for pid, page_i, y0 in leaves:
             end_page, end_y = _end_before_next(page_i, y0, pid.parent)
             body_bands = _structured_band_span(
@@ -1930,25 +1949,37 @@ def structured_part_paper_clips(qp_pdf: Path) -> dict[str, PaperClip]:
             )
 
             shared: list[FigureRegion] = []
-            # Question-level intro: main Q start → first part marker
-            parent_clip = main_clips.get(pid.parent)
-            first_m = first_marker_pos.get(pid.parent)
-            if parent_clip is not None and first_m is not None:
-                q_page = parent_clip.bands[0].page - 1
-                q_y0 = parent_clip.bands[0].y0
-                m_page, m_y0 = first_m
-                stem_bands = _structured_band_span(
-                    doc,
-                    start_page=q_page,
-                    start_y=q_y0,
-                    end_page=m_page,
-                    end_y=m_y0 - 2.0,
-                )
-                shared.extend(stem_bands)
+            # Question-level intro (main Q stem) is prepended only once per
+            # parent: the first sub-part carries the opener, and later parts
+            # continue from their own marker so the stem is not repeated.
+            if pid.parent not in seen_parent_stem:
+                seen_parent_stem.add(pid.parent)
+                parent_clip = main_clips.get(pid.parent)
+                first_m = first_marker_pos.get(pid.parent)
+                if parent_clip is not None and first_m is not None:
+                    q_page = parent_clip.bands[0].page - 1
+                    q_y0 = parent_clip.bands[0].y0
+                    m_page, m_y0 = first_m
+                    stem_bands = _structured_band_span(
+                        doc,
+                        start_page=q_page,
+                        start_y=q_y0,
+                        end_page=m_page,
+                        end_y=m_y0 - 2.0,
+                    )
+                    shared.extend(stem_bands)
 
-            # Letter preamble under (b)/(c)/… before first roman child
+            # Letter preamble under (b)/(c)/… is prepended only to that
+            # letter's first roman child, so (b)(ii) does not repeat the (b)
+            # stem that (b)(i) already carried.
             key = (pid.parent, pid.letter)
-            if pid.roman and key in letter_pos and key in first_roman_pos:
+            is_first_roman = (
+                pid.roman is not None
+                and key in first_roman_pos
+                and first_roman_pos[key][0] == page_i
+                and abs(first_roman_pos[key][1] - y0) < 0.5
+            )
+            if is_first_roman and key in letter_pos:
                 lp, ly = letter_pos[key]
                 rp, ry = first_roman_pos[key]
                 if rp > lp or ry > ly + 8.0:

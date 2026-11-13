@@ -298,6 +298,58 @@ def test_export_reuses_original_pick_fields(tmp_path: Path):
     assert out_path.name == "tiles-selector-test-pruned.md"
 
 
+def test_export_writes_confirmed_json_beside_pick(tmp_path: Path):
+    """Export also writes a -confirmed.json (the bridge to the next stage)."""
+    pick = _pick(*_make_questions())
+    _write_pick(tmp_path, pick)
+    out_dir = tmp_path / "out"
+    out_dir.mkdir(exist_ok=True)
+
+    fake = _FakeHandler("/api/export?file=pick.json&keep=1,3", out_dir=out_dir)
+    fake.cwd = tmp_path
+    _HandlerBridge(fake).do_GET()
+
+    resp = fake.wfile
+    assert resp.status == 200
+    data = resp.json()
+    assert data["ok"] is True
+
+    confirmed = Path(data["confirmed_path"])
+    assert confirmed.is_file()
+    assert confirmed.name == "tiles-selector-test-confirmed.json"
+    assert confirmed.parent == tmp_path  # beside the source pick, not in out_dir
+
+    loaded = json.loads(confirmed.read_text(encoding="utf-8"))
+    assert loaded["question_count"] == 2
+    assert {q["id"] for q in loaded["questions"]} == {"q-c", "q-d"}
+    assert loaded["slug"] == "tiles-selector-test"
+
+
+def test_write_confirmed_helper(tmp_path: Path):
+    from chembank.serve import write_confirmed
+
+    pick = {"slug": "my-pick", "title": "x", "questions": []}
+    src = tmp_path / "pick.json"
+    src.write_text("{}\n", encoding="utf-8")
+    out = write_confirmed(pick, src)
+    assert out.name == "my-pick-confirmed.json"
+    assert out.parent == tmp_path
+    assert json.loads(out.read_text(encoding="utf-8"))["slug"] == "my-pick"
+
+
+def test_api_pick_surfaces_target_count(tmp_path: Path):
+    """A pool pick exposes target_count so the page can show 目标 N 题."""
+    pick = _pick(*_make_questions())
+    pick["rules"] = {"title": "Tiles Selector Test", "final_count": 20}
+    pick["target_count"] = 20
+    data = pick_payload(pick, VAULT)
+    assert data["target_count"] == 20
+
+    # Without any target, the field is falsy (None).
+    plain = pick_payload(_pick(*_make_questions()), VAULT)
+    assert not plain["target_count"]
+
+
 def test_export_missing_pick_returns_json_error(tmp_path: Path):
     fake = _FakeHandler("/api/export?file=nope.json&keep=1")
     fake.cwd = tmp_path

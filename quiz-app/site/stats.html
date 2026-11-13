@@ -169,6 +169,8 @@
   .mod-del { background:transparent; color:var(--red); border:1px solid var(--red); border-radius:7px; padding:4px 12px; cursor:pointer; font-size:12px; }
   .mod-del:hover { background:var(--red); color:#fff; }
   .mod-del:disabled { opacity:.5; cursor:not-allowed; }
+  .mod-q { color:var(--muted); font-size:12px; margin-bottom:2px; }
+  .mod-q b { color:var(--accent-deep); font-weight:700; }
 </style>
 </head>
 <body>
@@ -241,13 +243,15 @@
     </div>
   </div>
 
-  <!-- 评论审核（教师）：按题目 ID 查看学生评论并删除不当内容 -->
+  <!-- 评论审核（教师）：一键查看全部学生评论并删除不当内容 -->
   <div class="card" id="modCard">
     <h2>💬 评论审核</h2>
-    <div class="small-note" style="margin:0 0 8px">输入题目 ID，查看该题的学生评论并删除不当内容。评论只显示学号后 4 位、不含姓名。</div>
-    <div style="display:flex;gap:8px">
-      <input id="modQid" placeholder="题目 ID，如 cie-9701-2024-mj-p11-q12" />
-      <button class="btn" id="modLoad" type="button">查看评论</button>
+    <div class="small-note" style="margin:0 0 8px">一键查看全部学生评论（最新在前），每条附题目出处，可直接删除不当内容。评论只显示学号后 4 位、不含姓名。</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn" id="modAll" type="button">查看全部评论</button>
+      <span class="small-note" style="margin:0">或按题目 ID：</span>
+      <input id="modQid" placeholder="cie-9701-2024-mj-p11-q12" />
+      <button class="btn ghost" id="modLoad" type="button">查看该题</button>
     </div>
     <div id="modList" style="margin-top:10px"></div>
   </div>
@@ -283,27 +287,68 @@ let lastOverview = null;
 const modQidEl = document.getElementById("modQid");
 const modListEl = document.getElementById("modList");
 document.getElementById("modLoad").addEventListener("click", loadModeration);
+document.getElementById("modAll").addEventListener("click", loadAllModeration);
 modQidEl.addEventListener("keydown", (e) => { if (e.key === "Enter") loadModeration(); });
 
-async function loadModeration() {
-  const qid = modQidEl.value.trim();
-  if (!qid) { modListEl.innerHTML = '<div class="err">请输入题目 ID</div>'; return; }
+// 把题目 ID 转成「年份 卷 卷号 题号 + 题干摘要」的可读出处
+function qSnippet(qid) {
+  const q = BYID.get(qid);
+  if (!q) return null;
+  const plain = String(q.title || q.body || "")
+    .replace(/\[图\][^\n]*/g, "")
+    .replace(/\$\$?/g, "")
+    .replace(/\\[a-zA-Z]+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const label = (q.year && q.session && q.paper && q.question)
+    ? q.year + " " + q.session + " P" + q.paper + " Q" + q.question
+    : qid;
+  return { label: label, snippet: plain.slice(0, 90) };
+}
+
+async function loadAllModeration() {
   if (!window.CommentDB) { modListEl.innerHTML = '<div class="err">评论服务未配置</div>'; return; }
-  modListEl.innerHTML = '<div class="small-note" style="margin:0">加载中…</div>';
+  modListEl.innerHTML = '<div class="small-note" style="margin:0">加载全部评论中…</div>';
   try {
-    const comments = await window.CommentDB.list(qid, null);
-    renderModeration(comments);
+    const comments = await window.CommentDB.moderate(__token, 300);
+    renderModeration(comments, /* latestFirst */ true);
   } catch (e) {
     modListEl.innerHTML = '<div class="err">加载失败：' + esc(e && e.message ? e.message : e) + '</div>';
   }
 }
 
-function renderModeration(comments) {
-  if (!comments.length) { modListEl.innerHTML = '<div class="empty" style="padding:16px">这道题还没有评论。</div>'; return; }
+async function loadModeration() {
+  const qid = modQidEl.value.trim();
+  if (!qid) { modListEl.innerHTML = '<div class="err">请输入题目 ID，或直接点「查看全部评论」</div>'; return; }
+  if (!window.CommentDB) { modListEl.innerHTML = '<div class="err">评论服务未配置</div>'; return; }
+  modListEl.innerHTML = '<div class="small-note" style="margin:0">加载中…</div>';
+  try {
+    const comments = await window.CommentDB.list(qid, null);
+    renderModeration(comments, /* latestFirst */ false);
+  } catch (e) {
+    modListEl.innerHTML = '<div class="err">加载失败：' + esc(e && e.message ? e.message : e) + '</div>';
+  }
+}
+
+function renderModeration(comments, latestFirst) {
+  if (!comments.length) { modListEl.innerHTML = '<div class="empty" style="padding:16px">还没有评论。</div>'; return; }
   modListEl.innerHTML = "";
-  comments.slice().sort((a, b) => a.id - b.id).forEach((c) => {
+  comments.slice().sort((a, b) => latestFirst ? (b.id - a.id) : (a.id - b.id)).forEach((c) => {
     const row = document.createElement("div");
     row.className = "mod-item";
+    const qctx = qSnippet(c.question_id);
+    if (qctx) {
+      const qline = document.createElement("div");
+      qline.className = "mod-q";
+      qline.innerHTML = '📌 <b>' + esc(qctx.label) + '</b>'
+        + (qctx.snippet ? ' · ' + esc(qctx.snippet) : '');
+      row.appendChild(qline);
+    } else {
+      const qline = document.createElement("div");
+      qline.className = "mod-q";
+      qline.textContent = '📌 ' + c.question_id;
+      row.appendChild(qline);
+    }
     const head = document.createElement("div");
     head.className = "mod-head";
     head.innerHTML =

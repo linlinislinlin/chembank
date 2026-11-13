@@ -275,5 +275,11 @@ window.CommentDB = (() => {
     return callEdge({ action: "delete", comment_id: commentId, teacher_token: teacherToken });
   }
 
-  return { list, post, like, remove };
+  // 教师审核：拉全部评论流（最新在前），无需逐题找 ID
+  async function moderate(teacherToken, limit) {
+    const d = await callEdge({ action: "moderate", teacher_token: teacherToken, limit: limit || 200 });
+    return d.comments || [];
+  }
+
+  return { list, post, like, remove, moderate };
 })();

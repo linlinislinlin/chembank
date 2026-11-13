@@ -238,6 +238,39 @@ Deno.serve(async (req: Request) => {
       return json(200, { likes: counts.get(commentId) ?? 0, liked_by_me: want });
     }
 
+    // ---- 教师审核：拉全部评论流（无需逐题找 ID）----
+    if (action === "moderate") {
+      const token = clean(body.teacher_token);
+      if (!TEACHER_TOKEN || !tokEq(token, TEACHER_TOKEN)) {
+        return json(401, { error: "unauthorized" });
+      }
+      const limit = Math.min(Number(body.limit) || 200, 1000);
+      const { data: rows, error } = await supabase
+        .from("question_comments")
+        .select("id, question_id, parent_id, body, created_at, students!question_comments_student_id_fkey(student_no)")
+        .eq("deleted", false)
+        .order("id", { ascending: false })
+        .limit(limit);
+      if (error) return json(500, { error: error.message });
+
+      const ids = (rows ?? []).map((r) => Number(r.id));
+      const likes = await likeCounts(ids);
+
+      const comments = (rows ?? []).map((r) => {
+        const stu = r.students as { student_no?: string } | null;
+        return {
+          id: Number(r.id),
+          question_id: r.question_id,
+          parent_id: r.parent_id == null ? null : Number(r.parent_id),
+          body: r.body,
+          created_at: r.created_at,
+          student_no: last4(stu && stu.student_no),
+          likes: likes.get(Number(r.id)) ?? 0,
+        };
+      });
+      return json(200, { comments });
+    }
+
     // ---- 教师软删 ----
     if (action === "delete") {
       const token = clean(body.teacher_token);

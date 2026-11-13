@@ -136,8 +136,25 @@ tests/test_exam.py
 scripts/_ex_ig_exam.py
 .cursor/skills/chembank-exam/
 
+# 选题/组卷中间产物（本地 only · 泄题风险）
+# 「题目清单」「精选」= 老师按考点整理选题单（含答案），等同 pick/，公开即泄题
+*题目清单*.md
+*精选*.md
+
+# 出题/作业/小测的质检、预览、排版工具（本地 only，与 exam 相关对齐）
+scripts/_coverage.py
+scripts/_qa_ig.py
+scripts/_verify_ms.py
+scripts/make_ig_unit3_preview.py
+src/chembank/print.py
+tests/test_print.py
+.cursor/skills/chembank-homework/
+.cursor/skills/chembank-mcq-transcribe/
+.cursor/skills/chembank-route/
+
 # Supabase CLI local state (do not commit)
 quiz-app/supabase/.temp/
+supabase/.temp/
 
 # ChemBank quiz web app — the generated site IS committed to the (public) repo
 # so GitHub Actions can deploy it without needing the copyrighted source data

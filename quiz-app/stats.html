@@ -156,6 +156,19 @@
   .gate .input { width:100%; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:12px 14px; font-size:15px; }
   .gate .input:focus { outline:none; border-color:var(--accent); }
   .gate .err { color:var(--red); font-size:13px; min-height:20px; }
+
+  /* 评论审核（教师） */
+  #modQid { flex:1; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:10px 14px; font-size:14px; }
+  #modQid:focus { outline:none; border-color:var(--accent); }
+  .mod-item { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px; background:var(--bg-soft); }
+  .mod-head { display:flex; align-items:baseline; gap:8px; margin-bottom:4px; }
+  .mod-who { font-weight:700; color:var(--accent-deep); font-size:13px; }
+  .mod-time { color:var(--muted); font-size:12px; }
+  .mod-meta { margin-left:auto; color:var(--muted); font-size:12px; }
+  .mod-body { font-size:14px; white-space:pre-wrap; word-break:break-word; margin-bottom:8px; }
+  .mod-del { background:transparent; color:var(--red); border:1px solid var(--red); border-radius:7px; padding:4px 12px; cursor:pointer; font-size:12px; }
+  .mod-del:hover { background:var(--red); color:#fff; }
+  .mod-del:disabled { opacity:.5; cursor:not-allowed; }
 </style>
 </head>
 <body>
@@ -227,6 +240,17 @@
       <div class="empty" id="qEmpty" style="display:none">暂无数据</div>
     </div>
   </div>
+
+  <!-- 评论审核（教师）：按题目 ID 查看学生评论并删除不当内容 -->
+  <div class="card" id="modCard">
+    <h2>💬 评论审核</h2>
+    <div class="small-note" style="margin:0 0 8px">输入题目 ID，查看该题的学生评论并删除不当内容。评论只显示学号后 4 位、不含姓名。</div>
+    <div style="display:flex;gap:8px">
+      <input id="modQid" placeholder="题目 ID，如 cie-9701-2024-mj-p11-q12" />
+      <button class="btn" id="modLoad" type="button">查看评论</button>
+    </div>
+    <div id="modList" style="margin-top:10px"></div>
+  </div>
 </div>
 
 <script src="data.js?v=20260906z"></script>
@@ -255,6 +279,63 @@ let trackFilter = "";
 let scopeClass = "";
 // 最近一次 renderOverview 的入参，供切换班级时原地重绘（不重新联网拉数据）。
 let lastOverview = null;
+// ---------- 评论审核（教师）----------
+const modQidEl = document.getElementById("modQid");
+const modListEl = document.getElementById("modList");
+document.getElementById("modLoad").addEventListener("click", loadModeration);
+modQidEl.addEventListener("keydown", (e) => { if (e.key === "Enter") loadModeration(); });
+
+async function loadModeration() {
+  const qid = modQidEl.value.trim();
+  if (!qid) { modListEl.innerHTML = '<div class="err">请输入题目 ID</div>'; return; }
+  if (!window.CommentDB) { modListEl.innerHTML = '<div class="err">评论服务未配置</div>'; return; }
+  modListEl.innerHTML = '<div class="small-note" style="margin:0">加载中…</div>';
+  try {
+    const comments = await window.CommentDB.list(qid, null);
+    renderModeration(comments);
+  } catch (e) {
+    modListEl.innerHTML = '<div class="err">加载失败：' + esc(e && e.message ? e.message : e) + '</div>';
+  }
+}
+
+function renderModeration(comments) {
+  if (!comments.length) { modListEl.innerHTML = '<div class="empty" style="padding:16px">这道题还没有评论。</div>'; return; }
+  modListEl.innerHTML = "";
+  comments.slice().sort((a, b) => a.id - b.id).forEach((c) => {
+    const row = document.createElement("div");
+    row.className = "mod-item";
+    const head = document.createElement("div");
+    head.className = "mod-head";
+    head.innerHTML =
+      '<span class="mod-who">' + esc(c.student_no) + '</span>' +
+      '<span class="mod-time">' + new Date(c.created_at).toLocaleString("zh-CN", { hour12: false }) + '</span>' +
+      '<span class="mod-meta">👍 ' + c.likes + (c.parent_id ? " · 回复" : "") + "</span>";
+    const body = document.createElement("div");
+    body.className = "mod-body";
+    body.textContent = c.body;
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "mod-del";
+    del.textContent = "删除";
+    del.onclick = async () => {
+      if (!confirm("确定删除这条评论？（" + c.student_no + "）")) return;
+      del.disabled = true; del.textContent = "删除中…";
+      try {
+        await window.CommentDB.remove(c.id, __token);
+        row.style.opacity = "0.4";
+        del.textContent = "已删除";
+      } catch (e) {
+        del.disabled = false; del.textContent = "删除";
+        alert("删除失败：" + (e && e.message ? e.message : e));
+      }
+    };
+    row.appendChild(head);
+    row.appendChild(body);
+    row.appendChild(del);
+    modListEl.appendChild(row);
+  });
+}
+
 async function loadAssignments() {
   try {
     assignments = await DB.listAssignments();

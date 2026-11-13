@@ -65,7 +65,7 @@ PROTECTED_SUBSTRINGS = (
 NAME_PATTERNS = [
     (re.compile(r"\bexam\b", re.I), "文件名含 exam"),
     (re.compile(r"\bunit[-_ ]?test\b", re.I), "文件名含 unit test"),
-    (re.compile(r"考试|试卷|答案卷|选题单|组卷", re.I), "文件名含中文出卷词"),
+    (re.compile(r"考试|试卷|答案卷|选题单|组卷|题目清单|精选", re.I), "文件名含中文出卷词"),
     (re.compile(r"paper[-_][ab]\d*\.", re.I), "文件名像 A/B 卷"),
     (re.compile(r"answers?[-_][ab]\d*\.", re.I), "文件名像 A/B 卷答案"),
 ]

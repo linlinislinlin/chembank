@@ -246,7 +246,12 @@ window.CommentDB = (() => {
   }
 
   function ident(identity) {
-    return identity ? { name: identity.name, student_no: identity.no } : {};
+    // 兼容不同页面身份对象的字段名：
+    //   practice.html 用 { name, no }
+    //   homework.html  用 { name, studentNo }
+    if (!identity) return {};
+    const no = identity.no || identity.studentNo || identity.student_no || "";
+    return { name: identity.name || "", student_no: no };
   }
 
   async function list(questionId, identity) {

@@ -868,6 +868,29 @@ body.landing .hero .sub {
 /* --------------------------------------------------------------------------
    17. HOMEWORK FOLDER LIST (as.html / ig.html)
    -------------------------------------------------------------------------- */
+/* Lucky Wheel promo banner — 作业首页抽奖广告 */
+.stamp-ad {
+  max-width: 640px; margin: 0 auto 24px;
+  display: flex; align-items: center; gap: 16px;
+  background: linear-gradient(135deg, #2a0f42 0%, #4a1d6e 55%, #8a2d3b 100%);
+  border: 1px solid rgba(255,213,79,.55);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  color: #fff7ea;
+  box-shadow: 0 8px 24px rgba(74,29,110,.25);
+  position: relative; overflow: hidden;
+}
+.stamp-ad::before {
+  content: ""; position: absolute; top: -46px; right: -30px;
+  width: 130px; height: 130px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,213,79,.4), transparent 70%);
+}
+.stamp-ad .ico { font-size: 40px; line-height: 1; flex: 0 0 auto; animation: stamp-spin 6s linear infinite; position: relative; }
+@keyframes stamp-spin { to { transform: rotate(360deg); } }
+.stamp-ad .body { flex: 1; min-width: 0; position: relative; }
+.stamp-ad h3 { margin: 0 0 3px; font-size: 16.5px; font-weight: 800; color: #ffd54f; letter-spacing: -.2px; }
+.stamp-ad p { margin: 0; font-size: 13px; color: rgba(255,247,234,.88); line-height: 1.5; }
+
 .assign-panel { max-width: 640px; margin: 0 auto 28px; }
 .assign-card {
   background: var(--panel); border: 1px solid var(--line);

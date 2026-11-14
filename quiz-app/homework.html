@@ -752,6 +752,7 @@ function resetTesterBar() {
 }
 
 function showLocked() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
   document.getElementById("idCard").style.display = "none";
   document.getElementById("quizWrap").style.display = "none";
   document.getElementById("doneCard").style.display = "block";
@@ -764,27 +765,37 @@ function showLocked() {
 }
 
 function showResult(result) {
+  window.scrollTo({ top: 0, behavior: "smooth" });
   document.getElementById("idCard").style.display = "none";
   document.getElementById("quizWrap").style.display = "none";
   document.getElementById("doneCard").style.display = "block";
   document.getElementById("doneTitle").textContent = (result.assignment && result.assignment.title || "Homework") + " · Submitted";
   const st = document.getElementById("doneStats");
   st.innerHTML = "";
-  const mk = (v, k) => {
+  const items = result.items || [];
+  const correct = items.filter((it) => it.is_correct === true).length;
+  const wrong = items.filter((it) => it.is_correct === false).length;
+  const mk = (v, k, color) => {
     const d = document.createElement("div");
     d.className = "stat";
-    d.innerHTML = `<div class="v">${v}</div><div class="k">${k}</div>`;
+    d.innerHTML = `<div class="v"${color ? ` style="color:${color}"` : ""}>${v}</div><div class="k">${k}</div>`;
     return d;
   };
   st.appendChild(mk(result.score + " / " + result.total_score, "Score"));
   st.appendChild(mk((result.accuracy ?? 0) + "%", "Accuracy"));
-  st.appendChild(mk((result.items || []).length, "Questions"));
+  st.appendChild(mk(correct, "Correct", "var(--green)"));
+  st.appendChild(mk(wrong, "Wrong", "var(--red)"));
 
-  // 幸运转盘入口：交卷后可以跳过去抽一次
+  // 幸运转盘入口：交卷后跳到转盘抽一次（放在统计下方，醒目全宽按钮）
   try {
     const stampBtn = document.createElement("button");
     stampBtn.className = "btn";
-    stampBtn.style.marginTop = "14px";
+    stampBtn.style.width = "100%";
+    stampBtn.style.marginTop = "4px";
+    stampBtn.style.background = "linear-gradient(180deg, #ffe37a, #ffb300 50%, #ff8a00)";
+    stampBtn.style.color = "#4a2600";
+    stampBtn.style.fontWeight = "800";
+    stampBtn.style.boxShadow = "0 4px 0 #c96f00, 0 8px 18px rgba(255,178,0,.35)";
     stampBtn.textContent = "🎡 Spin & Win a Stamp";
     stampBtn.onclick = () => {
       const p = new URLSearchParams({
@@ -795,11 +806,11 @@ function showResult(result) {
       });
       location.href = "stamp.html?" + p.toString();
     };
-    st.appendChild(stampBtn);
+    st.insertAdjacentElement("afterend", stampBtn);
   } catch (_) {}
 
   const tbar = resetTesterBar();
-  if (tbar) st.appendChild(tbar);
+  if (tbar) st.insertAdjacentElement("afterend", tbar);
 
   const byId = new Map((result.items || []).map((it) => [it.question_id, it]));
   const qs = (result.assignment && result.assignment.questions) || assignment.questions || [];

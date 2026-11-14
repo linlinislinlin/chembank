@@ -1,119 +1,157 @@
 <!DOCTYPE html>
-<html lang="zh" data-course="as">
+<html lang="en" data-course="as">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#8A2D3B" />
+<meta name="theme-color" content="#FFB300" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>幸运转盘 · ChemBank</title>
+<title>Lucky Wheel · ChemBank</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="stylesheet" href="theme.css" />
 <style>
-  :root {
-    --stamp-bg: radial-gradient(circle at 50% 20%, #2b1035, #150818 70%);
-    --stamp-gold: #f5c34a;
-    --stamp-gold-2: #e8a33d;
-    --stamp-red: #e4576b;
-    --stamp-gray: #5a5360;
-  }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     min-height: 100vh;
     font-family: 'Inter', -apple-system, 'PingFang SC', sans-serif;
-    color: #f4eef7;
-    background: var(--stamp-bg);
+    color: #fff7ea;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #5b1d8f 0%, transparent 60%),
+      radial-gradient(900px 500px at 85% 110%, #b3206b 0%, transparent 55%),
+      radial-gradient(circle at 50% 50%, #2a0f42, #12051e 75%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 28px 16px;
+    padding: 30px 14px;
+    overflow-x: hidden;
   }
-  .wrap { width: 100%; max-width: 440px; text-align: center; }
+  .wrap { width: 100%; max-width: 620px; text-align: center; }
+
   h1 {
-    margin: 0 0 4px; font-size: 26px; font-weight: 800; letter-spacing: -.5px;
-    background: linear-gradient(90deg, #ffd978, #ffb15c);
+    margin: 0 0 2px; font-size: 40px; font-weight: 900; letter-spacing: 1px;
+    background: linear-gradient(180deg, #fff3c4 0%, #ffd54f 40%, #ff9d00 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 18px rgba(255,178,0,.45));
+    text-transform: uppercase;
   }
-  .sub { font-size: 13px; color: rgba(244,238,247,.72); margin: 0 0 6px; }
+  .sub { font-size: 14px; color: rgba(255,247,234,.75); margin: 0 0 4px; font-weight: 600; }
   .who {
     display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; color: rgba(244,238,247,.85);
-    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-    padding: 4px 12px; border-radius: 999px; margin: 8px 0 4px;
+    font-size: 12px; color: rgba(255,247,234,.9);
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    padding: 4px 12px; border-radius: 999px; margin: 8px 0 2px;
   }
 
-  .stage { margin-top: 14px; }
+  .stage { margin-top: 10px; }
 
-  .wheel-box { position: relative; width: 320px; max-width: 88vw; margin: 8px auto 0; }
+  .wheel-box { position: relative; width: min(94vw, 560px); margin: 4px auto 0; }
   canvas#wheel { width: 100%; height: auto; display: block; }
+
   .pointer {
-    position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 14px solid transparent; border-right: 14px solid transparent;
-    border-top: 26px solid #fff;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
+    position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; z-index: 3;
+    border-left: 22px solid transparent; border-right: 22px solid transparent;
+    border-top: 42px solid #ffd54f;
+    filter: drop-shadow(0 0 10px rgba(255,178,0,.9)) drop-shadow(0 3px 4px rgba(0,0,0,.5));
   }
+  .pointer::after {
+    content: ""; position: absolute; top: -42px; left: -10px;
+    border-left: 10px solid transparent; border-right: 10px solid transparent;
+    border-top: 14px solid #fff8e1;
+  }
+
   .hub {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 64px; height: 64px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #fff, #e8e2ea 70%);
+    width: 92px; height: 92px; border-radius: 50%; z-index: 4;
+    background: radial-gradient(circle at 35% 30%, #fffbe6, #ffd54f 55%, #f59b00 100%);
     display: grid; place-items: center;
-    color: #6b2230; font-weight: 800; font-size: 13px;
-    box-shadow: 0 3px 10px rgba(0,0,0,.45);
+    color: #7a1f00; font-weight: 900; font-size: 17px; letter-spacing: 1px;
+    box-shadow: 0 0 0 6px rgba(0,0,0,.35), 0 0 24px rgba(255,178,0,.7);
+    animation: hubPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes hubPulse {
+    0%,100% { box-shadow: 0 0 0 6px rgba(0,0,0,.35), 0 0 24px rgba(255,178,0,.7); }
+    50% { box-shadow: 0 0 0 6px rgba(0,0,0,.35), 0 0 44px rgba(255,178,0,1); }
   }
 
   .btn {
-    margin-top: 18px; width: 100%; padding: 14px 18px; border: none; border-radius: 14px;
-    font-family: inherit; font-size: 17px; font-weight: 800; cursor: pointer;
-    color: #3a1d08;
-    background: linear-gradient(180deg, #ffd978, #f5a93d);
-    box-shadow: 0 6px 0 #c57c16, 0 10px 18px rgba(0,0,0,.3);
+    margin-top: 20px; width: 100%; padding: 16px 20px; border: none; border-radius: 18px;
+    font-family: inherit; font-size: 20px; font-weight: 900; letter-spacing: 1px; cursor: pointer;
+    color: #4a2600; text-transform: uppercase;
+    background: linear-gradient(180deg, #ffe37a 0%, #ffb300 50%, #ff8a00 100%);
+    box-shadow: 0 7px 0 #c96f00, 0 14px 26px rgba(0,0,0,.4), inset 0 2px 0 rgba(255,255,255,.7);
     transition: transform .06s ease, box-shadow .06s ease;
+    animation: btnGlow 1.8s ease-in-out infinite;
   }
-  .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #c57c16, 0 6px 12px rgba(0,0,0,.3); }
-  .btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: 0 4px 0 #c57c16; }
+  @keyframes btnGlow {
+    0%,100% { box-shadow: 0 7px 0 #c96f00, 0 14px 26px rgba(0,0,0,.4), 0 0 0 rgba(255,178,0,0); }
+    50% { box-shadow: 0 7px 0 #c96f00, 0 14px 26px rgba(0,0,0,.4), 0 0 30px rgba(255,178,0,.7); }
+  }
+  .btn:active { transform: translateY(4px); box-shadow: 0 3px 0 #c96f00, 0 8px 14px rgba(0,0,0,.4); }
+  .btn:disabled { opacity: .55; cursor: not-allowed; animation: none; }
 
-  .hint { font-size: 13px; color: rgba(244,238,247,.7); margin-top: 14px; line-height: 1.6; }
+  .hint { font-size: 13px; color: rgba(255,247,234,.7); margin-top: 14px; line-height: 1.6; }
   .msg {
-    margin: 14px 0 0; padding: 14px 16px; border-radius: 14px;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-    font-size: 14px; line-height: 1.6;
+    margin: 16px 0 0; padding: 15px 18px; border-radius: 16px;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16);
+    font-size: 14.5px; line-height: 1.6;
+    backdrop-filter: blur(2px);
   }
-  .msg.lock { background: rgba(228,87,107,.14); border-color: rgba(228,87,107,.4); }
-  .msg.win  { background: rgba(245,195,74,.16); border-color: rgba(245,195,74,.45); }
+  .msg.lock { background: rgba(255,46,126,.14); border-color: rgba(255,46,126,.45); }
+  .msg.win  { background: rgba(255,178,0,.16); border-color: rgba(255,178,0,.5); }
 
-  .result { margin-top: 16px; animation: pop .5s cubic-bezier(.2,1.4,.4,1); }
-  @keyframes pop { 0% { transform: scale(.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  .prize-emoji { font-size: 46px; }
-  .prize-text { font-size: 24px; font-weight: 800; margin: 4px 0 2px; color: var(--stamp-gold); }
+  .result { margin-top: 18px; animation: pop .55s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes pop { 0% { transform: scale(.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .prize-emoji { font-size: 54px; }
+  .prize-text {
+    font-size: 30px; font-weight: 900; margin: 4px 0 2px;
+    background: linear-gradient(180deg, #fff3c4, #ffd54f 55%, #ff9d00);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .code-label { font-size: 11px; letter-spacing: 2px; color: rgba(255,247,234,.65); margin-top: 12px; text-transform: uppercase; }
   .code {
-    display: inline-block; margin: 10px auto 0; padding: 8px 20px;
-    font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 22px; font-weight: 700;
-    letter-spacing: 3px; color: #fff; background: rgba(0,0,0,.35);
-    border: 1px dashed rgba(255,255,255,.5); border-radius: 10px;
+    display: inline-block; margin: 6px auto 0; padding: 9px 24px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 26px; font-weight: 800;
+    letter-spacing: 4px; color: #fff; background: rgba(0,0,0,.4);
+    border: 1px dashed rgba(255,213,79,.7); border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255,178,0,.25);
   }
-  .code-note { font-size: 12px; color: rgba(244,238,247,.65); margin-top: 8px; }
+  .code-note { font-size: 13px; color: rgba(255,247,234,.7); margin-top: 10px; line-height: 1.6; }
 
-  .back { margin-top: 20px; background: none; border: 1px solid rgba(255,255,255,.25); color: rgba(244,238,247,.8); border-radius: 10px; padding: 8px 16px; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .back { margin-top: 22px; background: none; border: 1px solid rgba(255,255,255,.28); color: rgba(255,247,234,.85); border-radius: 12px; padding: 9px 18px; font-size: 13px; cursor: pointer; font-family: inherit; }
   .back:hover { background: rgba(255,255,255,.08); }
-  .err { color: #ffb4bf; font-size: 13px; margin-top: 10px; }
+  .err { color: #ffb1c6; font-size: 13px; margin-top: 10px; }
+
+  /* confetti */
+  .confetti {
+    position: fixed; top: -20px; width: 10px; height: 15px;
+    pointer-events: none; z-index: 999; border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* 漂浮光点 */
+  .sparkle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; background: #ffd54f; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Lucky Draw · 幸运转盘</h1>
-  <p class="sub">做完作业，交卷达标，即可转一次</p>
+  <h1>Lucky Wheel</h1>
+  <p class="sub">Finish your homework · hit the mark · spin &amp; win stamps!</p>
   <div class="who" id="whoBox" style="display:none"><span id="whoName"></span></div>
 
   <div class="stage" id="stage">
     <div class="wheel-box" id="wheelBox" style="display:none">
       <div class="pointer"></div>
-      <canvas id="wheel" width="640" height="640"></canvas>
-      <div class="hub">抽奖</div>
+      <canvas id="wheel" width="720" height="720"></canvas>
+      <div class="hub">SPIN</div>
     </div>
 
     <div id="ui"></div>
@@ -121,7 +159,7 @@
     <div class="hint" id="hint" style="display:none"></div>
   </div>
 
-  <button class="back" id="backBtn" onclick="goBack()">← 返回作业</button>
+  <button class="back" id="backBtn" onclick="goBack()">← Back to homework</button>
 </div>
 
 <script src="config.js"></script>
@@ -138,20 +176,25 @@
   const $ = (id) => document.getElementById(id);
   const ui = $("ui"), errEl = $("err"), hintEl = $("hint");
 
-  // ---- 转盘几何 ----
-  // 档位顺序（从 3 点钟方向顺时针）：谢谢参与 / 1章 / 2章 / 3章
+  // ---- 转盘几何（扇区从 3 点钟方向顺时针）----
   const SEG_DEFS = [
-    { key: "miss", label: "谢谢参与", color: "#5a5360" },
-    { key: "1",    label: "1 章",     color: "#f5a93d" },
-    { key: "2",    label: "2 章",     color: "#e8782e" },
-    { key: "3",    label: "3 章",     color: "#e4576b" },
+    { key: "miss", main: "TRY",  sub: "AGAIN",  color: "#8E7CC3" },
+    { key: "1",    main: "1",    sub: "STAMP",  color: "#FFC107" },
+    { key: "2",    main: "2",    sub: "STAMPS", color: "#FF6D00" },
+    { key: "3",    main: "3",    sub: "STAMPS", color: "#FF0055" },
   ];
   let pct = { miss: 20, "1": 60, "2": 15, "3": 5 }; // 默认，会被 status 的 config 覆盖
-  let rotation = 0;          // 累计旋转角（度）
-  let spinning = false;
+  let rotation = 0;
+  let spinState = null; // { start, target, t0, dur, resolve }
 
   const canvas = $("wheel");
   const ctx = canvas.getContext("2d");
+  const CX = canvas.width / 2, CY = canvas.height / 2;
+  const R_SEG = 258;      // 扇区半径
+  const R_TEXT_MAIN = R_SEG * 0.5;
+  const R_TEXT_SUB = R_SEG * 0.78;
+  const R_RING_IN = 268, R_RING_OUT = 306; // 金边环
+  const R_BULB = 330;     // 灯泡半径
 
   function segmentAngles() {
     const total = SEG_DEFS.reduce((s, s2) => s + (pct[s2.key] || 0), 0) || 100;
@@ -164,68 +207,109 @@
     });
   }
 
-  function drawWheel(rotDeg) {
-    const cx = canvas.width / 2, cy = canvas.height / 2, R = canvas.width / 2 - 10;
+  function drawWheel(rotDeg, now) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const segs = segmentAngles();
     const rot = (rotDeg * Math.PI) / 180;
+
+    // 扇区
     segs.forEach((s) => {
       const a0 = (s.a0 * Math.PI) / 180 + rot;
       const a1 = (s.a1 * Math.PI) / 180 + rot;
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, R, a0, a1);
+      ctx.moveTo(CX, CY);
+      ctx.arc(CX, CY, R_SEG, a0, a1);
       ctx.closePath();
       ctx.fillStyle = s.color;
       ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,.85)";
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(255,255,255,.9)";
+      ctx.lineWidth = 4;
       ctx.stroke();
 
-      // 标签文字
+      // 标签（沿半径方向，两行：主数字 + 英文）
       const mid = (a0 + a1) / 2;
       ctx.save();
-      ctx.translate(cx, cy);
+      ctx.translate(CX, CY);
       ctx.rotate(mid);
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillStyle = "#fff";
-      ctx.font = "700 30px 'Inter','PingFang SC',sans-serif";
-      ctx.shadowColor = "rgba(0,0,0,.5)";
-      ctx.shadowBlur = 4;
-      ctx.fillText(s.label, R * 0.62, 0);
+      ctx.shadowColor = "rgba(0,0,0,.55)";
+      ctx.shadowBlur = 5;
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 46px 'Inter', sans-serif";
+      ctx.fillText(s.main, R_TEXT_MAIN, 0);
+      ctx.font = "800 20px 'Inter', sans-serif";
+      ctx.fillText(s.sub, R_TEXT_SUB, 0);
       ctx.restore();
     });
-    // 外圈
+
+    // 金边环（固定，不随扇区旋转）
     ctx.beginPath();
-    ctx.arc(cx, cy, R, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(255,255,255,.6)";
-    ctx.lineWidth = 6;
+    ctx.arc(CX, CY, R_RING_OUT, 0, Math.PI * 2);
+    ctx.arc(CX, CY, R_RING_IN, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.fillStyle = "#f5a623";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(122,60,0,.6)";
+    ctx.lineWidth = 3;
     ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(CX, CY, R_RING_IN - 3, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255,255,255,.5)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 灯泡（carnival lights，按时间交替闪烁）
+    const N = 24;
+    const phase = Math.floor((now || 0) / 280) % 2;
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2;
+      const x = CX + Math.cos(a) * R_BULB;
+      const y = CY + Math.sin(a) * R_BULB;
+      const on = (i % 2 === phase);
+      ctx.beginPath();
+      ctx.arc(x, y, 8, 0, Math.PI * 2);
+      if (on) {
+        ctx.fillStyle = "#ffe082";
+        ctx.shadowColor = "#ffd54f";
+        ctx.shadowBlur = 18;
+      } else {
+        ctx.fillStyle = "#5b3d16";
+        ctx.shadowBlur = 0;
+      }
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
   }
+
+  function render(now) {
+    if (spinState) {
+      const t = Math.min(1, (now - spinState.t0) / spinState.dur);
+      const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
+      rotation = spinState.start + (spinState.target - spinState.start) * ease;
+      if (t >= 1) {
+        rotation = spinState.target;
+        const r = spinState.resolve;
+        spinState = null;
+        r();
+      }
+    }
+    drawWheel(rotation, now);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
 
   function spinTo(prizeKey) {
     return new Promise((resolve) => {
       const segs = segmentAngles();
       const seg = segs.find((s) => s.key === prizeKey) || segs[0];
-      // 指针固定在顶部（270°）。让中奖扇区的中心（加轻微抖动）转到指针处。
+      // 指针固定在顶部（270°）。让中奖扇区中心（加轻微抖动）转到指针处。
       const jitter = (Math.random() * 2 - 1) * Math.max(4, (seg.a1 - seg.a0) / 2 - 8);
       const targetMod = ((270 - (seg.center + jitter)) % 360 + 360) % 360;
       const curMod = ((rotation % 360) + 360) % 360;
       const delta = ((targetMod - curMod) % 360 + 360) % 360;
       const target = rotation + 5 * 360 + delta;
-      const start = rotation, diff = target - start;
-      const dur = 4200, t0 = performance.now();
-      spinning = true;
-      function frame(now) {
-        const t = Math.min(1, (now - t0) / dur);
-        const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
-        rotation = start + diff * ease;
-        drawWheel(rotation);
-        if (t < 1) requestAnimationFrame(frame);
-        else { spinning = false; resolve(); }
-      }
-      requestAnimationFrame(frame);
+      spinState = { start: rotation, target, t0: performance.now(), dur: 4200, resolve };
     });
   }
 
@@ -234,20 +318,39 @@
   function setErr(t) { errEl.textContent = t || ""; }
 
   const PRIZE_VIEW = {
-    miss: { emoji: "😊", text: "谢谢参与", note: "这次没中，下次继续加油！" },
-    "1":  { emoji: "⭐", text: "1 章", note: "恭喜！凭对奖码找老师盖 1 个印章。" },
-    "2":  { emoji: "⭐⭐", text: "2 章", note: "恭喜！凭对奖码找老师盖 2 个印章。" },
-    "3":  { emoji: "⭐⭐⭐", text: "3 章", note: "大吉！凭对奖码找老师盖 3 个印章。" },
+    miss: { emoji: "😊", text: "Try again!", note: "No stamp this time — better luck next spin!" },
+    "1":  { emoji: "⭐", text: "You won 1 Stamp!", note: "Show this code to your teacher to collect your stamp." },
+    "2":  { emoji: "⭐⭐", text: "You won 2 Stamps!", note: "Show this code to your teacher to collect your stamps." },
+    "3":  { emoji: "🎉", text: "JACKPOT! 3 Stamps!", note: "Show this code to your teacher to collect your 3 stamps!" },
   };
+
+  function launchConfetti() {
+    const colors = ["#FFC107", "#FF6D00", "#FF0055", "#4FC3F7", "#7CFC9B", "#FFD54F", "#fff"];
+    for (let i = 0; i < 90; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = (Math.random() * 100) + "%";
+      c.style.background = colors[i % colors.length];
+      c.style.width = (6 + Math.random() * 8) + "px";
+      c.style.height = (8 + Math.random() * 10) + "px";
+      c.style.animationDelay = (Math.random() * 0.6) + "s";
+      c.style.animationDuration = (1.6 + Math.random() * 1.6) + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3600);
+    }
+  }
 
   function showResult(prize, redeemCode, already) {
     const v = PRIZE_VIEW[prize] || PRIZE_VIEW.miss;
+    if (prize !== "miss") launchConfetti();
     ui.innerHTML =
       `<div class="result">` +
       `<div class="prize-emoji">${v.emoji}</div>` +
       `<div class="prize-text">${v.text}</div>` +
-      (prize !== "miss" ? `<div class="code">${esc(redeemCode)}</div>` : "") +
-      `<div class="code-note">${v.note}${already ? "<br>（这份作业已经抽过了）" : ""}</div>` +
+      (prize !== "miss"
+        ? `<div class="code-label">Redeem code</div><div class="code">${esc(redeemCode)}</div>`
+        : "") +
+      `<div class="code-note">${v.note}${already ? "<br>(This homework has already been drawn.)" : ""}</div>` +
       `</div>`;
   }
 
@@ -256,7 +359,7 @@
   function showSpinButton(enabled) {
     const b = document.createElement("button");
     b.className = "btn";
-    b.textContent = "🎡 转一下";
+    b.textContent = "🎡 Spin the Wheel";
     b.onclick = doDraw;
     if (!enabled) b.disabled = true;
     ui.innerHTML = "";
@@ -267,7 +370,7 @@
   // ---- 主流程 ----
   async function boot() {
     if (!identity.name || !identity.studentNo || !ASSIGNMENT_ID) {
-      ui.innerHTML = `<div class="msg lock">缺少参数：请从作业页（交卷后）点「去抽奖」进入。</div>`;
+      ui.innerHTML = `<div class="msg lock">Missing info — please open this page from your homework after you submit.</div>`;
       return;
     }
     $("whoName").textContent = identity.name + " · " + identity.studentNo;
@@ -276,39 +379,36 @@
     try {
       const s = await window.StampDB.status(ASSIGNMENT_ID, identity);
       pct = { ...pct, ...(s.config && s.config.prizes || {}) };
-      drawWheel(rotation);
 
       if (s.already_drawn && s.draw) {
         $("wheelBox").style.display = "block";
-        drawWheel(rotation);
         showResult(s.draw.prize, s.draw.redeem_code, true);
         return;
       }
       if (!s.config || s.config.enabled === false) {
-        ui.innerHTML = `<div class="msg lock">抽奖活动暂时关闭了。</div>`;
+        ui.innerHTML = `<div class="msg lock">The lucky draw is currently closed. Check back later!</div>`;
         return;
       }
       if (!s.submitted) {
-        ui.innerHTML = `<div class="msg lock">你还没有提交这份作业。<br>先完成作业并交卷，达标后就能来转一次。</div>`;
+        ui.innerHTML = `<div class="msg lock">You haven't submitted this homework yet.<br>Finish it and hit the passing mark to earn a spin.</div>`;
         return;
       }
       if (!s.eligible) {
-        ui.innerHTML = `<div class="msg lock">还差一点！<br>本次抽奖需要正确率 ≥ ${s.threshold}%，你目前是 ${s.accuracy}%。<br>达标后再来转。</div>`;
+        ui.innerHTML = `<div class="msg lock">So close!<br>You need <b>${s.threshold}%</b> to spin — you scored <b>${s.accuracy}%</b>.<br>Improve your score and come back to spin!</div>`;
         return;
       }
-      // 达标 → 可抽
       showSpinButton(true);
-      setHint("转盘按中奖概率分区；结果由系统随机决定，不能重复抽。");
+      setHint("Each slice matches the prize odds. The result is random — one spin per homework.");
     } catch (e) {
       ui.innerHTML = `<div class="msg lock">${esc(e.message || e)}</div>`;
     }
   }
 
   async function doDraw() {
-    if (spinning) return;
+    if (spinState) return;
     setErr("");
     const btn = ui.querySelector(".btn");
-    if (btn) { btn.disabled = true; btn.textContent = "转动中…"; }
+    if (btn) { btn.disabled = true; btn.textContent = "Spinning…"; }
     try {
       const r = await window.StampDB.draw(ASSIGNMENT_ID, identity);
       pct = { ...pct, ...(r.config && r.config.prizes || {}) };
@@ -317,10 +417,9 @@
       setHint("");
     } catch (e) {
       const msg = e && e.message ? e.message : String(e);
-      // 已是「已抽过」→ 服务端其实已返回结果，重查一次状态
       ui.innerHTML = "";
       $("wheelBox").style.display = "block";
-      if (/已经|already|再抽|draw|percent|accuracy|%/.test(msg)) {
+      if (/already|draw|percent|accuracy|%/i.test(msg)) {
         ui.innerHTML = `<div class="msg lock">${esc(msg)}</div>`;
         try {
           const s = await window.StampDB.status(ASSIGNMENT_ID, identity);
@@ -333,6 +432,21 @@
   }
 
   function goBack() { history.length > 1 ? history.back() : (location.href = "home.html"); }
+
+  // 漂浮光点（氛围）
+  (function sparkles() {
+    for (let i = 0; i < 26; i++) {
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      const size = 2 + Math.random() * 4;
+      s.style.width = s.style.height = size + "px";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.opacity = 0.25 + Math.random() * 0.6;
+      s.style.animation = `confettiFall ${(6 + Math.random() * 8)}s linear ${(Math.random() * 6)}s infinite`;
+      document.body.appendChild(s);
+    }
+  })();
 
   boot();
 </script>

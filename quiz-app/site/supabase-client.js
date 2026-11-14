@@ -283,3 +283,62 @@ window.CommentDB = (() => {
 
   return { list, post, like, remove, moderate };
 })();
+
+// ---- 幸运转盘抽奖（stamp）封装 ----
+// 安全模型：抽奖完全在服务端完成（概率 + 加密随机 + 唯一约束），
+// 学生只「请求抽奖」→「收到结果」，看不到概率、改不了结果。
+window.StampDB = (() => {
+  const cfg = window.SUPABASE_CONFIG || {};
+
+  async function callEdge(payload) {
+    const url = (cfg.stampEdgeUrl || "").replace(/\/+$/, "");
+    if (!url) throw new Error("Lucky draw is not configured");
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "text/plain" },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (resp.status === 401 || resp.status === 403) throw new Error(data.error || "no access");
+    if (!resp.ok) throw new Error(data.error || ("Lucky draw error (HTTP " + resp.status + ")"));
+    return data;
+  }
+
+  function ident(identity) {
+    if (!identity) return {};
+    const no = identity.studentNo || identity.student_no || identity.no || "";
+    return { name: identity.name || "", student_no: no, class_name: identity.className || identity.class_name || "" };
+  }
+
+  // 学生：查自己某份作业的抽奖状态
+  async function status(assignmentId, identity) {
+    return callEdge(Object.assign({ action: "status", assignment_id: assignmentId }, ident(identity)));
+  }
+
+  // 学生：抽奖
+  async function draw(assignmentId, identity) {
+    return callEdge(Object.assign({ action: "draw", assignment_id: assignmentId }, ident(identity)));
+  }
+
+  // 教师：读全部抽奖记录
+  async function teacherList(teacherToken, limit) {
+    return callEdge({ action: "teacherList", teacher_token: teacherToken, limit: limit || 500 });
+  }
+
+  // 教师：对奖（标记已盖章）
+  async function redeem(drawId, teacherToken) {
+    return callEdge({ action: "redeem", draw_id: drawId, teacher_token: teacherToken });
+  }
+
+  // 教师：读配置
+  async function configGet(teacherToken) {
+    return callEdge({ action: "configGet", teacher_token: teacherToken });
+  }
+
+  // 教师：改配置
+  async function configSet(teacherToken, cfg) {
+    return callEdge(Object.assign({ action: "configSet", teacher_token: teacherToken }, cfg));
+  }
+
+  return { status, draw, teacherList, redeem, configGet, configSet };
+})();

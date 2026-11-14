@@ -36,4 +36,9 @@ window.SUPABASE_CONFIG = {
   // 评论/点赞/回复走 Edge Function comments（service_role 写库，anon 不直接碰表）。
   // 留空表示尚未部署，practice 页的讨论区会显示"未配置"。
   commentsEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/comments",
+
+  // ---- 幸运转盘抽奖（stamp）配置 ----
+  // 学生抽奖 + 教师对奖都走 Edge Function stamp。
+  // 留空表示尚未部署，stamp 页会提示"未配置"。
+  stampEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/stamp",
 };

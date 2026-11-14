@@ -18,3 +18,7 @@ verify_jwt = false
 [functions.comments]
 enabled = true
 verify_jwt = false
+
+[functions.stamp]
+enabled = true
+verify_jwt = false

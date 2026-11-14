@@ -780,6 +780,24 @@ function showResult(result) {
   st.appendChild(mk((result.accuracy ?? 0) + "%", "Accuracy"));
   st.appendChild(mk((result.items || []).length, "Questions"));
 
+  // 幸运转盘入口：交卷后可以跳过去抽一次
+  try {
+    const stampBtn = document.createElement("button");
+    stampBtn.className = "btn";
+    stampBtn.style.marginTop = "14px";
+    stampBtn.textContent = "🎡 去抽奖";
+    stampBtn.onclick = () => {
+      const p = new URLSearchParams({
+        assignment_id: String(assignment.id),
+        name: identity.name || "",
+        studentNo: identity.studentNo || "",
+        className: identity.className || "",
+      });
+      location.href = "stamp.html?" + p.toString();
+    };
+    st.appendChild(stampBtn);
+  } catch (_) {}
+
   const tbar = resetTesterBar();
   if (tbar) st.appendChild(tbar);
 

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh" data-course="as">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E85D6A" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>抽奖管理 · ChemBank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="theme.css" />
+<style>
+  body { font-family: 'Inter', -apple-system, 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+  .page { max-width: 860px; margin: 0 auto; padding: 28px 16px 60px; }
+  h1 { font-size: 22px; font-weight: 800; margin: 0 0 2px; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .gate { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; max-width: 420px; margin: 40px auto; text-align: center; box-shadow: var(--shadow); }
+  .gate h2 { margin: 0 0 8px; font-size: 18px; }
+  .input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 15px; font-family: inherit; }
+  .input:focus { outline: none; border-color: var(--accent); }
+  .btn { border: none; border-radius: 10px; padding: 10px 16px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--accent); color: #fff; }
+  .btn:hover { background: var(--accent-deep); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.ghost { background: var(--panel); color: var(--text); border: 1px solid var(--line); }
+  .btn.ghost:hover { background: var(--bg-soft); }
+  .btn.ok { background: var(--green); }
+  .btn.ok:hover { background: var(--green-deep); }
+  .err { color: var(--red); font-size: 13px; margin-top: 8px; }
+  .ok-note { color: var(--green-deep); font-size: 13px; margin-top: 8px; }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .card h2 { margin: 0 0 14px; font-size: 16px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .field .input { width: 90px; }
+  .field.toggle { flex-direction: row; align-items: center; gap: 8px; padding-bottom: 8px; }
+  .field.toggle label { font-size: 14px; color: var(--text); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line-soft); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  tr:hover td { background: var(--bg-soft); }
+  .prize { font-weight: 700; }
+  .prize.miss { color: var(--muted); }
+  .prize.p1 { color: #b7791f; }
+  .prize.p2 { color: #d4610f; }
+  .prize.p3 { color: var(--red); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge.redeemed { background: var(--green-soft); color: var(--green-deep); }
+  .badge.pending { background: var(--amber-soft); color: var(--amber); }
+  .code { font-family: ui-monospace, Menlo, monospace; font-weight: 700; letter-spacing: 1px; }
+  .empty { color: var(--muted); padding: 20px; text-align: center; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div id="main" style="display:none">
+    <h1>🎡 抽奖管理（对奖 / 调概率）</h1>
+    <p class="sub">学生达标抽奖后，凭「对奖码」来找你盖印章。对过奖的点「已盖章」。</p>
+
+    <div class="card">
+      <h2>概率设置</h2>
+      <div class="row">
+        <div class="field"><label>谢谢参与 %</label><input class="input" id="pMiss" type="number" min="0" max="100" step="1" /></div>
+        <div class="field"><label>1 章 %</label><input class="input" id="p1" type="number" min="0" max="100" step="1" /></div>
+        <div class="field"><label>2 章 %</label><input class="input" id="p2" type="number" min="0" max="100" step="1" /></div>
+        <div class="field"><label>3 章 %</label><input class="input" id="p3" type="number" min="0" max="100" step="1" /></div>
+        <div class="field"><label>达标线 %</label><input class="input" id="pTh" type="number" min="0" max="100" step="1" /></div>
+        <div class="field toggle"><input id="pEnabled" type="checkbox" /><label for="pEnabled">抽奖开放中</label></div>
+      </div>
+      <div style="margin-top:14px; display:flex; gap:8px; align-items:center">
+        <button class="btn" id="saveCfg">保存设置</button>
+        <span class="ok-note" id="cfgNote"></span>
+      </div>
+      <p class="muted" style="font-size:12px;margin:12px 0 0">四档概率加起来应为 100%（不是 100% 时系统按比例自动缩放）。学生永远看不到这些数字。</p>
+    </div>
+
+    <div class="card">
+      <h2>中奖记录</h2>
+      <div style="display:flex; gap:8px; margin-bottom:12px">
+        <button class="btn ghost" id="reload">刷新</button>
+        <button class="btn ghost" id="exportCsv">导出 CSV</button>
+      </div>
+      <div id="list"></div>
+    </div>
+  </div>
+
+  <div class="gate" id="gate">
+    <h2>🔒 教师口令</h2>
+    <p class="sub" style="margin:0 0 12px">请输入教师口令以管理抽奖。</p>
+    <input class="input" id="tokenInput" type="password" placeholder="教师口令" />
+    <button class="btn" id="goBtn" style="margin-top:10px; width:100%">进入</button>
+    <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="supabase-client.js"></script>
+<script>
+  let __token = null;
+  const $ = (id) => document.getElementById(id);
+
+  function getToken() { return __token; }
+
+  function showGate(err) {
+    $("main").style.display = "none";
+    $("gate").style.display = "block";
+    if (err) $("gateErr").textContent = err;
+  }
+  function enterMain() {
+    $("gate").style.display = "none";
+    $("main").style.display = "block";
+    loadConfig(); loadDraws();
+  }
+
+  // 进入
+  async function submitToken() {
+    const v = $("tokenInput").value.trim();
+    if (!v) { $("gateErr").textContent = "请输入教师口令"; return; }
+    __token = v;
+    try { sessionStorage.setItem("stamp-token", __token); } catch (_) {}
+    // 真实校验在后端（拉数据时 401 → 退回登录框）
+    try {
+      await window.StampDB.configGet(__token);
+      enterMain();
+    } catch (e) {
+      showGate(e.message || "口令错误");
+    }
+  }
+  $("goBtn").onclick = submitToken;
+  $("tokenInput").addEventListener("keydown", (e) => { if (e.key === "Enter") submitToken(); });
+
+  // 配置
+  async function loadConfig() {
+    try {
+      const c = await window.StampDB.configGet(getToken());
+      $("pMiss").value = c.prize_miss;
+      $("p1").value = c.prize_1;
+      $("p2").value = c.prize_2;
+      $("p3").value = c.prize_3;
+      $("pTh").value = c.threshold_pct;
+      $("pEnabled").checked = c.enabled;
+    } catch (e) {
+      if (/口令|token|access|unauthorized/i.test(e.message || "")) showGate("口令错误或已失效");
+    }
+  }
+  $("saveCfg").onclick = async () => {
+    const b = $("saveCfg"); b.disabled = true; $("cfgNote").textContent = "保存中…";
+    try {
+      await window.StampDB.configSet(getToken(), {
+        prize_miss: Number($("pMiss").value),
+        prize_1: Number($("p1").value),
+        prize_2: Number($("p2").value),
+        prize_3: Number($("p3").value),
+        threshold_pct: Number($("pTh").value),
+        enabled: $("pEnabled").checked,
+      });
+      $("cfgNote").textContent = "已保存 ✓";
+      setTimeout(() => { $("cfgNote").textContent = ""; }, 2000);
+    } catch (e) {
+      $("cfgNote").textContent = e.message || "保存失败";
+    } finally { b.disabled = false; }
+  };
+
+  // 记录
+  const PRIZE_LABEL = { miss: "谢谢参与", "1": "1 章", "2": "2 章", "3": "3 章" };
+  const PRIZE_CLASS = { miss: "miss", "1": "p1", "2": "p2", "3": "p3" };
+
+  async function loadDraws() {
+    const box = $("list");
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const r = await window.StampDB.teacherList(getToken(), 500);
+      if (!r.draws || !r.draws.length) { box.innerHTML = '<div class="empty">还没有人中奖。</div>'; return; }
+      const rows = r.draws.map((d) => {
+        const redeemed = d.redeemed;
+        return `<tr>
+          <td>${esc(d.name || "—")}</td>
+          <td class="muted">${esc(d.student_no || "")}</td>
+          <td class="muted">${esc(d.class_name || "")}</td>
+          <td>#${d.assignment_id}</td>
+          <td class="prize ${PRIZE_CLASS[d.prize] || ""}">${PRIZE_LABEL[d.prize] || d.prize}</td>
+          <td class="code">${esc(d.redeem_code)}</td>
+          <td>${redeemed ? '<span class="badge redeemed">已盖章</span>' : '<span class="badge pending">待盖章</span>'}</td>
+          <td>${redeemed ? `<button class="btn ghost" disabled>已对</button>` : `<button class="btn ok" data-id="${d.id}">对奖</button>`}</td>
+        </tr>`;
+      }).join("");
+      box.innerHTML = `<table>
+        <thead><tr><th>学生</th><th>学号</th><th>班级</th><th>作业</th><th>奖品</th><th>对奖码</th><th>状态</th><th></th></tr></thead>
+        <tbody>${rows}</tbody></table>`;
+      box.querySelectorAll("button[data-id]").forEach((b) => {
+        b.onclick = async () => {
+          b.disabled = true; b.textContent = "对奖中…";
+          try {
+            await window.StampDB.redeem(Number(b.dataset.id), getToken());
+            loadDraws();
+          } catch (e) { b.disabled = false; b.textContent = "重试"; alert(e.message || "对奖失败"); }
+        };
+      });
+    } catch (e) {
+      if (/口令|token|access|unauthorized/i.test(e.message || "")) { showGate("口令错误或已失效"); return; }
+      box.innerHTML = `<div class="empty" style="color:var(--red)">${esc(e.message || e)}</div>`;
+    }
+  }
+  $("reload").onclick = loadDraws;
+
+  $("exportCsv").onclick = async () => {
+    try {
+      const r = await window.StampDB.teacherList(getToken(), 2000);
+      const head = ["name", "student_no", "class_name", "assignment_id", "prize", "redeem_code", "redeemed", "drawn_at"];
+      const lines = [head.join(",")];
+      for (const d of r.draws || []) {
+        lines.push([d.name, d.student_no, d.class_name, d.assignment_id, d.prize, d.redeem_code, d.redeemed, d.drawn_at]
+          .map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","));
+      }
+      const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "stamp-draws.csv";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) { alert(e.message || "导出失败"); }
+  };
+
+  function esc(s) { return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  // 恢复会话
+  (function init() {
+    try {
+      const t = sessionStorage.getItem("stamp-token");
+      if (t) { __token = t; $("tokenInput").value = t; }
+    } catch (_) {}
+    if (__token) { enterMain(); } else { showGate(); }
+  })();
+</script>
+</body>
+</html>

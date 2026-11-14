@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh" data-course="as">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#8A2D3B" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>幸运转盘 · ChemBank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="theme.css" />
+<style>
+  :root {
+    --stamp-bg: radial-gradient(circle at 50% 20%, #2b1035, #150818 70%);
+    --stamp-gold: #f5c34a;
+    --stamp-gold-2: #e8a33d;
+    --stamp-red: #e4576b;
+    --stamp-gray: #5a5360;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, 'PingFang SC', sans-serif;
+    color: #f4eef7;
+    background: var(--stamp-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 16px;
+  }
+  .wrap { width: 100%; max-width: 440px; text-align: center; }
+  h1 {
+    margin: 0 0 4px; font-size: 26px; font-weight: 800; letter-spacing: -.5px;
+    background: linear-gradient(90deg, #ffd978, #ffb15c);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { font-size: 13px; color: rgba(244,238,247,.72); margin: 0 0 6px; }
+  .who {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: rgba(244,238,247,.85);
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+    padding: 4px 12px; border-radius: 999px; margin: 8px 0 4px;
+  }
+
+  .stage { margin-top: 14px; }
+
+  .wheel-box { position: relative; width: 320px; max-width: 88vw; margin: 8px auto 0; }
+  canvas#wheel { width: 100%; height: auto; display: block; }
+  .pointer {
+    position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 14px solid transparent; border-right: 14px solid transparent;
+    border-top: 26px solid #fff;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
+  }
+  .hub {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 64px; height: 64px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, #e8e2ea 70%);
+    display: grid; place-items: center;
+    color: #6b2230; font-weight: 800; font-size: 13px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.45);
+  }
+
+  .btn {
+    margin-top: 18px; width: 100%; padding: 14px 18px; border: none; border-radius: 14px;
+    font-family: inherit; font-size: 17px; font-weight: 800; cursor: pointer;
+    color: #3a1d08;
+    background: linear-gradient(180deg, #ffd978, #f5a93d);
+    box-shadow: 0 6px 0 #c57c16, 0 10px 18px rgba(0,0,0,.3);
+    transition: transform .06s ease, box-shadow .06s ease;
+  }
+  .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #c57c16, 0 6px 12px rgba(0,0,0,.3); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: 0 4px 0 #c57c16; }
+
+  .hint { font-size: 13px; color: rgba(244,238,247,.7); margin-top: 14px; line-height: 1.6; }
+  .msg {
+    margin: 14px 0 0; padding: 14px 16px; border-radius: 14px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+    font-size: 14px; line-height: 1.6;
+  }
+  .msg.lock { background: rgba(228,87,107,.14); border-color: rgba(228,87,107,.4); }
+  .msg.win  { background: rgba(245,195,74,.16); border-color: rgba(245,195,74,.45); }
+
+  .result { margin-top: 16px; animation: pop .5s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes pop { 0% { transform: scale(.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .prize-emoji { font-size: 46px; }
+  .prize-text { font-size: 24px; font-weight: 800; margin: 4px 0 2px; color: var(--stamp-gold); }
+  .code {
+    display: inline-block; margin: 10px auto 0; padding: 8px 20px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 22px; font-weight: 700;
+    letter-spacing: 3px; color: #fff; background: rgba(0,0,0,.35);
+    border: 1px dashed rgba(255,255,255,.5); border-radius: 10px;
+  }
+  .code-note { font-size: 12px; color: rgba(244,238,247,.65); margin-top: 8px; }
+
+  .back { margin-top: 20px; background: none; border: 1px solid rgba(255,255,255,.25); color: rgba(244,238,247,.8); border-radius: 10px; padding: 8px 16px; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .back:hover { background: rgba(255,255,255,.08); }
+  .err { color: #ffb4bf; font-size: 13px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Lucky Draw · 幸运转盘</h1>
+  <p class="sub">做完作业，交卷达标，即可转一次</p>
+  <div class="who" id="whoBox" style="display:none"><span id="whoName"></span></div>
+
+  <div class="stage" id="stage">
+    <div class="wheel-box" id="wheelBox" style="display:none">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="640" height="640"></canvas>
+      <div class="hub">抽奖</div>
+    </div>
+
+    <div id="ui"></div>
+    <div class="err" id="err"></div>
+    <div class="hint" id="hint" style="display:none"></div>
+  </div>
+
+  <button class="back" id="backBtn" onclick="goBack()">← 返回作业</button>
+</div>
+
+<script src="config.js"></script>
+<script src="supabase-client.js"></script>
+<script>
+  const q = new URLSearchParams(location.search);
+  const ASSIGNMENT_ID = Number(q.get("assignment_id") || 0);
+  const identity = {
+    name: q.get("name") || "",
+    studentNo: q.get("studentNo") || q.get("student_no") || "",
+    className: q.get("className") || q.get("class_name") || "",
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const ui = $("ui"), errEl = $("err"), hintEl = $("hint");
+
+  // ---- 转盘几何 ----
+  // 档位顺序（从 3 点钟方向顺时针）：谢谢参与 / 1章 / 2章 / 3章
+  const SEG_DEFS = [
+    { key: "miss", label: "谢谢参与", color: "#5a5360" },
+    { key: "1",    label: "1 章",     color: "#f5a93d" },
+    { key: "2",    label: "2 章",     color: "#e8782e" },
+    { key: "3",    label: "3 章",     color: "#e4576b" },
+  ];
+  let pct = { miss: 20, "1": 60, "2": 15, "3": 5 }; // 默认，会被 status 的 config 覆盖
+  let rotation = 0;          // 累计旋转角（度）
+  let spinning = false;
+
+  const canvas = $("wheel");
+  const ctx = canvas.getContext("2d");
+
+  function segmentAngles() {
+    const total = SEG_DEFS.reduce((s, s2) => s + (pct[s2.key] || 0), 0) || 100;
+    let acc = 0;
+    return SEG_DEFS.map((s) => {
+      const span = ((pct[s.key] || 0) / total) * 360;
+      const a0 = acc, a1 = acc + span;
+      acc = a1;
+      return { ...s, a0, a1, center: (a0 + a1) / 2 };
+    });
+  }
+
+  function drawWheel(rotDeg) {
+    const cx = canvas.width / 2, cy = canvas.height / 2, R = canvas.width / 2 - 10;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const segs = segmentAngles();
+    const rot = (rotDeg * Math.PI) / 180;
+    segs.forEach((s) => {
+      const a0 = (s.a0 * Math.PI) / 180 + rot;
+      const a1 = (s.a1 * Math.PI) / 180 + rot;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, R, a0, a1);
+      ctx.closePath();
+      ctx.fillStyle = s.color;
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.85)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // 标签文字
+      const mid = (a0 + a1) / 2;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(mid);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#fff";
+      ctx.font = "700 30px 'Inter','PingFang SC',sans-serif";
+      ctx.shadowColor = "rgba(0,0,0,.5)";
+      ctx.shadowBlur = 4;
+      ctx.fillText(s.label, R * 0.62, 0);
+      ctx.restore();
+    });
+    // 外圈
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255,255,255,.6)";
+    ctx.lineWidth = 6;
+    ctx.stroke();
+  }
+
+  function spinTo(prizeKey) {
+    return new Promise((resolve) => {
+      const segs = segmentAngles();
+      const seg = segs.find((s) => s.key === prizeKey) || segs[0];
+      // 指针固定在顶部（270°）。让中奖扇区的中心（加轻微抖动）转到指针处。
+      const jitter = (Math.random() * 2 - 1) * Math.max(4, (seg.a1 - seg.a0) / 2 - 8);
+      const targetMod = ((270 - (seg.center + jitter)) % 360 + 360) % 360;
+      const curMod = ((rotation % 360) + 360) % 360;
+      const delta = ((targetMod - curMod) % 360 + 360) % 360;
+      const target = rotation + 5 * 360 + delta;
+      const start = rotation, diff = target - start;
+      const dur = 4200, t0 = performance.now();
+      spinning = true;
+      function frame(now) {
+        const t = Math.min(1, (now - t0) / dur);
+        const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
+        rotation = start + diff * ease;
+        drawWheel(rotation);
+        if (t < 1) requestAnimationFrame(frame);
+        else { spinning = false; resolve(); }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  // ---- 渲染 ----
+  function setHint(t) { hintEl.style.display = t ? "block" : "none"; hintEl.textContent = t || ""; }
+  function setErr(t) { errEl.textContent = t || ""; }
+
+  const PRIZE_VIEW = {
+    miss: { emoji: "😊", text: "谢谢参与", note: "这次没中，下次继续加油！" },
+    "1":  { emoji: "⭐", text: "1 章", note: "恭喜！凭对奖码找老师盖 1 个印章。" },
+    "2":  { emoji: "⭐⭐", text: "2 章", note: "恭喜！凭对奖码找老师盖 2 个印章。" },
+    "3":  { emoji: "⭐⭐⭐", text: "3 章", note: "大吉！凭对奖码找老师盖 3 个印章。" },
+  };
+
+  function showResult(prize, redeemCode, already) {
+    const v = PRIZE_VIEW[prize] || PRIZE_VIEW.miss;
+    ui.innerHTML =
+      `<div class="result">` +
+      `<div class="prize-emoji">${v.emoji}</div>` +
+      `<div class="prize-text">${v.text}</div>` +
+      (prize !== "miss" ? `<div class="code">${esc(redeemCode)}</div>` : "") +
+      `<div class="code-note">${v.note}${already ? "<br>（这份作业已经抽过了）" : ""}</div>` +
+      `</div>`;
+  }
+
+  function esc(s) { return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  function showSpinButton(enabled) {
+    const b = document.createElement("button");
+    b.className = "btn";
+    b.textContent = "🎡 转一下";
+    b.onclick = doDraw;
+    if (!enabled) b.disabled = true;
+    ui.innerHTML = "";
+    ui.appendChild(b);
+    $("wheelBox").style.display = "block";
+  }
+
+  // ---- 主流程 ----
+  async function boot() {
+    if (!identity.name || !identity.studentNo || !ASSIGNMENT_ID) {
+      ui.innerHTML = `<div class="msg lock">缺少参数：请从作业页（交卷后）点「去抽奖」进入。</div>`;
+      return;
+    }
+    $("whoName").textContent = identity.name + " · " + identity.studentNo;
+    $("whoBox").style.display = "inline-flex";
+
+    try {
+      const s = await window.StampDB.status(ASSIGNMENT_ID, identity);
+      pct = { ...pct, ...(s.config && s.config.prizes || {}) };
+      drawWheel(rotation);
+
+      if (s.already_drawn && s.draw) {
+        $("wheelBox").style.display = "block";
+        drawWheel(rotation);
+        showResult(s.draw.prize, s.draw.redeem_code, true);
+        return;
+      }
+      if (!s.config || s.config.enabled === false) {
+        ui.innerHTML = `<div class="msg lock">抽奖活动暂时关闭了。</div>`;
+        return;
+      }
+      if (!s.submitted) {
+        ui.innerHTML = `<div class="msg lock">你还没有提交这份作业。<br>先完成作业并交卷，达标后就能来转一次。</div>`;
+        return;
+      }
+      if (!s.eligible) {
+        ui.innerHTML = `<div class="msg lock">还差一点！<br>本次抽奖需要正确率 ≥ ${s.threshold}%，你目前是 ${s.accuracy}%。<br>达标后再来转。</div>`;
+        return;
+      }
+      // 达标 → 可抽
+      showSpinButton(true);
+      setHint("转盘按中奖概率分区；结果由系统随机决定，不能重复抽。");
+    } catch (e) {
+      ui.innerHTML = `<div class="msg lock">${esc(e.message || e)}</div>`;
+    }
+  }
+
+  async function doDraw() {
+    if (spinning) return;
+    setErr("");
+    const btn = ui.querySelector(".btn");
+    if (btn) { btn.disabled = true; btn.textContent = "转动中…"; }
+    try {
+      const r = await window.StampDB.draw(ASSIGNMENT_ID, identity);
+      pct = { ...pct, ...(r.config && r.config.prizes || {}) };
+      await spinTo(r.prize);
+      showResult(r.prize, r.redeem_code, r.already_drawn);
+      setHint("");
+    } catch (e) {
+      const msg = e && e.message ? e.message : String(e);
+      // 已是「已抽过」→ 服务端其实已返回结果，重查一次状态
+      ui.innerHTML = "";
+      $("wheelBox").style.display = "block";
+      if (/已经|already|再抽|draw|percent|accuracy|%/.test(msg)) {
+        ui.innerHTML = `<div class="msg lock">${esc(msg)}</div>`;
+        try {
+          const s = await window.StampDB.status(ASSIGNMENT_ID, identity);
+          if (s.already_drawn && s.draw) showResult(s.draw.prize, s.draw.redeem_code, true);
+        } catch (_) {}
+      } else {
+        setErr(msg);
+      }
+    }
+  }
+
+  function goBack() { history.length > 1 ? history.back() : (location.href = "home.html"); }
+
+  boot();
+</script>
+</body>
+</html>

@@ -28,6 +28,8 @@
   .btn.ghost:hover { background: var(--bg-soft); }
   .btn.ok { background: var(--green); }
   .btn.ok:hover { background: var(--green-deep); }
+  .btn.danger { background: var(--red); }
+  .btn.danger:hover { background: #c53030; }
   .err { color: var(--red); font-size: 13px; margin-top: 8px; }
 
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
@@ -52,21 +54,28 @@
 
   /* student grid */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-  .stu { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); padding: 12px 12px 12px 34px; }
+  .stu { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); padding: 12px 12px 52px 34px; }
   .stu .cb { position: absolute; left: 10px; top: 12px; width: 16px; height: 16px; }
   .stu .nm { font-weight: 700; font-size: 14px; line-height: 1.2; }
   .stu .no { color: var(--muted); font-size: 11px; margin-top: 2px; }
   .stu .tot { display: inline-block; margin-top: 6px; font-size: 20px; font-weight: 800; color: var(--amber); }
   .stu .tot b { font-size: 12px; font-weight: 600; color: var(--muted); }
-  .stu .plus { position: absolute; right: 10px; bottom: 12px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 22px; font-weight: 800; cursor: pointer; line-height: 1; }
+  .stu .plus { position: absolute; right: 10px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 22px; font-weight: 800; cursor: pointer; line-height: 1; }
   .stu .plus:active { background: var(--accent-deep); transform: scale(.94); }
   .stu .plus:disabled { opacity: .4; }
+  .stu .redeem { position: absolute; right: 56px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--amber); color: #fff; font-size: 17px; cursor: pointer; line-height: 1; }
+  .stu .redeem:active { background: #d4880f; transform: scale(.94); }
+  .stu .redeem:disabled { opacity: .4; }
 
   /* undo log */
   .log-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px; }
   .log-item .who { font-weight: 700; }
   .log-item .why { color: var(--muted); flex: 1; }
   .log-item .delta { font-weight: 800; color: var(--green-deep); }
+  .log-item .delta.neg { color: var(--red); }
+  .log-item .tag { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
+  .log-item .tag.award { background: var(--green-soft); color: var(--green-deep); }
+  .log-item .tag.redeem { background: var(--amber-soft); color: var(--amber); }
   .log-item .t { color: var(--muted); font-size: 11px; }
   .undo { background: transparent; color: var(--red); border: 1px solid var(--red); border-radius: 7px; padding: 3px 10px; font-size: 12px; cursor: pointer; }
   .undo:disabled { opacity: .5; }
@@ -74,13 +83,26 @@
   .empty { color: var(--muted); padding: 18px; text-align: center; }
   .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--green-deep); color: #fff; padding: 9px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 999; }
   .toast.show { opacity: 1; }
+
+  /* redeem modal */
+  .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 500; padding: 16px; }
+  .modal-mask.show { display: flex; }
+  .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; width: 100%; max-width: 380px; box-shadow: var(--shadow); }
+  .modal h2 { margin: 0 0 4px; font-size: 18px; }
+  .modal .who { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  .modal .field { margin-bottom: 12px; }
+  .modal .field label { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+  .modal .hint { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .modal .actions { display: flex; gap: 8px; margin-top: 6px; }
+  .modal .actions .btn { flex: 1; }
+  .modal .err { min-height: 16px; }
 </style>
 </head>
 <body>
 <div class="page">
   <div id="main" style="display:none">
     <h1>⚡ Stamp Cards (class participation)</h1>
-    <p class="sub">Pick a class → pick a reason → tap the "+" on a student's card to award a stamp. For group work, select several students and award them all at once.</p>
+    <p class="sub">Pick a class → pick a reason → tap "+" to award a stamp. Tap the 🎁 coin to redeem stamps (e.g. 4 stamps → 1 point). For group work, select several students and award them all at once.</p>
 
     <div class="card">
       <h2>Class</h2>
@@ -106,19 +128,47 @@
     </div>
 
     <div class="card">
-      <h2>Recent stamps (tap "Undo" to remove a mistake)</h2>
+      <h2>Recent stamps &amp; redemptions (tap "Undo" to remove a mistake)</h2>
       <div id="log"></div>
     </div>
   </div>
 
   <div class="gate" id="gate">
     <h2>🔒 Teacher passcode</h2>
-    <p class="sub" style="margin:0 0 12px">Enter the teacher passcode to award stamps.</p>
+    <p class="sub" style="margin:0 0 12px">Enter the teacher passcode to award or redeem stamps.</p>
     <input class="input" id="tokenInput" type="password" placeholder="Teacher passcode" />
     <button class="btn" id="goBtn" style="margin-top:10px; width:100%">Enter</button>
     <div class="err" id="gateErr"></div>
   </div>
 </div>
+
+<!-- redeem modal -->
+<div class="modal-mask" id="redeemMask">
+  <div class="modal">
+    <h2>🎁 Redeem stamps</h2>
+    <p class="who" id="redeemWho"></p>
+    <div class="field">
+      <label>Redeem for what?</label>
+      <input class="input" id="redeemItem" list="redeemItems" placeholder="e.g. 1 point" />
+      <datalist id="redeemItems">
+        <option value="1 point"></option>
+        <option value="Homework pass"></option>
+        <option value="Small prize"></option>
+      </datalist>
+    </div>
+    <div class="field">
+      <label>How many stamps?</label>
+      <input class="input" id="redeemStamps" type="number" min="1" value="4" />
+      <div class="hint">4 stamps = 1 point</div>
+    </div>
+    <div class="err" id="redeemErr"></div>
+    <div class="actions">
+      <button class="btn ghost" id="redeemCancel" type="button">Cancel</button>
+      <button class="btn danger" id="redeemConfirm" type="button">Redeem</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="config.js"></script>
@@ -144,11 +194,12 @@ let curClass = CLASSES[0] || "";
 let curReason = "Answering questions";
 let totals = new Map();   // student_no -> total
 let selected = new Set(); // student_no
+let redeemNo = null;      // student_no being redeemed
 
 function showGate(err) { $("main").style.display = "none"; $("gate").style.display = "block"; if (err) $("gateErr").textContent = err; }
 function enterMain() { $("gate").style.display = "none"; $("main").style.display = "block"; renderClassChips(); renderReasonChips(); loadAll(); }
 
-function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1400); }
+function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1600); }
 
 // ---------- login ----------
 async function submitToken() {
@@ -197,9 +248,10 @@ function renderGrid() {
     const checked = selected.has(no) ? "checked" : "";
     return `<div class="stu" data-no="${esc(no)}">
       <input class="cb" type="checkbox" ${checked} />
-      <div class="nm">${esc(s.name_zh || s.name)}</div>
+      <div class="nm">${esc(s.name)}</div>
       <div class="no">${esc(no)}</div>
       <div class="tot">${total} <b>stamps</b></div>
+      <button class="redeem" data-redeem="${esc(no)}" title="Redeem">🎁</button>
       <button class="plus" data-plus="${esc(no)}">+</button>
     </div>`;
   }).join("");
@@ -213,6 +265,9 @@ function renderGrid() {
   });
   box.querySelectorAll("button[data-plus]").forEach((btn) => {
     btn.onclick = () => addOne(btn, btn.dataset.plus);
+  });
+  box.querySelectorAll("button[data-redeem]").forEach((btn) => {
+    btn.onclick = () => openRedeem(btn.dataset.redeem);
   });
   updateBatch();
 }
@@ -249,7 +304,7 @@ async function addOne(btn, no) {
     await window.StampLedgerDB.addEntries([{ name: s.name, student_no: s.student_no, class_name: s.class_name, delta: 1, reason: curReason }], __token);
     totals.set(no, (totals.get(no) || 0) + 1);
     renderGrid();
-    toast((s.name_zh || s.name) + " +1 stamp");
+    toast(s.name + " +1 stamp");
     loadLog();
   } catch (e) {
     btn.disabled = false;
@@ -283,23 +338,65 @@ $("batchClear").onclick = () => { selected.clear(); renderGrid(); };
 $("search").addEventListener("input", renderGrid);
 $("refresh").onclick = () => loadAll();
 
+// ---------- redeem ----------
+function openRedeem(no) {
+  redeemNo = no;
+  const s = studentByNo(no);
+  $("redeemWho").textContent = s.name + " · " + no + " · " + (totals.get(no) || 0) + " stamps";
+  $("redeemItem").value = "1 point";
+  $("redeemStamps").value = "4";
+  $("redeemErr").textContent = "";
+  $("redeemMask").classList.add("show");
+}
+$("redeemCancel").onclick = () => { $("redeemMask").classList.remove("show"); redeemNo = null; };
+$("redeemMask").addEventListener("click", (e) => { if (e.target === $("redeemMask")) { $("redeemMask").classList.remove("show"); redeemNo = null; } });
+$("redeemConfirm").onclick = async () => {
+  if (!redeemNo) return;
+  const item = $("redeemItem").value.trim();
+  const stamps = Number($("redeemStamps").value);
+  if (!item) { $("redeemErr").textContent = "Please enter what it's redeemed for."; return; }
+  if (!Number.isFinite(stamps) || stamps <= 0) { $("redeemErr").textContent = "Enter a valid stamp amount."; return; }
+  const s = studentByNo(redeemNo);
+  const bal = totals.get(redeemNo) || 0;
+  if (stamps > bal) { $("redeemErr").textContent = "Not enough stamps (has " + bal + ")."; return; }
+  const btn = $("redeemConfirm"); btn.disabled = true; btn.textContent = "Redeeming…";
+  try {
+    const r = await window.StampLedgerDB.redeem([{ name: s.name, student_no: s.student_no, class_name: s.class_name, stamps, item }], __token);
+    if (r.redeemed > 0) {
+      totals.set(redeemNo, bal - stamps);
+      $("redeemMask").classList.remove("show"); redeemNo = null;
+      renderGrid();
+      toast(s.name + " −" + stamps + " stamps (" + item + ")");
+      loadLog();
+    } else if (r.skipped && r.skipped.length) {
+      $("redeemErr").textContent = "Not enough stamps.";
+    }
+  } catch (e) {
+    if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }
+    $("redeemErr").textContent = e.message || "Redeem failed";
+  } finally { btn.disabled = false; btn.textContent = "Redeem"; }
+};
+
 async function loadLog() {
   const box = $("log");
   try {
-    const r = await window.StampLedgerDB.history(__token, 30);
+    const r = await window.StampLedgerDB.history(__token, 40);
     const list = r.history || [];
     if (!list.length) { box.innerHTML = '<div class="empty">No stamps yet.</div>'; return; }
-    box.innerHTML = list.map((h) => `
-      <div class="log-item">
+    box.innerHTML = list.map((h) => {
+      const isRedeem = h.type === "redeem";
+      return `<div class="log-item">
+        <span class="tag ${isRedeem ? "redeem" : "award"}">${isRedeem ? "REDEEM" : "AWARD"}</span>
         <span class="who">${esc(h.name)}</span>
         <span class="why">${esc(h.reason)}${h.note ? " · " + esc(h.note) : ""}</span>
-        <span class="delta">${h.delta > 0 ? "+" + h.delta : h.delta}</span>
+        <span class="delta ${h.delta < 0 ? "neg" : ""}">${h.delta > 0 ? "+" + h.delta : h.delta}</span>
         <span class="t">${new Date(h.created_at).toLocaleString("zh-CN", { hour12: false, month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
         <button class="undo" data-id="${h.id}">Undo</button>
-      </div>`).join("");
+      </div>`;
+    }).join("");
     box.querySelectorAll(".undo").forEach((b) => {
       b.onclick = async () => {
-        if (!confirm("Undo this stamp? (The student's total will be recalculated.)")) return;
+        if (!confirm("Undo this entry? (The student's total will be recalculated.)")) return;
         b.disabled = true; b.textContent = "Undoing…";
         try {
           await window.StampLedgerDB.undo(Number(b.dataset.id), __token);

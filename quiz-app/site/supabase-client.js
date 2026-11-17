@@ -377,6 +377,11 @@ window.StampLedgerDB = (() => {
     return callEdge({ action: "teacherHistory", teacher_token: teacherToken, limit: limit || 100 });
   }
 
+  // 教师：兑换（扣章并记录换成了什么；entries: [{name, student_no, class_name, stamps, item}]）
+  async function redeem(entries, teacherToken) {
+    return callEdge({ action: "teacherRedeem", entries: entries, teacher_token: teacherToken });
+  }
+
   // 教师：撤销某笔盖章
   async function undo(ledgerId, teacherToken) {
     return callEdge({ action: "teacherUndo", ledger_id: ledgerId, teacher_token: teacherToken });
@@ -390,5 +395,5 @@ window.StampLedgerDB = (() => {
     return callEdge({ action: "studentStatus", name: identity.name || "", student_no: no, class_name: cn });
   }
 
-  return { addEntries, summary, history, undo, studentStatus };
+  return { addEntries, redeem, summary, history, undo, studentStatus };
 })();

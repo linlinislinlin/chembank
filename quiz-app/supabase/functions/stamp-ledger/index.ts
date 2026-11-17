@@ -122,8 +122,8 @@ Deno.serve(async (req: Request) => {
         const stu = await resolveStudent(name, sno, cn);
         const { data: row, error } = await supabase
           .from("stamp_ledger")
-          .insert({ student_id: stu.id, delta, reason, note: note || null })
-          .select("id, delta, reason, note, created_at")
+          .insert({ student_id: stu.id, type: "award", delta, reason, note: note || null })
+          .select("id, type, delta, reason, note, created_at")
           .single();
         if (error) throw new Error(error.message);
         out.push({
@@ -131,6 +131,7 @@ Deno.serve(async (req: Request) => {
           name,
           student_no: sno,
           class_name: cn,
+          type: row.type,
           delta: Number(row.delta),
           reason: row.reason,
           note: row.note,
@@ -138,6 +139,55 @@ Deno.serve(async (req: Request) => {
         });
       }
       return json(200, { added: out.length, rows: out });
+    }
+
+    // ---- 教师：兑换（扣章并记录换成了什么）----
+    if (action === "teacherRedeem") {
+      if (!teacherOk(body.teacher_token)) return json(401, { error: "unauthorized" });
+      const entries = Array.isArray(body.entries) ? body.entries : [];
+      if (!entries.length) return json(400, { error: "missing entries" });
+
+      const out: Record<string, unknown>[] = [];
+      const skipped: Record<string, unknown>[] = [];
+      for (const e of entries) {
+        const name = clean((e as Record<string, unknown>).name);
+        const sno = clean((e as Record<string, unknown>).student_no);
+        const cn = clean((e as Record<string, unknown>).class_name);
+        const stamps = Number((e as Record<string, unknown>).stamps ?? 4);
+        const item = clean((e as Record<string, unknown>).item) || "Redeemed";
+        if (!name || !sno) continue;
+        if (!Number.isFinite(stamps) || stamps <= 0) continue;
+
+        const stu = await resolveStudent(name, sno, cn);
+        // 查余额，不足则跳过
+        const { data: balanceRows } = await supabase
+          .from("stamp_ledger")
+          .select("delta")
+          .eq("student_id", stu.id);
+        const balance = (balanceRows ?? []).reduce((s, r) => s + Number(r.delta ?? 0), 0);
+        if (balance < stamps) {
+          skipped.push({ name, student_no: sno, balance, needed: stamps });
+          continue;
+        }
+        const { data: row, error } = await supabase
+          .from("stamp_ledger")
+          .insert({ student_id: stu.id, type: "redeem", delta: -stamps, reason: item, note: null })
+          .select("id, type, delta, reason, note, created_at")
+          .single();
+        if (error) throw new Error(error.message);
+        out.push({
+          id: Number(row.id),
+          name,
+          student_no: sno,
+          class_name: cn,
+          type: row.type,
+          delta: Number(row.delta),
+          reason: row.reason,
+          note: row.note,
+          created_at: row.created_at,
+        });
+      }
+      return json(200, { redeemed: out.length, rows: out, skipped });
     }
 
     // ---- 教师：读全部学生累计章数 ----
@@ -175,7 +225,7 @@ Deno.serve(async (req: Request) => {
       const limit = Math.min(Number(body.limit) || 100, 1000);
       const { data: rows, error } = await supabase
         .from("stamp_ledger")
-        .select("id, delta, reason, note, created_at, students(name, student_no, class_name)")
+        .select("id, type, delta, reason, note, created_at, students(name, student_no, class_name)")
         .order("id", { ascending: false })
         .limit(limit);
       if (error) return json(500, { error: error.message });
@@ -187,6 +237,7 @@ Deno.serve(async (req: Request) => {
           name: stu?.name ?? "",
           student_no: stu?.student_no ?? "",
           class_name: stu?.class_name ?? "",
+          type: r.type,
           delta: Number(r.delta ?? 0),
           reason: r.reason,
           note: r.note,
@@ -221,12 +272,13 @@ Deno.serve(async (req: Request) => {
 
       const { data: rows, error } = await supabase
         .from("stamp_ledger")
-        .select("id, delta, reason, note, created_at")
+        .select("id, type, delta, reason, note, created_at")
         .eq("student_id", stu.id)
         .order("id", { ascending: false });
       if (error) return json(500, { error: error.message });
 
       const history = (rows ?? []).map((r) => ({
+        type: r.type,
         delta: Number(r.delta ?? 0),
         reason: r.reason,
         note: r.note,

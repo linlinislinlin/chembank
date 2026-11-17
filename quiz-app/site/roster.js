@@ -33,14 +33,6 @@ window.AS_ROSTER = [
     "class": "C"
   },
   {
-    "id": "T20281203",
-    "name": "Abigail Zeng",
-    "name_zh": "曾栩婷",
-    "student_no": "T20281203",
-    "class_name": "AS-C",
-    "class": "C"
-  },
-  {
     "id": "T20281127",
     "name": "Ailey Li",
     "name_zh": "李真仪",
@@ -257,8 +249,6 @@ window.IG_ROSTER = [
   { "id": "T20291260", "name": "Lynn Lin", "name_zh": "林予浠", "student_no": "T20291260", "class_name": "IGCSE-Qingyun", "class": "Q" },
   { "id": "T20291246", "name": "Zeki Liu", "name_zh": "刘知几", "student_no": "T20291246", "class_name": "IGCSE-Qingyun", "class": "Q" },
   { "id": "T20291230", "name": "Cindy Ma", "name_zh": "马心霖", "student_no": "T20291230", "class_name": "IGCSE-Qingyun", "class": "Q" },
-  { "id": "T20291263", "name": "Steven Shen", "name_zh": "沈子铭", "student_no": "T20291263", "class_name": "IGCSE-Qingyun", "class": "Q" },
-  { "id": "T20301191", "name": "Joy Wang", "name_zh": "王子晗", "student_no": "T20301191", "class_name": "IGCSE-Qingyun", "class": "Q" },
   { "id": "T20291112", "name": "Brice Yang", "name_zh": "杨梓谦", "student_no": "T20291112", "class_name": "IGCSE-Qingyun", "class": "Q" },
   { "id": "T20291257", "name": "Queeny Ye", "name_zh": "叶晴", "student_no": "T20291257", "class_name": "IGCSE-Qingyun", "class": "Q" },
   { "id": "T20291271", "name": "Tina Yi", "name_zh": "易涵菁", "student_no": "T20291271", "class_name": "IGCSE-Qingyun", "class": "Q" },

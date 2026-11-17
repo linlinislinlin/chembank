@@ -60,12 +60,17 @@
   .stu .no { color: var(--muted); font-size: 11px; margin-top: 2px; }
   .stu .tot { display: inline-block; margin-top: 6px; font-size: 20px; font-weight: 800; color: var(--amber); }
   .stu .tot b { font-size: 12px; font-weight: 600; color: var(--muted); }
-  .stu .plus { position: absolute; right: 10px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 22px; font-weight: 800; cursor: pointer; line-height: 1; }
+  .stu .plus { position: absolute; right: 10px; bottom: 8px; width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 24px; font-weight: 800; cursor: pointer; line-height: 1; }
   .stu .plus:active { background: var(--accent-deep); transform: scale(.94); }
   .stu .plus:disabled { opacity: .4; }
-  .stu .redeem { position: absolute; right: 56px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--amber); color: #fff; font-size: 17px; cursor: pointer; line-height: 1; }
-  .stu .redeem:active { background: #d4880f; transform: scale(.94); }
-  .stu .redeem:disabled { opacity: .4; }
+
+  /* redeem picker modal */
+  .rp-list { max-height: 60vh; overflow-y: auto; }
+  .rp-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 10px; margin-bottom: 8px; cursor: pointer; background: var(--bg-soft); }
+  .rp-item:hover { border-color: var(--amber); background: var(--panel-2); }
+  .rp-item .nm { flex: 1; font-weight: 600; font-size: 14px; }
+  .rp-item .bal { font-weight: 800; color: var(--amber); }
+  .rp-item .bal b { font-size: 11px; font-weight: 600; color: var(--muted); }
 
   /* undo log */
   .log-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px; }
@@ -96,6 +101,28 @@
   .modal .actions { display: flex; gap: 8px; margin-top: 6px; }
   .modal .actions .btn { flex: 1; }
   .modal .err { min-height: 16px; }
+
+  /* group maker */
+  .grow { margin-bottom: 12px; }
+  .glabel { display: block; font-size: 12px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .g-actions { display: flex; gap: 10px; align-items: center; margin: 2px 0 14px; flex-wrap: wrap; }
+  .g-size .chip.on { background: var(--amber); border-color: var(--amber); }
+  .g-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .g-group { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); padding: 12px; }
+  .g-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .g-num { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 14px; display: grid; place-items: center; flex: none; }
+  .g-title { font-weight: 800; font-size: 14px; }
+  .g-members { list-style: none; margin: 0; padding: 0; }
+  .g-members li { display: flex; align-items: center; gap: 6px; padding: 5px 0; font-size: 13px; border-bottom: 1px solid var(--line-soft); }
+  .g-members li:last-child { border-bottom: none; }
+  .g-members li .nm { flex: 1; }
+  .g-members li .rm { cursor: pointer; color: var(--muted); font-size: 13px; border: none; background: none; padding: 0 4px; }
+  .g-members li .rm:hover { color: var(--red); }
+  .g-award { margin-top: 10px; width: 100%; }
+  .g-pool { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 1px dashed var(--line); border-radius: 12px; margin-bottom: 14px; min-height: 44px; }
+  .g-pool .chip.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .g-empty { color: var(--muted); text-align: center; padding: 14px; }
+  .g-hint { color: var(--muted); font-size: 12px; }
 </style>
 </head>
 <body>
@@ -112,6 +139,31 @@
     <div class="card">
       <h2>Reason</h2>
       <div class="reason" id="reasonChips"></div>
+    </div>
+
+    <div class="card">
+      <h2>🎁 Redeem stamps</h2>
+      <p class="sub" style="margin:0 0 12px">4 stamps = 1 point. Used occasionally — tap here, pick a student, then record what it's for.</p>
+      <button class="btn danger" id="redeemEntry" type="button">Redeem stamps…</button>
+    </div>
+
+    <div class="card">
+      <h2>👥 Group maker</h2>
+      <p class="sub" style="margin:0 0 12px">Make random or manual groups, then tap "⭐ +1 stamp" to award the whole group at once.</p>
+      <div class="grow">
+        <label class="glabel">Class</label>
+        <div class="chips" id="gClassChips"></div>
+      </div>
+      <div class="grow g-size">
+        <label class="glabel">Group size</label>
+        <div class="chips" id="gSizeChips"></div>
+      </div>
+      <div class="grow">
+        <label class="glabel">Mode</label>
+        <div class="chips" id="gModeChips"></div>
+      </div>
+      <div class="g-actions" id="gActions"></div>
+      <div class="g-result" id="gResult"></div>
     </div>
 
     <div class="card">
@@ -139,6 +191,18 @@
     <input class="input" id="tokenInput" type="password" placeholder="Teacher passcode" />
     <button class="btn" id="goBtn" style="margin-top:10px; width:100%">Enter</button>
     <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
+<!-- redeem picker modal (pick which student to redeem) -->
+<div class="modal-mask" id="rpMask">
+  <div class="modal">
+    <h2>🎁 Redeem stamps</h2>
+    <p class="who">Pick a student to redeem their stamps (4 stamps = 1 point).</p>
+    <div class="rp-list" id="rpList"></div>
+    <div class="actions" style="margin-top:12px">
+      <button class="btn ghost" id="rpCancel" type="button">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -196,8 +260,17 @@ let totals = new Map();   // student_no -> total
 let selected = new Set(); // student_no
 let redeemNo = null;      // student_no being redeemed
 
+// ---------- group maker state ----------
+const G_CLASSES = CLASSES.filter((c) => !/test/i.test(c));
+const G_SIZES = [2, 3, 4, 5, 6, 7];
+let gClass = G_CLASSES[0] || "";
+let gSize = 2;
+let gMode = "random";   // "random" | "manual"
+let groups = [];        // array of arrays of student objects
+let gSelected = null;   // student_no selected in manual mode
+
 function showGate(err) { $("main").style.display = "none"; $("gate").style.display = "block"; if (err) $("gateErr").textContent = err; }
-function enterMain() { $("gate").style.display = "none"; $("main").style.display = "block"; renderClassChips(); renderReasonChips(); loadAll(); }
+function enterMain() { $("gate").style.display = "none"; $("main").style.display = "block"; renderClassChips(); renderReasonChips(); renderGClassChips(); renderGSizeChips(); renderGModeChips(); renderGActions(); renderGResult(); loadAll(); }
 
 function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1600); }
 
@@ -251,7 +324,6 @@ function renderGrid() {
       <div class="nm">${esc(s.name)}</div>
       <div class="no">${esc(no)}</div>
       <div class="tot">${total} <b>stamps</b></div>
-      <button class="redeem" data-redeem="${esc(no)}" title="Redeem">🎁</button>
       <button class="plus" data-plus="${esc(no)}">+</button>
     </div>`;
   }).join("");
@@ -265,9 +337,6 @@ function renderGrid() {
   });
   box.querySelectorAll("button[data-plus]").forEach((btn) => {
     btn.onclick = () => addOne(btn, btn.dataset.plus);
-  });
-  box.querySelectorAll("button[data-redeem]").forEach((btn) => {
-    btn.onclick = () => openRedeem(btn.dataset.redeem);
   });
   updateBatch();
 }
@@ -338,7 +407,168 @@ $("batchClear").onclick = () => { selected.clear(); renderGrid(); };
 $("search").addEventListener("input", renderGrid);
 $("refresh").onclick = () => loadAll();
 
+// ---------- group maker ----------
+function gStudents() { return ROSTER.filter((s) => s.class_name === gClass); }
+
+function renderGClassChips() {
+  $("gClassChips").innerHTML = G_CLASSES.map((c) =>
+    `<span class="chip${c === gClass ? " on" : ""}" data-c="${esc(c)}">${esc(c)}</span>`).join("");
+  $("gClassChips").querySelectorAll(".chip").forEach((el) => {
+    el.onclick = () => { gClass = el.dataset.c; groups = []; gSelected = null; renderGClassChips(); renderGResult(); };
+  });
+}
+function renderGSizeChips() {
+  $("gSizeChips").innerHTML = G_SIZES.map((n) =>
+    `<span class="chip${n === gSize ? " on" : ""}" data-n="${n}">${n}</span>`).join("");
+  $("gSizeChips").querySelectorAll(".chip").forEach((el) => {
+    el.onclick = () => { gSize = Number(el.dataset.n); if (gMode === "random") shuffleGroups(); };
+  });
+}
+function renderGModeChips() {
+  const modes = [["random", "Random shuffle"], ["manual", "Pick teammates"]];
+  $("gModeChips").innerHTML = modes.map(([v, l]) =>
+    `<span class="chip${v === gMode ? " on" : ""}" data-m="${v}">${l}</span>`).join("");
+  $("gModeChips").querySelectorAll(".chip").forEach((el) => {
+    el.onclick = () => { gMode = el.dataset.m; groups = []; gSelected = null; renderGModeChips(); renderGActions(); renderGResult(); };
+  });
+}
+function renderGActions() {
+  if (gMode === "random") {
+    $("gActions").innerHTML = `<button class="btn" id="gShuffle" type="button">🔀 Shuffle groups</button>`;
+    $("gShuffle").onclick = shuffleGroups;
+  } else {
+    $("gActions").innerHTML = `<button class="btn ghost" id="gAddGroup" type="button">+ New group</button>
+      <span class="g-hint">Click a student below, then click the group to add them.</span>`;
+    $("gAddGroup").onclick = () => { groups.push([]); renderGResult(); };
+  }
+}
+function renderGActionsNow() { renderGActions(); }
+
+function shuffleGroups() {
+  const arr = gStudents().slice();
+  // Fisher–Yates shuffle
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  groups = [];
+  for (let i = 0; i < arr.length; i += gSize) groups.push(arr.slice(i, i + gSize));
+  gSelected = null;
+  renderGResult();
+}
+
+function renderGResult() {
+  const box = $("gResult");
+  const all = gStudents();
+  if (!groups.length) {
+    if (gMode === "random") {
+      box.innerHTML = '<div class="g-empty">Pick a group size, then tap "🔀 Shuffle groups".</div>';
+    } else {
+      box.innerHTML = '<div class="g-empty">Tap "+ New group", then click students to fill each group.</div>';
+    }
+    return;
+  }
+  // manual mode: show leftover student pool
+  const assigned = new Set();
+  groups.forEach((g) => g.forEach((s) => assigned.add(s.student_no)));
+  const leftover = all.filter((s) => !assigned.has(s.student_no));
+
+  let html = "";
+  if (gMode === "manual" && leftover.length) {
+    html += `<div class="g-pool" id="gPool">` + leftover.map((s) =>
+      `<span class="chip${gSelected === s.student_no ? " sel" : ""}" data-no="${esc(s.student_no)}">${esc(s.name)}</span>`
+    ).join("") + `</div>`;
+  }
+  html += `<div class="g-groups">`;
+  groups.forEach((g, gi) => {
+    html += `<div class="g-group" data-gi="${gi}">
+      <div class="g-head">
+        <span class="g-num">${gi + 1}</span>
+        <span class="g-title">Group ${gi + 1}</span>
+      </div>
+      <ul class="g-members">` +
+      g.map((s) => `<li data-no="${esc(s.student_no)}"><span class="nm">${esc(s.name)}</span><button class="rm" title="Remove">✕</button></li>`).join("") +
+      (g.length ? "" : '<li style="color:var(--muted)">— empty —</li>') +
+      `</ul>
+      <button class="btn ok g-award" data-award="${gi}" type="button">⭐ +1 stamp for group</button>
+    </div>`;
+  });
+  html += `</div>`;
+  box.innerHTML = html;
+
+  // manual: click pool student to select
+  box.querySelectorAll("#gPool .chip").forEach((el) => {
+    el.onclick = () => { gSelected = gSelected === el.dataset.no ? null : el.dataset.no; renderGResult(); };
+  });
+  // manual: click a group to add selected student
+  if (gMode === "manual") {
+    box.querySelectorAll(".g-group").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        if (e.target.closest(".rm") || e.target.closest(".g-award")) return;
+        if (!gSelected) return;
+        const gi = Number(el.dataset.gi);
+        groups[gi].push(studentByNo(gSelected));
+        gSelected = null;
+        renderGResult();
+      });
+    });
+  }
+  // remove member
+  box.querySelectorAll(".rm").forEach((btn) => {
+    btn.onclick = () => {
+      const li = btn.closest("li");
+      const gi = Number(btn.closest(".g-group").dataset.gi);
+      groups[gi] = groups[gi].filter((s) => s.student_no !== li.dataset.no);
+      renderGResult();
+    };
+  });
+  // award whole group
+  box.querySelectorAll(".g-award").forEach((btn) => {
+    btn.onclick = async () => {
+      const gi = Number(btn.dataset.award);
+      const members = groups[gi];
+      if (!members.length) { toast("Group is empty"); return; }
+      const entries = members.map((s) => ({ name: s.name, student_no: s.student_no, class_name: s.class_name, delta: 1, reason: "Group work" }));
+      btn.disabled = true; btn.textContent = "Awarding…";
+      try {
+        await window.StampLedgerDB.addEntries(entries, __token);
+        entries.forEach((e) => totals.set(e.student_no, (totals.get(e.student_no) || 0) + 1));
+        btn.disabled = false; btn.textContent = "⭐ +1 stamp for group";
+        toast("+1 stamp for Group " + (gi + 1) + " (" + members.length + " students)");
+        renderGrid();
+        loadLog();
+      } catch (err) {
+        btn.disabled = false; btn.textContent = "⭐ +1 stamp for group";
+        if (/passcode|token|access|unauthorized/i.test(err.message || "")) { showGate("Wrong or expired passcode"); return; }
+        alert(err.message || "Group award failed");
+      }
+    };
+  });
+}
+
 // ---------- redeem ----------
+function openRedeemPicker() {
+  const list = studentsInClass().slice().sort((a, b) =>
+    (b.student_no || "").localeCompare(a.student_no || ""));
+  $("rpList").innerHTML = list.length
+    ? list.map((s) => {
+        const no = s.student_no || "";
+        const bal = totals.get(no) || 0;
+        return `<div class="rp-item" data-no="${esc(no)}">
+          <span class="nm">${esc(s.name)}</span>
+          <span class="bal">${bal} <b>stamps</b></span>
+        </div>`;
+      }).join("")
+    : '<div class="empty">No students in this class.</div>';
+  $("rpList").querySelectorAll(".rp-item").forEach((el) => {
+    el.onclick = () => { $("rpMask").classList.remove("show"); openRedeem(el.dataset.no); };
+  });
+  $("rpMask").classList.add("show");
+}
+$("redeemEntry").onclick = openRedeemPicker;
+$("rpCancel").onclick = () => { $("rpMask").classList.remove("show"); };
+$("rpMask").addEventListener("click", (e) => { if (e.target === $("rpMask")) $("rpMask").classList.remove("show"); });
+
 function openRedeem(no) {
   redeemNo = no;
   const s = studentByNo(no);

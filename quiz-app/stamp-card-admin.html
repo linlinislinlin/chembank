@@ -124,6 +124,24 @@
   .g-pool .chip.absent { background: transparent; color: var(--muted); border-color: var(--line-soft); text-decoration: line-through; opacity: .55; }
   .g-empty { color: var(--muted); text-align: center; padding: 14px; }
   .g-hint { color: var(--muted); font-size: 12px; }
+
+  /* totals toggle */
+  .btn.eyeing { background: var(--amber); color: #fff; }
+
+  /* award effect: card pop */
+  .stu.pop { animation: pop .45s ease; }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.12); box-shadow: 0 0 0 4px rgba(255,193,7,.55); }
+    100% { transform: scale(1); }
+  }
+
+  /* confetti */
+  .confetti { position: fixed; top: -12px; width: 10px; height: 16px; z-index: 1000; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -174,6 +192,7 @@
     <div class="card">
       <div class="toolbar">
         <input class="input" id="search" type="search" placeholder="Search by name or student number" />
+        <button class="btn ghost" id="toggleTotals" type="button">👁 Show totals</button>
         <button class="btn ghost" id="refresh" type="button">Refresh</button>
       </div>
       <div class="batch" id="batchBar">
@@ -264,6 +283,7 @@ let curReason = "Answering questions";
 let totals = new Map();   // student_no -> total
 let selected = new Set(); // student_no
 let redeemNo = null;      // student_no being redeemed
+let showTotals = false;   // hide stamp totals by default (for screen sharing)
 
 // ---------- group maker state ----------
 const G_CLASSES = CLASSES.filter((c) => !/test/i.test(c));
@@ -329,7 +349,7 @@ function renderGrid() {
       <input class="cb" type="checkbox" ${checked} />
       <div class="nm">${esc(s.name)}</div>
       <div class="no">${esc(no)}</div>
-      <div class="tot">${total} <b>stamps</b></div>
+      ${showTotals ? `<div class="tot">${total} <b>stamps</b></div>` : ""}
       <button class="plus" data-plus="${esc(no)}">+</button>
     </div>`;
   }).join("");
@@ -379,7 +399,9 @@ async function addOne(btn, no) {
     await window.StampLedgerDB.addEntries([{ name: s.name, student_no: s.student_no, class_name: s.class_name, delta: 1, reason: curReason }], __token);
     totals.set(no, (totals.get(no) || 0) + 1);
     renderGrid();
-    toast(s.name + " +1 stamp");
+    popCard(no);
+    burstConfetti();
+    toast("⭐ " + s.name + " +1 stamp!");
     loadLog();
   } catch (e) {
     btn.disabled = false;
@@ -401,7 +423,8 @@ $("batchAdd").onclick = async () => {
     selected.clear();
     $("batchAdd").disabled = false;
     renderGrid();
-    toast("+1 stamp for " + entries.length + " students");
+    burstConfetti();
+    toast("⭐ +1 stamp for " + entries.length + " students!");
     loadLog();
   } catch (e) {
     $("batchAdd").disabled = false;
@@ -412,6 +435,35 @@ $("batchAdd").onclick = async () => {
 $("batchClear").onclick = () => { selected.clear(); renderGrid(); };
 $("search").addEventListener("input", renderGrid);
 $("refresh").onclick = () => loadAll();
+
+// ---- totals toggle (hide from students when sharing screen) ----
+$("toggleTotals").onclick = () => {
+  showTotals = !showTotals;
+  const b = $("toggleTotals");
+  b.textContent = showTotals ? "👁 Hide totals" : "👁 Show totals";
+  b.classList.toggle("eyeing", showTotals);
+  renderGrid();
+};
+
+// ---- award effect: confetti burst ----
+function burstConfetti() {
+  const colors = ["#FFC107", "#FF6D00", "#FF0055", "#4FC3F7", "#7CFC9B", "#FFD54F", "#B388FF", "#fff"];
+  for (let i = 0; i < 70; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = (Math.random() * 100) + "vw";
+    c.style.background = colors[i % colors.length];
+    c.style.animationDuration = (1.4 + Math.random() * 1.2) + "s";
+    c.style.animationDelay = (Math.random() * 0.35) + "s";
+    c.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+    document.body.appendChild(c);
+    (function (el) { setTimeout(function () { el.remove(); }, 3000); })(c);
+  }
+}
+function popCard(no) {
+  const el = document.querySelector(`.stu[data-no="${CSS.escape(no)}"]`);
+  if (el) { el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+}
 
 // ---------- group maker ----------
 function gStudents() { return ROSTER.filter((s) => s.class_name === gClass); }
@@ -565,7 +617,8 @@ function renderGResult() {
         await window.StampLedgerDB.addEntries(entries, __token);
         entries.forEach((e) => totals.set(e.student_no, (totals.get(e.student_no) || 0) + 1));
         btn.disabled = false; btn.textContent = "⭐ +1 stamp for group";
-        toast("+1 stamp for Group " + (gi + 1) + " (" + members.length + " students)");
+        burstConfetti();
+        toast("⭐ +1 stamp for Group " + (gi + 1) + " (" + members.length + " students)!");
         renderGrid();
         loadLog();
       } catch (err) {

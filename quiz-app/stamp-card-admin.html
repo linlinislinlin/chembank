@@ -249,7 +249,7 @@ async function addOne(btn, no) {
     await window.StampLedgerDB.addEntries([{ name: s.name, student_no: s.student_no, class_name: s.class_name, delta: 1, reason: curReason }], __token);
     totals.set(no, (totals.get(no) || 0) + 1);
     renderGrid();
-    toast(s.name_zh || s.name + " +1 章");
+    toast((s.name_zh || s.name) + " +1 章");
     loadLog();
   } catch (e) {
     btn.disabled = false;

@@ -203,7 +203,7 @@
         <div class="g-pool" id="gAttendance"></div>
       </div>
       <div class="grow g-size">
-        <label class="glabel">Group size</label>
+        <label class="glabel">Number of groups</label>
         <div class="chips" id="gSizeChips"></div>
       </div>
       <div class="grow">
@@ -303,9 +303,9 @@ const LOG_PAGE_SIZE = 30; // items per page
 
 // ---------- group maker state ----------
 const G_CLASSES = CLASSES.filter((c) => !/test/i.test(c));
-const G_SIZES = [2, 3, 4, 5, 6, 7];
+const G_COUNTS = [2, 3, 4, 5, 6, 7]; // number of groups to split into
 let gClass = G_CLASSES[0] || "";
-let gSize = 2;
+let gCount = 2;         // how many groups to make (default 2)
 let gMode = "random";   // "random" | "manual"
 let groups = [];        // array of arrays of student objects
 let gSelected = null;   // student_no selected in manual mode
@@ -503,6 +503,7 @@ function renderGAttendance() {
         groups = groups.map((g) => g.filter((s) => s.student_no !== no));
         if (gSelected === no) gSelected = null;
       }
+      renderGSizeChips();
       renderGAttendance();
       renderGResult();
     };
@@ -513,14 +514,19 @@ function renderGClassChips() {
   $("gClassChips").innerHTML = G_CLASSES.map((c) =>
     `<span class="chip${c === gClass ? " on" : ""}" data-c="${esc(c)}">${esc(c)}</span>`).join("");
   $("gClassChips").querySelectorAll(".chip").forEach((el) => {
-    el.onclick = () => { gClass = el.dataset.c; groups = []; gSelected = null; absent = new Set(); renderGClassChips(); renderGAttendance(); renderGResult(); };
+    el.onclick = () => { gClass = el.dataset.c; groups = []; gSelected = null; absent = new Set(); renderGClassChips(); renderGSizeChips(); renderGAttendance(); renderGResult(); };
   });
 }
 function renderGSizeChips() {
-  $("gSizeChips").innerHTML = G_SIZES.map((n) =>
-    `<span class="chip${n === gSize ? " on" : ""}" data-n="${n}">${n}</span>`).join("");
+  const present = gPresent().length;
+  // 组数不能超过出席人数，否则有空组
+  const maxGroups = Math.max(2, Math.min(7, present));
+  const options = G_COUNTS.filter((n) => n <= maxGroups);
+  if (gCount > maxGroups) gCount = Math.min(gCount, maxGroups);
+  $("gSizeChips").innerHTML = options.map((n) =>
+    `<span class="chip${n === gCount ? " on" : ""}" data-n="${n}">${n}</span>`).join("");
   $("gSizeChips").querySelectorAll(".chip").forEach((el) => {
-    el.onclick = () => { gSize = Number(el.dataset.n); if (gMode === "random") shuffleGroups(); };
+    el.onclick = () => { gCount = Number(el.dataset.n); if (gMode === "random") shuffleGroups(); };
   });
 }
 function renderGModeChips() {
@@ -543,15 +549,26 @@ function renderGActions() {
 }
 function renderGActionsNow() { renderGActions(); }
 
-function shuffleGroups() {
-  const arr = gPresent().slice();
-  // Fisher–Yates shuffle
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+// 加密级随机洗牌（crypto.getRandomValues），每次 shuffle 都真正随机
+function cryptoShuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const u = new Uint32Array(1);
+    crypto.getRandomValues(u);
+    const j = u[0] % (i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
   }
+  return a;
+}
+
+function shuffleGroups() {
+  const present = gPresent();
+  const arr = cryptoShuffle(present);
+  const n = Math.max(1, Math.min(gCount, arr.length));
   groups = [];
-  for (let i = 0; i < arr.length; i += gSize) groups.push(arr.slice(i, i + gSize));
+  for (let i = 0; i < n; i++) groups.push([]);
+  // round-robin：均匀分配，每组人数最多相差 1
+  arr.forEach((s, idx) => groups[idx % n].push(s));
   gSelected = null;
   renderGResult();
 }
@@ -561,7 +578,7 @@ function renderGResult() {
   const all = gPresent();
   if (!groups.length) {
     if (gMode === "random") {
-      box.innerHTML = '<div class="g-empty">Pick a group size, then tap "🔀 Shuffle groups".</div>';
+      box.innerHTML = '<div class="g-empty">Pick how many groups, then tap "🔀 Shuffle groups".</div>';
     } else {
       box.innerHTML = '<div class="g-empty">Tap "+ New group", then click students to fill each group.</div>';
     }

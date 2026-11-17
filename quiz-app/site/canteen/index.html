@@ -4009,9 +4009,12 @@ async function render() {
         <h1>今天食堂吃什么？</h1>
         <p>What's on today</p>
       </div>
-      ${total.count
-        ? `<button class="top__pill" data-act="open-log"><b>${total.kcal}</b> kcal</button>`
-        : ''}
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <a class="top__pill" href="home.html" style="text-decoration:none">🏠 Home</a>
+        ${total.count
+          ? `<button class="top__pill" data-act="open-log"><b>${total.kcal}</b> kcal</button>`
+          : ''}
+      </div>
     </header>
     <nav class="tabs">
       <button data-act="view" data-view="today" class="${state.view === 'today' ? 'on' : ''}">今天<i>Today</i></button>

@@ -59,9 +59,14 @@
 </style>
 </head>
 <body>
+<div class="top">
+  <h1>⭐ My Stamp Card</h1>
+  <div class="navline">
+    <a href="home.html">Home</a>
+  </div>
+</div>
 <div class="page">
   <div id="login">
-    <h1>⭐ My Stamp Card</h1>
     <p class="sub">Enter your name and student number to see the stamps you've earned.</p>
     <div class="login-card">
       <div class="field"><label>Name (English, same as homework)</label><input class="input" id="inName" placeholder="e.g. Monica Liu" /></div>
@@ -72,7 +77,6 @@
   </div>
 
   <div id="view" style="display:none">
-    <h1>⭐ My Stamp Card</h1>
     <p class="sub"><span class="who" id="whoBox"></span> <button class="logout" id="logout">Switch account</button></p>
     <div class="card-panel">
       <div class="big-num" id="totalNum">0</div>
@@ -84,7 +88,7 @@
       <h2>Recent activity</h2>
       <div id="hist"></div>
     </div>
-    <button class="back" onclick="history.length > 1 ? history.back() : location.href='home.html'">← Back to student home</button>
+    <button class="back" onclick="location.href='home.html'">← Home</button>
   </div>
 </div>
 

@@ -173,6 +173,20 @@
     </div>
 
     <div class="card">
+      <div class="toolbar">
+        <input class="input" id="search" type="search" placeholder="Search by name or student number" />
+        <button class="btn ghost" id="toggleTotals" type="button">👁 Show totals</button>
+        <button class="btn ghost" id="refresh" type="button">Refresh</button>
+      </div>
+      <div class="batch" id="batchBar">
+        <span class="count" id="batchCount">0 selected</span>
+        <button class="btn ok" id="batchAdd" type="button">+1 for selected</button>
+        <button class="btn ghost" id="batchClear" type="button">Clear selection</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div class="card">
       <h2>👥 Group maker</h2>
       <p class="sub" style="margin:0 0 12px">Make random or manual groups, then tap "⭐ +1 stamp" to award the whole group at once.</p>
       <div class="grow">
@@ -193,20 +207,6 @@
       </div>
       <div class="g-actions" id="gActions"></div>
       <div class="g-result" id="gResult"></div>
-    </div>
-
-    <div class="card">
-      <div class="toolbar">
-        <input class="input" id="search" type="search" placeholder="Search by name or student number" />
-        <button class="btn ghost" id="toggleTotals" type="button">👁 Show totals</button>
-        <button class="btn ghost" id="refresh" type="button">Refresh</button>
-      </div>
-      <div class="batch" id="batchBar">
-        <span class="count" id="batchCount">0 selected</span>
-        <button class="btn ok" id="batchAdd" type="button">+1 for selected</button>
-        <button class="btn ghost" id="batchClear" type="button">Clear selection</button>
-      </div>
-      <div class="grid" id="grid"></div>
     </div>
 
     <div class="card">

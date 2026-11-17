@@ -33,7 +33,7 @@
   .card-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; box-shadow: var(--shadow); text-align: center; }
   .big-num { font-size: 64px; font-weight: 900; line-height: 1; color: var(--amber); }
   .big-label { color: var(--muted); font-size: 14px; margin-top: 4px; }
-  .stamp-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 20px 0 6px; }
+  .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 20px 0 6px; }
   .cell { aspect-ratio: 1; border-radius: 8px; display: grid; place-items: center; font-size: 20px; border: 1px solid var(--line); background: var(--bg-soft); }
   .cell.on { background: linear-gradient(180deg, #fff3c4, #ffd54f); border-color: #f0b400; box-shadow: 0 0 8px rgba(255,178,0,.35); }
   .cell.off { opacity: .35; }
@@ -76,7 +76,7 @@
       <div class="big-num" id="totalNum">0</div>
       <div class="big-label">已累计的章</div>
       <div class="stamp-grid" id="grid"></div>
-      <div class="hint-note">每满 10 个章排成一行</div>
+      <div class="hint-note">每满 4 个章排成一行</div>
     </div>
     <div class="hist">
       <h2>最近记录</h2>
@@ -120,16 +120,16 @@ function renderView(id, s) {
   $("whoBox").textContent = id.name + " · " + id.student_no;
   $("totalNum").textContent = total;
 
-  // 印章格子：满行 10 个，最后一行不足补空
+  // 印章格子：满行 4 个，最后一行不足补空
   const cells = [];
-  const filled = Math.min(total, 100); // 显示上限 100，超出用数字表达
-  const lastRowRem = filled % 10;
-  const pad = lastRowRem === 0 ? 0 : 10 - lastRowRem;
+  const filled = Math.min(total, 200); // 显示上限 200，超出用数字表达
+  const lastRowRem = filled % 4;
+  const pad = lastRowRem === 0 ? 0 : 4 - lastRowRem;
   const shown = filled + pad;
   for (let i = 0; i < shown; i++) {
     cells.push(`<div class="cell ${i < filled ? "on" : "off"}">${i < filled ? "⭐" : "○"}</div>`);
   }
-  if (shown === 0) cells.push('<div class="cell off" style="grid-column:span 10">○</div>');
+  if (shown === 0) cells.push('<div class="cell off" style="grid-column:span 4">○</div>');
   $("grid").innerHTML = cells.join("");
 
   const hist = s.history || [];

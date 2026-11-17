@@ -325,9 +325,14 @@ window.StampDB = (() => {
     return callEdge({ action: "teacherList", teacher_token: teacherToken, limit: limit || 500 });
   }
 
-  // 教师：对奖（标记已盖章）
+  // 教师：对奖（标记已盖章 + 自动加章到印章账本）
   async function redeem(drawId, teacherToken) {
     return callEdge({ action: "redeem", draw_id: drawId, teacher_token: teacherToken });
+  }
+
+  // 教师：失效（违规/迟交，作废此条，不给章）
+  async function voidDraw(drawId, teacherToken) {
+    return callEdge({ action: "void", draw_id: drawId, teacher_token: teacherToken });
   }
 
   // 教师：读配置
@@ -340,7 +345,7 @@ window.StampDB = (() => {
     return callEdge(Object.assign({ action: "configSet", teacher_token: teacherToken }, cfg));
   }
 
-  return { status, draw, teacherList, redeem, configGet, configSet };
+  return { status, draw, teacherList, redeem, voidDraw, configGet, configSet };
 })();
 
 // ---- 上课表现印章账本（stamp-ledger）封装 ----
@@ -372,9 +377,9 @@ window.StampLedgerDB = (() => {
     return callEdge({ action: "teacherSummary", teacher_token: teacherToken });
   }
 
-  // 教师：最近盖章流水（撤销用）
-  async function history(teacherToken, limit) {
-    return callEdge({ action: "teacherHistory", teacher_token: teacherToken, limit: limit || 100 });
+  // 教师：最近盖章流水（撤销用，支持分页）
+  async function history(teacherToken, limit, offset) {
+    return callEdge({ action: "teacherHistory", teacher_token: teacherToken, limit: limit || 50, offset: offset || 0 });
   }
 
   // 教师：兑换（扣章并记录换成了什么；entries: [{name, student_no, class_name, stamps, item}]）

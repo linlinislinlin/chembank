@@ -219,15 +219,22 @@ Deno.serve(async (req: Request) => {
       return json(200, { students });
     }
 
-    // ---- 教师：最近盖章流水（撤销用）----
+    // ---- 教师：最近盖章流水（撤销用，支持分页）----
     if (action === "teacherHistory") {
       if (!teacherOk(body.teacher_token)) return json(401, { error: "unauthorized" });
-      const limit = Math.min(Number(body.limit) || 100, 1000);
+      const limit = Math.min(Number(body.limit) || 50, 500);
+      const offset = Math.max(Number(body.offset) || 0, 0);
+
+      // 总数（用于翻页）
+      const { count } = await supabase
+        .from("stamp_ledger")
+        .select("id", { count: "exact", head: true });
+
       const { data: rows, error } = await supabase
         .from("stamp_ledger")
         .select("id, type, delta, reason, note, created_at, students(name, student_no, class_name)")
         .order("id", { ascending: false })
-        .limit(limit);
+        .range(offset, offset + limit - 1);
       if (error) return json(500, { error: error.message });
 
       const history = (rows ?? []).map((r) => {
@@ -244,7 +251,7 @@ Deno.serve(async (req: Request) => {
           created_at: r.created_at,
         };
       });
-      return json(200, { history });
+      return json(200, { history, total: count ?? 0, offset, limit });
     }
 
     // ---- 教师：撤销某笔盖章 ----

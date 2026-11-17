@@ -51,6 +51,10 @@
   .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
   .badge.redeemed { background: var(--green-soft); color: var(--green-deep); }
   .badge.pending { background: var(--amber-soft); color: var(--amber); }
+  .badge.voided { background: #fdecec; color: var(--red); }
+  .btn.warn { background: var(--red); color: #fff; }
+  .btn.warn:hover { background: #c53030; }
+  .btn.warn:disabled { opacity: .4; cursor: not-allowed; }
   .code { font-family: ui-monospace, Menlo, monospace; font-weight: 700; letter-spacing: 1px; }
   .empty { color: var(--muted); padding: 20px; text-align: center; }
   .muted { color: var(--muted); }
@@ -178,6 +182,18 @@
       if (!r.draws || !r.draws.length) { box.innerHTML = '<div class="empty">还没有人中奖。</div>'; return; }
       const rows = r.draws.map((d) => {
         const redeemed = d.redeemed;
+        const voided = d.voided;
+        let statusCell, actionCell;
+        if (voided) {
+          statusCell = '<span class="badge voided">已失效</span>';
+          actionCell = `<button class="btn ghost" disabled>失效</button>`;
+        } else if (redeemed) {
+          statusCell = '<span class="badge redeemed">已盖章</span>';
+          actionCell = `<button class="btn ghost" disabled>已对</button>`;
+        } else {
+          statusCell = '<span class="badge pending">待对奖</span>';
+          actionCell = `<button class="btn ok" data-id="${d.id}">对奖</button> <button class="btn warn" data-void="${d.id}">失效</button>`;
+        }
         return `<tr>
           <td>${esc(d.name || "—")}</td>
           <td class="muted">${esc(d.student_no || "")}</td>
@@ -185,8 +201,8 @@
           <td>#${d.assignment_id}</td>
           <td class="prize ${PRIZE_CLASS[d.prize] || ""}">${PRIZE_LABEL[d.prize] || d.prize}</td>
           <td class="code">${esc(d.redeem_code)}</td>
-          <td>${redeemed ? '<span class="badge redeemed">已盖章</span>' : '<span class="badge pending">待盖章</span>'}</td>
-          <td>${redeemed ? `<button class="btn ghost" disabled>已对</button>` : `<button class="btn ok" data-id="${d.id}">对奖</button>`}</td>
+          <td>${statusCell}</td>
+          <td>${actionCell}</td>
         </tr>`;
       }).join("");
       box.innerHTML = `<table>
@@ -194,11 +210,24 @@
         <tbody>${rows}</tbody></table>`;
       box.querySelectorAll("button[data-id]").forEach((b) => {
         b.onclick = async () => {
+          if (!confirm("对奖后会自动把中奖的章数加进该学生的印章账本，确定吗？")) return;
           b.disabled = true; b.textContent = "对奖中…";
           try {
-            await window.StampDB.redeem(Number(b.dataset.id), getToken());
+            const res = await window.StampDB.redeem(Number(b.dataset.id), getToken());
+            const n = (res && res.awarded) || 0;
+            alert(n > 0 ? `已盖章，并自动加了 ${n} 个章。` : "已盖章。");
             loadDraws();
           } catch (e) { b.disabled = false; b.textContent = "重试"; alert(e.message || "对奖失败"); }
+        };
+      });
+      box.querySelectorAll("button[data-void]").forEach((b) => {
+        b.onclick = async () => {
+          if (!confirm("确定把这条抽奖作废吗？（不给章，之后不能再对奖）")) return;
+          b.disabled = true; b.textContent = "失效中…";
+          try {
+            await window.StampDB.voidDraw(Number(b.dataset.void), getToken());
+            loadDraws();
+          } catch (e) { b.disabled = false; b.textContent = "重试"; alert(e.message || "失效失败"); }
         };
       });
     } catch (e) {
@@ -211,10 +240,10 @@
   $("exportCsv").onclick = async () => {
     try {
       const r = await window.StampDB.teacherList(getToken(), 2000);
-      const head = ["name", "student_no", "class_name", "assignment_id", "prize", "redeem_code", "redeemed", "drawn_at"];
+      const head = ["name", "student_no", "class_name", "assignment_id", "prize", "redeem_code", "redeemed", "voided", "drawn_at"];
       const lines = [head.join(",")];
       for (const d of r.draws || []) {
-        lines.push([d.name, d.student_no, d.class_name, d.assignment_id, d.prize, d.redeem_code, d.redeemed, d.drawn_at]
+        lines.push([d.name, d.student_no, d.class_name, d.assignment_id, d.prize, d.redeem_code, d.redeemed, d.voided, d.drawn_at]
           .map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","));
       }
       const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });

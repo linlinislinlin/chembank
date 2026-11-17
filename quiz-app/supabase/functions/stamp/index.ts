@@ -189,7 +189,7 @@ Deno.serve(async (req: Request) => {
       const limit = Math.min(Number(body.limit) || 500, 2000);
       const { data: rows, error } = await supabase
         .from("stamp_draws")
-        .select("id, assignment_id, prize, redeem_code, redeemed, redeemed_at, drawn_at, students(name, student_no, class_name)")
+        .select("id, assignment_id, prize, redeem_code, redeemed, redeemed_at, voided, drawn_at, students(name, student_no, class_name)")
         .order("id", { ascending: false })
         .limit(limit);
       if (error) return json(500, { error: error.message });
@@ -202,6 +202,7 @@ Deno.serve(async (req: Request) => {
           redeem_code: r.redeem_code,
           redeemed: r.redeemed === true,
           redeemed_at: r.redeemed_at,
+          voided: r.voided === true,
           drawn_at: r.drawn_at,
           name: stu?.name ?? "",
           student_no: stu?.student_no ?? "",
@@ -211,16 +212,72 @@ Deno.serve(async (req: Request) => {
       return json(200, { draws });
     }
 
-    // ---- 教师：对奖（标记已盖章）----
+    // ---- 教师：对奖（标记已盖章 + 自动把中奖章数写进 stamp_ledger）----
     if (action === "redeem") {
       if (!teacherOk(body.teacher_token)) return json(401, { error: "unauthorized" });
       const drawId = Number(body.draw_id);
       if (!drawId) return json(400, { error: "missing draw_id" });
+
+      // 先读当前状态，避免重复对奖重复加章
+      const { data: cur, error: readErr } = await supabase
+        .from("stamp_draws")
+        .select("id, prize, redeemed, voided, student_id, assignment_id")
+        .eq("id", drawId)
+        .maybeSingle();
+      if (readErr) return json(500, { error: readErr.message });
+      if (!cur) return json(404, { error: "draw not found" });
+      if (cur.voided === true) return json(409, { error: "This draw has been voided." });
+      if (cur.redeemed === true) return json(200, { ok: true, already: true, draw: cur });
+
       const { data: d, error } = await supabase
         .from("stamp_draws")
         .update({ redeemed: true, redeemed_at: new Date().toISOString() })
         .eq("id", drawId)
-        .select("id, redeemed")
+        .select("id, redeemed, prize, student_id")
+        .maybeSingle();
+      if (error) return json(500, { error: error.message });
+
+      // 中奖章数：'1'/'2'/'3' → 1/2/3 章；'miss' 不写账本
+      const delta = Number((d as { prize?: string }).prize);
+      if (Number.isFinite(delta) && delta > 0) {
+        const { error: lgErr } = await supabase
+          .from("stamp_ledger")
+          .insert({
+            student_id: (d as { student_id: number }).student_id,
+            type: "award",
+            delta,
+            reason: "Lucky draw",
+            note: `Won ${delta} stamp${delta > 1 ? "s" : ""} (draw #${drawId})`,
+          });
+        if (lgErr) {
+          // 章已标记已对，但写账本失败：回滚对奖标记，避免账实不符
+          await supabase.from("stamp_draws").update({ redeemed: false, redeemed_at: null }).eq("id", drawId);
+          return json(500, { error: "stamp ledger write failed: " + lgErr.message });
+        }
+      }
+      return json(200, { ok: true, draw: d, awarded: Number.isFinite(delta) && delta > 0 ? delta : 0 });
+    }
+
+    // ---- 教师：失效（违规/迟交，作废此条，不给章）----
+    if (action === "void") {
+      if (!teacherOk(body.teacher_token)) return json(401, { error: "unauthorized" });
+      const drawId = Number(body.draw_id);
+      if (!drawId) return json(400, { error: "missing draw_id" });
+
+      const { data: cur, error: readErr } = await supabase
+        .from("stamp_draws")
+        .select("id, redeemed, voided")
+        .eq("id", drawId)
+        .maybeSingle();
+      if (readErr) return json(500, { error: readErr.message });
+      if (!cur) return json(404, { error: "draw not found" });
+      if (cur.redeemed === true) return json(409, { error: "Already redeemed — undo it from the stamp ledger first." });
+
+      const { data: d, error } = await supabase
+        .from("stamp_draws")
+        .update({ voided: true })
+        .eq("id", drawId)
+        .select("id, voided")
         .maybeSingle();
       if (error) return json(500, { error: error.message });
       return json(200, { ok: true, draw: d });

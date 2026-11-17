@@ -136,6 +136,11 @@
     100% { transform: scale(1); }
   }
 
+  /* log pagination */
+  .log-pager { display: flex; align-items: center; gap: 10px; justify-content: center; margin-top: 12px; }
+  .log-pager .btn { padding: 6px 12px; font-size: 13px; }
+  .log-pageinfo { font-size: 12px; color: var(--muted); }
+
   /* collapsible log */
   .log-details summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
   .log-details summary::-webkit-details-marker { display: none; }
@@ -293,6 +298,8 @@ let totals = new Map();   // student_no -> total
 let selected = new Set(); // student_no
 let redeemNo = null;      // student_no being redeemed
 let showTotals = false;   // hide stamp totals by default (for screen sharing)
+let logPage = 0;          // current page of the Recent stamps & redemptions log
+const LOG_PAGE_SIZE = 30; // items per page
 
 // ---------- group maker state ----------
 const G_CLASSES = CLASSES.filter((c) => !/test/i.test(c));
@@ -703,27 +710,52 @@ $("redeemConfirm").onclick = async () => {
 async function loadLog() {
   const box = $("log");
   try {
-    const r = await window.StampLedgerDB.history(__token, 40);
+    const r = await window.StampLedgerDB.history(__token, LOG_PAGE_SIZE, logPage * LOG_PAGE_SIZE);
     const list = r.history || [];
-    if (!list.length) { box.innerHTML = '<div class="empty">No stamps yet.</div>'; return; }
-    box.innerHTML = list.map((h) => {
-      const isRedeem = h.type === "redeem";
-      return `<div class="log-item">
-        <span class="tag ${isRedeem ? "redeem" : "award"}">${isRedeem ? "REDEEM" : "AWARD"}</span>
-        <span class="who">${esc(h.name)}</span>
-        <span class="why">${esc(h.reason)}${h.note ? " · " + esc(h.note) : ""}</span>
-        <span class="delta ${h.delta < 0 ? "neg" : ""}">${h.delta > 0 ? "+" + h.delta : h.delta}</span>
-        <span class="t">${new Date(h.created_at).toLocaleString("zh-CN", { hour12: false, month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
-        <button class="undo" data-id="${h.id}">Undo</button>
+    const total = Number(r.total) || 0;
+    const totalPages = Math.max(1, Math.ceil(total / LOG_PAGE_SIZE));
+
+    let html = "";
+    if (!list.length) {
+      html = '<div class="empty">No stamps yet.</div>';
+    } else {
+      html = list.map((h) => {
+        const isRedeem = h.type === "redeem";
+        return `<div class="log-item">
+          <span class="tag ${isRedeem ? "redeem" : "award"}">${isRedeem ? "REDEEM" : "AWARD"}</span>
+          <span class="who">${esc(h.name)}</span>
+          <span class="why">${esc(h.reason)}${h.note ? " · " + esc(h.note) : ""}</span>
+          <span class="delta ${h.delta < 0 ? "neg" : ""}">${h.delta > 0 ? "+" + h.delta : h.delta}</span>
+          <span class="t">${new Date(h.created_at).toLocaleString("zh-CN", { hour12: false, month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+          <button class="undo" data-id="${h.id}">Undo</button>
+        </div>`;
+      }).join("");
+    }
+
+    // pagination bar (only if more than one page)
+    if (total > LOG_PAGE_SIZE) {
+      html += `<div class="log-pager">
+        <button class="btn ghost" id="logPrev" type="button" ${logPage <= 0 ? "disabled" : ""}>← Prev</button>
+        <span class="log-pageinfo">Page ${logPage + 1} / ${totalPages} · ${total} entries</span>
+        <button class="btn ghost" id="logNext" type="button" ${logPage >= totalPages - 1 ? "disabled" : ""}>Next →</button>
       </div>`;
-    }).join("");
+    }
+    box.innerHTML = html;
+
+    const prev = $("logPrev"), next = $("logNext");
+    if (prev) prev.onclick = () => { if (logPage > 0) { logPage--; loadLog(); } };
+    if (next) next.onclick = () => { if (logPage < totalPages - 1) { logPage++; loadLog(); } };
+
     box.querySelectorAll(".undo").forEach((b) => {
       b.onclick = async () => {
         if (!confirm("Undo this entry? (The student's total will be recalculated.)")) return;
         b.disabled = true; b.textContent = "Undoing…";
         try {
           await window.StampLedgerDB.undo(Number(b.dataset.id), __token);
-          await loadTotals(); await loadLog();
+          await loadTotals();
+          // 若当前页删空则回退一页
+          if (list.length === 1 && logPage > 0) logPage--;
+          await loadLog();
         } catch (e) {
           b.disabled = false; b.textContent = "Undo";
           if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }

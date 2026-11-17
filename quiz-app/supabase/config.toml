@@ -22,3 +22,7 @@ verify_jwt = false
 [functions.stamp]
 enabled = true
 verify_jwt = false
+
+[functions.stamp-ledger]
+enabled = true
+verify_jwt = false

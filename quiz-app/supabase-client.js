@@ -342,3 +342,53 @@ window.StampDB = (() => {
 
   return { status, draw, teacherList, redeem, configGet, configSet };
 })();
+
+// ---- 上课表现印章账本（stamp-ledger）封装 ----
+// 老师手动加章 / 学生查自己的章。与幸运转盘 stamp 完全独立。
+window.StampLedgerDB = (() => {
+  const cfg = window.SUPABASE_CONFIG || {};
+
+  async function callEdge(payload) {
+    const url = (cfg.stampLedgerEdgeUrl || "").replace(/\/+$/, "");
+    if (!url) throw new Error("Stamp ledger is not configured");
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "text/plain" },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (resp.status === 401 || resp.status === 403) throw new Error(data.error || "no access");
+    if (!resp.ok) throw new Error(data.error || ("Stamp ledger error (HTTP " + resp.status + ")"));
+    return data;
+  }
+
+  // 教师：给一个/多个学生加章（entries: [{name, student_no, class_name, delta?, reason?, note?}]）
+  async function addEntries(entries, teacherToken) {
+    return callEdge({ action: "teacherAdd", entries: entries, teacher_token: teacherToken });
+  }
+
+  // 教师：读全部学生累计章数
+  async function summary(teacherToken) {
+    return callEdge({ action: "teacherSummary", teacher_token: teacherToken });
+  }
+
+  // 教师：最近盖章流水（撤销用）
+  async function history(teacherToken, limit) {
+    return callEdge({ action: "teacherHistory", teacher_token: teacherToken, limit: limit || 100 });
+  }
+
+  // 教师：撤销某笔盖章
+  async function undo(ledgerId, teacherToken) {
+    return callEdge({ action: "teacherUndo", ledger_id: ledgerId, teacher_token: teacherToken });
+  }
+
+  // 学生：查自己的章数与历史
+  async function studentStatus(identity) {
+    if (!identity) return { total: 0, history: [] };
+    const no = identity.student_no || identity.studentNo || identity.no || "";
+    const cn = identity.class_name || identity.className || "";
+    return callEdge({ action: "studentStatus", name: identity.name || "", student_no: no, class_name: cn });
+  }
+
+  return { addEntries, summary, history, undo, studentStatus };
+})();

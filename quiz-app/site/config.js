@@ -41,4 +41,9 @@ window.SUPABASE_CONFIG = {
   // 学生抽奖 + 教师对奖都走 Edge Function stamp。
   // 留空表示尚未部署，stamp 页会提示"未配置"。
   stampEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/stamp",
+
+  // ---- 上课表现印章账本（stamp-ledger）配置 ----
+  // 老师手动加章 + 学生查自己的章，走 Edge Function stamp-ledger。
+  // 与幸运转盘 stamp 完全独立。留空表示尚未部署。
+  stampLedgerEdgeUrl: "https://jrobrcaiqtfwuomzycui.supabase.co/functions/v1/stamp-ledger",
 };

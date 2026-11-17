@@ -598,6 +598,7 @@ def main() -> int:
                         INDEX_SRC.parent / "ukcho.html",
                         INDEX_SRC.parent / "ukcho-tag.html",
                         INDEX_SRC.parent / "stamp.html", INDEX_SRC.parent / "stamp-admin.html",
+                        INDEX_SRC.parent / "stamp-card.html", INDEX_SRC.parent / "stamp-card-admin.html",
                         INDEX_SRC.parent / "theme.css",
                         INDEX_SRC.parent / "config.js", INDEX_SRC.parent / "supabase-client.js",
                         INDEX_SRC.parent / "roster.js"]

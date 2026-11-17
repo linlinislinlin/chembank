@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh" data-course="as">
+<html lang="en" data-course="as">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#E85D6A" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>盖章 · ChemBank</title>
+<title>Stamp Cards · ChemBank</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -33,24 +33,24 @@
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
   .card h2 { margin: 0 0 12px; font-size: 16px; }
 
-  /* 班级选择 chips */
+  /* class chips */
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip { border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
   .chip.on { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  /* 原因预设 */
+  /* reason presets */
   .reason { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .reason .chip.on { background: var(--green); border-color: var(--green); }
 
-  /* 搜索 */
+  /* search */
   .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
   .toolbar .input { flex: 1; }
 
-  /* 批量条 */
+  /* batch bar */
   .batch { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 12px; background: var(--bg-soft); margin-bottom: 12px; }
   .batch .count { font-weight: 700; color: var(--accent-deep); }
 
-  /* 学生网格 */
+  /* student grid */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
   .stu { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); padding: 12px 12px 12px 34px; }
   .stu .cb { position: absolute; left: 10px; top: 12px; width: 16px; height: 16px; }
@@ -62,7 +62,7 @@
   .stu .plus:active { background: var(--accent-deep); transform: scale(.94); }
   .stu .plus:disabled { opacity: .4; }
 
-  /* 撤销流水 */
+  /* undo log */
   .log-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px; }
   .log-item .who { font-weight: 700; }
   .log-item .why { color: var(--muted); flex: 1; }
@@ -79,43 +79,43 @@
 <body>
 <div class="page">
   <div id="main" style="display:none">
-    <h1>⚡ 盖章（上课表现）</h1>
-    <p class="sub">选班级 → 选原因 → 点学生卡片右下角「+」盖一章。小组活动可勾选多人后批量 +1。</p>
+    <h1>⚡ Stamp Cards (class participation)</h1>
+    <p class="sub">Pick a class → pick a reason → tap the "+" on a student's card to award a stamp. For group work, select several students and award them all at once.</p>
 
     <div class="card">
-      <h2>班级</h2>
+      <h2>Class</h2>
       <div class="chips" id="classChips"></div>
     </div>
 
     <div class="card">
-      <h2>盖章原因</h2>
+      <h2>Reason</h2>
       <div class="reason" id="reasonChips"></div>
     </div>
 
     <div class="card">
       <div class="toolbar">
-        <input class="input" id="search" type="search" placeholder="搜索学生姓名 / 学号" />
-        <button class="btn ghost" id="refresh" type="button">刷新</button>
+        <input class="input" id="search" type="search" placeholder="Search by name or student number" />
+        <button class="btn ghost" id="refresh" type="button">Refresh</button>
       </div>
       <div class="batch" id="batchBar">
-        <span class="count" id="batchCount">已选 0 人</span>
-        <button class="btn ok" id="batchAdd" type="button">给选中的同学 +1</button>
-        <button class="btn ghost" id="batchClear" type="button">取消选择</button>
+        <span class="count" id="batchCount">0 selected</span>
+        <button class="btn ok" id="batchAdd" type="button">+1 for selected</button>
+        <button class="btn ghost" id="batchClear" type="button">Clear selection</button>
       </div>
       <div class="grid" id="grid"></div>
     </div>
 
     <div class="card">
-      <h2>最近盖章记录（点「撤销」可删除误操作）</h2>
+      <h2>Recent stamps (tap "Undo" to remove a mistake)</h2>
       <div id="log"></div>
     </div>
   </div>
 
   <div class="gate" id="gate">
-    <h2>🔒 教师口令</h2>
-    <p class="sub" style="margin:0 0 12px">请输入教师口令以盖章。</p>
-    <input class="input" id="tokenInput" type="password" placeholder="教师口令" />
-    <button class="btn" id="goBtn" style="margin-top:10px; width:100%">进入</button>
+    <h2>🔒 Teacher passcode</h2>
+    <p class="sub" style="margin:0 0 12px">Enter the teacher passcode to award stamps.</p>
+    <input class="input" id="tokenInput" type="password" placeholder="Teacher passcode" />
+    <button class="btn" id="goBtn" style="margin-top:10px; width:100%">Enter</button>
     <div class="err" id="gateErr"></div>
   </div>
 </div>
@@ -133,15 +133,15 @@ let __token = null;
 const ROSTER = [...(window.AS_ROSTER || []), ...(window.IG_ROSTER || [])];
 const CLASSES = [];
 ROSTER.forEach((s) => { if (s.class_name && CLASSES.indexOf(s.class_name) < 0) CLASSES.push(s.class_name); });
-// 主班排前面，测试班排最后
+// main classes first, test classes last
 CLASSES.sort((a, b) => {
   const t = (x) => /test/i.test(x) ? 1 : 0;
   return t(a) - t(b) || a.localeCompare(b);
 });
 
-const REASONS = ["回答问题", "小组活动", "作业优秀", "其他"];
+const REASONS = ["Answering questions", "Group work", "Great homework", "Other"];
 let curClass = CLASSES[0] || "";
-let curReason = "回答问题";
+let curReason = "Answering questions";
 let totals = new Map();   // student_no -> total
 let selected = new Set(); // student_no
 
@@ -150,21 +150,21 @@ function enterMain() { $("gate").style.display = "none"; $("main").style.display
 
 function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1400); }
 
-// ---------- 登录 ----------
+// ---------- login ----------
 async function submitToken() {
   const v = $("tokenInput").value.trim();
-  if (!v) { $("gateErr").textContent = "请输入教师口令"; return; }
+  if (!v) { $("gateErr").textContent = "Please enter the teacher passcode."; return; }
   __token = v;
   try { sessionStorage.setItem("stamp-ledger-token", __token); } catch (_) {}
   try {
-    await window.StampLedgerDB.summary(__token); // 真实校验在后端
+    await window.StampLedgerDB.summary(__token); // real validation happens on the backend
     enterMain();
-  } catch (e) { showGate(e.message || "口令错误"); }
+  } catch (e) { showGate(e.message || "Wrong passcode"); }
 }
 $("goBtn").onclick = submitToken;
 $("tokenInput").addEventListener("keydown", (e) => { if (e.key === "Enter") submitToken(); });
 
-// ---------- 渲染 ----------
+// ---------- rendering ----------
 function renderClassChips() {
   $("classChips").innerHTML = CLASSES.map((c) =>
     `<span class="chip${c === curClass ? " on" : ""}" data-c="${esc(c)}">${esc(c)}</span>`).join("");
@@ -190,7 +190,7 @@ function renderGrid() {
     !kw || (s.name && s.name.toLowerCase().indexOf(kw) >= 0) ||
     (s.student_no && s.student_no.toLowerCase().indexOf(kw) >= 0));
   const box = $("grid");
-  if (!list.length) { box.innerHTML = '<div class="empty">该班没有学生，或搜索无结果。</div>'; return; }
+  if (!list.length) { box.innerHTML = '<div class="empty">No students in this class, or no search results.</div>'; return; }
   box.innerHTML = list.map((s) => {
     const no = s.student_no || "";
     const total = totals.get(no) || 0;
@@ -199,7 +199,7 @@ function renderGrid() {
       <input class="cb" type="checkbox" ${checked} />
       <div class="nm">${esc(s.name_zh || s.name)}</div>
       <div class="no">${esc(no)}</div>
-      <div class="tot">${total} <b>章</b></div>
+      <div class="tot">${total} <b>stamps</b></div>
       <button class="plus" data-plus="${esc(no)}">+</button>
     </div>`;
   }).join("");
@@ -218,10 +218,10 @@ function renderGrid() {
 }
 
 function updateBatch() {
-  $("batchCount").textContent = "已选 " + selected.size + " 人";
+  $("batchCount").textContent = selected.size + " selected";
 }
 
-// ---------- 数据 ----------
+// ---------- data ----------
 async function loadAll() {
   await loadTotals();
   await loadLog();
@@ -233,7 +233,7 @@ async function loadTotals() {
     (r.students || []).forEach((s) => totals.set(s.student_no, s.total));
     renderGrid();
   } catch (e) {
-    if (/口令|token|access|unauthorized/i.test(e.message || "")) { showGate("口令错误或已失效"); return; }
+    if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }
     $("grid").innerHTML = '<div class="empty" style="color:var(--red)">' + esc(e.message || e) + '</div>';
   }
 }
@@ -249,17 +249,17 @@ async function addOne(btn, no) {
     await window.StampLedgerDB.addEntries([{ name: s.name, student_no: s.student_no, class_name: s.class_name, delta: 1, reason: curReason }], __token);
     totals.set(no, (totals.get(no) || 0) + 1);
     renderGrid();
-    toast((s.name_zh || s.name) + " +1 章");
+    toast((s.name_zh || s.name) + " +1 stamp");
     loadLog();
   } catch (e) {
     btn.disabled = false;
-    if (/口令|token|access|unauthorized/i.test(e.message || "")) { showGate("口令错误或已失效"); return; }
-    alert(e.message || "盖章失败");
+    if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }
+    alert(e.message || "Failed to award stamp");
   }
 }
 
 $("batchAdd").onclick = async () => {
-  if (!selected.size) { toast("先勾选要盖章的同学"); return; }
+  if (!selected.size) { toast("Select students first"); return; }
   const entries = [...selected].map((no) => {
     const s = studentByNo(no);
     return { name: s.name, student_no: s.student_no, class_name: s.class_name, delta: 1, reason: curReason };
@@ -271,12 +271,12 @@ $("batchAdd").onclick = async () => {
     selected.clear();
     $("batchAdd").disabled = false;
     renderGrid();
-    toast("已给 " + entries.length + " 位同学 +1");
+    toast("+1 stamp for " + entries.length + " students");
     loadLog();
   } catch (e) {
     $("batchAdd").disabled = false;
-    if (/口令|token|access|unauthorized/i.test(e.message || "")) { showGate("口令错误或已失效"); return; }
-    alert(e.message || "批量盖章失败");
+    if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }
+    alert(e.message || "Batch award failed");
   }
 };
 $("batchClear").onclick = () => { selected.clear(); renderGrid(); };
@@ -288,36 +288,36 @@ async function loadLog() {
   try {
     const r = await window.StampLedgerDB.history(__token, 30);
     const list = r.history || [];
-    if (!list.length) { box.innerHTML = '<div class="empty">还没有盖章记录。</div>'; return; }
+    if (!list.length) { box.innerHTML = '<div class="empty">No stamps yet.</div>'; return; }
     box.innerHTML = list.map((h) => `
       <div class="log-item">
         <span class="who">${esc(h.name)}</span>
         <span class="why">${esc(h.reason)}${h.note ? " · " + esc(h.note) : ""}</span>
         <span class="delta">${h.delta > 0 ? "+" + h.delta : h.delta}</span>
         <span class="t">${new Date(h.created_at).toLocaleString("zh-CN", { hour12: false, month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
-        <button class="undo" data-id="${h.id}">撤销</button>
+        <button class="undo" data-id="${h.id}">Undo</button>
       </div>`).join("");
     box.querySelectorAll(".undo").forEach((b) => {
       b.onclick = async () => {
-        if (!confirm("撤销这笔盖章记录？（会重算该生章数）")) return;
-        b.disabled = true; b.textContent = "撤销中…";
+        if (!confirm("Undo this stamp? (The student's total will be recalculated.)")) return;
+        b.disabled = true; b.textContent = "Undoing…";
         try {
           await window.StampLedgerDB.undo(Number(b.dataset.id), __token);
           await loadTotals(); await loadLog();
         } catch (e) {
-          b.disabled = false; b.textContent = "撤销";
-          if (/口令|token|access|unauthorized/i.test(e.message || "")) { showGate("口令错误或已失效"); return; }
-          alert(e.message || "撤销失败");
+          b.disabled = false; b.textContent = "Undo";
+          if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }
+          alert(e.message || "Undo failed");
         }
       };
     });
   } catch (e) {
-    if (/口令|token|access|unauthorized/i.test(e.message || "")) { showGate("口令错误或已失效"); return; }
+    if (/passcode|token|access|unauthorized/i.test(e.message || "")) { showGate("Wrong or expired passcode"); return; }
     box.innerHTML = '<div class="empty" style="color:var(--red)">' + esc(e.message || e) + '</div>';
   }
 }
 
-// 恢复会话
+// restore session
 (function init() {
   try {
     const t = sessionStorage.getItem("stamp-ledger-token");

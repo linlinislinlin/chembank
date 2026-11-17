@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh" data-course="as">
+<html lang="en" data-course="as">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#FFB300" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>我的印章卡 · ChemBank</title>
+<title>My Stamp Card · ChemBank</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -29,7 +29,7 @@
   .btn:disabled { opacity: .5; cursor: not-allowed; }
   .err { color: var(--red); font-size: 13px; margin-top: 8px; min-height: 18px; }
 
-  /* 印章卡 */
+  /* stamp card */
   .card-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; box-shadow: var(--shadow); text-align: center; }
   .big-num { font-size: 64px; font-weight: 900; line-height: 1; color: var(--amber); }
   .big-label { color: var(--muted); font-size: 14px; margin-top: 4px; }
@@ -39,7 +39,7 @@
   .cell.off { opacity: .35; }
   .hint-note { color: var(--muted); font-size: 12px; }
 
-  /* 历史 */
+  /* history */
   .hist { margin-top: 20px; }
   .hist h2 { font-size: 15px; margin: 0 0 10px; }
   .h-item { display: flex; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; }
@@ -59,30 +59,30 @@
 <body>
 <div class="page">
   <div id="login">
-    <h1>⭐ 我的印章卡</h1>
-    <p class="sub">输入姓名和学号，查看你累计的章。</p>
+    <h1>⭐ My Stamp Card</h1>
+    <p class="sub">Enter your name and student number to see the stamps you've earned.</p>
     <div class="login-card">
-      <div class="field"><label>姓名（英文，和作业一致）</label><input class="input" id="inName" placeholder="如 Monica Liu" /></div>
-      <div class="field"><label>学号</label><input class="input" id="inNo" placeholder="如 T20280178" /></div>
-      <button class="btn" id="goBtn">查看我的章</button>
+      <div class="field"><label>Name (English, same as homework)</label><input class="input" id="inName" placeholder="e.g. Monica Liu" /></div>
+      <div class="field"><label>Student number</label><input class="input" id="inNo" placeholder="e.g. T20280178" /></div>
+      <button class="btn" id="goBtn">See my stamps</button>
       <div class="err" id="err"></div>
     </div>
   </div>
 
   <div id="view" style="display:none">
-    <h1>⭐ 我的印章卡</h1>
-    <p class="sub"><span class="who" id="whoBox"></span> <button class="logout" id="logout">切换账号</button></p>
+    <h1>⭐ My Stamp Card</h1>
+    <p class="sub"><span class="who" id="whoBox"></span> <button class="logout" id="logout">Switch account</button></p>
     <div class="card-panel">
       <div class="big-num" id="totalNum">0</div>
-      <div class="big-label">已累计的章</div>
+      <div class="big-label">total stamps earned</div>
       <div class="stamp-grid" id="grid"></div>
-      <div class="hint-note">每满 4 个章排成一行</div>
+      <div class="hint-note">4 stamps per row</div>
     </div>
     <div class="hist">
-      <h2>最近记录</h2>
+      <h2>Recent activity</h2>
       <div id="hist"></div>
     </div>
-    <button class="back" onclick="history.length > 1 ? history.back() : location.href='home.html'">← 返回学生首页</button>
+    <button class="back" onclick="history.length > 1 ? history.back() : location.href='home.html'">← Back to student home</button>
   </div>
 </div>
 
@@ -101,9 +101,9 @@ function currentIdentity() {
 
 async function doView() {
   const id = currentIdentity();
-  if (!id.name || !id.student_no) { $("err").textContent = "请输入姓名和学号"; return; }
+  if (!id.name || !id.student_no) { $("err").textContent = "Please enter your name and student number."; return; }
   try { localStorage.setItem(ID_KEY, JSON.stringify(id)); } catch (_) {}
-  const btn = $("goBtn"); btn.disabled = true; btn.textContent = "加载中…";
+  const btn = $("goBtn"); btn.disabled = true; btn.textContent = "Loading…";
   $("err").textContent = "";
   try {
     const s = await window.StampLedgerDB.studentStatus(id);
@@ -111,8 +111,8 @@ async function doView() {
     $("login").style.display = "none";
     $("view").style.display = "block";
   } catch (e) {
-    $("err").textContent = e.message || "加载失败";
-  } finally { btn.disabled = false; btn.textContent = "查看我的章"; }
+    $("err").textContent = e.message || "Failed to load";
+  } finally { btn.disabled = false; btn.textContent = "See my stamps"; }
 }
 
 function renderView(id, s) {
@@ -120,9 +120,9 @@ function renderView(id, s) {
   $("whoBox").textContent = id.name + " · " + id.student_no;
   $("totalNum").textContent = total;
 
-  // 印章格子：满行 4 个，最后一行不足补空
+  // stamp grid: 4 per row, pad the last row with empty cells
   const cells = [];
-  const filled = Math.min(total, 200); // 显示上限 200，超出用数字表达
+  const filled = Math.min(total, 200); // display cap 200; the number shows beyond that
   const lastRowRem = filled % 4;
   const pad = lastRowRem === 0 ? 0 : 4 - lastRowRem;
   const shown = filled + pad;
@@ -134,7 +134,7 @@ function renderView(id, s) {
 
   const hist = s.history || [];
   const box = $("hist");
-  if (!hist.length) { box.innerHTML = '<div class="empty">还没有章，上课多举手呀！</div>'; return; }
+  if (!hist.length) { box.innerHTML = '<div class="empty">No stamps yet — raise your hand in class!</div>'; return; }
   box.innerHTML = hist.map((h) => `
     <div class="h-item">
       <span class="h-delta">${h.delta > 0 ? "+" + h.delta : h.delta}</span>

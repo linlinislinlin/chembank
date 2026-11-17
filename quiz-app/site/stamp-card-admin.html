@@ -136,6 +136,12 @@
     100% { transform: scale(1); }
   }
 
+  /* collapsible log */
+  .log-details summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
+  .log-details summary::-webkit-details-marker { display: none; }
+  .log-details summary .chev { transition: transform .18s ease; font-size: 12px; color: var(--muted); }
+  .log-details[open] summary .chev { transform: rotate(90deg); }
+
   /* confetti */
   .confetti { position: fixed; top: -12px; width: 10px; height: 16px; z-index: 1000; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
   @keyframes fall {
@@ -204,8 +210,11 @@
     </div>
 
     <div class="card">
-      <h2>Recent stamps &amp; redemptions (tap "Undo" to remove a mistake)</h2>
-      <div id="log"></div>
+      <details class="log-details">
+        <summary>Recent stamps &amp; redemptions <span class="chev">▶</span></summary>
+        <p class="g-hint" style="margin:8px 0 4px">Tap "Undo" to remove a mistake.</p>
+        <div id="log"></div>
+      </details>
     </div>
   </div>
 

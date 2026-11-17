@@ -309,8 +309,8 @@ window.ChemBankPortal = {
   topicSlug: function (title, track) {
     const g = this.homeworkGroup(title, track);
     const map = {
-      "Chemical Bonding": "bonding",
-      "Stoichiometry": "stoich",
+      "3 Chemical bonding": "bonding",
+      "2 Stoichiometry": "stoich",
       "Atomic Structure": "atomic",
       "Energetics": "energetics",
       "5 Chemical energetics": "energetics",
@@ -416,11 +416,11 @@ window.ChemBankPortal = {
     const t = title || "";
     if (track === "ig") return this.igGroupLabel(t);
     /* Stoichiometry has its own folder — it must NOT be filed under bonding. */
-    if (/stoichiometr/i.test(t)) return "Stoichiometry";
+    if (/stoichiometr/i.test(t)) return "2 Stoichiometry";
     if (/^3\.\d/.test(t) || /electronegativity|ionic bonding|metallic bonding|sigma\s*\/\s*pi|shapes of molecules|intermolecular/i.test(t)) {
-      return "Chemical Bonding";
+      return "3 Chemical bonding";
     }
-    if (/^2\.\d/.test(t) || /mole\b|avogadro|empirical formula/i.test(t)) return "Stoichiometry";
+    if (/^2\.\d/.test(t) || /mole\b|avogadro|empirical formula/i.test(t)) return "2 Stoichiometry";
     /* Topic 4 (states of matter / ideal gases) has its own folder. */
     if (/^4\.\d/.test(t) || /states of matter|gaseous state|ideal gas|vapour pressure|kinetic theory/i.test(t)) {
       return "4 States of matter";
@@ -438,7 +438,7 @@ window.ChemBankPortal = {
     const track = opts.track === "ig" ? "ig" : "as";
     const order = track === "ig"
       ? null
-      : ["4 States of matter", "5 Chemical energetics", "6 Redox", "7 Equilibria", "8 Reaction kinetics", "Chemical Bonding", "Stoichiometry", "Atomic Structure", "Other"];
+      : ["Atomic Structure", "2 Stoichiometry", "3 Chemical bonding", "4 States of matter", "5 Chemical energetics", "6 Redox", "7 Equilibria", "8 Reaction kinetics", "Other"];
     try {
       if (!window.HomeworkDB) throw new Error("HomeworkDB missing");
       const all = await window.HomeworkDB.listAssignments();

@@ -340,11 +340,25 @@ function escapeHtml(s) {
 }
 
 function setupGate() {
-  const unlock = () => {
+  const unlock = async () => {
     const v = $("tokenInput").value.trim();
     if (!v) { $("gateErr").textContent = "请输入教师口令"; return; }
-    __token = v; // 真实校验在后端（创建作业时 401 → 提示口令错误）
+    // 🔒 真实校验：先调后端验证口令，防止「随便输入就进入」。
+    $("gateBtn").disabled = true;
+    $("gateErr").textContent = "";
+    try {
+      await window.StampDB.configGet(v);
+    } catch (e) {
+      $("gateBtn").disabled = false;
+      const msg = String((e && e.message) || e || "");
+      $("gateErr").textContent = /unauthorized|no access/i.test(msg) ? "口令错误，请重试" : ("无法连接服务器：" + msg);
+      $("tokenInput").focus();
+      $("tokenInput").select();
+      return;
+    }
+    __token = v;
     try { sessionStorage.setItem("stats-token", __token); } catch (e) {}
+    $("gateBtn").disabled = false;
     $("loginGate").style.display = "none";
     $("mainWrap").style.display = "block";
   };

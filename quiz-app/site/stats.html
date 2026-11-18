@@ -1091,12 +1091,26 @@ function setupGate() {
   const err = document.getElementById("gateErr");
   const btn = document.getElementById("gateBtn");
 
-  const unlock = () => {
+  const unlock = async () => {
     const v = input.value.trim();
     if (!v) { err.textContent = "请输入教师口令"; input.focus(); return; }
-    __token = v; // 真实校验在后端（读统计时 401 → 提示口令错误）
+    // 🔒 真实校验：先调后端验证口令，防止「随便输入就进入」。
+    btn.disabled = true;
+    err.textContent = "";
+    try {
+      await window.StampDB.configGet(v);
+    } catch (e) {
+      btn.disabled = false;
+      const msg = String((e && e.message) || e || "");
+      err.textContent = /unauthorized|no access/i.test(msg) ? "口令错误，请重试" : ("无法连接服务器：" + msg);
+      input.focus();
+      input.select();
+      return;
+    }
+    __token = v;
     // 记住口令（仅当次会话），刷新页面不用再输
     try { sessionStorage.setItem("stats-token", __token); } catch (e) {}
+    btn.disabled = false;
     document.getElementById("loginGate").style.display = "none";
     document.getElementById("mainWrap").style.display = "block";
     loadAssignments();
